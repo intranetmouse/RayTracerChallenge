@@ -2,19 +2,14 @@ package org.intranet.graphics.raytrace;
 
 public class Tuple
 {
-	public static Tuple point(double x, double y, double z)
-	{ return new Tuple(x, y, z, 1.0); }
-	public static Tuple vector(double x, double y, double z)
-	{ return new Tuple(x, y, z, 0.0); }
-	public static Tuple color(double x, double y, double z)
-	{ return new Tuple(x, y, z, 0.0); }
+	static final Tuple zeroTuple = new Tuple(0, 0, 0, 0);
 
-	public Tuple(double x, double y, double z, double w)
+	protected double[] values;
+	public Tuple(double... values)
 	{
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.w = w;
+		this.values = new double[values.length];
+		for (int i = 0; i < values.length; i++)
+			this.values[i] = values[i];
 	}
 
 	public static final double EPSILON = 0.0000001;
@@ -23,30 +18,10 @@ public class Tuple
 		return Math.abs(a - b) < EPSILON;
 	}
 
-	double x;
-	public double getX() { return x; }
-	public double getRed() { return x; }
-
-	double y;
-	public double getY() { return y; }
-	public double getGreen() { return y; }
-
-	double z;
-	public double getZ() { return z; }
-	public double getBlue() { return z; }
-
-	double w;
-	public double getW() { return w; }
-
-	public boolean isPoint()
-	{
-		return dblEqual(1.0, w);
-	}
-
-	public boolean isVector()
-	{
-		return dblEqual(0.0, w);
-	}
+	public double getX() { return values[0]; }
+	public double getY() { return values[1]; }
+	public double getZ() { return values[2]; }
+	public double getW() { return values[3]; }
 
 	@Override
 	public boolean equals(Object other)
@@ -54,58 +29,68 @@ public class Tuple
 		if (!(other instanceof Tuple))
 			return false;
 		Tuple otherTuple = (Tuple)other;
-		return dblEqual(x, otherTuple.x) &&
-				dblEqual(y, otherTuple.y) &&
-				dblEqual(z, otherTuple.z) &&
-				dblEqual(w, otherTuple.w);
+		return dblEqual(values[0], otherTuple.values[0]) &&
+				dblEqual(values[1], otherTuple.values[1]) &&
+				dblEqual(values[2], otherTuple.values[2]) &&
+				dblEqual(values[3], otherTuple.values[3]);
 	}
 
-	public Tuple add(Tuple a2) {
-		if (isPoint() && a2.isPoint())
-			throw new IllegalArgumentException("Cannot add two points");
-		return new Tuple(x + a2.x, y + a2.y, z + a2.z, w + a2.w);
+	public static double[] addDoubles(double[] a, double[] b)
+	{
+		if (a.length != b.length)
+			throw new IllegalArgumentException();
+		double[] result = new double[a.length];
+		for (int i = 0; i < a.length; i++)
+			result[i] = a[i] + b[i];
+		return result;
 	}
 
-	public Tuple subtract(Tuple a2) {
-		if (isVector() && a2.isPoint())
-			throw new IllegalArgumentException("Cannot subtract a point from a vector");
-		return new Tuple(x - a2.x, y - a2.y, z - a2.z, w - a2.w);
+	public static double[] subtractDoubles(double[] a, double[] b)
+	{
+		if (a.length != b.length)
+			throw new IllegalArgumentException();
+		double[] result = new double[a.length];
+		for (int i = 0; i < a.length; i++)
+			result[i] = a[i] - b[i];
+		return result;
+	}
+
+	public Tuple negate()
+	{
+		double[] doubles = subtractDoubles(zeroTuple.values, values);
+		return new Tuple(doubles[0], doubles[1], doubles[2], doubles[3]);
 	}
 
 	@Override
 	public String toString()
 	{
 		return String.format("%s(%.8f,%.8f,%.8f)",
-			isVector() ? "vector" : "point", x, y, z);
-	}
-
-	private static final Tuple zero = Tuple.vector(0, 0, 0);
-
-	public Tuple negate()
-	{
-		Tuple diff = zero.subtract(this);
-		return diff;
+			getClass().getSimpleName(),
+			values[0], values[1], values[2]);
 	}
 
 	public Tuple multiply(double d)
 	{
-		return new Tuple(x*d, y*d, z*d, w*d);
+		return new Tuple(values[0]*d, values[1]*d, values[2]*d, values[3]*d);
 	}
 
 	public Tuple hadamard_product(Tuple d)
 	{
-		return new Tuple(x*d.x, y*d.y, z*d.z, w*d.w);
+		return new Tuple(values[0]*d.values[0],
+			values[1]*d.values[1],
+			values[2]*d.values[2],
+			values[3]*d.values[3]);
 	}
 
 	public Tuple divide(double d)
 	{
 		d = 1 / d;
-		return new Tuple(x*d, y*d, z*d, w*d);
+		return new Tuple(values[0]*d, values[1]*d, values[2]*d, values[3]*d);
 	}
 
 	public double magnitude()
 	{
-		return magnitude(x, y, z, w);
+		return magnitude(values[0], values[1], values[2], values[3]);
 	}
 
 	public static double magnitude(double ... dbls)
@@ -123,14 +108,9 @@ public class Tuple
 
 	public double dot(Tuple other)
 	{
-		return x * other.x + y * other.y + z * other.z + w * other.w;
-	}
-
-	public Tuple cross(Tuple b)
-	{
-		return vector(
-			y * b.z - z * b.y,
-			z * b.x - x * b.z,
-			x * b.y - y * b.x);
+		return values[0] * other.values[0] +
+			values[1] * other.values[1] +
+			values[2] * other.values[2] +
+			values[3] * other.values[3];
 	}
 }
