@@ -31,4 +31,9 @@ public class Point
 		double[] doubles = subtractDoubles(zeroTuple.values, values);
 		return new Point(doubles[0], doubles[1], doubles[2]);
 	}
+
+	public Point multiply(double d)
+	{
+		return new Point(values[0]*d, values[1]*d, values[2]*d);
+	}
 }

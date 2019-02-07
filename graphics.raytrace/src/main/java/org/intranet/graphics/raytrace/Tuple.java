@@ -29,10 +29,12 @@ public class Tuple
 		if (!(other instanceof Tuple))
 			return false;
 		Tuple otherTuple = (Tuple)other;
-		return dblEqual(values[0], otherTuple.values[0]) &&
-				dblEqual(values[1], otherTuple.values[1]) &&
-				dblEqual(values[2], otherTuple.values[2]) &&
-				dblEqual(values[3], otherTuple.values[3]);
+		if (values.length != otherTuple.values.length)
+			return false;
+		for (int i = 0; i < values.length; i++)
+			if (!dblEqual(values[i], otherTuple.values[i]))
+				return false;
+		return true;
 	}
 
 	public static double[] addDoubles(double[] a, double[] b)
@@ -72,14 +74,6 @@ public class Tuple
 	public Tuple multiply(double d)
 	{
 		return new Tuple(values[0]*d, values[1]*d, values[2]*d, values[3]*d);
-	}
-
-	public Tuple hadamard_product(Tuple d)
-	{
-		return new Tuple(values[0]*d.values[0],
-			values[1]*d.values[1],
-			values[2]*d.values[2],
-			values[3]*d.values[3]);
 	}
 
 	public Tuple divide(double d)

@@ -32,4 +32,9 @@ public class Vector
 		double[] doubles = subtractDoubles(zeroVector.values, values);
 		return new Vector(doubles[0], doubles[1], doubles[2]);
 	}
+
+	public Vector multiply(double d)
+	{
+		return new Vector(values[0]*d, values[1]*d, values[2]*d);
+	}
 }

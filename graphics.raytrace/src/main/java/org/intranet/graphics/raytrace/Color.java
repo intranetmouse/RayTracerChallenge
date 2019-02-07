@@ -26,4 +26,16 @@ public class Color
 		double[] doubles = subtractDoubles(values, c.values);
 		return new Color(doubles[0], doubles[1], doubles[2]);
 	}
+
+	public Color hadamard_product(Color d)
+	{
+		return new Color(values[0]*d.values[0],
+			values[1]*d.values[1],
+			values[2]*d.values[2]);
+	}
+
+	public Color multiply(double d)
+	{
+		return new Color(values[0]*d, values[1]*d, values[2]*d);
+	}
 }

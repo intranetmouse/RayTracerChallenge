@@ -37,19 +37,19 @@ public class ColorTest
 	@Test
 	public void testMultiplyColor()
 	{
-		Tuple c = new Color(0.2, 0.3, 0.4);
-		Tuple result = c.multiply(2);
-		Tuple expectedColor = new Color(0.4, 0.6, 0.8);
+		Color c = new Color(0.2, 0.3, 0.4);
+		Color result = c.multiply(2);
+		Color expectedColor = new Color(0.4, 0.6, 0.8);
 		Assert.assertEquals(expectedColor, result);
 	}
 
 	@Test
 	public void testMultiplyColorByColor()
 	{
-		Tuple c1 = new Color(1, 0.2, 0.4);
-		Tuple c2 = new Color(0.9, 1, 0.1);
-		Tuple result = c1.hadamard_product(c2);
-		Tuple expectedColor = new Color(0.9, 0.2, 0.04);
+		Color c1 = new Color(1, 0.2, 0.4);
+		Color c2 = new Color(0.9, 1, 0.1);
+		Color result = c1.hadamard_product(c2);
+		Color expectedColor = new Color(0.9, 0.2, 0.04);
 		Assert.assertEquals(expectedColor, result);
 	}
 }
