@@ -16,7 +16,7 @@ public class Vector
 			values[0] * b.values[1] - values[1] * b.values[0]);
 	}
 
-	public Tuple add(Tuple p) {
+	public Vector add(Tuple p) {
 		double[] doubles = addDoubles(values, p.values);
 		return new Vector(doubles[0], doubles[1], doubles[2]);
 	}
@@ -36,5 +36,16 @@ public class Vector
 	public Vector multiply(double d)
 	{
 		return new Vector(values[0]*d, values[1]*d, values[2]*d);
+	}
+
+	public Vector divide(double d)
+	{
+		d = 1 / d;
+		return new Vector(values[0]*d, values[1]*d, values[2]*d);
+	}
+
+	public Vector normalize()
+	{
+		return divide(magnitude());
 	}
 }

@@ -1,6 +1,6 @@
 package org.intranet.graphics.raytrace;
 
-public class Color
+public final class Color
 	extends Tuple
 {
 	public Color(double x, double y, double z)
@@ -37,5 +37,11 @@ public class Color
 	public Color multiply(double d)
 	{
 		return new Color(values[0]*d, values[1]*d, values[2]*d);
+	}
+
+	public void copy(Color other)
+	{
+		for (int i = 0; i < values.length; i++)
+			values[i] = other.values[i];
 	}
 }
