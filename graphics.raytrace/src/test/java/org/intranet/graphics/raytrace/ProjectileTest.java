@@ -1,7 +1,5 @@
 package org.intranet.graphics.raytrace;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
 import org.intranet.graphics.raytrace.projectile.Environment;
