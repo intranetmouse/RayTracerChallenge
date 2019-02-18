@@ -127,4 +127,103 @@ public class MatrixTest
 		Point multiplied = a.multiply(b);
 		Assert.assertEquals(expected, multiplied);
 	}
+
+	@Test
+	public void testMatrixMultiplyIdentiy()
+	{
+		Matrix a = new Matrix(
+			new double[] { 0, 1, 2, 4 },
+			new double[] { 1, 2, 4, 8 },
+			new double[] { 2, 4, 8, 16 },
+			new double[] { 4, 8, 16, 32 }
+		);
+		Matrix ident = Matrix.identity(4);
+		Matrix result = a.multiply(ident);
+
+		Assert.assertEquals(a, result);
+	}
+
+	@Test
+	public void testIdentiyMatrixMultiplyPoint()
+	{
+		Point t = new Point(1, 2, 3, 4);
+		Matrix ident = Matrix.identity(4);
+		Point result = ident.multiply(t);
+
+		Assert.assertEquals(t, result);
+	}
+
+
+	@Test
+	public void testMatrixTranspose()
+	{
+		Matrix a = new Matrix(
+			new double[] { 0, 9, 3, 0 },
+			new double[] { 9, 8, 0, 8 },
+			new double[] { 1, 8, 5, 3 },
+			new double[] { 0, 0, 5, 8 }
+		);
+		Matrix expected = new Matrix(
+			new double[] { 0, 9, 1, 0 },
+			new double[] { 9, 8, 8, 0 },
+			new double[] { 3, 0, 5, 5 },
+			new double[] { 0, 8, 3, 8 }
+		);
+		Matrix transposed = a.transpose();
+		Assert.assertEquals(expected, transposed);
+	}
+
+	@Test
+	public void testMatrixTransposeIdentity()
+	{
+		Matrix ident = Matrix.identity(4);
+		Matrix transposed = ident.transpose();
+		Assert.assertEquals(ident, transposed);
+	}
+
+	@Test
+	public void testMatrixDeterminant2x2()
+	{
+		Matrix a = new Matrix(
+			new double[] { 1, 5 },
+			new double[] { -3, 2 }
+		);
+		double determinant = a.determinant();
+		Assert.assertEquals(17.0, determinant, Tuple.EPSILON);
+	}
+
+	@Test
+	public void testMatrixSubmatrix3x3To2x2()
+	{
+		Matrix a = new Matrix(
+			new double[] { 1, 5, 0 },
+			new double[] { -3, 2, 7 },
+			new double[] { 0, 6, -3 }
+		);
+		Matrix expected = new Matrix(
+			new double[] { -3, 2 },
+			new double[] { 0, 6 }
+		);
+		Matrix sub = a.submatrix(0, 2);
+		Assert.assertEquals(expected, sub);
+	}
+
+	@Test
+	public void testMatrixSubmatrix4x4To3x3()
+	{
+		Matrix a = new Matrix(
+			new double[] { -6, 1, 1, 6 },
+			new double[] { -8, 5, 8, 6 },
+			new double[] { -1, 0, 8, 2 },
+			new double[] { -7, 1, -1, 1 }
+		);
+		Matrix expected = new Matrix(
+			new double[] { -6, 1, 6 },
+			new double[] { -8, 8, 6 },
+			new double[] { -7, -1, 1 }
+		);
+		Matrix sub = a.submatrix(2, 1);
+		Assert.assertEquals(expected, sub);
+	}
+
 }
