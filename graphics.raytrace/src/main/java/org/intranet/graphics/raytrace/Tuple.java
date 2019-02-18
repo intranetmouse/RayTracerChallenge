@@ -12,7 +12,8 @@ public class Tuple
 			this.values[i] = values[i];
 	}
 
-	public static final double EPSILON = 0.0000001;
+	public static final double EPSILON = 0.0001;
+	public static final double EPSILON4 = 0.0001;
 	public static boolean dblEqual(double a, double b)
 	{
 		return Math.abs(a - b) < EPSILON;

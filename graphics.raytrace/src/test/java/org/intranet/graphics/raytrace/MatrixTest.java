@@ -290,4 +290,98 @@ public class MatrixTest
 		Assert.assertEquals(51, a.cofactor(0, 3), Tuple.EPSILON);
 		Assert.assertEquals(-4071, a.determinant(), Tuple.EPSILON);
 	}
+
+	@Test
+	public void testMatrixInvertible()
+	{
+		Matrix a = new Matrix(
+			new double[] { 6, 4, 4, 4 },
+			new double[] { 5, 5, 7, 6 },
+			new double[] { 4, -9, 3, -7 },
+			new double[] { 9, 1, 7, -6 }
+		);
+
+		Assert.assertEquals(-2120, a.determinant(), Tuple.EPSILON);
+		Assert.assertTrue(a.isInvertible());
+	}
+
+	@Test
+	public void testMatrixNoninvertible()
+	{
+		Matrix a = new Matrix(
+			new double[] { -4, 2, -2, 3 },
+			new double[] { 9, 6, 2, 6 },
+			new double[] { 0, -5, 1, -5 },
+			new double[] { 0, 0, 0, 0 }
+		);
+
+		Assert.assertEquals(0, a.determinant(), Tuple.EPSILON);
+		Assert.assertFalse(a.isInvertible());
+	}
+
+	@Test
+	public void testMatrixInvert()
+	{
+		Matrix a = new Matrix(
+			new double[] { -5, 2, 6, -8 },
+			new double[] { 1, -5, 1, 8 },
+			new double[] { 7, 7, -6, -7 },
+			new double[] { 1, -3, 7, 4 }
+		);
+		Matrix b = a.inverse();
+		Matrix expectedB = new Matrix(
+			new double[] { 0.21805, 0.45113, 0.24060, -0.04511 },
+			new double[] { -0.80827, -1.45677, -0.44361, 0.52068 },
+			new double[] { -0.07895, -0.22368, -0.05263, 0.19737 },
+			new double[] { -0.52256, -0.81391, -0.30075, 0.30639 }
+		);
+System.out.println("        b="+b);
+System.out.println("expectedB="+expectedB);
+		Assert.assertEquals(532.0, a.determinant(), Tuple.EPSILON);
+		Assert.assertEquals(-160, a.cofactor(2, 3), Tuple.EPSILON);
+		Assert.assertEquals(-160/532.0, b.get(3, 2), Tuple.EPSILON);
+		Assert.assertEquals(105, a.cofactor(3, 2), Tuple.EPSILON);
+		Assert.assertEquals(105/532.0, b.get(2, 3), Tuple.EPSILON);
+		Assert.assertEquals(expectedB, b);
+	}
+
+	@Test
+	public void testMatrixInvert2()
+	{
+		Matrix a = new Matrix(
+			new double[] { 8, -5, 9, 2 },
+			new double[] { 7, 5, 6, 1 },
+			new double[] { -6, 0, 9, 6 },
+			new double[] { -3, 0, -9, -4 }
+		);
+		Matrix b = a.inverse();
+		Matrix expectedB = new Matrix(
+			new double[] { -0.15385, -0.15385, -0.28205, -0.53846 },
+			new double[] { -0.07692, 0.12308, 0.02564, 0.03077 },
+			new double[] { 0.35897, 0.35897, 0.43590, 0.92308 },
+			new double[] { -0.69231, -0.69231, -0.76923, -1.92308 }
+		);
+
+		Assert.assertEquals(expectedB, b);
+	}
+
+	@Test
+	public void testMatrixInvert3()
+	{
+		Matrix a = new Matrix(
+			new double[] { 9, 3, 0, 9 },
+			new double[] { -5, -2, -6, -3 },
+			new double[] { -4, 9, 6, 4 },
+			new double[] { -7, 6, 6, 2 }
+		);
+		Matrix b = a.inverse();
+		Matrix expectedB = new Matrix(
+			new double[] { -0.04074, -0.07778, 0.14444, -0.22222 },
+			new double[] { -0.07778, 0.03333, 0.36667, -0.33333 },
+			new double[] { -0.02901, -0.14630, -0.10926, 0.12963 },
+			new double[] { 0.17778, 0.06667, -0.26667, 0.33333 }
+		);
+
+		Assert.assertEquals(expectedB, b);
+	}
 }

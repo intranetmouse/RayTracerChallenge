@@ -182,4 +182,27 @@ public class Matrix
 			minor = -minor;
 		return minor;
 	}
+
+	public boolean isInvertible()
+	{
+		return !Tuple.dblEqual(0.0, determinant());
+	}
+
+	public Matrix inverse()
+	{
+		if (!isInvertible())
+			return null;
+
+		double determinant = determinant();
+		double[][] other = allocateArray(matrix.length, matrix[0].length);
+		for (int row = 0; row < matrix.length; row++)
+			for (int col = 0; col < matrix[0].length; col++)
+			{
+				double c = cofactor(row, col);
+				// note that "col, row" here, instead of "row, col",
+				// accomplishes the transpose operation!
+				other[col][row] = c / determinant;
+			}
+		return new Matrix(other);
+	}
 }
