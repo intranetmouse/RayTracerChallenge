@@ -226,4 +226,68 @@ public class MatrixTest
 		Assert.assertEquals(expected, sub);
 	}
 
+	@Test
+	public void testMatrixMinor3x3()
+	{
+		Matrix a = new Matrix(
+			new double[] { 3, 5, 0 },
+			new double[] { 2, -1, -7 },
+			new double[] { 6, -1, 5 }
+		);
+		Matrix b = a.submatrix(1, 0);
+		double bdeterminant = b.determinant();
+
+		Assert.assertEquals(25, bdeterminant, Tuple.EPSILON);
+		Assert.assertEquals(25, a.minor(1, 0), Tuple.EPSILON);
+	}
+
+	@Test
+	public void testMatrixCofactor3x3()
+	{
+		Matrix a = new Matrix(
+			new double[] { 3, 5, 0 },
+			new double[] { 2, -1, -7 },
+			new double[] { 6, -1, 5 }
+		);
+		double a00minor = a.minor(0, 0);
+		double a00cofactor = a.cofactor(0, 0);
+		double a10minor = a.minor(1, 0);
+		double a10cofactor = a.cofactor(1, 0);
+
+		Assert.assertEquals(-12, a00minor, Tuple.EPSILON);
+		Assert.assertEquals(-12, a00cofactor, Tuple.EPSILON);
+		Assert.assertEquals(25, a10minor, Tuple.EPSILON);
+		Assert.assertEquals(-25, a10cofactor, Tuple.EPSILON);
+	}
+
+	@Test
+	public void testMatrixDeterminant3x3()
+	{
+		Matrix a = new Matrix(
+			new double[] { 1, 2, 6 },
+			new double[] { -5, 8, -4 },
+			new double[] { 2, 6, 4 }
+		);
+
+		Assert.assertEquals(56, a.cofactor(0, 0), Tuple.EPSILON);
+		Assert.assertEquals(12, a.cofactor(0, 1), Tuple.EPSILON);
+		Assert.assertEquals(-46, a.cofactor(0, 2), Tuple.EPSILON);
+	}
+
+	@Test
+	public void testMatrixDeterminant4x4()
+	{
+		Matrix a = new Matrix(
+			new double[] { -2, -8, 3, 5 },
+			new double[] { -3, 1, 7, 3 },
+			new double[] { 1, 2, -9, 6 },
+			new double[] { -6, 7, 7, -9 }
+		);
+
+		Assert.assertEquals(690, a.cofactor(0, 0), Tuple.EPSILON);
+		Assert.assertEquals(447, a.cofactor(0, 1), Tuple.EPSILON);
+		Assert.assertEquals(210, a.cofactor(0, 2), Tuple.EPSILON);
+		Assert.assertEquals(51, a.cofactor(0, 3), Tuple.EPSILON);
+		Assert.assertEquals(-4071, a.determinant(), Tuple.EPSILON);
+	}
 }

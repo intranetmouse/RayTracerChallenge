@@ -116,10 +116,15 @@ public class Matrix
 
 	public double determinant()
 	{
-		if (matrix.length != 2)
-			throw new UnsupportedOperationException(
-				"Determinant only works for 2x2 matrices.");
-		return matrix[0][0] * matrix[1][1] - matrix[1][0] * matrix[0][1];
+		double[] row0 = matrix[0];
+
+		if (matrix.length == 2 && row0.length == 2)
+			return row0[0] * matrix[1][1] - matrix[1][0] * row0[1];
+
+		double det = 0.0;
+		for (int colNum = 0; colNum < row0.length; colNum++)
+			det += matrix[0][colNum] * cofactor(0, colNum);
+		return det;
 	}
 
 	public Matrix submatrix(int dropRow, int dropCol)
@@ -163,5 +168,18 @@ public class Matrix
 		}
 		sb.append("]");
 		return sb.toString();
+	}
+
+	public double minor(int dropRow, int dropCol)
+	{
+		return submatrix(dropRow, dropCol).determinant();
+	}
+
+	public double cofactor(int dropRow, int dropCol)
+	{
+		double minor = minor(dropRow, dropCol);
+		if ((dropRow + dropCol) % 2 == 1)
+			minor = -minor;
+		return minor;
 	}
 }
