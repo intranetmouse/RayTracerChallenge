@@ -4,13 +4,10 @@ public class Matrix
 {
 	public static Matrix identity(int size)
 	{
-		double[][] mtx = new double[size][];
+		double[][] mtx = allocateArray(size, size);
 		for (int row = 0; row < size; row++)
-		{
-			mtx[row] = new double[size];
 			for (int col = 0; col < size; col++)
 				mtx[row][col] = row == col ? 1.0 : 0.0;
-		}
 		return new Matrix(mtx);
 	}
 
@@ -84,15 +81,26 @@ public class Matrix
 
 	public Point multiply(Point b)
 	{
+		double[] values = multiplyTuple(b);
+		return new Point(values[0], values[1], values[2], values[3]);
+	}
+
+	private double[] multiplyTuple(Tuple tuple)
+	{
 		double[] values = new double[4];
 		for (int rowNum = 0; rowNum < 4; rowNum++)
 		{
 			double[] row = matrix[rowNum];
 			for (int colNum = 0; colNum < row.length; colNum++)
-				values[rowNum] += matrix[rowNum][colNum] * b.values[colNum];
+				values[rowNum] += matrix[rowNum][colNum] * tuple.values[colNum];
 		}
-		Point result = new Point(values[0], values[1], values[2], values[3]);
-		return result;
+		return values;
+	}
+
+	public Vector multiply(Vector v)
+	{
+		double[] values = multiplyTuple(v);
+		return new Vector(values[0], values[1], values[2], values[3]);
 	}
 
 	public Matrix transpose()
@@ -204,5 +212,66 @@ public class Matrix
 				other[col][row] = c / determinant;
 			}
 		return new Matrix(other);
+	}
+
+	public static Matrix newTranslation(double x, double y, double z)
+	{
+		Matrix translation = identity(4);
+		translation.matrix[0][3] = x;
+		translation.matrix[1][3] = y;
+		translation.matrix[2][3] = z;
+		return translation;
+	}
+
+	public static Matrix newScaling(double x, double y, double z)
+	{
+		Matrix translation = identity(4);
+		translation.matrix[0][0] = x;
+		translation.matrix[1][1] = y;
+		translation.matrix[2][2] = z;
+		return translation;
+	}
+
+	public static Matrix newRotationX(double d)
+	{
+		Matrix translation = identity(4);
+		translation.matrix[1][1] = Math.cos(d);
+		translation.matrix[1][2] = -Math.sin(d);
+		translation.matrix[2][1] = Math.sin(d);
+		translation.matrix[2][2] = Math.cos(d);
+		return translation;
+	}
+
+	public static Matrix newRotationY(double d)
+	{
+		Matrix translation = identity(4);
+		translation.matrix[0][0] = Math.cos(d);
+		translation.matrix[0][2] = Math.sin(d);
+		translation.matrix[2][0] = -Math.sin(d);
+		translation.matrix[2][2] = Math.cos(d);
+		return translation;
+	}
+
+	public static Matrix newRotationZ(double d)
+	{
+		Matrix translation = identity(4);
+		translation.matrix[0][0] = Math.cos(d);
+		translation.matrix[0][1] = -Math.sin(d);
+		translation.matrix[1][0] = Math.sin(d);
+		translation.matrix[1][1] = Math.cos(d);
+		return translation;
+	}
+
+	public static Matrix shearing(double xy, double xz, double yx, double yz,
+		double zx, double zy)
+	{
+		Matrix translation = identity(4);
+		translation.matrix[0][1] = xy;
+		translation.matrix[0][2] = xz;
+		translation.matrix[1][0] = yx;
+		translation.matrix[1][2] = yz;
+		translation.matrix[2][0] = zx;
+		translation.matrix[2][1] = zy;
+		return translation;
 	}
 }

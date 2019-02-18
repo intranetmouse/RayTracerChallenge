@@ -384,4 +384,215 @@ System.out.println("expectedB="+expectedB);
 
 		Assert.assertEquals(expectedB, b);
 	}
+
+	@Test
+	public void testMatrixTranslationPoint()
+	{
+		Matrix a = Matrix.newTranslation(5, -3, 2);
+		Point p = new Point(-3, 4, 5);
+		Point expectedPoint = new Point(2, 1, 7);
+
+		Point result = a.multiply(p);
+		Assert.assertEquals(expectedPoint, result);
+	}
+
+	@Test
+	public void testMatrixTranslationInversePoint()
+	{
+		Matrix a = Matrix.newTranslation(5, -3, 2);
+		Matrix inv = a.inverse();
+		Point p = new Point(-3, 4, 5);
+		Point expectedPoint = new Point(-8, 7, 3);
+
+		Point result = inv.multiply(p);
+		Assert.assertEquals(expectedPoint, result);
+	}
+
+	@Test
+	public void testMatrixTranslationVector()
+	{
+		Matrix a = Matrix.newTranslation(5, -3, 2);
+		Vector v = new Vector(-3, 4, 5);
+
+		Vector result = a.multiply(v);
+		Assert.assertEquals(v, result);
+	}
+
+	@Test
+	public void testMatrixScalePoint()
+	{
+		Matrix a = Matrix.newScaling(2, 3, 4);
+		Point pt = new Point(-4, 6, 8);
+		Point expectedScaledPt = new Point(-8, 18, 32);
+
+		Point scaledPt = a.multiply(pt);
+		Assert.assertEquals(expectedScaledPt, scaledPt);
+	}
+
+	@Test
+	public void testMatrixScaleVector()
+	{
+		Matrix a = Matrix.newScaling(2, 3, 4);
+		Vector v = new Vector(-4, 6, 8);
+		Vector expectedScaledVector = new Vector(-8, 18, 32);
+
+		Vector scaledVector = a.multiply(v);
+		Assert.assertEquals(expectedScaledVector, scaledVector);
+	}
+
+	@Test
+	public void testMatrixInverseScaleVector()
+	{
+		Matrix a = Matrix.newScaling(2, 3, 4);
+		Matrix inv = a.inverse();
+		Vector v = new Vector(-4, 6, 8);
+		Vector expectedScaledVector = new Vector(-2, 2, 2);
+
+		Vector scaledVector = inv.multiply(v);
+		Assert.assertEquals(expectedScaledVector, scaledVector);
+	}
+
+	@Test
+	public void testMatrixReflectPoint()
+	{
+		Matrix a = Matrix.newScaling(-1, 1, 1);
+		Point pt = new Point(2, 3, 4);
+		Point expectedScaledPt = new Point(-2, 3, 4);
+
+		Point scaledPt = a.multiply(pt);
+		Assert.assertEquals(expectedScaledPt, scaledPt);
+	}
+
+	@Test
+	public void testMatrixRotationXPoint()
+	{
+		Point p = new Point(0, 1, 0);
+
+		Matrix halfQuarterRot = Matrix.newRotationX(Math.PI / 4);
+		double sqrt2Div2 = Math.sqrt(2)/2;
+		Point expectedHalfQuarterPt = new Point(0, sqrt2Div2, sqrt2Div2);
+		Point halfQuarterRotPt = halfQuarterRot.multiply(p);
+		Assert.assertEquals(expectedHalfQuarterPt, halfQuarterRotPt);
+
+		Matrix fullQuarterRot = Matrix.newRotationX(Math.PI / 2);
+		Point expectedFullQuarterPt = new Point(0, 0, 1);
+		Point fullQuarterRotPt = fullQuarterRot.multiply(p);
+		Assert.assertEquals(expectedFullQuarterPt, fullQuarterRotPt);
+	}
+
+	@Test
+	public void testMatrixInverseRotationXPoint()
+	{
+		Point p = new Point(0, 1, 0);
+
+		Matrix halfQuarterRot = Matrix.newRotationX(Math.PI / 4);
+		Matrix halfQuarterRotInv = halfQuarterRot.inverse();
+
+		double sqrt2Div2 = Math.sqrt(2)/2;
+		Point expectedHalfQuarterPt = new Point(0, sqrt2Div2, -sqrt2Div2);
+		Point halfQuarterRotPt = halfQuarterRotInv.multiply(p);
+		Assert.assertEquals(expectedHalfQuarterPt, halfQuarterRotPt);
+	}
+
+	@Test
+	public void testMatrixRotationYPoint()
+	{
+		Point p = new Point(0, 0, 1);
+
+		double sqrt2Div2 = Math.sqrt(2)/2;
+
+		Matrix halfQuarterRot = Matrix.newRotationY(Math.PI / 4);
+		Point expectedHalfQuarterPt = new Point(sqrt2Div2, 0, sqrt2Div2);
+		Point halfQuarterRotPt = halfQuarterRot.multiply(p);
+		Assert.assertEquals(expectedHalfQuarterPt, halfQuarterRotPt);
+
+		Matrix fullQuarterRot = Matrix.newRotationY(Math.PI / 2);
+		Point expectedFullQuarterPt = new Point(1, 0, 0);
+		Point fullQuarterRotPt = fullQuarterRot.multiply(p);
+		Assert.assertEquals(expectedFullQuarterPt, fullQuarterRotPt);
+	}
+
+	@Test
+	public void testMatrixRotationZPoint()
+	{
+		Point p = new Point(0, 1, 0);
+
+		double sqrt2Div2 = Math.sqrt(2)/2;
+
+		Matrix halfQuarterRot = Matrix.newRotationZ(Math.PI / 4);
+		Point expectedHalfQuarterPt = new Point(-sqrt2Div2, sqrt2Div2, 0);
+		Point halfQuarterRotPt = halfQuarterRot.multiply(p);
+		Assert.assertEquals(expectedHalfQuarterPt, halfQuarterRotPt);
+
+		Matrix fullQuarterRot = Matrix.newRotationZ(Math.PI / 2);
+		Point expectedFullQuarterPt = new Point(-1, 0, 0);
+		Point fullQuarterRotPt = fullQuarterRot.multiply(p);
+		Assert.assertEquals(expectedFullQuarterPt, fullQuarterRotPt);
+	}
+
+	@Test
+	public void testMatrixShearingXtoY()
+	{
+		Matrix shearMtx = Matrix.shearing(1, 0, 0, 0, 0, 0);
+		Point p = new Point(2, 3, 4);
+
+		Point expectedPt = new Point(5, 3, 4);
+		Point shearedPt = shearMtx.multiply(p);
+		Assert.assertEquals(expectedPt, shearedPt);
+	}
+
+	@Test
+	public void testMatrixShearingXtoZ()
+	{
+		Matrix shearMtx = Matrix.shearing(0, 1, 0, 0, 0, 0);
+		Point p = new Point(2, 3, 4);
+
+		Point expectedPt = new Point(6, 3, 4);
+		Point shearedPt = shearMtx.multiply(p);
+		Assert.assertEquals(expectedPt, shearedPt);
+	}
+
+	@Test
+	public void testMatrixShearingYtoX()
+	{
+		Matrix shearMtx = Matrix.shearing(0, 0, 1, 0, 0, 0);
+		Point p = new Point(2, 3, 4);
+
+		Point expectedPt = new Point(2, 5, 4);
+		Point shearedPt = shearMtx.multiply(p);
+		Assert.assertEquals(expectedPt, shearedPt);
+	}
+
+	@Test
+	public void testMatrixShearingYtoZ()
+	{
+		Matrix shearMtx = Matrix.shearing(0, 0, 0, 1, 0, 0);
+		Point p = new Point(2, 3, 4);
+
+		Point expectedPt = new Point(2, 7, 4);
+		Point shearedPt = shearMtx.multiply(p);
+		Assert.assertEquals(expectedPt, shearedPt);
+	}
+
+	@Test
+	public void testMatrixShearingZtoX()
+	{
+		Matrix shearMtx = Matrix.shearing(0, 0, 0, 0, 1, 0);
+		Point p = new Point(2, 3, 4);
+
+		Point expectedPt = new Point(2, 3, 6);
+		Point shearedPt = shearMtx.multiply(p);
+		Assert.assertEquals(expectedPt, shearedPt);
+	}
+
+	@Test
+	public void testMatrixShearingZtoY()
+	{
+		Matrix shearMtx = Matrix.shearing(0, 0, 0, 0, 0, 1);
+		Point p = new Point(2, 3, 4);
+
+		Point expectedPt = new Point(2, 3, 7);
+		Point shearedPt = shearMtx.multiply(p);
+		Assert.assertEquals(expectedPt, shearedPt);
+	}
 }

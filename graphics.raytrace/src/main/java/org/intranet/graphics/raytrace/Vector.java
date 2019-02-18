@@ -8,6 +8,11 @@ public class Vector
 	public Vector(double x, double y, double z)
 	{ super(x, y, z, 0.0); }
 
+	public Vector(double x, double y, double z, double w)
+	{
+		super(x, y, z, w);
+	}
+
 	public Vector cross(Vector b)
 	{
 		return new Vector(
