@@ -595,4 +595,36 @@ System.out.println("expectedB="+expectedB);
 		Point shearedPt = shearMtx.multiply(p);
 		Assert.assertEquals(expectedPt, shearedPt);
 	}
+
+	@Test
+	public void testIndividualTransformationsInSequence()
+	{
+		Point p = new Point(1, 0, 1);
+		Matrix a = Matrix.newRotationX(Math.PI / 2);
+		Matrix b = Matrix.newScaling(5, 5, 5);
+		Matrix c = Matrix.newTranslation(10, 5, 7);
+
+		Point p2 = a.multiply(p);
+		Assert.assertEquals(new Point(1, -1, 0), p2);
+
+		Point p3 = b.multiply(p2);
+		Assert.assertEquals(new Point(5, -5, 0), p3);
+
+		Point p4 = c.multiply(p3);
+		Assert.assertEquals(new Point(15, 0, 7), p4);
+	}
+
+	@Test
+	public void testChainedTransformationsInReverseOrder()
+	{
+		Point p = new Point(1, 0, 1);
+		Matrix a = Matrix.newRotationX(Math.PI / 2);
+		Matrix b = Matrix.newScaling(5, 5, 5);
+		Matrix c = Matrix.newTranslation(10, 5, 7);
+
+		Matrix t = c.multiply(b).multiply(a);
+
+		Point p2 = t.multiply(p);
+		Assert.assertEquals(new Point(15, 0, 7), p2);
+	}
 }
