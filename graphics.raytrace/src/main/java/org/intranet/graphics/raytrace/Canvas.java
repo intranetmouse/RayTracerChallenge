@@ -38,7 +38,7 @@ public class Canvas
 
 	public void writePixel(int w, int h, Color color)
 	{
-		getPixelColor(w, h).copy(color);
+		getPixelColor(w, h).copyValues(color);
 	}
 
 	public List<String> toPpm()
@@ -92,7 +92,7 @@ public class Canvas
 	{
 		for (int w = 0; w < width; w++)
 			for (int h = 0; h < height; h++)
-				pixels[h][w].copy(c);
+				pixels[h][w].copyValues(c);
 	}
 
 	public void writeFile(String fname)

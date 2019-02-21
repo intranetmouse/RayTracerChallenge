@@ -39,7 +39,7 @@ public final class Color
 		return new Color(values[0]*d, values[1]*d, values[2]*d);
 	}
 
-	public void copy(Color other)
+	public void copyValues(Color other)
 	{
 		for (int i = 0; i < values.length; i++)
 			values[i] = other.values[i];
