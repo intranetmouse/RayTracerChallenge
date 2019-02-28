@@ -12,21 +12,22 @@ import cucumber.api.java.en.When;
 
 public class TuplesSteps
 {
-	private Tuple a;
+	private Map<String, Tuple> tupleMap = new HashMap<>();
 	private Map<String, Point> pointMap = new HashMap<>();
 	private Map<String, Vector> vectorMap = new HashMap<>();
 	private Map<String, Color> colorMap = new HashMap<>();
 
-	@Given("^a ← tuple\\((-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*)\\)$")
-	public void aTuple(double x, double y, double z, double w)
+	@Given("^([a-zA-Z_][a-zA-Z0-9_]*) ← tuple\\((-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*)\\)$")
+	public void aTuple(String tupleName, double x, double y, double z, double w)
 	{
-		a = Tuple.dblEqual(1.0, w) ? new Point(x, y, z) :
+		Tuple a = Tuple.dblEqual(1.0, w) ? new Point(x, y, z) :
 			Tuple.dblEqual(0.0, w) ? new Vector(x, y, z) :
 			new Tuple(x, y, z, w);
+		tupleMap.put(tupleName, a);
 	}
 
 	@Given("^([a-zA-Z_][a-zA-Z0-9_]*) ← (vector|point|color)\\((-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*)\\)$")
-	public void v2Vector(String varName, String type, double x, double y, double z)
+	public void setTupleType3(String varName, String type, double x, double y, double z)
 	{
 		if ("vector".equals(type))
 			vectorMap.put(varName, new Vector(x, y, z));
@@ -45,51 +46,59 @@ public class TuplesSteps
 
 
 
-	@Then("^a\\.x = (-?\\d+\\.?\\d+)$")
-	public void aX(double x)
+	@Then("^([a-zA-Z_][a-zA-Z0-9_]*)\\.x = (-?\\d+\\.?\\d+)$")
+	public void aX(String tupleName, double x)
 	{
+		Tuple a = tupleMap.get(tupleName);
 		Assert.assertEquals(x, a.getX(), Tuple.EPSILON);
 	}
 
-	@Then("^a\\.y = (-?\\d+\\.?\\d+)$")
-	public void aY(double y)
+	@Then("^([a-zA-Z_][a-zA-Z0-9_]*)\\.y = (-?\\d+\\.?\\d+)$")
+	public void aY(String tupleName, double y)
 	{
+		Tuple a = tupleMap.get(tupleName);
 		Assert.assertEquals(y, a.getY(), Tuple.EPSILON);
 	}
 
-	@Then("^a\\.z = (-?\\d+\\.\\d+)$")
-	public void aZ(double z)
+	@Then("^([a-zA-Z_][a-zA-Z0-9_]*)\\.z = (-?\\d+\\.\\d+)$")
+	public void aZ(String tupleName, double z)
 	{
+		Tuple a = tupleMap.get(tupleName);
 		Assert.assertEquals(z, a.getZ(), Tuple.EPSILON);
 	}
 
-	@Then("^a\\.w = (-?\\d+\\.?\\d+)$")
-	public void aW(double w)
+	@Then("^([a-zA-Z_][a-zA-Z0-9_]*)\\.w = (-?\\d+\\.?\\d+)$")
+	public void aW(String tupleName, double w)
 	{
+		Tuple a = tupleMap.get(tupleName);
 		Assert.assertEquals(w, a.getW(), Tuple.EPSILON);
 	}
 
-	@Then("^a is a point$")
-	public void aIsAPoint()
+	@Then("^([a-zA-Z_][a-zA-Z0-9_]*) is a point$")
+	public void aIsAPoint(String tupleName)
 	{
+		Tuple a = tupleMap.get(tupleName);
 		Assert.assertTrue(a instanceof Point);
 	}
 
-	@Then("^a is not a point$")
-	public void aIsNotAPoint() throws Throwable
+	@Then("^([a-zA-Z_][a-zA-Z0-9_]*) is not a point$")
+	public void aIsNotAPoint(String tupleName)
 	{
+		Tuple a = tupleMap.get(tupleName);
 		Assert.assertFalse(a instanceof Point);
 	}
 
-	@Then("^a is not a vector$")
-	public void aIsNotAVector()
+	@Then("^([a-zA-Z_][a-zA-Z0-9_]*) is not a vector$")
+	public void aIsNotAVector(String tupleName)
 	{
+		Tuple a = tupleMap.get(tupleName);
 		Assert.assertFalse(a instanceof Vector);
 	}
 
-	@Then("^a is a vector$")
-	public void aIsAVector() throws Throwable
+	@Then("^([a-zA-Z_][a-zA-Z0-9_]*) is a vector$")
+	public void aIsAVector(String tupleName)
 	{
+		Tuple a = tupleMap.get(tupleName);
 		Assert.assertTrue(a instanceof Vector);
 	}
 
@@ -148,18 +157,20 @@ public class TuplesSteps
 		Assert.assertEquals(expected, actual);
 	}
 
-	@Then("^-a = tuple\\((-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*)\\)$")
-	public void negativeTuple_Equals_Tuple(double x, double y, double z, double w)
+	@Then("^-([a-zA-Z_][a-zA-Z0-9_]*) = tuple\\((-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*)\\)$")
+	public void negativeTuple_Equals_Tuple(String tupleName, double x, double y, double z, double w)
 	{
 		Tuple expected = new Tuple(x, y, z, w);
 
+		Tuple a = tupleMap.get(tupleName);
 		Tuple actual = a.negate();
 		Assert.assertEquals(expected, actual);
 	}
 
-	@Then("^a (\\*|\\/) (-?\\d+\\.?\\d*) = tuple\\((-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*)\\)$")
-	public void aMultiply_Equals_Tuple(String operation, double multiply, double x, double y, double z, double w)
+	@Then("^([a-zA-Z_][a-zA-Z0-9_]*) (\\*|\\/) (-?\\d+\\.?\\d*) = tuple\\((-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*)\\)$")
+	public void aMultiply_Equals_Tuple(String tupleName, String operation, double multiply, double x, double y, double z, double w)
 	{
+		Tuple a = tupleMap.get(tupleName);
 		Tuple actual = operation.equals("*") ? a.multiply(multiply) :
 			operation.equals("/") ? a.divide(multiply) :
 			null;
@@ -204,7 +215,8 @@ public class TuplesSteps
 	}
 
 	@Then("^cross\\(([a-zA-Z_][a-zA-Z0-9_]*), ([a-zA-Z_][a-zA-Z0-9_]*)\\) = vector\\((-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*)\\)$")
-	public void vector_cross_Vector(String vector1Name, String vector2Name, double x, double y, double z)
+	public void vector_cross_Vector(String vector1Name, String vector2Name,
+		double x, double y, double z)
 	{
 		Vector expectedVector = new Vector(x, y, z);
 		Vector vector1 = vectorMap.get(vector1Name);
@@ -215,7 +227,8 @@ public class TuplesSteps
 
 
 	@Then("^([a-zA-Z_][a-zA-Z0-9_]*)\\.(red|green|blue) = (-?\\d+\\.?\\d*)$")
-	public void colorAssert(String colorVarName, String colorName, double expectedColor)
+	public void colorAssert(String colorVarName, String colorName,
+		double expectedColor)
 	{
 		Color color = colorMap.get(colorVarName);
 		Double value = "red".equals(colorName) ? color.getRed() :
@@ -224,6 +237,33 @@ public class TuplesSteps
 			null;
 		Assert.assertNotNull("Illegal color name " + colorName, value);
 		Assert.assertEquals(expectedColor, value, Tuple.EPSILON);
+	}
+
+	@Then("^([a-zA-Z_][a-zA-Z0-9_]*) (\\+|-|\\*) ([a-zA-Z_][a-zA-Z0-9_]*) = color\\((\\d+\\.?\\d*), (\\d+\\.?\\d*), (\\d+\\.?\\d*)\\)$")
+	public void colorOperationColor_equals_Color(String color1Name, String operation, String color2Name,
+		double red, double green, double blue)
+	{
+		Color expected = new Color(red, green, blue);
+		Color c1 = colorMap.get(color1Name);
+		Color c2 = colorMap.get(color2Name);
+		Color result = "+".equals(operation) ? c1.add(c2) :
+			"-".equals(operation) ? c1.subtract(c2) :
+			"*".equals(operation) ? c1.multiply(c2) :
+//			"/".equals(operation) ? c1.divide(c2) :
+			null;
+		Assert.assertNotNull("Unknown operation " + operation, result);
+		Assert.assertEquals(expected, result);
+	}
+
+	@Then("^([a-zA-Z_][a-zA-Z0-9_]*) \\* (\\d+\\.?\\d*) = color\\((\\d+\\.?\\d*), (\\d+\\.?\\d*), (\\d+\\.?\\d*)\\)$")
+	public void colorOperationDouble_equals_Color(String color1Name,
+		double multiplyValue,
+		double red, double green, double blue)
+	{
+		Color expected = new Color(red, green, blue);
+		Color c1 = colorMap.get(color1Name);
+		Color result = c1.multiply(multiplyValue);
+		Assert.assertEquals(expected, result);
 	}
 
 }

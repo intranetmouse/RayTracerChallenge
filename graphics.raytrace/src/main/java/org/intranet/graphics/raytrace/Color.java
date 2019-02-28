@@ -44,4 +44,12 @@ public final class Color
 		for (int i = 0; i < values.length; i++)
 			values[i] = other.values[i];
 	}
+
+	public Color multiply(Color c2)
+	{
+		return new Color(
+			values[0] * c2.values[0],
+			values[1] * c2.values[1],
+			values[2] * c2.values[2]);
+	}
 }
