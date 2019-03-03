@@ -6,14 +6,19 @@ import java.util.Map;
 
 import org.junit.Assert;
 
-import cucumber.api.DataTable;
+import io.cucumber.datatable.*;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 
 public class MatricesSteps
 {
-	private Map<String, Matrix> matricesMap = new HashMap<>();
+	private final TupleData data;
+
+	public MatricesSteps(TupleData data)
+	{
+		this.data = data;
+	}
 
 	@Given("^the following (\\d+)x(\\d+) matrix ([a-zA-Z_][a-zA-Z0-9]*):$")
 	public void theFollowingRxCMatrixM(int numRows, int numCols, String matrixName,
@@ -38,7 +43,7 @@ public class MatricesSteps
 		List<Double> doubles)
 	{
 		Matrix m = createMatrix(numRows, numCols, doubles);
-		matricesMap.put(matrixName,  m);
+		data.put(matrixName,  m);
 	}
 
 	private Matrix createMatrix(int numRows, int numCols, List<Double> doubles)
@@ -60,7 +65,7 @@ public class MatricesSteps
 	public void matrixAssertEquals(String varName, int rowNum, int colNum,
 		double expected)
 	{
-		Matrix m = matricesMap.get(varName);
+		Matrix m = data.getMatrix(varName);
 		double actual = m.get(rowNum, colNum);
 		Assert.assertEquals(expected, actual, Tuple.EPSILON);
 	}
@@ -68,8 +73,8 @@ public class MatricesSteps
 	@Then("^([a-zA-Z_][a-zA-Z0-9]*) (=|!=) ([a-zA-Z_][a-zA-Z0-9]*)$")
 	public void aB(String mtx1Name, String operation, String mtx2Name)
 	{
-		Matrix m1 = matricesMap.get(mtx1Name);
-		Matrix m2 = matricesMap.get(mtx2Name);
+		Matrix m1 = data.getMatrix(mtx1Name);
+		Matrix m2 = data.getMatrix(mtx2Name);
 
 		if ("=".equals(operation))
 			Assert.assertEquals(m1, m2);
@@ -82,8 +87,8 @@ public class MatricesSteps
 	@Then("^([a-zA-Z_][a-zA-Z0-9]*) \\* ([a-zA-Z_][a-zA-Z0-9]*) is the following (\\d+)x(\\d+) matrix:$")
 	public void aTimesB(String mtx1Name, String mtx2Name, int numRows, int numCols, List<Double> doubles)
 	{
-		Matrix m1 = matricesMap.get(mtx1Name);
-		Matrix m2 = matricesMap.get(mtx2Name);
+		Matrix m1 = data.getMatrix(mtx1Name);
+		Matrix m2 = data.getMatrix(mtx2Name);
 		Matrix expected = createMatrix(numRows, numCols, doubles);
 
 		Matrix result = m1.multiply(m2);
