@@ -19,10 +19,9 @@ public class TuplesSteps
 	@Given("^([a-zA-Z_][a-zA-Z0-9_]*) ← tuple\\((-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*)\\)$")
 	public void aTuple(String tupleName, double x, double y, double z, double w)
 	{
-		Tuple a = Tuple.dblEqual(1.0, w) ? new Point(x, y, z) :
-			Tuple.dblEqual(0.0, w) ? new Vector(x, y, z) :
-			new Tuple(x, y, z, w);
-		data.put(tupleName, a);
+		if (Tuple.dblEqual(1.0, w)) data.put(tupleName, new Point(x, y, z));
+		else if (Tuple.dblEqual(0.0, w)) data.put(tupleName, new Vector(x, y, z));
+		else data.put(tupleName, new Tuple(x, y, z, w));
 	}
 
 	@Given("^([a-zA-Z_][a-zA-Z0-9_]*) ← (vector|point|color)\\((-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*)\\)$")
@@ -40,7 +39,8 @@ public class TuplesSteps
 	@When("^([a-zA-Z_][a-zA-Z0-9_]*) ← normalize\\(([a-zA-Z_][a-zA-Z0-9_]*)\\)$")
 	public void v2Vector(String varName, String vectorName)
 	{
-		data.put(varName, data.getVector(vectorName).normalize());
+		Vector vector = data.getVector(vectorName);
+		data.put(varName, vector.normalize());
 	}
 
 
