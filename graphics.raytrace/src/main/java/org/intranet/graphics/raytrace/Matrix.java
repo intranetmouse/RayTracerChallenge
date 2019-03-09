@@ -85,6 +85,12 @@ public class Matrix
 		return new Point(values[0], values[1], values[2], values[3]);
 	}
 
+	public Tuple multiply(Tuple b)
+	{
+		double[] values = multiplyTuple(b);
+		return new Tuple(values[0], values[1], values[2], values[3]);
+	}
+
 	private double[] multiplyTuple(Tuple tuple)
 	{
 		double[] values = new double[4];
@@ -273,5 +279,15 @@ public class Matrix
 		translation.matrix[2][0] = zx;
 		translation.matrix[2][1] = zy;
 		return translation;
+	}
+
+	public int getNumRows()
+	{
+		return matrix.length;
+	}
+
+	public int getNumCols()
+	{
+		return matrix[0].length;
 	}
 }
