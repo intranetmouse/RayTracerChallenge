@@ -2,21 +2,19 @@ package org.intranet.graphics.raytrace;
 
 import org.junit.Assert;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 public class TuplesSteps
+	extends StepsParent
 {
-	private final TupleData data;
-
-	public TuplesSteps(TupleData data)
+	public TuplesSteps(RaytraceData data)
 	{
-		this.data = data;
+		super(data);
 	}
 
-	@Given("^([a-zA-Z_][a-zA-Z0-9_]*) ← tuple\\((-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*)\\)$")
+	@Given("^" + wordPattern + " ← tuple\\(" + fourDoublesPattern + "\\)$")
 	public void aTuple(String tupleName, double x, double y, double z, double w)
 	{
 		if (Tuple.dblEqual(1.0, w)) data.put(tupleName, new Point(x, y, z));
@@ -24,7 +22,7 @@ public class TuplesSteps
 		else data.put(tupleName, new Tuple(x, y, z, w));
 	}
 
-	@Given("^([a-zA-Z_][a-zA-Z0-9_]*) ← (vector|point|color)\\((-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*)\\)$")
+	@Given("^" + wordPattern + " ← (vector|point|color)\\(" + threeDoublesPattern + "\\)$")
 	public void setTupleType3(String varName, String type, double x, double y, double z)
 	{
 		if ("vector".equals(type))
@@ -36,7 +34,7 @@ public class TuplesSteps
 	}
 
 
-	@When("^([a-zA-Z_][a-zA-Z0-9_]*) ← normalize\\(([a-zA-Z_][a-zA-Z0-9_]*)\\)$")
+	@When("^" + wordPattern + " ← normalize\\(" + wordPattern + "\\)$")
 	public void v2Vector(String varName, String vectorName)
 	{
 		Vector vector = data.getVector(vectorName);
@@ -45,84 +43,84 @@ public class TuplesSteps
 
 
 
-	@Then("^([a-zA-Z_][a-zA-Z0-9_]*)\\.x = (-?\\d+\\.?\\d+)$")
+	@Then("^" + wordPattern + "\\.x = " + doublePattern + "$")
 	public void aX(String tupleName, double x)
 	{
 		Tuple a = data.getTuple(tupleName);
 		Assert.assertEquals(x, a.getX(), Tuple.EPSILON);
 	}
 
-	@Then("^([a-zA-Z_][a-zA-Z0-9_]*)\\.y = (-?\\d+\\.?\\d+)$")
+	@Then("^" + wordPattern + "\\.y = " + doublePattern + "$")
 	public void aY(String tupleName, double y)
 	{
 		Tuple a = data.getTuple(tupleName);
 		Assert.assertEquals(y, a.getY(), Tuple.EPSILON);
 	}
 
-	@Then("^([a-zA-Z_][a-zA-Z0-9_]*)\\.z = (-?\\d+\\.\\d+)$")
+	@Then("^" + wordPattern + "\\.z = " + doublePattern + "$")
 	public void aZ(String tupleName, double z)
 	{
 		Tuple a = data.getTuple(tupleName);
 		Assert.assertEquals(z, a.getZ(), Tuple.EPSILON);
 	}
 
-	@Then("^([a-zA-Z_][a-zA-Z0-9_]*)\\.w = (-?\\d+\\.?\\d+)$")
+	@Then("^" + wordPattern + "\\.w = " + doublePattern + "$")
 	public void aW(String tupleName, double w)
 	{
 		Tuple a = data.getTuple(tupleName);
 		Assert.assertEquals(w, a.getW(), Tuple.EPSILON);
 	}
 
-	@Then("^([a-zA-Z_][a-zA-Z0-9_]*) is a point$")
+	@Then("^" + wordPattern + " is a point$")
 	public void aIsAPoint(String tupleName)
 	{
 		Tuple a = data.getTuple(tupleName);
 		Assert.assertTrue(a instanceof Point);
 	}
 
-	@Then("^([a-zA-Z_][a-zA-Z0-9_]*) is not a point$")
+	@Then("^" + wordPattern + " is not a point$")
 	public void aIsNotAPoint(String tupleName)
 	{
 		Tuple a = data.getTuple(tupleName);
 		Assert.assertFalse(a instanceof Point);
 	}
 
-	@Then("^([a-zA-Z_][a-zA-Z0-9_]*) is not a vector$")
+	@Then("^" + wordPattern + " is not a vector$")
 	public void aIsNotAVector(String tupleName)
 	{
 		Tuple a = data.getTuple(tupleName);
 		Assert.assertFalse(a instanceof Vector);
 	}
 
-	@Then("^([a-zA-Z_][a-zA-Z0-9_]*) is a vector$")
+	@Then("^" + wordPattern + " is a vector$")
 	public void aIsAVector(String tupleName)
 	{
 		Tuple a = data.getTuple(tupleName);
 		Assert.assertTrue(a instanceof Vector);
 	}
 
-	@Then("^(p[a-zA-Z0-9_]*) = tuple\\((-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), 1\\)$")
+	@Then("^(p[a-zA-Z0-9_]*) = tuple\\(" + threeDoublesPattern + ", 1\\)$")
 	public void pEqualsTuple(String pointName, double x, double y, double z)
 	{
 		Point p2 = new Point(x, y, z);
 		Assert.assertEquals(p2, data.getPoint(pointName));
 	}
 
-	@Then("^(v[a-zA-Z0-9_]*) = tuple\\((-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), 0\\)$")
+	@Then("^(v[a-zA-Z0-9_]*) = tuple\\(" + threeDoublesPattern + ", 0\\)$")
 	public void vTuple(String vectorName, double x, double y, double z)
 	{
 		Vector expectedVector = new Vector(x, y, z);
 		Assert.assertEquals(expectedVector, data.getVector(vectorName));
 	}
 
-	@Then("^([a-zA-Z_][a-zA-Z0-9_]*) = vector\\((-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*)\\)$")
+	@Then("^" + wordPattern + " = vector\\(" + threeDoublesPattern + "\\)$")
 	public void vEqualsVector(String vectorName, double x, double y, double z)
 	{
 		Vector expectedVector = new Vector(x, y, z);
 		Assert.assertEquals(expectedVector, data.getVector(vectorName));
 	}
 
-	@Then("^(p[a-zA-Z0-9_]*) \\+ v2 = tuple\\((-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), 1\\)$")
+	@Then("^(p[a-zA-Z0-9_]*) \\+ v2 = tuple\\(" + threeDoublesPattern + ", 1\\)$")
 	public void pAddV_point(String pointName, double x, double y, double z)
 	{
 		Point expected = new Point(x, y, z);
@@ -132,7 +130,7 @@ public class TuplesSteps
 		Assert.assertEquals(expected, actual);
 	}
 
-	@Then("^(p[a-zA-Z0-9_]*) \\- ([a-zA-Z_][a-zA-Z0-9_]*) = vector\\((-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*)\\)$")
+	@Then("^(p[a-zA-Z0-9_]*) \\- " + wordPattern + " = vector\\(" + threeDoublesPattern + "\\)$")
 	public void pSubtractV_vector(String point1Name, String point2Name, double x, double y, double z)
 	{
 		Vector expected = new Vector(x, y, z);
@@ -142,7 +140,7 @@ public class TuplesSteps
 		Assert.assertEquals(expected, actual);
 	}
 
-	@Then("^(p[a-zA-Z0-9_]*) \\- v = point\\((-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*)\\)$")
+	@Then("^(p[a-zA-Z0-9_]*) \\- v = point\\(" + threeDoublesPattern + "\\)$")
 	public void pSubtractV_point(String point1Name, double x, double y, double z)
 	{
 		Point expected = new Point(x, y, z);
@@ -152,7 +150,7 @@ public class TuplesSteps
 		Assert.assertEquals(expected, actual);
 	}
 
-	@Then("^([vz][a-zA-Z0-9_]*) \\- ([vz][a-zA-Z0-9_]*) = vector\\((-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*)\\)$")
+	@Then("^([vz][a-zA-Z0-9_]*) \\- ([vz][a-zA-Z0-9_]*) = vector\\(" + threeDoublesPattern + "\\)$")
 	public void vSubtractV_vector(String v1Name, String v2Name, double x, double y, double z)
 	{
 		Vector expected = new Vector(x, y, z);
@@ -162,7 +160,7 @@ public class TuplesSteps
 		Assert.assertEquals(expected, actual);
 	}
 
-	@Then("^-([a-zA-Z_][a-zA-Z0-9_]*) = tuple\\((-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*)\\)$")
+	@Then("^-" + wordPattern + " = tuple\\(" + fourDoublesPattern + "\\)$")
 	public void negativeTuple_Equals_Tuple(String tupleName, double x, double y, double z, double w)
 	{
 		Tuple expected = new Tuple(x, y, z, w);
@@ -172,7 +170,7 @@ public class TuplesSteps
 		Assert.assertEquals(expected, actual);
 	}
 
-	@Then("^([a-zA-Z_][a-zA-Z0-9_]*) (\\*|\\/) (-?\\d+\\.?\\d*) = tuple\\((-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*)\\)$")
+	@Then("^" + wordPattern + " (\\*|\\/) " + doublePattern + " = tuple\\(" + fourDoublesPattern + "\\)$")
 	public void aMultiply_Equals_Tuple(String tupleName, String operation, double multiply, double x, double y, double z, double w)
 	{
 		Tuple a = data.getTuple(tupleName);
@@ -184,7 +182,7 @@ public class TuplesSteps
 		Assert.assertEquals(expected, actual);
 	}
 
-	@Then("^magnitude\\(([a-zA-Z_][a-zA-Z0-9_]*)\\) = (-?\\d+\\.?\\d*)$")
+	@Then("^magnitude\\(" + wordPattern + "\\) = " + doublePattern + "$")
 	public void magnitude_v(String vectorVariable, double expectedMagnitude)
 	{
 		Vector v = data.getVector(vectorVariable);
@@ -192,7 +190,7 @@ public class TuplesSteps
 		Assert.assertEquals(expectedMagnitude, actualMagnitude, Tuple.EPSILON);
 	}
 
-	@Then("^magnitude\\(([a-zA-Z_][a-zA-Z0-9_]*)\\) = √(-?\\d+\\.?\\d*)$")
+	@Then("^magnitude\\(" + wordPattern + "\\) = √" + doublePattern + "$")
 	public void sqrtMagnitude_v(String vectorVariable, double expectedMagnitudeSquared)
 	{
 		double expectedMagnitude = Math.sqrt(expectedMagnitudeSquared);
@@ -201,7 +199,7 @@ public class TuplesSteps
 		Assert.assertEquals(expectedMagnitude, actualMagnitude, Tuple.EPSILON);
 	}
 
-	@Then("^normalize\\(([a-zA-Z_][a-zA-Z0-9_]*)\\) = (?:approximately )?vector\\((-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*)\\)$")
+	@Then("^normalize\\(" + wordPattern + "\\) = (?:approximately )?vector\\(" + threeDoublesPattern + "\\)$")
 	public void normalize_v_vector(String vectorVariable, double x, double y, double z)
 	{
 		Vector expected = new Vector(x, y, z);
@@ -211,7 +209,7 @@ public class TuplesSteps
 	}
 
 
-	@Then("^dot\\(([a-zA-Z_][a-zA-Z0-9_]*), ([a-zA-Z_][a-zA-Z0-9_]*)\\) = (-?\\d+\\.?\\d*)$")
+	@Then("^dot\\(" + wordPattern + ", " + wordPattern + "\\) = " + doublePattern + "$")
 	public void vector_dot_vector(String vectorVariable, String otherVectorVariable, double expectedDot)
 	{
 		Vector v1 = data.getVector(vectorVariable);
@@ -220,7 +218,7 @@ public class TuplesSteps
 		Assert.assertEquals(expectedDot, actualDot, Tuple.EPSILON);
 	}
 
-	@Then("^cross\\(([a-zA-Z_][a-zA-Z0-9_]*), ([a-zA-Z_][a-zA-Z0-9_]*)\\) = vector\\((-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*)\\)$")
+	@Then("^cross\\(" + wordPattern + ", " + wordPattern + "\\) = vector\\(" + threeDoublesPattern + "\\)$")
 	public void vector_cross_Vector(String vector1Name, String vector2Name,
 		double x, double y, double z)
 	{
@@ -232,7 +230,7 @@ public class TuplesSteps
 	}
 
 
-	@Then("^([a-zA-Z_][a-zA-Z0-9_]*)\\.(red|green|blue) = (-?\\d+\\.?\\d*)$")
+	@Then("^" + wordPattern + "\\.(red|green|blue) = " + doublePattern + "$")
 	public void colorAssert(String colorVarName, String colorName,
 		double expectedColor)
 	{
@@ -245,7 +243,7 @@ public class TuplesSteps
 		Assert.assertEquals(expectedColor, value, Tuple.EPSILON);
 	}
 
-	@Then("^([a-zA-Z_][a-zA-Z0-9_]*) (\\+|-|\\*) ([a-zA-Z_][a-zA-Z0-9_]*) = color\\((\\d+\\.?\\d*), (\\d+\\.?\\d*), (\\d+\\.?\\d*)\\)$")
+	@Then("^" + wordPattern + " (\\+|-|\\*) " + wordPattern + " = color\\(" + threeDoublesPattern + "\\)$")
 	public void colorOperationColor_equals_Color(String color1Name, String operation, String color2Name,
 		double red, double green, double blue)
 	{
@@ -261,7 +259,7 @@ public class TuplesSteps
 		Assert.assertEquals(expected, result);
 	}
 
-	@Then("^([a-zA-Z_][a-zA-Z0-9_]*) \\* (\\d+\\.?\\d*) = color\\((\\d+\\.?\\d*), (\\d+\\.?\\d*), (\\d+\\.?\\d*)\\)$")
+	@Then("^" + wordPattern + " \\* " + doublePattern + " = color\\(" + threeDoublesPattern + "\\)$")
 	public void colorOperationDouble_equals_Color(String color1Name,
 		double multiplyValue,
 		double red, double green, double blue)

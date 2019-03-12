@@ -10,9 +10,9 @@ import io.cucumber.datatable.DataTable;
 
 public class MatricesSteps
 {
-	private final TupleData data;
+	private final RaytraceData data;
 
-	public MatricesSteps(TupleData data)
+	public MatricesSteps(RaytraceData data)
 	{
 		this.data = data;
 	}
