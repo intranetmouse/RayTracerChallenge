@@ -98,8 +98,7 @@ public class IntersectionsSteps
 		Assert.assertNull(i);
 	}
 
-	@Given(wordPattern + " ← intersections\\(" + wordPattern + ", " +
-			wordPattern + ", " + wordPattern + ", " + wordPattern + "\\)")
+	@Given(wordPattern + " ← intersections\\(" + fourWordPattern + "\\)")
 	public void xsIntersectionsIIII(String intersectionListName, String int1,
 		String int2, String int3, String int4)
 	{

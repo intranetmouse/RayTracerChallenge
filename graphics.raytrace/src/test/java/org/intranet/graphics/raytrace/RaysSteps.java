@@ -35,6 +35,16 @@ public class RaysSteps
 		data.put(rayName, ray);
 	}
 
+//	@When(wordPattern + " ← transform\\(" + twoWordPattern + "\\)")
+//	public void rTransformRM(String newRayName, String rayName,
+//		String translationName)
+//	{
+//		Ray ray = data.getRay(rayName);
+//		Matrix t = data.getMatrix(translationName);
+//
+//		Ray newRay = ray.transform(t);
+//		data.put(newRayName, newRay);
+//	}
 
 
 
@@ -65,6 +75,22 @@ public class RaysSteps
 		Point expected = new Point(x, y, z);
 
 		Assert.assertEquals(expected, result);
+	}
+
+	@Then(wordPattern + ".origin = point\\(" + threeDoublesPattern + "\\)")
+	public void rOriginPoint(String rayName, double x, double y, double z)
+	{
+		Ray ray = data.getRay(rayName);
+		Point expectedOrigin = new Point(x, y, z);
+		Assert.assertEquals(expectedOrigin, ray.getOrigin());
+	}
+
+	@Then(wordPattern + ".direction = vector\\(" + threeDoublesPattern + "\\)")
+	public void rDirectionVector(String rayName, double x, double y, double z)
+	{
+		Ray ray = data.getRay(rayName);
+		Vector expectedDirection = new Vector(x, y, z);
+		Assert.assertEquals(expectedDirection, ray.getDirection());
 	}
 
 }

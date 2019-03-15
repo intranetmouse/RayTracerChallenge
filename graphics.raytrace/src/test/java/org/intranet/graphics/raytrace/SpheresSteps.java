@@ -21,7 +21,7 @@ public class SpheresSteps
 	}
 
 
-	@When(wordPattern + " ← intersect\\(" + wordPattern + ", " + wordPattern + "\\)")
+	@When(wordPattern + " ← intersect\\(" + twoWordPattern + "\\)")
 	public void xsIntersectSR(String intersectionName, String sphereName, String rayName)
 	{
 		Sphere sphere = data.getSphere(sphereName);
@@ -33,8 +33,9 @@ public class SpheresSteps
 	@Then(wordPattern + "\\[" + intPattern + "\\] = " + doublePattern)
 	public void xs(String intersectionName, int index, double expectedValue)
 	{
-		IntersectionList intersections = data.getIntersectionList(intersectionName);
-		double value = intersections.get(index).getDistance();
+		IntersectionList ilist = data.getIntersectionList(intersectionName);
+		Intersection intersection = ilist.get(index);
+		double value = intersection.getDistance();
 		Assert.assertEquals(expectedValue, value, Tuple.EPSILON);
 	}
 

@@ -9,15 +9,15 @@ import cucumber.api.java.en.Then;
 import io.cucumber.datatable.DataTable;
 
 public class MatricesSteps
+	extends StepsParent
 {
-	private final RaytraceData data;
 
 	public MatricesSteps(RaytraceData data)
 	{
-		this.data = data;
+		super(data);
 	}
 
-	@Given("^the following (\\d+)x(\\d+) matrix ([a-zA-Z_][a-zA-Z0-9]*):$")
+	@Given("^the following " + intPattern + "x" + intPattern + " matrix " + wordPattern + ":$")
 	public void theFollowingRxCMatrixM(int numRows, int numCols, String matrixName,
 		DataTable dataTable)
 	{
@@ -26,7 +26,7 @@ public class MatricesSteps
 		createMatrix(numRows, numCols, matrixName, doubles);
 	}
 
-	@Given("^the following matrix ([a-zA-Z_][a-zA-Z0-9]*):$")
+	@Given("^the following matrix " + wordPattern + ":$")
 	public void theFollowingXMatrixM(String matrixName,
 		DataTable dataTable)
 	{
@@ -35,22 +35,23 @@ public class MatricesSteps
 		createMatrix(size, size, matrixName, doubles);
 	}
 
-	@Given("^([a-zA-Z_][a-zA-Z0-9]*) ← transpose\\(identity_matrix\\)$")
+	@Given("^" + wordPattern + " ← transpose\\(identity_matrix\\)$")
 	public void theTransposeOfIdentity(String matrixName)
 	{
 		Matrix ident = Matrix.identity(4);
 		data.put(matrixName, ident);
 	}
 
-	@Given("^([a-zA-Z_][a-zA-Z0-9]*) ← submatrix\\(([a-zA-Z_][a-zA-Z0-9_]*), (\\d+), (\\d+)\\)$")
-	public void theTransposeOfIdentity(String matrix1Name, String matrix2Name, int dropRow, int dropCol)
+	@Given("^" + wordPattern + " ← submatrix\\(" + wordPattern + ", " + intPattern + ", " + intPattern + "\\)$")
+	public void theTransposeOfIdentity(String matrix1Name, String matrix2Name,
+		int dropRow, int dropCol)
 	{
 		Matrix m2 = data.getMatrix(matrix2Name);
 		Matrix result = m2.submatrix(dropRow, dropCol);
 		data.put(matrix1Name, result);
 	}
 
-	@Given("^([a-zA-Z_][a-zA-Z0-9]*) ← inverse\\(([a-zA-Z_][a-zA-Z0-9_]*)\\)$")
+	@Given("^" + wordPattern + " ← inverse\\(" + wordPattern + "\\)$")
 	public void theInverse(String matrix1Name, String matrix2Name)
 	{
 		Matrix matrix2 = data.getMatrix(matrix2Name);
@@ -59,8 +60,9 @@ public class MatricesSteps
 		data.put(matrix1Name, calc);
 	}
 
-	@Given("^([a-zA-Z_][a-zA-Z0-9]*) ← ([a-zA-Z_][a-zA-Z0-9]*) \\* ([a-zA-Z_][a-zA-Z0-9]*)$")
-	public void theTransposeOfIdentity(String destMatrixName, String matrix1Name, String matrix2Name)
+	@Given("^" + wordPattern + " ← " + wordPattern + " \\* " + wordPattern + "$")
+	public void theTransposeOfIdentity(String destMatrixName,
+		String matrix1Name, String matrix2Name)
 	{
 		Matrix matrix1 = data.getMatrix(matrix1Name);
 		Matrix matrix2 = data.getMatrix(matrix2Name);
@@ -68,6 +70,16 @@ public class MatricesSteps
 		data.put(destMatrixName, matrix1.multiply(matrix2));
 	}
 
+	@Given(wordPattern + " ← translation\\(" + threeDoublesPattern + "\\)")
+	public void transformTranslation(String matrixName, double x, double y,
+		double z)
+	{
+		Matrix matrix = Matrix.identity(4);
+		matrix.matrix[0][3] = x;
+		matrix.matrix[1][3] = y;
+		matrix.matrix[2][3] = z;
+		data.put(matrixName, matrix);
+	}
 
 	private void createMatrix(int numRows, int numCols, String matrixName,
 		List<Double> doubles)
@@ -91,7 +103,7 @@ public class MatricesSteps
 		return m;
 	}
 
-	@Then("^([a-zA-Z_][a-zA-Z0-9]*)\\[(\\d+),(\\d+)\\] = (-?\\d+\\.?\\d*)$")
+	@Then("^" + wordPattern + "\\[" + intPattern + "," + intPattern + "\\] = " + doublePattern + "$")
 	public void matrixAssertEquals(String varName, int rowNum, int colNum,
 		double expected)
 	{
@@ -100,11 +112,12 @@ public class MatricesSteps
 		Assert.assertEquals(expected, actual, Tuple.EPSILON);
 	}
 
-	@Then("^([a-zA-Z_][a-zA-Z0-9]*) (=|!=) ([a-zA-Z_][a-zA-Z0-9]*)$")
+	@Then("^" + wordPattern + " (=|!=) " + wordPattern + "$")
 	public void aB(String mtx1Name, String operation, String mtx2Name)
 	{
 		Matrix m1 = data.getMatrix(mtx1Name);
-		Matrix m2 = data.getMatrix(mtx2Name);
+		Matrix m2 = "identity_matrix".equals(mtx2Name) ?
+			Matrix.identity(m1.getNumCols()) : data.getMatrix(mtx2Name);
 
 		if ("=".equals(operation))
 			Assert.assertEquals(m1, m2);
@@ -114,7 +127,7 @@ public class MatricesSteps
 			throw new IllegalArgumentException("Unknown operation " + operation);
 	}
 
-	@Then("^([a-zA-Z_][a-zA-Z0-9]*) \\* ([a-zA-Z_][a-zA-Z0-9]*) is the following (\\d+)x(\\d+) matrix:$")
+	@Then("^" + wordPattern + " \\* " + wordPattern + " is the following " + intPattern + "x" + intPattern + " matrix:$")
 	public void matrixATimesMatrixB(String mtx1Name, String mtx2Name,
 		int numRows, int numCols, List<Double> doubles)
 	{
@@ -127,7 +140,7 @@ public class MatricesSteps
 		Assert.assertEquals(expected, result);
 	}
 
-	@Then("^([a-zA-Z_][a-zA-Z0-9]*) \\* ([a-zA-Z_][a-zA-Z0-9]*) = tuple\\((-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), (-?\\d+\\.?\\d*), 1\\)$")
+	@Then("^" + wordPattern + " \\* " + wordPattern + " = tuple\\(" + threeDoublesPattern + ", 1\\)$")
 	public void matrixATimesTupleB(String mtx1Name, String tupleBName,
 		double x, double y, double z)
 	{
@@ -140,7 +153,7 @@ public class MatricesSteps
 		Assert.assertEquals(expected, result);
 	}
 
-	@Then("^([a-zA-Z_][a-zA-Z0-9]*) \\* identity_matrix = ([a-zA-Z_][a-zA-Z0-9_]*)$")
+	@Then("^" + wordPattern + " \\* identity_matrix = " + wordPattern + "$")
 	public void matrixATimesIdentity(String mtx1Name, String mtx2Name)
 	{
 		Assert.assertEquals("Only the same matrix is supported", mtx1Name, mtx2Name);
@@ -154,18 +167,7 @@ public class MatricesSteps
 		Assert.assertEquals(m1, result);
 	}
 
-	@Then("^([a-zA-Z_][a-zA-Z0-9]*) = identity_matrix$")
-	public void matrixAEqualsIdentity(String mtx1Name)
-	{
-		Matrix m1 = data.getMatrix(mtx1Name);
-		Assert.assertNotNull(mtx1Name, m1);
-
-		Matrix identityMtx = Matrix.identity(m1.matrix[0].length);
-
-		Assert.assertEquals(identityMtx, m1);
-	}
-
-	@Then("^identity_matrix \\* ([a-zA-Z_][a-zA-Z0-9]*) = ([a-zA-Z_][a-zA-Z0-9_]*)$")
+	@Then("^identity_matrix \\* " + wordPattern + " = " + wordPattern + "$")
 	public void identityTimesMatrixA(String mtx1Name, String mtx2Name)
 	{
 		Assert.assertEquals("Only the same matrix is supported", mtx1Name, mtx2Name);
@@ -179,7 +181,7 @@ public class MatricesSteps
 		Assert.assertEquals(a, result);
 	}
 
-	@Then("^transpose\\(([a-zA-Z_][a-zA-Z0-9_]*)\\) is the following matrix:$")
+	@Then("^transpose\\(" + wordPattern + "\\) is the following matrix:$")
 	public void transposeAIsTheFollowingMatrix(String mtxName, DataTable dataTable)
 	{
 		Matrix a = data.getMatrix(mtxName);
@@ -192,7 +194,7 @@ public class MatricesSteps
 		Assert.assertEquals(expected, result);
 	}
 
-	@Then("^([a-zA-Z_][a-zA-Z0-9_]*) is the following (\\d+)x(\\d+) matrix:$")
+	@Then("^" + wordPattern + " is the following " + intPattern + "x" + intPattern + " matrix:$")
 	public void aIsTheFollowingMatrix(String mtxName, int rows, int cols, DataTable dataTable)
 	{
 		Matrix result = data.getMatrix(mtxName);
@@ -205,8 +207,9 @@ public class MatricesSteps
 		Assert.assertEquals(expected, result);
 	}
 
-	@Then("^inverse\\(([a-zA-Z_][a-zA-Z0-9_]*)\\) is the following (\\d+)x(\\d+) matrix:$")
-	public void inverseAIsTheFollowingMatrix(String mtxName, int rows, int cols, DataTable dataTable)
+	@Then("^inverse\\(" + wordPattern + "\\) is the following " + intPattern + "x" + intPattern + " matrix:$")
+	public void inverseAIsTheFollowingMatrix(String mtxName, int rows, int cols,
+		DataTable dataTable)
 	{
 		Matrix matrix = data.getMatrix(mtxName);
 		Matrix result = matrix.inverse();
@@ -219,7 +222,7 @@ public class MatricesSteps
 		Assert.assertEquals(expected, result);
 	}
 
-	@Then("^determinant\\(([a-zA-Z_][a-zA-Z0-9_]*)\\) = (-?\\d+\\.?\\d*)$")
+	@Then("^determinant\\(" + wordPattern + "\\) = " + doublePattern + "$")
 	public void determinantA(String matrixName, double expectedValue)
 	{
 		Matrix a = data.getMatrix(matrixName);
@@ -229,9 +232,9 @@ public class MatricesSteps
 		Assert.assertEquals(expectedValue, result, Tuple.EPSILON);
 	}
 
-	@Then("^submatrix\\(([a-zA-Z_][a-zA-Z0-9_]*), ([\\d]+), ([\\d]+)\\) is the following ([\\d]+)x([\\d]+) matrix:$")
-	public void submatrixAIsTheFollowingXMatrix(String matrixName, int dropRow, int dropCol,
-		int subRows, int subCols,
+	@Then("^submatrix\\(" + wordPattern + ", " + intPattern + ", " + intPattern + "\\) is the following " + intPattern + "x" + intPattern + " matrix:$")
+	public void submatrixAIsTheFollowingXMatrix(String matrixName, int dropRow,
+		int dropCol, int subRows, int subCols,
 		DataTable dataTable)
 	{
 		Matrix m = data.getMatrix(matrixName);
@@ -244,7 +247,7 @@ public class MatricesSteps
 		Assert.assertEquals(expected, result);
 	}
 
-	@Then("^minor\\(([a-zA-Z_][a-zA-Z0-9_]*), (\\d+), (\\d+)\\) = (-?\\d+\\.?\\d*)$")
+	@Then("^minor\\(" + wordPattern + ", " + intPattern + ", " + intPattern + "\\) = " + doublePattern + "$")
 	public void minorA(String matrixName, int dropRow, int dropCol, double expected)
 	{
 		Matrix m = data.getMatrix(matrixName);
@@ -252,7 +255,7 @@ public class MatricesSteps
 		Assert.assertEquals(expected, result, Tuple.EPSILON);
 	}
 
-	@Then("^cofactor\\(([a-zA-Z_][a-zA-Z0-9_]*), (\\d+), (\\d+)\\) = (-?\\d+\\.?\\d*)$")
+	@Then("^cofactor\\(" + wordPattern + ", " + intPattern + ", " + intPattern + "\\) = " + doublePattern + "$")
 	public void cofactorA(String matrixName, int dropRow, int dropCol, double expected)
 	{
 		Matrix m = data.getMatrix(matrixName);
@@ -260,7 +263,7 @@ public class MatricesSteps
 		Assert.assertEquals(expected, result, Tuple.EPSILON);
 	}
 
-	@Then("([a-zA-Z_][a-zA-Z0-9_]*) (is|is not) invertible")
+	@Then(wordPattern + " (is|is not) invertible")
 	public void aIsInvertible(String matrixName, String operation)
 	{
 		Matrix m = data.getMatrix(matrixName);
@@ -270,7 +273,7 @@ public class MatricesSteps
 			Assert.assertFalse(m.isInvertible());
 	}
 
-	@Then("^([a-zA-Z_][a-zA-Z0-9_]*)\\[(\\d+),(\\d+)\\] = (-?\\d+\\.?\\d*)\\/(-?\\d+\\.?\\d*)$")
+	@Then("^" + wordPattern + "\\[" + intPattern + "," + intPattern + "\\] = " + doublePattern + "\\/" + doublePattern + "$")
 	public void testMatrixCellToFraction(String matrixName, int row, int col,
 		double numerator, double denominator)
 	{
@@ -283,7 +286,7 @@ public class MatricesSteps
 	}
 
 
-	@Then("^([a-zA-Z_][a-zA-Z0-9_]*) \\* inverse\\(([a-zA-Z_][a-zA-Z0-9_]*)\\) = ([a-zA-Z_][a-zA-Z0-9_]*)$")
+	@Then("^" + wordPattern + " \\* inverse\\(" + wordPattern + "\\) = " + wordPattern + "$")
 	public void cInverseBA(String cName, String bName, String expectedMatrixName)
 	{
 		Matrix c = data.getMatrix(cName);
@@ -292,4 +295,16 @@ public class MatricesSteps
 		Matrix value = c.multiply(b.inverse());
 		Assert.assertEquals(result, value);
 	}
+
+	@Then(wordPattern + " \\* " + wordPattern + " = point\\(" + threeDoublesPattern + "\\)")
+	public void transformPPoint(String matrixName, String pointName, double x,
+		double y, double z)
+	{
+		Matrix m = data.getMatrix(matrixName);
+		Point p = data.getPoint(pointName);
+		Point result = m.multiply(p);
+		Point expectedPoint = new Point(x, y, z);
+		Assert.assertEquals(expectedPoint, result);
+	}
+
 }
