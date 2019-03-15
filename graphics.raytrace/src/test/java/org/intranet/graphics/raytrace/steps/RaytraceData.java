@@ -1,7 +1,17 @@
-package org.intranet.graphics.raytrace;
+package org.intranet.graphics.raytrace.steps;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.intranet.graphics.raytrace.Color;
+import org.intranet.graphics.raytrace.Intersection;
+import org.intranet.graphics.raytrace.IntersectionList;
+import org.intranet.graphics.raytrace.Matrix;
+import org.intranet.graphics.raytrace.Point;
+import org.intranet.graphics.raytrace.Ray;
+import org.intranet.graphics.raytrace.Sphere;
+import org.intranet.graphics.raytrace.Tuple;
+import org.intranet.graphics.raytrace.Vector;
 
 public final class RaytraceData
 {

@@ -30,6 +30,11 @@ public class Matrix
 		return matrix[row][col];
 	}
 
+	public void set(int row, int col, double value)
+	{
+		matrix[row][col] = value;
+	}
+
 	@Override
 	public boolean equals(Object other)
 	{

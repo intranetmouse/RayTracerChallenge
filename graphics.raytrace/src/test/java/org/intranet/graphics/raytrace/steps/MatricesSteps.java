@@ -1,7 +1,10 @@
-package org.intranet.graphics.raytrace;
+package org.intranet.graphics.raytrace.steps;
 
 import java.util.List;
 
+import org.intranet.graphics.raytrace.Matrix;
+import org.intranet.graphics.raytrace.Point;
+import org.intranet.graphics.raytrace.Tuple;
 import org.junit.Assert;
 
 import cucumber.api.java.en.Given;
@@ -75,9 +78,9 @@ public class MatricesSteps
 		double z)
 	{
 		Matrix matrix = Matrix.identity(4);
-		matrix.matrix[0][3] = x;
-		matrix.matrix[1][3] = y;
-		matrix.matrix[2][3] = z;
+		matrix.set(0, 3, x);
+		matrix.set(1, 3, y);
+		matrix.set(2, 3, z);
 		data.put(matrixName, matrix);
 	}
 
@@ -160,7 +163,7 @@ public class MatricesSteps
 		Matrix m1 = data.getMatrix(mtx1Name);
 		Assert.assertNotNull(mtx1Name, m1);
 
-		Matrix identityMtx = Matrix.identity(m1.matrix[0].length);
+		Matrix identityMtx = Matrix.identity(m1.getNumCols());
 
 		Matrix result = m1.multiply(identityMtx);
 
@@ -174,7 +177,7 @@ public class MatricesSteps
 		Tuple a = data.getTuple(mtx1Name);
 		Assert.assertNotNull(mtx1Name, a);
 
-		Matrix identityMtx = Matrix.identity(a.values.length);
+		Matrix identityMtx = Matrix.identity(4);
 
 		Tuple result = identityMtx.multiply(a);
 

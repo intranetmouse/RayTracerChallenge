@@ -1,7 +1,11 @@
-package org.intranet.graphics.raytrace;
+package org.intranet.graphics.raytrace.projectile;
 
 import java.io.IOException;
 
+import org.intranet.graphics.raytrace.Canvas;
+import org.intranet.graphics.raytrace.Color;
+import org.intranet.graphics.raytrace.Point;
+import org.intranet.graphics.raytrace.Vector;
 import org.intranet.graphics.raytrace.projectile.Environment;
 import org.intranet.graphics.raytrace.projectile.Projectile;
 import org.junit.Test;

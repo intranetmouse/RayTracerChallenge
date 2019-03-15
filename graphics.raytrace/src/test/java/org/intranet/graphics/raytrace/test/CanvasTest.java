@@ -1,7 +1,9 @@
-package org.intranet.graphics.raytrace;
+package org.intranet.graphics.raytrace.test;
 
 import java.util.List;
 
+import org.intranet.graphics.raytrace.Canvas;
+import org.intranet.graphics.raytrace.Color;
 import org.junit.Assert;
 import org.junit.Test;
 
