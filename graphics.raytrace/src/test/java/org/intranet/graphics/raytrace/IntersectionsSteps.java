@@ -55,13 +55,6 @@ public class IntersectionsSteps
 	@Then(wordPattern + ".count = " + intPattern)
 	public void xsCount(String intersectionName, int numIntersections)
 	{
-		double[] intersections = data.getIntersectionDistances(intersectionName);
-		if (intersections != null)
-		{
-			Assert.assertEquals(numIntersections, intersections.length);
-			return;
-		}
-
 		IntersectionList intersectionList = data.getIntersectionList(intersectionName);
 		if (intersectionList != null)
 		{

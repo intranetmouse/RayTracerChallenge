@@ -33,8 +33,8 @@ public class SpheresSteps
 	@Then(wordPattern + "\\[" + intPattern + "\\] = " + doublePattern)
 	public void xs(String intersectionName, int index, double expectedValue)
 	{
-		double[] intersections = data.getIntersectionDistances(intersectionName);
-		double value = intersections[index];
+		IntersectionList intersections = data.getIntersectionList(intersectionName);
+		double value = intersections.get(index).getDistance();
 		Assert.assertEquals(expectedValue, value, Tuple.EPSILON);
 	}
 

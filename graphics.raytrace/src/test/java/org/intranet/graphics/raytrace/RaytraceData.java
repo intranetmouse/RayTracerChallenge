@@ -53,12 +53,6 @@ public final class RaytraceData
 	public Sphere getSphere(String sphereName)
 	{ return spheresMap.get(sphereName); }
 
-	private Map<String, double[]> intersectionDistancesMap = new HashMap<>();
-	public void put(String intersectionDistanceName, double[] i)
-	{ intersectionDistancesMap.put(intersectionDistanceName, i); }
-	public double[] getIntersectionDistances(String intersectionDistanceName)
-	{ return intersectionDistancesMap.get(intersectionDistanceName); }
-
 	private Map<String, Intersection> intersectionsMap = new HashMap<>();
 	public void put(String intersectionName, Intersection i)
 	{ intersectionsMap.put(intersectionName, i); }
