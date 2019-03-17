@@ -2,9 +2,18 @@ package org.intranet.graphics.raytrace;
 
 public class Sphere
 {
+	Matrix transform = Matrix.identity(4);
+	public Matrix getTransform() { return transform; }
+	public void setTransform(Matrix value) { transform = value; }
+
+	public Sphere()
+	{
+		
+	}
 
 	public IntersectionList intersections(Ray ray)
 	{
+		ray = ray.transform(transform.inverse());
 		Vector sphereToRay = ray.getOrigin().subtract(new Point(0, 0, 0));
 		double a = ray.getDirection().dot(ray.getDirection());
 		double b = 2 * ray.getDirection().dot(sphereToRay);

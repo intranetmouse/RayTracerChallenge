@@ -85,6 +85,18 @@ public class IntersectionsSteps
 		Assert.assertEquals(sphere, intersection.getObject());
 	}
 
+	@Then(wordPattern + "\\[" + intPattern + "\\].object = " + wordPattern)
+	public void intersectionSetObject(String intersectionListName,
+		int intersectionIdx, String objectName)
+	{
+		IntersectionList ilist = data.getIntersectionList(intersectionListName);
+		Intersection intersection = ilist.get(intersectionIdx);
+		Sphere t = intersection.getObject();
+		
+		Sphere expectedObject = data.getSphere(objectName);
+		Assert.assertEquals(t, expectedObject);
+	}
+
 	@Then(wordPattern + "\\[" + intPattern + "\\].t = " + doublePattern)
 	public void xsT(String intersectionListName, int intersectionIdx,
 		double expectedValue)
@@ -92,7 +104,7 @@ public class IntersectionsSteps
 		IntersectionList ilist = data.getIntersectionList(intersectionListName);
 		Intersection intersection = ilist.get(intersectionIdx);
 		double t = intersection.getDistance();
-		Assert.assertEquals(t, expectedValue, Tuple.EPSILON);
+		Assert.assertEquals(expectedValue, t, Tuple.EPSILON);
 	}
 
 	@Then(wordPattern + " is nothing")

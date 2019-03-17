@@ -18,4 +18,11 @@ public class Ray
 	{
 		return origin.add(direction.multiply(t));
 	}
+
+	public Ray transform(Matrix t)
+	{
+		Point newOrigin = t.multiply(origin);
+		Vector newDirection = t.multiply(direction);
+		return new Ray(newOrigin, newDirection);
+	}
 }

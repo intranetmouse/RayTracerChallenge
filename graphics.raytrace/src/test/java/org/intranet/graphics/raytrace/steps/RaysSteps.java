@@ -1,5 +1,6 @@
 package org.intranet.graphics.raytrace.steps;
 
+import org.intranet.graphics.raytrace.Matrix;
 import org.intranet.graphics.raytrace.Point;
 import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.Vector;
@@ -38,16 +39,16 @@ public class RaysSteps
 		data.put(rayName, ray);
 	}
 
-//	@When(wordPattern + " ← transform\\(" + twoWordPattern + "\\)")
-//	public void rTransformRM(String newRayName, String rayName,
-//		String translationName)
-//	{
-//		Ray ray = data.getRay(rayName);
-//		Matrix t = data.getMatrix(translationName);
-//
-//		Ray newRay = ray.transform(t);
-//		data.put(newRayName, newRay);
-//	}
+	@When(wordPattern + " ← transform\\(" + twoWordPattern + "\\)")
+	public void rTransformRM(String newRayName, String rayName,
+		String translationName)
+	{
+		Ray ray = data.getRay(rayName);
+		Matrix t = data.getMatrix(translationName);
+
+		Ray newRay = ray.transform(t);
+		data.put(newRayName, newRay);
+	}
 
 
 
