@@ -243,6 +243,10 @@ public class Matrix
 		return translation;
 	}
 
+	/**
+	* @param d And angle in radians
+	* @return
+	*/
 	public static Matrix newRotationX(double d)
 	{
 		Matrix translation = identity(4);
@@ -253,6 +257,10 @@ public class Matrix
 		return translation;
 	}
 
+	/**
+	* @param d And angle in radians
+	* @return
+	*/
 	public static Matrix newRotationY(double d)
 	{
 		Matrix translation = identity(4);
@@ -263,6 +271,10 @@ public class Matrix
 		return translation;
 	}
 
+	/**
+	* @param d And angle in radians
+	* @return
+	*/
 	public static Matrix newRotationZ(double d)
 	{
 		Matrix translation = identity(4);

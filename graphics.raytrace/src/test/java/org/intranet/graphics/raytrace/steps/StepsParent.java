@@ -11,6 +11,7 @@ public abstract class StepsParent
 	public static final String doublePattern = "(-?\\d+\\.?\\d*)";
 	public static final String fourDoublesPattern = doublePattern + ", " + doublePattern + ", " + doublePattern + ", " + doublePattern;
 	public static final String threeDoublesPattern = doublePattern + ", " + doublePattern + ", " + doublePattern;
+	public static final String sixDoublesPattern = threeDoublesPattern + ", " + threeDoublesPattern;
 
 	protected StepsParent(RaytraceData data)
 	{

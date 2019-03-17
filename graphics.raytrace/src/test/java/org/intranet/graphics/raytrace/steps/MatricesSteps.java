@@ -5,6 +5,7 @@ import java.util.List;
 import org.intranet.graphics.raytrace.Matrix;
 import org.intranet.graphics.raytrace.Point;
 import org.intranet.graphics.raytrace.Tuple;
+import org.intranet.graphics.raytrace.Vector;
 import org.junit.Assert;
 
 import cucumber.api.java.en.Given;
@@ -46,7 +47,7 @@ public class MatricesSteps
 	}
 
 	@Given("^" + wordPattern + " ← submatrix\\(" + wordPattern + ", " + intPattern + ", " + intPattern + "\\)$")
-	public void theTransposeOfIdentity(String matrix1Name, String matrix2Name,
+	public void theSubmatrixOf(String matrix1Name, String matrix2Name,
 		int dropRow, int dropCol)
 	{
 		Matrix m2 = data.getMatrix(matrix2Name);
@@ -64,23 +65,91 @@ public class MatricesSteps
 	}
 
 	@Given("^" + wordPattern + " ← " + wordPattern + " \\* " + wordPattern + "$")
-	public void theTransposeOfIdentity(String destMatrixName,
-		String matrix1Name, String matrix2Name)
+	public void multiplyingMatrixBySomethingElse(String destObjectName,
+		String transformMatrixName, String object2Name)
+	{
+		Matrix transformMatrix = data.getMatrix(transformMatrixName);
+
+		Matrix matrix = data.getMatrix(object2Name);
+		if (matrix != null)
+		{
+			Matrix resultMatrix = transformMatrix.multiply(matrix);
+			data.put(destObjectName, resultMatrix);
+			return;
+		}
+
+		Point point = data.getPoint(object2Name);
+		if (point != null)
+		{
+			Point resultPoint = transformMatrix.multiply(point);
+			data.put(destObjectName, resultPoint);
+			return;
+		}
+
+		Vector v2 = data.getVector(object2Name);
+		if (v2 != null)
+		{
+			Vector resultVector = transformMatrix.multiply(v2);
+			data.put(destObjectName, resultVector);
+			return;
+		}
+		throw new IllegalStateException();
+	}
+
+	@Given("^" + wordPattern + " ← " + wordPattern + " \\* " + wordPattern + " \\* " + wordPattern + "$")
+	public void multiplyingMatrixByMatrixByMatrix(String destObjectName,
+		String matrix1Name, String matrix2Name, String matrix3Name)
 	{
 		Matrix matrix1 = data.getMatrix(matrix1Name);
 		Matrix matrix2 = data.getMatrix(matrix2Name);
+		Matrix matrix3 = data.getMatrix(matrix3Name);
 
-		data.put(destMatrixName, matrix1.multiply(matrix2));
+		Matrix result = matrix1.multiply(matrix2).multiply(matrix3);
+
+		data.put(destObjectName, result);
 	}
 
 	@Given(wordPattern + " ← translation\\(" + threeDoublesPattern + "\\)")
 	public void transformTranslation(String matrixName, double x, double y,
 		double z)
 	{
-		Matrix matrix = Matrix.identity(4);
-		matrix.set(0, 3, x);
-		matrix.set(1, 3, y);
-		matrix.set(2, 3, z);
+		Matrix matrix = Matrix.newTranslation(x, y, z);
+		data.put(matrixName, matrix);
+	}
+
+	@Given(wordPattern + " ← scaling\\(" + threeDoublesPattern + "\\)")
+	public void transformScaling(String matrixName, double x, double y,
+		double z)
+	{
+		Matrix matrix = Matrix.newScaling(x, y, z);
+		data.put(matrixName, matrix);
+	}
+
+	@Given(wordPattern + " ← rotation_x\\(π \\/ " + doublePattern + "\\)")
+	public void half_quarterRotation_xPi(String matrixName, double xRotation)
+	{
+		Matrix matrix = Matrix.newRotationX(Math.PI / xRotation);
+		data.put(matrixName, matrix);
+	}
+
+	@Given(wordPattern + " ← rotation_y\\(π \\/ " + doublePattern + "\\)")
+	public void half_quarterRotation_yPi(String matrixName, double yRotation)
+	{
+		Matrix matrix = Matrix.newRotationY(Math.PI / yRotation);
+		data.put(matrixName, matrix);
+	}
+
+	@Given(wordPattern + " ← rotation_z\\(π \\/ " + doublePattern + "\\)")
+	public void half_quarterRotation_zPi(String matrixName, double yRotation)
+	{
+		Matrix matrix = Matrix.newRotationZ(Math.PI / yRotation);
+		data.put(matrixName, matrix);
+	}
+
+	@Given(wordPattern + " ← shearing\\(" + sixDoublesPattern + "\\)")
+	public void shearing(String matrixName, double xy, double xz, double yx, double yz, double zx, double zy)
+	{
+		Matrix matrix = Matrix.shearing(xy, xz, yx, yz, zx, zy);
 		data.put(matrixName, matrix);
 	}
 
@@ -152,6 +221,19 @@ public class MatricesSteps
 		Point expected = new Point(x, y, z);
 
 		Point result = m1.multiply(tupleB);
+
+		Assert.assertEquals(expected, result);
+	}
+
+	@Then("^" + wordPattern + " \\* " + wordPattern + " = " + wordPattern + "$")
+	public void matrixATimesVectorB(String mtx1Name, String vector1Name,
+		String expectedVectorName)
+	{
+		Matrix m1 = data.getMatrix(mtx1Name);
+		Vector vector = data.getVector(vector1Name);
+		Vector expected = data.getVector(expectedVectorName);
+
+		Vector result = m1.multiply(vector);
 
 		Assert.assertEquals(expected, result);
 	}
@@ -308,6 +390,75 @@ public class MatricesSteps
 		Point result = m.multiply(p);
 		Point expectedPoint = new Point(x, y, z);
 		Assert.assertEquals(expectedPoint, result);
+	}
+
+	@Then(wordPattern + " \\* " + wordPattern + " = point\\(" +
+		doublePattern +
+		", √" + doublePattern + "\\/" + doublePattern +
+		", √" + doublePattern + "\\/" + doublePattern + "\\)")
+	public void quarterPPointX(String matrixName, String pointName, double x,
+		double y1, double y2, double z1, double z2)
+	{
+		transformPPoint(matrixName, pointName, x, Math.sqrt(y1) / y2, Math.sqrt(z1) / z2);
+	}
+
+	@Then(wordPattern + " \\* " + wordPattern + " = point\\(" +
+		doublePattern +
+		", √" + doublePattern + "\\/" + doublePattern +
+		", -√" + doublePattern + "\\/" + doublePattern + "\\)")
+	public void quarterPPointXNegZ(String matrixName, String pointName, double x,
+		double y1, double y2, double z1, double z2)
+	{
+		transformPPoint(matrixName, pointName, x, Math.sqrt(y1) / y2, -Math.sqrt(z1) / z2);
+	}
+
+	@Then(wordPattern + " \\* " + wordPattern + " = point\\(" +
+		"√" + doublePattern + "\\/" + doublePattern +
+		", " + doublePattern +
+		", √" + doublePattern + "\\/" + doublePattern + "\\)")
+	public void quarterPPointZ(String matrixName, String pointName, double x1,
+		double x2, double y, double z1, double z2)
+	{
+		transformPPoint(matrixName, pointName, Math.sqrt(x1) / x2, y, Math.sqrt(z1) / z2);
+	}
+
+	@Then(wordPattern + " \\* " + wordPattern + " = point\\(" +
+		"-√" + doublePattern + "\\/" + doublePattern +
+		", √" + doublePattern + "\\/" + doublePattern +
+		", " + doublePattern + "\\)")
+	public void quarterPPointNegZ(String matrixName, String pointName, double x1,
+		double x2, double y1, double y2, double z)
+	{
+		transformPPoint(matrixName, pointName, -Math.sqrt(x1) / x2, Math.sqrt(y1) / y2, z);
+	}
+
+	@Then(wordPattern + " \\* " + wordPattern + " = vector\\(" + threeDoublesPattern + "\\)")
+	public void transformPVector(String matrixName, String vectorName, double x,
+		double y, double z)
+	{
+		Matrix m = data.getMatrix(matrixName);
+		Vector p = data.getVector(vectorName);
+		Vector result = m.multiply(p);
+		Vector expectedVector = new Vector(x, y, z);
+		Assert.assertEquals(expectedVector, result);
+	}
+
+	@Then(wordPattern + " = scaling\\(" + threeDoublesPattern + "\\)")
+	public void compareToScalingMatrix(String matrixName, double x,
+		double y, double z)
+	{
+		Matrix m = data.getMatrix(matrixName);
+		Matrix expected = Matrix.newScaling(x, y, z);
+		Assert.assertEquals(expected, m);
+	}
+
+	@Then(wordPattern + " = translation\\(" + threeDoublesPattern + "\\)")
+	public void compareToTranslationMatrix(String matrixName, double x,
+		double y, double z)
+	{
+		Matrix m = data.getMatrix(matrixName);
+		Matrix expected = Matrix.newTranslation(x, y, z);
+		Assert.assertEquals(expected, m);
 	}
 
 }

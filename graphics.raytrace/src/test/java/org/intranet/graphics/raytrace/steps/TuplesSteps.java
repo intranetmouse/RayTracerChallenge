@@ -110,6 +110,13 @@ public class TuplesSteps
 		Assert.assertEquals(p2, data.getPoint(pointName));
 	}
 
+	@Then("^" + wordPattern + " = point\\(" + threeDoublesPattern + "\\)$")
+	public void pEqualsPoint(String pointName, double x, double y, double z)
+	{
+		Point p2 = new Point(x, y, z);
+		Assert.assertEquals(p2, data.getPoint(pointName));
+	}
+
 	@Then("^(v[a-zA-Z0-9_]*) = tuple\\(" + threeDoublesPattern + ", 0\\)$")
 	public void vTuple(String vectorName, double x, double y, double z)
 	{
