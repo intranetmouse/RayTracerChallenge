@@ -8,13 +8,13 @@ import javax.swing.JComponent;
 import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.Color;
 
-public final class CanvasCanvas
+public final class CanvasComponent
 	extends JComponent
 {
 	private static final long serialVersionUID = 1L;
 	private final Canvas canvas;
 
-	public CanvasCanvas(Canvas c)
+	public CanvasComponent(Canvas c)
 	{
 		Dimension canvasSize = new Dimension(c.getWidth(), c.getHeight());
 		setMinimumSize(canvasSize);
@@ -31,12 +31,19 @@ public final class CanvasCanvas
 			for (int row = 0; row < canvas.getHeight(); row++)
 			{
 				Color color = canvas.getPixelColor(col, row);
-				java.awt.Color awtColor = new java.awt.Color(
-					(int)(color.getRed() * 255),
-					(int)(color.getGreen() * 255),
-					(int)(color.getBlue() * 255));
-				g.setColor(awtColor);
-				g.drawLine(col, row, col, row);
+				try
+				{
+					java.awt.Color awtColor = new java.awt.Color(
+						(int)(color.getRed() * 255),
+						(int)(color.getGreen() * 255),
+						(int)(color.getBlue() * 255));
+					g.setColor(awtColor);
+					g.drawLine(col, row, col, row);
+				}
+				catch (Exception e)
+				{
+					System.err.println("Bad color: " + color);
+				}
 			}
 		}
 	}

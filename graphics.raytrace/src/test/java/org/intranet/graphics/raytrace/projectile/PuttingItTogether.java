@@ -19,13 +19,18 @@ public class PuttingItTogether {
 	public static void init()
 	{
 		JFrame f = new JFrame("Putting It Together");
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JTabbedPane tabPane = new JTabbedPane();
 		f.add(tabPane);
 
 		Canvas projectileCanvas = ProjectileTest.createProjectileCanvas();
-		CanvasCanvas projectileCanvasCanvas = new CanvasCanvas(projectileCanvas);
+		CanvasComponent projectileCanvasCanvas = new CanvasComponent(projectileCanvas);
 		tabPane.addTab("Projectile", projectileCanvasCanvas);
+
+		Canvas sphereCanvas = SphereProjectionTest.createSphereProjection();
+		CanvasComponent sphereProjectionCanvasCanvas = new CanvasComponent(sphereCanvas);
+		tabPane.addTab("Sphere Projection", sphereProjectionCanvasCanvas);
 
 		f.pack();
 		f.setVisible(true);
