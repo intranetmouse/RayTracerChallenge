@@ -1,0 +1,43 @@
+package org.intranet.graphics.raytrace.projectile;
+
+import java.awt.Dimension;
+import java.awt.Graphics;
+
+import javax.swing.JComponent;
+
+import org.intranet.graphics.raytrace.Canvas;
+import org.intranet.graphics.raytrace.Color;
+
+public final class CanvasCanvas
+	extends JComponent
+{
+	private static final long serialVersionUID = 1L;
+	private final Canvas canvas;
+
+	public CanvasCanvas(Canvas c)
+	{
+		Dimension canvasSize = new Dimension(c.getWidth(), c.getHeight());
+		setMinimumSize(canvasSize);
+		setPreferredSize(canvasSize);
+		this.canvas = c;
+	}
+
+	@Override
+	public void paintComponent(Graphics g)
+	{
+		g.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
+		for (int col = 0; col < canvas.getWidth(); col++)
+		{
+			for (int row = 0; row < canvas.getHeight(); row++)
+			{
+				Color color = canvas.getPixelColor(col, row);
+				java.awt.Color awtColor = new java.awt.Color(
+					(int)(color.getRed() * 255),
+					(int)(color.getGreen() * 255),
+					(int)(color.getBlue() * 255));
+				g.setColor(awtColor);
+				g.drawLine(col, row, col, row);
+			}
+		}
+	}
+}

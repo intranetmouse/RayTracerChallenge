@@ -35,6 +35,12 @@ public class ProjectileTest
 	public void testProjectileCanvas()
 		throws IOException
 	{
+		Canvas c = createProjectileCanvas();
+
+		c.writeFile("projectile.ppm");
+	}
+
+	public static Canvas createProjectileCanvas() {
 		// projectile starts one unit above the origin.
 		// velocity is normalized to 1 unit/tick.
 		Projectile p = new Projectile(
@@ -62,7 +68,6 @@ public class ProjectileTest
 			p = p.tick(e);
 		}
 		while (p.getPosition().getY() > 0);
-
-		c.writeFile("projectile.ppm");
+		return c;
 	}
 }
