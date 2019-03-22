@@ -37,6 +37,15 @@ public class TuplesSteps
 			data.put(varName, new Color(x, y, z));
 	}
 
+	@Given(wordPattern + " ← vector\\(√" + doublePattern + "\\/" + doublePattern
+		+ ", √" + doublePattern + "\\/" + doublePattern + ", " + doublePattern
+		+ "\\)")
+	public void nVector(String vectorName, double xNum, double xDenom,
+		double yNum, double yDenom, double z)
+	{
+		data.put(vectorName,
+			new Vector(Math.sqrt(xNum) / xDenom, Math.sqrt(yNum) / yDenom, z));
+	}
 
 	@When("^" + wordPattern + " ← normalize\\(" + wordPattern + "\\)$")
 	public void v2Vector(String varName, String vectorName)
@@ -45,6 +54,16 @@ public class TuplesSteps
 		data.put(varName, vector.normalize());
 	}
 
+	@When(wordPattern + " ← reflect\\(" + wordPattern + ", " + wordPattern + "\\)")
+	public void rReflectVN(String reflectedVectorName, String bounceVectorName,
+		String normalVectorName)
+	{
+		Vector bounceVector = data.getVector(bounceVectorName);
+		Vector normalVector = data.getVector(normalVectorName);
+
+		Vector reflectedVector = bounceVector.reflect(normalVector);
+		data.put(reflectedVectorName, reflectedVector);
+	}
 
 
 	@Then("^" + wordPattern + "\\.x = " + doublePattern + "$")

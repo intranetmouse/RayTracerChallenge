@@ -28,7 +28,8 @@ public class SpheresSteps
 		data.put(sphereName, new Sphere());
 	}
 
-	@Given(wordPattern + " ← scaling\\(" + threeDoublesPattern + "\\) \\* rotation_z\\(π\\/" + doublePattern + "\\)")
+	@Given(wordPattern + " ← scaling\\(" + threeDoublesPattern +
+		"\\) \\* rotation_z\\(π\\/" + doublePattern + "\\)")
 	public void mScalingRotation_zPi(String matrixName, double scaleX,
 		double scaleY, double scaleZ, double rotateZdenom)
 	{
@@ -38,8 +39,10 @@ public class SpheresSteps
 		data.put(matrixName, product);
 	}
 
+
 	@When(wordPattern + " ← intersect\\(" + twoWordPattern + "\\)")
-	public void xsIntersectSR(String intersectionName, String sphereName, String rayName)
+	public void xsIntersectSR(String intersectionName, String sphereName,
+		String rayName)
 	{
 		Sphere sphere = data.getSphere(sphereName);
 		Ray ray = data.getRay(rayName);
@@ -55,7 +58,8 @@ public class SpheresSteps
 		sphere.setTransform(mtx);
 	}
 
-	@When("^set_transform\\(" + wordPattern + ", (scaling|translation)\\(" + threeDoublesPattern + "\\)\\)$")
+	@When("^set_transform\\(" + wordPattern +
+		", (scaling|translation)\\(" + threeDoublesPattern + "\\)\\)$")
 	public void set_transform_s_t(String sphereName, String operation, double x,
 		double y, double z)
 	{
@@ -65,7 +69,8 @@ public class SpheresSteps
 		sphere.setTransform(mtx);
 	}
 
-	@When(wordPattern + " ← normal_at\\(" + wordPattern + ", point\\(" + threeDoublesPattern + "\\)\\)")
+	@When(wordPattern + " ← normal_at\\(" + wordPattern +
+		", point\\(" + threeDoublesPattern + "\\)\\)")
 	public void n_normal_at_s_point(String normalVectorName, String sphereName,
 		double x, double y, double z)
 	{
@@ -82,7 +87,8 @@ public class SpheresSteps
 		", √" + doublePattern + "\\/" + doublePattern +
 		", √" + doublePattern + "\\/" + doublePattern + "\\)\\)")
 	public void nNormal_atSPoint(String normalVectorName, String sphereName,
-		double xNum, double xDenom, double yNum, double yDenom, double zNum, double zDenom)
+		double xNum, double xDenom, double yNum, double yDenom, double zNum,
+		double zDenom)
 	{
 		Sphere s = data.getSphere(sphereName);
 		Point point = new Point(Math.sqrt(xNum) / xDenom,
@@ -154,5 +160,4 @@ public class SpheresSteps
 
 		Assert.assertEquals(expectedVector, normalizedVector);
 	}
-
 }

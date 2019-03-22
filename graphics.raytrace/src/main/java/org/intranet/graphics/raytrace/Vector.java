@@ -53,4 +53,9 @@ public class Vector
 	{
 		return divide(magnitude());
 	}
+
+	public Vector reflect(Vector normalVector)
+	{
+		return subtract(normalVector.multiply(2 * dot(normalVector)));
+	}
 }
