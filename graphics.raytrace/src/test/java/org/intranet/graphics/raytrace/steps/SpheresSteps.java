@@ -3,9 +3,11 @@ package org.intranet.graphics.raytrace.steps;
 import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Matrix;
+import org.intranet.graphics.raytrace.Point;
 import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.Sphere;
 import org.intranet.graphics.raytrace.Tuple;
+import org.intranet.graphics.raytrace.Vector;
 import org.junit.Assert;
 
 import cucumber.api.java.en.Given;
@@ -26,6 +28,15 @@ public class SpheresSteps
 		data.put(sphereName, new Sphere());
 	}
 
+	@Given(wordPattern + " ← scaling\\(" + threeDoublesPattern + "\\) \\* rotation_z\\(π\\/" + doublePattern + "\\)")
+	public void mScalingRotation_zPi(String matrixName, double scaleX,
+		double scaleY, double scaleZ, double rotateZdenom)
+	{
+		Matrix scalingMtx = Matrix.newScaling(scaleX, scaleY, scaleZ);
+		Matrix rotateZMtx = Matrix.newRotationZ(Math.PI / rotateZdenom);
+		Matrix product = scalingMtx.multiply(rotateZMtx);
+		data.put(matrixName, product);
+	}
 
 	@When(wordPattern + " ← intersect\\(" + twoWordPattern + "\\)")
 	public void xsIntersectSR(String intersectionName, String sphereName, String rayName)
@@ -54,6 +65,63 @@ public class SpheresSteps
 		sphere.setTransform(mtx);
 	}
 
+	@When(wordPattern + " ← normal_at\\(" + wordPattern + ", point\\(" + threeDoublesPattern + "\\)\\)")
+	public void n_normal_at_s_point(String normalVectorName, String sphereName,
+		double x, double y, double z)
+	{
+		Sphere s = data.getSphere(sphereName);
+		Point point = new Point(x, y, z);
+
+		Vector normalVector = s.normalAt(point);
+
+		data.put(normalVectorName, normalVector);
+	}
+
+	@When(wordPattern + " ← normal_at\\(" + wordPattern +
+		", point\\(√" + doublePattern + "\\/" + doublePattern +
+		", √" + doublePattern + "\\/" + doublePattern +
+		", √" + doublePattern + "\\/" + doublePattern + "\\)\\)")
+	public void nNormal_atSPoint(String normalVectorName, String sphereName,
+		double xNum, double xDenom, double yNum, double yDenom, double zNum, double zDenom)
+	{
+		Sphere s = data.getSphere(sphereName);
+		Point point = new Point(Math.sqrt(xNum) / xDenom,
+			Math.sqrt(yNum) / yDenom, Math.sqrt(zNum) / zDenom);
+
+		Vector normalVector = s.normalAt(point);
+
+		data.put(normalVectorName, normalVector);
+	}
+
+	@When(wordPattern + " ← normal_at\\(" + wordPattern +
+		", point\\(" + doublePattern +
+		", √" + doublePattern + "\\/" + doublePattern +
+		", -√" + doublePattern + "\\/" + doublePattern + "\\)\\)")
+	public void nNormal_atSPoint(String normalVectorName, String objectName,
+		double x, double yNum, double yDenom, double zNum, double zDenom)
+	{
+		Sphere object = data.getSphere(objectName);
+		Point normalPoint = new Point(x, Math.sqrt(yNum)/yDenom,
+			-Math.sqrt(zNum)/zDenom);
+		Vector normalVector = object.normalAt(normalPoint);
+		data.put(normalVectorName, normalVector);
+	}
+
+	@When(wordPattern + " = vector\\(√" + doublePattern + "\\/" + doublePattern +
+		", √" + doublePattern + "\\/" + doublePattern +
+		", √" + doublePattern + "\\/" + doublePattern + "\\)")
+	public void nNormal_atSPoint(String expectedVectorName, double xNum,
+		double xDenom, double yNum, double yDenom, double zNum, double zDenom)
+	{
+		Vector expectedVector = data.getVector(expectedVectorName);
+
+		Vector actualVector = new Vector(Math.sqrt(xNum) / xDenom,
+			Math.sqrt(yNum) / yDenom, Math.sqrt(zNum) / zDenom);
+
+		Assert.assertEquals(expectedVector, actualVector);
+	}
+
+
 	@Then(wordPattern + "\\[" + intPattern + "\\] = " + doublePattern)
 	public void xs(String intersectionName, int index, double expectedValue)
 	{
@@ -67,13 +135,24 @@ public class SpheresSteps
 	public void xs(String objectName, String matrixName)
 	{
 		Sphere sphere = data.getSphere(objectName);
-		
+
 		Matrix expectedMatrix;
 		if ("identity_matrix".contentEquals(matrixName))
 			expectedMatrix = Matrix.identity(4);
 		else
 			expectedMatrix = data.getMatrix(matrixName);
 		Assert.assertEquals(expectedMatrix, sphere.getTransform());
+	}
+
+	@Then(wordPattern + " = normalize\\(" + wordPattern + "\\)")
+	public void nNormalizeN(String resultVectorName, String vectorName)
+	{
+		Vector expectedVector = data.getVector(resultVectorName);
+
+		Vector vectorToNormalized = data.getVector(vectorName);
+		Vector normalizedVector = vectorToNormalized.normalize();
+
+		Assert.assertEquals(expectedVector, normalizedVector);
 	}
 
 }

@@ -8,7 +8,7 @@ public class Sphere
 
 	public Sphere()
 	{
-		
+
 	}
 
 	public IntersectionList intersections(Ray ray)
@@ -31,5 +31,15 @@ public class Sphere
 		double t2 = (-b + sqrtDiscriminant) / twoA;
 		Intersection i2 = new Intersection(t2, this);
 		return new IntersectionList(i1, i2);
+	}
+
+	public Vector normalAt(Point point)
+	{
+		Matrix inverse = transform.inverse();
+		Point objectPoint = inverse.multiply(point);
+		Vector objectNormalVector = objectPoint.subtract(new Point(0, 0, 0));
+		Vector worldNormal = inverse.transpose().multiply(objectNormalVector);
+		Vector v = new Vector(worldNormal.getX(), worldNormal.getY(), worldNormal.getZ());
+		return v.normalize();
 	}
 }
