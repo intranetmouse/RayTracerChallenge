@@ -2,6 +2,7 @@ package org.intranet.graphics.raytrace.steps;
 
 import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionList;
+import org.intranet.graphics.raytrace.Material;
 import org.intranet.graphics.raytrace.Matrix;
 import org.intranet.graphics.raytrace.Point;
 import org.intranet.graphics.raytrace.Ray;
@@ -127,6 +128,12 @@ public class SpheresSteps
 		Assert.assertEquals(expectedVector, actualVector);
 	}
 
+	@When(wordPattern + " ← " + wordPattern + ".material")
+	public void mSMaterial(String materialName, String sphereName)
+	{
+		Sphere sphere = data.getSphere(sphereName);
+		data.put(materialName, sphere.getMaterial());
+	}
 
 	@Then(wordPattern + "\\[" + intPattern + "\\] = " + doublePattern)
 	public void xs(String intersectionName, int index, double expectedValue)
@@ -159,5 +166,13 @@ public class SpheresSteps
 		Vector normalizedVector = vectorToNormalized.normalize();
 
 		Assert.assertEquals(expectedVector, normalizedVector);
+	}
+
+	@Then(wordPattern + " = material\\(\\)")
+	public void mMaterial(String actualMaterialName)
+	{
+		Material expectedMaterial = new Material();
+		Material actualMaterial = data.getMaterial(actualMaterialName);
+		Assert.assertEquals(actualMaterial, expectedMaterial);
 	}
 }

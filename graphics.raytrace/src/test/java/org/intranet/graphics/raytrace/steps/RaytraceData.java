@@ -6,6 +6,7 @@ import java.util.Map;
 import org.intranet.graphics.raytrace.Color;
 import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionList;
+import org.intranet.graphics.raytrace.Material;
 import org.intranet.graphics.raytrace.Matrix;
 import org.intranet.graphics.raytrace.Point;
 import org.intranet.graphics.raytrace.PointLight;
@@ -81,4 +82,10 @@ public final class RaytraceData
 	{ pointLightMap.put(pointLightName, l); }
 	public PointLight getPointLight(String pointLightName)
 	{ return pointLightMap.get(pointLightName); }
+
+	private Map<String, Material> materialsMap = new HashMap<>();
+	public void put(String materialName, Material l)
+	{ materialsMap.put(materialName, l); }
+	public Material getMaterial(String materialName)
+	{ return materialsMap.get(materialName); }
 }

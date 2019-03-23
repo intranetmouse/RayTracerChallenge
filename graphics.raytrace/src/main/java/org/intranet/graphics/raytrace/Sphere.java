@@ -6,6 +6,9 @@ public class Sphere
 	public Matrix getTransform() { return transform; }
 	public void setTransform(Matrix value) { transform = value; }
 
+	private Material material = new Material();
+	public Material getMaterial() { return material; }
+
 	public Sphere()
 	{
 
