@@ -8,6 +8,7 @@ import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Matrix;
 import org.intranet.graphics.raytrace.Point;
+import org.intranet.graphics.raytrace.PointLight;
 import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.Sphere;
 import org.intranet.graphics.raytrace.Tuple;
@@ -74,4 +75,10 @@ public final class RaytraceData
 	{ intersectionListsMap.put(intersectionListName, ilist); }
 	public IntersectionList getIntersectionList(String intersectionListName)
 	{ return intersectionListsMap.get(intersectionListName); }
+
+	private Map<String, PointLight> pointLightMap = new HashMap<>();
+	public void put(String pointLightName, PointLight l)
+	{ pointLightMap.put(pointLightName, l); }
+	public PointLight getPointLight(String pointLightName)
+	{ return pointLightMap.get(pointLightName); }
 }
