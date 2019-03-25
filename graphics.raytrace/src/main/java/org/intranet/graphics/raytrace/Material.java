@@ -4,6 +4,7 @@ public class Material
 {
 	private Color color = new Color(1, 1, 1);
 	public Color getColor() { return color; }
+	public void setColor(Color value) { color = value; }
 
 	private double ambient = 0.1;
 	public double getAmbient() { return ambient; }
@@ -30,16 +31,30 @@ public class Material
 	public Color lighting(PointLight pointLight, Point position, Vector eyev,
 		Vector normalV)
 	{
+		// combine the surface color with the light's color/intensity
 		Color effectiveColor = color.multiply(pointLight.getIntensity());
+
+		// find the direction to the light source
 		Vector lightV = pointLight.getPosition().subtract(position).normalize();
+
+		// compute the ambient contribution
 		Color ambientColor = effectiveColor.multiply(ambient);
+
+		// lightDotNormal represents the cosine of the angle between the
+		// light vector and the normal vector. A negative number means the
+		// light is on the other side of the surface.
 		double lightDotNormal = lightV.dot(normalV);
 
 		if (lightDotNormal < 0)
 			return ambientColor;
 
-		Color diffuseColor = effectiveColor.multiply(diffuse).multiply(lightDotNormal);
+		// compute the diffuse contribution
+		Color diffuseColor = effectiveColor.multiply(diffuse)
+			.multiply(lightDotNormal);
 
+		// reflectDotEye represents the cosine of the angle between the
+		// reflection vector and the eye vector. A negative number means the
+		// light reflects away from the eye.
 		Vector reflectV = lightV.negate().reflect(normalV);
 		double reflectDotEye = reflectV.dot(eyev);
 
@@ -48,6 +63,7 @@ public class Material
 			specularColor = new Color(0, 0, 0);
 		else
 		{
+			// compute the specular contribution
 			double factor = Math.pow(reflectDotEye, shininess);
 			specularColor = pointLight.getIntensity().multiply(specular)
 				.multiply(factor);

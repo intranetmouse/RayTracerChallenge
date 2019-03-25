@@ -9,13 +9,22 @@ public class ClockExperiment
 	@Test
 	public void testClock() throws IOException
 	{
-		Point p = new Point(1, 0, 0);
-
 		int imageWidth = 301;
 		int imageHeight = 301;
-		int imageCenter = imageWidth / 2 + 1;
+		Canvas canvas = new Canvas(imageWidth, imageHeight);
 
-		int circleRadius = 261 / 2;
+		drawClockOnCanvas(canvas);
+
+		canvas.writeFile("clock.ppm");
+	}
+
+	private void drawClockOnCanvas(Canvas canvas)
+	{
+		int imageWidth = canvas.getWidth();
+		int imageCenter = imageWidth / 2 + 1;
+		int circleRadius = (int)(imageWidth * 0.7 / 2);
+
+		Point p = new Point(1, 0, 0);
 
 		Matrix scale = Matrix.newScaling(circleRadius, circleRadius, 1);
 		Matrix moveToCenter = Matrix.newTranslation(imageCenter, imageCenter, 0);
@@ -24,7 +33,6 @@ public class ClockExperiment
 
 		Color red = new Color(1, 0, 1);
 		Color color = new Color(1, 1, 0);
-		Canvas canvas = new Canvas(imageWidth, imageHeight);
 
 		for (int i = 0; i < 12; i++)
 		{
@@ -39,7 +47,5 @@ public class ClockExperiment
 		for (int i = imageCenter - 1; i <= imageCenter + 1; i++)
 			for (int j = imageCenter - 1; j <= imageCenter + 1; j++)
 				canvas.writePixel(i, j, red);
-
-		canvas.writeFile("clock.ppm");
 	}
 }
