@@ -10,18 +10,18 @@ import javax.swing.JToolBar;
 
 import org.intranet.graphics.raytrace.Canvas;
 
-public final class ProjectorUi
+public final class ToolbarCanvasProjectorUi
 	extends JPanel
 {
 	private static final long serialVersionUID = 1L;
 	private final Canvas projectileCanvas = new Canvas(200, 200);
 
-	public ProjectorUi(List<Projector> projectors)
+	public ToolbarCanvasProjectorUi(List<Projector> projectors)
 	{
 		this(projectors.toArray(new Projector[projectors.size()]));
 	}
 
-	public ProjectorUi(Projector ... projectors)
+	public ToolbarCanvasProjectorUi(Projector ... projectors)
 	{
 		super(new BorderLayout());
 
