@@ -1,4 +1,4 @@
-package org.intranet.graphics.raytrace.projectile;
+package org.intranet.graphics.raytrace.puttingItTogether;
 
 import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.Color;
@@ -10,12 +10,24 @@ import org.intranet.graphics.raytrace.Sphere;
 import org.intranet.graphics.raytrace.Vector;
 
 public class BasicSphereProjector
-	implements SphereProjector
+	implements Projector
 {
 	private Color color = new Color(1.0, 0.0, 0.0);
+	private final SphereProjectionType projType;
 
 	@Override
-	public void projectToCanvas(SphereProjectionType projType, Canvas canvas)
+	public String getName()
+	{
+		return projType.getName();
+	}
+
+	public BasicSphereProjector(SphereProjectionType t)
+	{
+		this.projType = t;
+	}
+
+	@Override
+	public void projectToCanvas(Canvas canvas)
 	{
 		Point rayOrigin = new Point(0, 0, -5);
 		double wallZ = 10;

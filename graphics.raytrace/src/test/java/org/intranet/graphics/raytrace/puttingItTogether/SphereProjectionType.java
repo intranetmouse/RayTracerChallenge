@@ -1,4 +1,4 @@
-package org.intranet.graphics.raytrace.projectile;
+package org.intranet.graphics.raytrace.puttingItTogether;
 
 import org.intranet.graphics.raytrace.Matrix;
 

@@ -1,12 +1,14 @@
 package org.intranet.graphics.raytrace;
 
 public class Sphere
+	implements SceneObject
 {
 	Matrix transform = Matrix.identity(4);
 	public Matrix getTransform() { return transform; }
 	public void setTransform(Matrix value) { transform = value; }
 
 	private Material material = new Material();
+	@Override
 	public Material getMaterial() { return material; }
 	public void setMaterial(Material value) { material = value; }
 
@@ -15,6 +17,7 @@ public class Sphere
 
 	}
 
+	@Override
 	public IntersectionList intersections(Ray ray)
 	{
 		ray = ray.transform(transform.inverse());
@@ -37,6 +40,7 @@ public class Sphere
 		return new IntersectionList(i1, i2);
 	}
 
+	@Override
 	public Vector normalAt(Point point)
 	{
 		Matrix inverse = transform.inverse();

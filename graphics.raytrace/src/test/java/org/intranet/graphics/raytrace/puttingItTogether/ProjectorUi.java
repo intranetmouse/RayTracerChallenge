@@ -1,7 +1,8 @@
-package org.intranet.graphics.raytrace.projectile;
+package org.intranet.graphics.raytrace.puttingItTogether;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JPanel;
@@ -9,29 +10,34 @@ import javax.swing.JToolBar;
 
 import org.intranet.graphics.raytrace.Canvas;
 
-public final class SphereProjectionUi
+public final class ProjectorUi
 	extends JPanel
 {
 	private static final long serialVersionUID = 1L;
 	private final Canvas projectileCanvas = new Canvas(200, 200);
 
-	public SphereProjectionUi(SphereProjector sphereProjector)
+	public ProjectorUi(List<Projector> projectors)
+	{
+		this(projectors.toArray(new Projector[projectors.size()]));
+	}
+
+	public ProjectorUi(Projector ... projectors)
 	{
 		super(new BorderLayout());
 
 		JToolBar toolBar = new JToolBar();
 		toolBar.setFloatable(false);
 		add(toolBar, BorderLayout.NORTH);
-		for (SphereProjectionType projType : SphereProjectionType.values())
+		for (Projector projector : projectors)
 		{
-			toolBar.add(new AbstractAction(projType.getName()) {
+			toolBar.add(new AbstractAction(projector.getName()) {
 				private static final long serialVersionUID = 1L;
 
 				@Override
 				public void actionPerformed(ActionEvent e)
 				{
 					projectileCanvas.clear();
-					sphereProjector.projectToCanvas(projType, projectileCanvas);
+					projector.projectToCanvas(projectileCanvas);
 					repaint();
 				}
 			});

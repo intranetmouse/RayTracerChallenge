@@ -5,10 +5,10 @@ public class Intersection
 	private double distance;
 	public double getDistance() { return distance; }
 
-	private Sphere object;
-	public Sphere getObject() { return object; }
+	private SceneObject object;
+	public SceneObject getObject() { return object; }
 
-	public Intersection(double distance, Sphere sphere)
+	public Intersection(double distance, SceneObject sphere)
 	{
 		this.distance = distance;
 		this.object = sphere;

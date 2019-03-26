@@ -1,10 +1,15 @@
-package org.intranet.graphics.raytrace;
+package org.intranet.graphics.raytrace.puttingItTogether;
 
 import java.io.IOException;
 
+import org.intranet.graphics.raytrace.Canvas;
+import org.intranet.graphics.raytrace.Color;
+import org.intranet.graphics.raytrace.Matrix;
+import org.intranet.graphics.raytrace.Point;
 import org.junit.Test;
 
-public class ClockExperiment
+public class ClockProjector
+	implements Projector
 {
 	@Test
 	public void testClock() throws IOException
@@ -13,12 +18,13 @@ public class ClockExperiment
 		int imageHeight = 301;
 		Canvas canvas = new Canvas(imageWidth, imageHeight);
 
-		drawClockOnCanvas(canvas);
+		projectToCanvas(canvas);
 
 		canvas.writeFile("clock.ppm");
 	}
 
-	private void drawClockOnCanvas(Canvas canvas)
+	@Override
+	public void projectToCanvas(Canvas canvas)
 	{
 		int imageWidth = canvas.getWidth();
 		int imageCenter = imageWidth / 2 + 1;
@@ -48,4 +54,8 @@ public class ClockExperiment
 			for (int j = imageCenter - 1; j <= imageCenter + 1; j++)
 				canvas.writePixel(i, j, red);
 	}
+
+	@Override
+	public String getName()
+	{ return "Clock"; }
 }

@@ -1,4 +1,4 @@
-package org.intranet.graphics.raytrace.projectile;
+package org.intranet.graphics.raytrace.puttingItTogether;
 
 import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.Color;
@@ -8,16 +8,29 @@ import org.intranet.graphics.raytrace.Material;
 import org.intranet.graphics.raytrace.Point;
 import org.intranet.graphics.raytrace.PointLight;
 import org.intranet.graphics.raytrace.Ray;
+import org.intranet.graphics.raytrace.SceneObject;
 import org.intranet.graphics.raytrace.Sphere;
 import org.intranet.graphics.raytrace.Vector;
 
 public class PhongShadingSphereProjector
-	implements SphereProjector
+	implements Projector
 {
 	private Color sphereColor = new Color(1.0, 0.2, 1.0);
+	private final SphereProjectionType projType;
 
 	@Override
-	public void projectToCanvas(SphereProjectionType projType, Canvas canvas)
+	public String getName()
+	{
+		return projType.getName();
+	}
+
+	public PhongShadingSphereProjector(SphereProjectionType t)
+	{
+		this.projType = t;
+	}
+
+	@Override
+	public void projectToCanvas(Canvas canvas)
 	{
 		Point rayOrigin = new Point(0, 0, -5);
 		double wallZ = 10;
@@ -64,7 +77,7 @@ public class PhongShadingSphereProjector
 	{
 		Intersection hit = ilist.get(0);
 		Point point = ray.position(hit.getDistance());
-		Sphere sphere = hit.getObject();
+		SceneObject sphere = hit.getObject();
 		Vector normal = sphere.normalAt(point);
 		Vector eye = ray.getDirection().negate();
 

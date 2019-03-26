@@ -11,7 +11,7 @@ import org.intranet.graphics.raytrace.Matrix;
 import org.intranet.graphics.raytrace.Point;
 import org.intranet.graphics.raytrace.PointLight;
 import org.intranet.graphics.raytrace.Ray;
-import org.intranet.graphics.raytrace.Sphere;
+import org.intranet.graphics.raytrace.SceneObject;
 import org.intranet.graphics.raytrace.Tuple;
 import org.intranet.graphics.raytrace.Vector;
 
@@ -59,11 +59,11 @@ public final class RaytraceData
 	public Ray getRay(String rayName)
 	{ return raysMap.get(rayName); }
 
-	private Map<String, Sphere> spheresMap = new HashMap<>();
-	public void put(String sphereName, Sphere r)
-	{ spheresMap.put(sphereName, r); }
-	public Sphere getSphere(String sphereName)
-	{ return spheresMap.get(sphereName); }
+	private Map<String, SceneObject> sceneObjectMap = new HashMap<>();
+	public void put(String sphereName, SceneObject r)
+	{ sceneObjectMap.put(sphereName, r); }
+	public SceneObject getSceneObject(String sphereName)
+	{ return sceneObjectMap.get(sphereName); }
 
 	private Map<String, Intersection> intersectionsMap = new HashMap<>();
 	public void put(String intersectionName, Intersection i)
