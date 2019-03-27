@@ -95,7 +95,8 @@ public class CanvasSteps
 		for (int i0 = firstLine1 - 1; i0 <= lastLine0; i0++)
 		{
 			String ppmLine = ppm.get(i0);
-			Assert.assertEquals(testLines[testLineNum++], ppmLine);
+			String testLine = testLines[testLineNum++];
+			Assert.assertEquals(testLine, ppmLine);
 		}
 	}
 

@@ -45,6 +45,18 @@ public final class Color
 			values[i] = other.values[i];
 	}
 
+	public void copyValues(Color other, double min, double max)
+	{
+		for (int i = 0; i < values.length; i++)
+			values[i] = clip(other.values[i], min, max);
+	}
+	private double clip(double value, double min, double max)
+	{
+		if (value < min) return min;
+		if (value > max) return max;
+		return value;
+	}
+
 	public Color multiply(Color c2)
 	{
 		return new Color(

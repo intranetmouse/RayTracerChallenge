@@ -33,18 +33,42 @@ public final class CanvasComponent
 				Color color = canvas.getPixelColor(col, row);
 				try
 				{
-					java.awt.Color awtColor = new java.awt.Color(
-						Math.min(255, (int)(color.getRed() * 255)),
-						Math.min(255, (int)(color.getGreen() * 255)),
-						Math.min(255, (int)(color.getBlue() * 255)));
+					java.awt.Color awtColor = rayColorToAwtColor(color);
 					g.setColor(awtColor);
 					g.drawLine(col, row, col, row);
 				}
 				catch (Exception e)
 				{
 					System.err.println("Bad color: " + color);
+//					e.printStackTrace();
 				}
 			}
 		}
+	}
+
+	private java.awt.Color rayColorToAwtColor(Color color)
+	{
+		java.awt.Color awtColor = new java.awt.Color(
+			(int)(color.getRed() * 255.99),
+			(int)(color.getGreen() * 255.99),
+			(int)(color.getBlue() * 255.99));
+		return awtColor;
+	}
+
+	// NOTE: Clipping is done in the canvas itself.
+	private java.awt.Color rayColorToAwtColorClipped(Color color)
+	{
+		java.awt.Color awtColor = new java.awt.Color(
+			scaleClip(color.getRed()),
+			scaleClip(color.getGreen()),
+			scaleClip(color.getBlue()));
+		return awtColor;
+	}
+	private int scaleClip(double color)
+	{
+		double scaled = color * 255.9999;
+		double clipped = Math.max(0.0, scaled);
+		clipped = Math.min(255, clipped);
+		return (int)clipped;
 	}
 }

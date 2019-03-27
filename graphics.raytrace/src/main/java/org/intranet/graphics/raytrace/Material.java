@@ -28,17 +28,17 @@ public class Material
 	private double transparency = 0.0;
 	public double getTransparency() { return transparency; }
 
-	public Color lighting(PointLight pointLight, Point position, Vector eyev,
+	public Color lighting(PointLight light, Point position, Vector eyeV,
 		Vector normalV)
 	{
 		// combine the surface color with the light's color/intensity
-		Color effectiveColor = color.multiply(pointLight.getIntensity());
-
-		// find the direction to the light source
-		Vector lightV = pointLight.getPosition().subtract(position).normalize();
+		Color effectiveColor = color.multiply(light.getIntensity());
 
 		// compute the ambient contribution
 		Color ambientColor = effectiveColor.multiply(ambient);
+
+		// find the direction to the light source
+		Vector lightV = light.getPosition().subtract(position).normalize();
 
 		// lightDotNormal represents the cosine of the angle between the
 		// light vector and the normal vector. A negative number means the
@@ -51,25 +51,24 @@ public class Material
 		// compute the diffuse contribution
 		Color diffuseColor = effectiveColor.multiply(diffuse)
 			.multiply(lightDotNormal);
+		Color ambientDiffuseColor = ambientColor.add(diffuseColor);
 
 		// reflectDotEye represents the cosine of the angle between the
 		// reflection vector and the eye vector. A negative number means the
 		// light reflects away from the eye.
 		Vector reflectV = lightV.negate().reflect(normalV);
-		double reflectDotEye = reflectV.dot(eyev);
+		double reflectDotEye = reflectV.dot(eyeV);
 
-		Color specularColor;
 		if (reflectDotEye < 0)
-			specularColor = new Color(0, 0, 0);
-		else
-		{
-			// compute the specular contribution
-			double factor = Math.pow(reflectDotEye, shininess);
-			specularColor = pointLight.getIntensity().multiply(specular)
-				.multiply(factor);
-		}
+			return ambientDiffuseColor;
 
-		return ambientColor.add(diffuseColor).add(specularColor);
+		// compute the specular contribution
+		double factor = Math.pow(reflectDotEye, shininess);
+		Color specularColor = light.getIntensity().multiply(specular)
+			.multiply(factor);
+System.out.println("Material.lighting: position="+position+", factor="+factor+", specularColor="+specularColor+",reflectDotEye="+reflectDotEye);
+
+		return ambientDiffuseColor.add(specularColor);
 	}
 
 	@Override

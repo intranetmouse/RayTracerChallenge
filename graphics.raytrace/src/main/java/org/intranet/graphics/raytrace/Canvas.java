@@ -38,7 +38,7 @@ public class Canvas
 
 	public void writePixel(int w, int h, Color color)
 	{
-		getPixelColor(w, h).copyValues(color);
+		getPixelColor(w, h).copyValues(color, 0.0, 1.0);
 	}
 
 	public List<String> toPpm()
