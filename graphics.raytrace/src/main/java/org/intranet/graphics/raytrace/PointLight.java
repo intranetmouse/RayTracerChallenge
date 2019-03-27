@@ -14,4 +14,17 @@ public class PointLight
 		this.position = position;
 		this.intensity = intensity;
 	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (obj == null || !(obj instanceof PointLight))
+			return false;
+		PointLight other = (PointLight) obj;
+		if (!position.equals(other.position))
+			return false;
+		if (!intensity.equals(other.intensity))
+			return false;
+		return true;
+	}
 }

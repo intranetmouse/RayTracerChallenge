@@ -18,6 +18,19 @@ public class Sphere
 	}
 
 	@Override
+	public boolean equals(Object other)
+	{
+		if (other == null || !(other instanceof Sphere))
+			return false;
+		Sphere otherSphere = (Sphere)other;
+		if (!transform.equals(otherSphere.transform))
+			return false;
+		if (!material.equals(otherSphere.material))
+			return false;
+		return true;
+	}
+
+	@Override
 	public IntersectionList intersections(Ray ray)
 	{
 		ray = ray.transform(transform.inverse());

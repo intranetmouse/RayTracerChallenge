@@ -16,6 +16,7 @@ import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.SceneObject;
 import org.intranet.graphics.raytrace.Tuple;
 import org.intranet.graphics.raytrace.Vector;
+import org.intranet.graphics.raytrace.World;
 
 public final class RaytraceData
 {
@@ -102,4 +103,10 @@ public final class RaytraceData
 	{ ppmMap.put(ppmName, ppm); }
 	public List<String> getPpm(String ppmName)
 	{ return ppmMap.get(ppmName); }
+
+	private Map<String, World> worldMap = new HashMap<>();
+	public void put(String worldName, World world)
+	{ worldMap.put(worldName, world); }
+	public World getWorld(String worldName)
+	{ return worldMap.get(worldName); }
 }

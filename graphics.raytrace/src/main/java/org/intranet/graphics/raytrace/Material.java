@@ -12,9 +12,11 @@ public class Material
 
 	private double diffuse = 0.9;
 	public double getDiffuse() { return diffuse; }
+	public void setDiffuse(double value) { diffuse = value; }
 
 	private double specular = 0.9;
 	public double getSpecular() { return specular; }
+	public void setSpecular(double value) { specular = value; }
 
 	private double shininess = 200.0;
 	public double getShininess() { return shininess; }
@@ -59,16 +61,16 @@ public class Material
 		Vector reflectV = lightV.negate().reflect(normalV);
 		double reflectDotEye = reflectV.dot(eyeV);
 
-		if (reflectDotEye < 0)
+//		if (reflectDotEye < 0)
 			return ambientDiffuseColor;
 
-		// compute the specular contribution
-		double factor = Math.pow(reflectDotEye, shininess);
-		Color specularColor = light.getIntensity().multiply(specular)
-			.multiply(factor);
-System.out.println("Material.lighting: position="+position+", factor="+factor+", specularColor="+specularColor+",reflectDotEye="+reflectDotEye);
-
-		return ambientDiffuseColor.add(specularColor);
+//		// compute the specular contribution
+//		double factor = Math.pow(reflectDotEye, shininess);
+//		Color specularColor = light.getIntensity().multiply(specular)
+//			.multiply(factor);
+//System.out.println("Material.lighting: position="+position+", factor="+factor+", specularColor="+specularColor+",reflectDotEye="+reflectDotEye);
+//
+//		return ambientDiffuseColor.add(specularColor);
 	}
 
 	@Override
