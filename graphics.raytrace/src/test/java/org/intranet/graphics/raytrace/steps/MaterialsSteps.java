@@ -46,7 +46,7 @@ public class MaterialsSteps
 		PointLight pointLight = data.getPointLight(pointLightName);
 		Vector eyev = data.getVector(eyeVectorName);
 		Vector normalv = data.getVector(normalVectorName);
-		Color color = material.lighting(pointLight, position, eyev, normalv);
+		Color color = Material.lighting(material, pointLight, position, eyev, normalv);
 		data.put(resultingColorName, color);
 	}
 

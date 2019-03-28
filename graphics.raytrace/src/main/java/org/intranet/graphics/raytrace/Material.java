@@ -30,14 +30,14 @@ public class Material
 	private double transparency = 0.0;
 	public double getTransparency() { return transparency; }
 
-	public Color lighting(PointLight light, Point position, Vector eyeV,
+	public static Color lighting(Material m, PointLight light, Point position, Vector eyeV,
 		Vector normalV)
 	{
 		// combine the surface color with the light's color/intensity
-		Color effectiveColor = color.multiply(light.getIntensity());
+		Color effectiveColor = m.getColor().multiply(light.getIntensity());
 
 		// compute the ambient contribution
-		Color ambientColor = effectiveColor.multiply(ambient);
+		Color ambientColor = effectiveColor.multiply(m.getAmbient());
 
 		// find the direction to the light source
 		Vector lightV = light.getPosition().subtract(position).normalize();
@@ -51,7 +51,7 @@ public class Material
 			return ambientColor;
 
 		// compute the diffuse contribution
-		Color diffuseColor = effectiveColor.multiply(diffuse)
+		Color diffuseColor = effectiveColor.multiply(m.getDiffuse())
 			.multiply(lightDotNormal);
 		Color ambientDiffuseColor = ambientColor.add(diffuseColor);
 
