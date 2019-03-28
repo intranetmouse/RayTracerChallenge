@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="cucumber.eclipse.launching.localCucumberFeature">
+<stringAttribute key="cucumber feature" value="classpath:/features/transformations.feature"/>
+<stringAttribute key="glue path" value=""/>
+<booleanAttribute key="is html formatter?" value="true"/>
+<booleanAttribute key="is json formatter?" value="false"/>
+<booleanAttribute key="is junit formatter" value="true"/>
+<booleanAttribute key="is monochrome?" value="true"/>
+<booleanAttribute key="is pretty formatter?" value="true"/>
+<booleanAttribute key="is progress formatter?" value="false"/>
+<booleanAttribute key="is rerun formatter" value="false"/>
+<booleanAttribute key="is usage formatter" value="false"/>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/graphics.raytrace"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="4"/>
+</listAttribute>
+<booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--snippets camelcase"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="graphics.raytrace"/>
+</launchConfiguration>
