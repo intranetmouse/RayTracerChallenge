@@ -61,16 +61,16 @@ public class Material
 		Vector reflectV = lightV.negate().reflect(normalV);
 		double reflectDotEye = reflectV.dot(eyeV);
 
-//		if (reflectDotEye < 0)
+		if (reflectDotEye < 0)
 			return ambientDiffuseColor;
 
-//		// compute the specular contribution
-//		double factor = Math.pow(reflectDotEye, shininess);
-//		Color specularColor = light.getIntensity().multiply(specular)
-//			.multiply(factor);
+		// compute the specular contribution
+		double factor = Math.pow(reflectDotEye, m.getShininess());
+		Color specularColor = light.getIntensity().multiply(m.getSpecular())
+			.multiply(factor);
 //System.out.println("Material.lighting: position="+position+", factor="+factor+", specularColor="+specularColor+",reflectDotEye="+reflectDotEye);
-//
-//		return ambientDiffuseColor.add(specularColor);
+
+		return ambientDiffuseColor.add(specularColor);
 	}
 
 	@Override
