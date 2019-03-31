@@ -4,6 +4,7 @@ import org.intranet.graphics.raytrace.Color;
 import org.intranet.graphics.raytrace.Material;
 import org.intranet.graphics.raytrace.Point;
 import org.intranet.graphics.raytrace.PointLight;
+import org.intranet.graphics.raytrace.Tracer;
 import org.intranet.graphics.raytrace.Tuple;
 import org.intranet.graphics.raytrace.Vector;
 import org.junit.Assert;
@@ -46,7 +47,7 @@ public class MaterialsSteps
 		PointLight pointLight = data.getPointLight(pointLightName);
 		Vector eyev = data.getVector(eyeVectorName);
 		Vector normalv = data.getVector(normalVectorName);
-		Color color = Material.lighting(material, pointLight, position, eyev, normalv);
+		Color color = Tracer.lighting(material, pointLight, position, eyev, normalv);
 		data.put(resultingColorName, color);
 	}
 

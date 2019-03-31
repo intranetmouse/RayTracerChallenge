@@ -10,6 +10,7 @@ import org.intranet.graphics.raytrace.PointLight;
 import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.SceneObject;
 import org.intranet.graphics.raytrace.Sphere;
+import org.intranet.graphics.raytrace.Tracer;
 import org.intranet.graphics.raytrace.Vector;
 
 public class PhongShadingSphereProjector
@@ -82,6 +83,6 @@ public class PhongShadingSphereProjector
 		Vector eyeV = ray.getDirection().normalize().negate();
 
 		Material material = sceneObject.getMaterial();
-		return Material.lighting(material, light, point, eyeV, normalV);
+		return Tracer.lighting(material, light, point, eyeV, normalV);
 	}
 }
