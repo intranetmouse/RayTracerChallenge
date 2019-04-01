@@ -67,6 +67,7 @@ public class BasicSphereProjector
 	{
 		Intersection hit = ilist.get(0);
 		double dist = hit.getDistance();
+//System.out.println("dist="+dist);
 		// distance range is 0.4 to 0.47808764940239135
 		double colorMultiplier = 1 - (dist - 0.4) * 10;
 		Color colorAtPoint = color.multiply(colorMultiplier);

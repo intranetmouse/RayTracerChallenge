@@ -1,7 +1,9 @@
 package org.intranet.graphics.raytrace.steps;
 
 import org.intranet.graphics.raytrace.Intersection;
+import org.intranet.graphics.raytrace.IntersectionComputations;
 import org.intranet.graphics.raytrace.IntersectionList;
+import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.SceneObject;
 import org.intranet.graphics.raytrace.Tuple;
 import org.junit.Assert;
@@ -53,6 +55,19 @@ public class IntersectionsSteps
 		IntersectionList ilist = data.getIntersectionList(intersectionListName);
 		Intersection hit = ilist.hit();
 		data.put(intersectionName, hit);
+	}
+
+	@When(wordPattern + " ← prepare_computations\\(" + wordPattern + ", " +
+		wordPattern + "\\)")
+	public void compsPrepare_computationsIR(String computationsName,
+		String intersectionName, String rayName)
+	{
+		Intersection intersection = data.getIntersection(intersectionName);
+		Ray ray = data.getRay(rayName);
+
+		IntersectionComputations comps = new IntersectionComputations(
+			intersection, ray);
+		data.put(computationsName, comps);
 	}
 
 

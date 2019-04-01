@@ -226,44 +226,30 @@ public class MatricesSteps
 	}
 
 	@Then("^" + wordPattern + " \\* " + wordPattern + " = " + wordPattern + "$")
-	public void matrixATimesVectorB(String mtx1Name, String vector1Name,
-		String expectedVectorName)
+	public void matrixATimesVectorB(String arg1Name, String arg2Name,
+		String expectedName)
 	{
-		Matrix m1 = data.getMatrix(mtx1Name);
-		Vector vector = data.getVector(vector1Name);
-		Vector expected = data.getVector(expectedVectorName);
-
-		Vector result = m1.multiply(vector);
-
+		Matrix m1 = "identity_matrix".equals(arg1Name) ? Matrix.identity(4) : data.getMatrix(arg1Name);
+		Vector vector = data.getVector(arg2Name);
+		if (vector != null)
+		{
+			Vector expected = data.getVector(expectedName);
+			Vector result = m1.multiply(vector);
+			Assert.assertEquals(expected, result);
+			return;
+		}
+		Tuple t = data.getTuple(arg2Name);
+		if (t != null)
+		{
+			Tuple expected = data.getTuple(expectedName);
+			Tuple result = m1.multiply(t);
+			Assert.assertEquals(expected, result);
+			return;
+		}
+		Matrix m2 = "identity_matrix".equals(arg2Name) ? Matrix.identity(4) : data.getMatrix(arg2Name);
+		Matrix expected = data.getMatrix(expectedName);
+		Matrix result = m1.multiply(m2);
 		Assert.assertEquals(expected, result);
-	}
-
-	@Then("^" + wordPattern + " \\* identity_matrix = " + wordPattern + "$")
-	public void matrixATimesIdentity(String mtx1Name, String mtx2Name)
-	{
-		Assert.assertEquals("Only the same matrix is supported", mtx1Name, mtx2Name);
-		Matrix m1 = data.getMatrix(mtx1Name);
-		Assert.assertNotNull(mtx1Name, m1);
-
-		Matrix identityMtx = Matrix.identity(m1.getNumCols());
-
-		Matrix result = m1.multiply(identityMtx);
-
-		Assert.assertEquals(m1, result);
-	}
-
-	@Then("^identity_matrix \\* " + wordPattern + " = " + wordPattern + "$")
-	public void identityTimesMatrixA(String mtx1Name, String mtx2Name)
-	{
-		Assert.assertEquals("Only the same matrix is supported", mtx1Name, mtx2Name);
-		Tuple a = data.getTuple(mtx1Name);
-		Assert.assertNotNull(mtx1Name, a);
-
-		Matrix identityMtx = Matrix.identity(4);
-
-		Tuple result = identityMtx.multiply(a);
-
-		Assert.assertEquals(a, result);
 	}
 
 	@Then("^transpose\\(" + wordPattern + "\\) is the following matrix:$")

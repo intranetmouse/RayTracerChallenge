@@ -3,9 +3,11 @@ package org.intranet.graphics.raytrace.steps;
 import java.util.List;
 
 import org.intranet.graphics.raytrace.Color;
+import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Material;
 import org.intranet.graphics.raytrace.Matrix;
 import org.intranet.graphics.raytrace.PointLight;
+import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.SceneObject;
 import org.intranet.graphics.raytrace.Sphere;
 import org.intranet.graphics.raytrace.World;
@@ -80,14 +82,14 @@ public class WorldSteps
 			}
 		}
 		data.put(sphereName, sphere);
-		// Write code here that turns the phrase above into concrete actions
-		// For automatic transformation, change DataTable to one of
-		// E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-		// Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-		// Double, Byte, Short, Long, BigInteger or BigDecimal.
-		//
-		// For other transformations you can register a DataTableType.
-//		throw new cucumber.api.PendingException();
+	}
+
+	@Given(wordPattern + " ← the first object in " + wordPattern)
+	public void shapeTheFirstObjectInW(String objectName, String worldName)
+	{
+		World world = data.getWorld(worldName);
+		SceneObject firstObject = world.getSceneObjects().get(0);
+		data.put(objectName, firstObject);
 	}
 
 
@@ -96,6 +98,18 @@ public class WorldSteps
 	{
 		World w = World.defaultWorld();
 		data.put(worldName, w);
+	}
+
+	@When(wordPattern + " ← intersect_world\\(" + wordPattern + ", " + wordPattern + "\\)")
+	public void xsIntersect_worldWR(String intersectionListName,
+		String worldName, String rayName)
+	{
+		World w = data.getWorld(worldName);
+		Ray r = data.getRay(rayName);
+
+		IntersectionList il = w.intersect(r);
+
+		data.put(intersectionListName, il);
 	}
 
 

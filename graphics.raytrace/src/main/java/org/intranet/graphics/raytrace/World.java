@@ -35,4 +35,16 @@ public class World
 		return world;
 	}
 
+	public IntersectionList intersect(Ray ray)
+	{
+		List<Intersection> intersections = new ArrayList<>();
+		for (SceneObject sceneObject : sceneObjects)
+		{
+			IntersectionList il = sceneObject.intersections(ray);
+			intersections.addAll(il.getIntersections());
+		}
+		intersections.sort((o1, o2) -> IntersectionList
+			.compareDouble(o1.getDistance() - o2.getDistance()));
+		return new IntersectionList(intersections);
+	}
 }

@@ -59,7 +59,7 @@ public class PhongShadingSphereProjector
 			for (int screenX = 0; screenX < screenWidth; screenX++)
 			{
 				double worldX = -halfWallWidth + screenX * pixelSize;
-				Ray ray = new Ray(rayOrigin, new Vector(worldX, worldY, wallZ));
+				Ray ray = new Ray(rayOrigin, new Vector(worldX, worldY, wallZ).normalize());
 
 				IntersectionList ilist = sphere.intersections(ray);
 
@@ -80,7 +80,7 @@ public class PhongShadingSphereProjector
 		Point point = ray.position(hit.getDistance());
 		SceneObject sceneObject = hit.getObject();
 		Vector normalV = sceneObject.normalAt(point);
-		Vector eyeV = ray.getDirection().normalize().negate();
+		Vector eyeV = ray.getDirection().negate();
 
 		Material material = sceneObject.getMaterial();
 		return Tracer.lighting(material, light, point, eyeV, normalV);

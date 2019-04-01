@@ -7,6 +7,7 @@ import java.util.Map;
 import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.Color;
 import org.intranet.graphics.raytrace.Intersection;
+import org.intranet.graphics.raytrace.IntersectionComputations;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Material;
 import org.intranet.graphics.raytrace.Matrix;
@@ -109,4 +110,12 @@ public final class RaytraceData
 	{ worldMap.put(worldName, world); }
 	public World getWorld(String worldName)
 	{ return worldMap.get(worldName); }
+
+	private Map<String, IntersectionComputations> compsMap = new HashMap<>();
+	public void put(String compsName, IntersectionComputations comps)
+	{ compsMap.put(compsName, comps); }
+	public IntersectionComputations getComputations(String compsName)
+	{ return compsMap.get(compsName); }
+
+
 }
