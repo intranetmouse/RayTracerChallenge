@@ -7,6 +7,7 @@ public class Material
 
 	private double ambient = 0.1;
 	public double getAmbient() { return ambient; }
+	public void setAmbient(double value) { ambient = value; }
 
 	private double diffuse = 0.9;
 	public double getDiffuse() { return diffuse; }
@@ -26,9 +27,40 @@ public class Material
 	private double transparency = 0.0;
 	public double getTransparency() { return transparency; }
 
+	public Color lighting(PointLight pointLight, Point position, Vector eyev,
+		Vector normalV)
+	{
+		Color effectiveColor = color.multiply(pointLight.getIntensity());
+		Vector lightV = pointLight.getPosition().subtract(position).normalize();
+		Color ambientColor = effectiveColor.multiply(ambient);
+		double lightDotNormal = lightV.dot(normalV);
+
+		if (lightDotNormal < 0)
+			return ambientColor;
+
+		Color diffuseColor = effectiveColor.multiply(diffuse).multiply(lightDotNormal);
+
+		Vector reflectV = lightV.negate().reflect(normalV);
+		double reflectDotEye = reflectV.dot(eyev);
+
+		Color specularColor;
+		if (reflectDotEye < 0)
+			specularColor = new Color(0, 0, 0);
+		else
+		{
+			double factor = Math.pow(reflectDotEye, shininess);
+			specularColor = pointLight.getIntensity().multiply(specular)
+				.multiply(factor);
+		}
+
+		return ambientColor.add(diffuseColor).add(specularColor);
+	}
+
 	@Override
 	public boolean equals(Object other)
 	{
+		if (other == this)
+			return true;
 		if (!(other instanceof Material))
 			return false;
 		Material otherMaterial = (Material)other;

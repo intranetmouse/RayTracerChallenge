@@ -47,6 +47,22 @@ public class TuplesSteps
 			new Vector(Math.sqrt(xNum) / xDenom, Math.sqrt(yNum) / yDenom, z));
 	}
 
+	@Given(wordPattern + " ← vector\\(" + doublePattern + ", "
+		+ "(-?)√" + doublePattern + "\\/" + doublePattern
+		+ ", (-?)√" + doublePattern + "\\/" + doublePattern
+		+ "\\)")
+	public void nVectorNumSqrSqr(String vectorName, double x,
+		String ySignStr, double yNum, double yDenom,
+		String zSignStr, double zNum, double zDenom)
+	{
+		int ySign = "-".contentEquals(ySignStr) ? -1 : 1;
+		int zSign = "-".contentEquals(zSignStr) ? -1 : 1;
+		Vector vector = new Vector(x, ySign * Math.sqrt(yNum) / yDenom,
+			zSign * Math.sqrt(zNum) / zDenom);
+		data.put(vectorName, vector);
+	}
+
+
 	@When("^" + wordPattern + " ← normalize\\(" + wordPattern + "\\)$")
 	public void v2Vector(String varName, String vectorName)
 	{
@@ -298,6 +314,15 @@ public class TuplesSteps
 		Color c1 = data.getColor(color1Name);
 		Color result = c1.multiply(multiplyValue);
 		Assert.assertEquals(expected, result);
+	}
+
+	@Then("^" + wordPattern + " = color\\(" + threeDoublesPattern + "\\)$")
+	public void color_equals_Color(String color1Name,
+		double red, double green, double blue)
+	{
+		Color expected = new Color(red, green, blue);
+		Color c1 = data.getColor(color1Name);
+		Assert.assertEquals(expected, c1);
 	}
 
 }

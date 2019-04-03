@@ -8,6 +8,7 @@ public class Sphere
 
 	private Material material = new Material();
 	public Material getMaterial() { return material; }
+	public void setMaterial(Material value) { material = value; }
 
 	public Sphere()
 	{

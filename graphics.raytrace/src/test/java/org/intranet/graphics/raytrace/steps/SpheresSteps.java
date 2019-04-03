@@ -135,6 +135,15 @@ public class SpheresSteps
 		data.put(materialName, sphere.getMaterial());
 	}
 
+	@When(wordPattern + ".material ← " + wordPattern)
+	public void setSphereMaterial(String sphereName, String materialName)
+	{
+		Material m = data.getMaterial(materialName);
+		Sphere sphere = data.getSphere(sphereName);
+		sphere.setMaterial(m);
+	}
+
+
 	@Then(wordPattern + "\\[" + intPattern + "\\] = " + doublePattern)
 	public void xs(String intersectionName, int index, double expectedValue)
 	{
@@ -174,5 +183,14 @@ public class SpheresSteps
 		Material expectedMaterial = new Material();
 		Material actualMaterial = data.getMaterial(actualMaterialName);
 		Assert.assertEquals(actualMaterial, expectedMaterial);
+	}
+
+	@Then(wordPattern + ".material = " + wordPattern)
+	public void sphereMaterialEqualsMaterial(String sphereName,
+		String actualMaterialName)
+	{
+		Sphere sphere = data.getSphere(sphereName);
+		Material actualMaterial = data.getMaterial(actualMaterialName);
+		Assert.assertEquals(actualMaterial, sphere.getMaterial());
 	}
 }
