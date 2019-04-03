@@ -4,6 +4,7 @@ import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.Color;
 import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionList;
+import org.intranet.graphics.raytrace.Matrix;
 import org.intranet.graphics.raytrace.Point;
 import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.Sphere;
@@ -11,12 +12,32 @@ import org.intranet.graphics.raytrace.Vector;
 
 public class SphereProjectionTest
 {
-	public static Canvas createSphereProjection()
+	enum SphereProjectionType
 	{
-		Canvas c = new Canvas(200, 200);
+		NORMAL("Normal", null),
+		SHRINK_Y("Shrink Y", Matrix.newScaling(1, 0.5, 1)),
+		SHRINK_X("Shrink X", Matrix.newScaling(0.5, 1, 1)),
+		SHRINK_ROTATE("Shrink + Rotate", Matrix.newRotationZ(Math.PI / 4).multiply(Matrix.newScaling(0.5, 1, 1))),
+		SHRINK_SKEW("Shink + Skew", Matrix.shearing(1, 0, 0, 0, 0, 0).multiply(Matrix.newScaling(0.5, 1, 1)));
 
+		private final String name;
+		public String getName() { return name; }
+
+		private Matrix transform;
+		public Matrix getTransform() { return transform; }
+
+		private SphereProjectionType(String name, Matrix t) {
+			this.name = name;
+			transform = t;
+		}
+	}
+
+	public static void renderSphereProjectionTo(Canvas c, SphereProjectionType t)
+	{
 		Point rayOrigin = new Point(0, 0, -5);
 		Sphere sphere = new Sphere();
+		if (t.getTransform() != null)
+			sphere.setTransform(t.getTransform());
 		Color color = new Color(1.0, 0.0, 0.0);
 
 		double wallSize = 7;
@@ -46,6 +67,5 @@ public class SphereProjectionTest
 				}
 			}
 		}
-		return c;
 	}
 }

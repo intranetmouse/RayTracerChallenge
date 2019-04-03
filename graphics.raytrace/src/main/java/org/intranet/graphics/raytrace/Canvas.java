@@ -107,4 +107,11 @@ public class Canvas
 			}
 		}
 	}
+
+	public void clear()
+	{
+		for (int h = 0; h < height; h++)
+			for (int w = 0; w < width; w++)
+				pixels[h][w] = new Color(0, 0, 0);
+	}
 }
