@@ -34,9 +34,9 @@ public final class CanvasComponent
 				try
 				{
 					java.awt.Color awtColor = new java.awt.Color(
-						(int)(color.getRed() * 255),
-						(int)(color.getGreen() * 255),
-						(int)(color.getBlue() * 255));
+						Math.min(255, (int)(color.getRed() * 255)),
+						Math.min(255, (int)(color.getGreen() * 255)),
+						Math.min(255, (int)(color.getBlue() * 255)));
 					g.setColor(awtColor);
 					g.drawLine(col, row, col, row);
 				}

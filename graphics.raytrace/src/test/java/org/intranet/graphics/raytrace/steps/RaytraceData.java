@@ -1,8 +1,10 @@
 package org.intranet.graphics.raytrace.steps;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.Color;
 import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionList;
@@ -84,8 +86,20 @@ public final class RaytraceData
 	{ return pointLightMap.get(pointLightName); }
 
 	private Map<String, Material> materialsMap = new HashMap<>();
-	public void put(String materialName, Material l)
-	{ materialsMap.put(materialName, l); }
+	public void put(String materialName, Material material)
+	{ materialsMap.put(materialName, material); }
 	public Material getMaterial(String materialName)
 	{ return materialsMap.get(materialName); }
+
+	private Map<String, Canvas> canvasMap = new HashMap<>();
+	public void put(String canvasName, Canvas canvas)
+	{ canvasMap.put(canvasName, canvas); }
+	public Canvas getCanvas(String canvasName)
+	{ return canvasMap.get(canvasName); }
+
+	private Map<String, List<String>> ppmMap = new HashMap<>();
+	public void put(String ppmName, List<String> ppm)
+	{ ppmMap.put(ppmName, ppm); }
+	public List<String> getPpm(String ppmName)
+	{ return ppmMap.get(ppmName); }
 }
