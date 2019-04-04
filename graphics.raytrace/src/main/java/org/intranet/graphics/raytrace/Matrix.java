@@ -72,7 +72,7 @@ public class Matrix
 			double[] row = matrix[rowNum];
 			int numCols = row.length;
 			if (numRows != numCols)
-				throw new IllegalStateException("Both matrices should have same number of rows and cols");
+				throw new IllegalStateException("Both matrices should have same number of rows " + numRows + " and cols " + numCols);
 			for (int colNum = 0; colNum < numCols; colNum++)
 			{
 				double sum = 0.0;
@@ -296,6 +296,26 @@ public class Matrix
 		translation.matrix[2][0] = zx;
 		translation.matrix[2][1] = zy;
 		return translation;
+	}
+
+	public static Matrix newView(Point fromPoint, Point toPoint,
+		Vector upVector)
+	{
+		Vector forwardVector = toPoint.subtract(fromPoint).normalize();
+		Vector left = forwardVector.cross(upVector.normalize());
+		Vector trueUp = left.cross(forwardVector);
+
+		double[][] orientationArray = {
+			{ left.getX(), left.getY(), left.getZ(), 0},
+			{ trueUp.getX(), trueUp.getY(), trueUp.getZ(), 0},
+			{ -forwardVector.getX(), -forwardVector.getY(), -forwardVector.getZ(), 0 },
+			{0, 0, 0, 1}
+		};
+
+		Matrix orientationMtx = new Matrix(orientationArray);
+
+		return orientationMtx.multiply(Matrix.newTranslation(-fromPoint.getX(),
+			-fromPoint.getY(), -fromPoint.getZ()));
 	}
 
 	public int getNumRows()

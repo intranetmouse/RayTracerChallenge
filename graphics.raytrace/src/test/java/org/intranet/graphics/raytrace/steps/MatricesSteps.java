@@ -10,6 +10,7 @@ import org.junit.Assert;
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import io.cucumber.datatable.DataTable;
 
 public class MatricesSteps
@@ -174,6 +175,20 @@ public class MatricesSteps
 		Matrix m = new Matrix(rows);
 		return m;
 	}
+
+
+	@When(wordPattern + " ← view_transform\\(" + wordPattern + ", "
+		+ wordPattern + ", " + wordPattern + "\\)")
+	public void tView_transformFromToUp(String matrixName, String fromPointName,
+		String toPointName, String upVectorName)
+	{
+		Point fromPoint = data.getPoint(fromPointName);
+		Point toPoint = data.getPoint(toPointName);
+		Vector upVector = data.getVector(upVectorName);
+
+		data.put(matrixName, Matrix.newView(fromPoint, toPoint, upVector));
+	}
+
 
 	@Then("^" + wordPattern + "\\[" + intPattern + "," + intPattern + "\\] = " + doublePattern + "$")
 	public void matrixAssertEquals(String varName, int rowNum, int colNum,
