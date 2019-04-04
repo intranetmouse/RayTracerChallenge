@@ -44,4 +44,14 @@ public final class Tracer
 
 		return ambientDiffuseColor.add(specularColor);
 	}
+
+	public static Color colorAt(World world, Ray ray)
+	{
+		IntersectionList intersectionList = world.intersect(ray);
+		Intersection hit = intersectionList.hit();
+		if (hit == null)
+			return new Color(0, 0, 0);
+		IntersectionComputations comps = new IntersectionComputations(hit, ray);
+		return comps.shadeHit(world);
+	}
 }

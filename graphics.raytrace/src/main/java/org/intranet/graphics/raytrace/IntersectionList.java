@@ -38,7 +38,7 @@ public final class IntersectionList
 		for (Intersection i : intersections)
 		{
 			double distance = i.getDistance();
-			if (intersection != null && (distance > 0 && distance < intersection.getDistance()))
+			if (distance > 0 && (intersection == null || distance < intersection.getDistance()))
 				intersection = i;
 		}
 		return intersection;

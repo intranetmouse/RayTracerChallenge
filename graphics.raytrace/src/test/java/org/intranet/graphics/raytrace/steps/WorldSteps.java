@@ -3,13 +3,16 @@ package org.intranet.graphics.raytrace.steps;
 import java.util.List;
 
 import org.intranet.graphics.raytrace.Color;
+import org.intranet.graphics.raytrace.IntersectionComputations;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Material;
 import org.intranet.graphics.raytrace.Matrix;
+import org.intranet.graphics.raytrace.Point;
 import org.intranet.graphics.raytrace.PointLight;
 import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.SceneObject;
 import org.intranet.graphics.raytrace.Sphere;
+import org.intranet.graphics.raytrace.Tracer;
 import org.intranet.graphics.raytrace.World;
 import org.junit.Assert;
 
@@ -57,6 +60,14 @@ public class WorldSteps
 							double scaleZ = Double.parseDouble(scalingValues[2]);
 							sphere.setTransform(Matrix.newScaling(scaleX, scaleY, scaleZ));
 							break;
+						case "translation":
+							String translationValue = args[1].replaceAll("[\\) ]", "");
+							String[] translationValues = translationValue.split(",");
+							double xlateX = Double.parseDouble(translationValues[0]);
+							double xlateY = Double.parseDouble(translationValues[1]);
+							double xlateZ = Double.parseDouble(translationValues[2]);
+							sphere.setTransform(Matrix.newTranslation(xlateX, xlateY, xlateZ));
+							break;
 						default:
 							throw new cucumber.api.PendingException("Unknown sphere transform property " + args[0]);
 					}
@@ -84,12 +95,37 @@ public class WorldSteps
 		data.put(sphereName, sphere);
 	}
 
-	@Given(wordPattern + " ← the first object in " + wordPattern)
-	public void shapeTheFirstObjectInW(String objectName, String worldName)
+	@Given(wordPattern + " ← the (first|second) object in " + wordPattern)
+	public void shapeTheFirstObjectInW(String objectName, String order, String worldName)
 	{
 		World world = data.getWorld(worldName);
-		SceneObject firstObject = world.getSceneObjects().get(0);
+		int sceneObjIdx = "first".equals(order) ? 0 : 1;
+		SceneObject firstObject = world.getSceneObjects().get(sceneObjIdx);
 		data.put(objectName, firstObject);
+	}
+
+	@Given("^" + wordPattern + "\\." + wordPattern + " ← point_light\\(point\\(" +
+		threeDoublesPattern + "\\), color\\(" + threeDoublesPattern + "\\)\\)$")
+	public void worldSetLightToPointLight(String worldName, String propertyName,
+		double pointX, double pointY, double pointZ, double red, double green,
+		double blue)
+	{
+		Assert.assertEquals("Only light is supported property name", "light", propertyName);
+
+		Point position = new Point(pointX, pointY, pointZ);
+		Color color = new Color(red, green, blue);
+		PointLight pointLight = new PointLight(position, color);
+		World world = data.getWorld(worldName);
+		world.getLightSources().clear();
+		world.getLightSources().add(pointLight);
+	}
+
+	@Given(wordPattern + " is added to " + wordPattern)
+	public void sIsAddedToW(String objName, String worldName)
+	{
+		SceneObject obj = data.getSceneObject(objName);
+		World world = data.getWorld(worldName);
+		world.getSceneObjects().add(obj);
 	}
 
 
@@ -110,6 +146,28 @@ public class WorldSteps
 		IntersectionList il = w.intersect(r);
 
 		data.put(intersectionListName, il);
+	}
+
+	@When(wordPattern + " ← shade_hit\\(" + wordPattern + ", " + wordPattern + "\\)")
+	public void cShade_hitWComps(String colorName, String worldName,
+		String intersectionComputationsName)
+	{
+		World world = data.getWorld(worldName);
+		IntersectionComputations comps = data.getComputations(intersectionComputationsName);
+
+		Color c = comps.shadeHit(world);
+
+		data.put(colorName, c);
+	}
+
+	@When(wordPattern + " ← color_at\\(" + wordPattern + ", " + wordPattern + "\\)")
+	public void cColor_atWR(String colorName, String worldName, String rayName)
+	{
+		World world = data.getWorld(worldName);
+		Ray ray = data.getRay(rayName);
+
+		Color color = Tracer.colorAt(world, ray);
+		data.put(colorName, color);
 	}
 
 

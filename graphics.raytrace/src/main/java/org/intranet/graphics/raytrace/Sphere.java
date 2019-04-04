@@ -63,4 +63,11 @@ public class Sphere
 		Vector v = new Vector(worldNormal.getX(), worldNormal.getY(), worldNormal.getZ());
 		return v.normalize();
 	}
+
+	@Override
+	public String toString()
+	{
+		return String.format("%s:[xform=%s,mat=%s]", getClass().getSimpleName(),
+			transform, material);
+	}
 }

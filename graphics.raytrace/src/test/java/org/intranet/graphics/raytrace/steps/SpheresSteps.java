@@ -1,5 +1,6 @@
 package org.intranet.graphics.raytrace.steps;
 
+import org.intranet.graphics.raytrace.Color;
 import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Material;
@@ -39,6 +40,13 @@ public class SpheresSteps
 		Matrix rotateZMtx = Matrix.newRotationZ(Math.PI / rotateZdenom);
 		Matrix product = scalingMtx.multiply(rotateZMtx);
 		data.put(matrixName, product);
+	}
+
+	@Given(wordPattern + ".material.ambient ← " + doublePattern)
+	public void outerMaterialAmbient(String objectName, double ambientValue)
+	{
+		SceneObject obj = data.getSceneObject(objectName);
+		obj.getMaterial().setAmbient(ambientValue);
 	}
 
 
@@ -193,5 +201,13 @@ public class SpheresSteps
 		SceneObject obj = data.getSceneObject(sphereName);
 		Material actualMaterial = data.getMaterial(actualMaterialName);
 		Assert.assertEquals(actualMaterial, obj.getMaterial());
+	}
+
+	@Then(wordPattern + " = " + wordPattern + ".material.color")
+	public void cInnerMaterialColor(String colorName, String objectName)
+	{
+		Color color = data.getColor(colorName);
+		SceneObject object = data.getSceneObject(objectName);
+		Assert.assertEquals(color, object.getMaterial().getColor());
 	}
 }

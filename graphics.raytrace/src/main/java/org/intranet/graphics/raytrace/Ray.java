@@ -25,4 +25,11 @@ public class Ray
 		Vector newDirection = t.multiply(direction);
 		return new Ray(newOrigin, newDirection);
 	}
+
+	@Override
+	public String toString()
+	{
+		return String.format("%s:{origin=%s,direction=%s}",
+			getClass().getSimpleName(), origin, direction);
+	}
 }

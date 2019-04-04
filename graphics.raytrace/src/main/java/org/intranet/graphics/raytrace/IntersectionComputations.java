@@ -1,5 +1,7 @@
 package org.intranet.graphics.raytrace;
 
+import java.util.List;
+
 public final class IntersectionComputations
 {
 	public double getDistance() { return intersection.getDistance(); }
@@ -17,6 +19,18 @@ public final class IntersectionComputations
 
 	private Intersection intersection;
 
+	private boolean inside;
+	public boolean isInside() { return inside; }
+
+	public Color shadeHit(World world)
+	{
+		List<PointLight> lightSources = world.getLightSources();
+		return lightSources.stream()
+			.map(lightSource -> Tracer.lighting(getObject().getMaterial(),
+				lightSource, point, eyeVector, normalVector))
+			.reduce((a, b) -> a.add(b)).orElse(new Color(0, 0, 0));
+	}
+
 	public IntersectionComputations(Intersection intersection,
 		Ray ray)
 	{
@@ -26,5 +40,12 @@ public final class IntersectionComputations
 		this.point = ray.position(getDistance());
 		this.eyeVector = ray.getDirection().normalize().negate();
 		this.normalVector = getObject().normalAt(point);
+
+		if (normalVector.dot(eyeVector) < 0)
+		{
+			inside = true;
+			normalVector = normalVector.negate();
+		}
+		// else inside = false;
 	}
 }

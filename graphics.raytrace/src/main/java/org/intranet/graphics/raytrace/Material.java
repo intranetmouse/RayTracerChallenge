@@ -56,4 +56,13 @@ public class Material
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString()
+	{
+		return String.format(
+			"%s:[color=%s,ambient=%.2f,diffuse=%.2f,specular=%.2f,shininess=%.2f,reflective=%.2f,refractive=%.2f,transparency=%.2f]",
+			getClass().getSimpleName(), color, ambient, diffuse, specular,
+			shininess, reflective, refractive, transparency);
+	}
 }
