@@ -52,15 +52,6 @@ public class MaterialsSteps
 	}
 
 
-	@Then(wordPattern + ".color = color\\(" + threeDoublesPattern + "\\)")
-	public void mColorColor(String materialName, double red, double green,
-		double blue)
-	{
-		Color expectedColor = new Color(red, green, blue);
-		Material m = data.getMaterial(materialName);
-		Assert.assertEquals(expectedColor, m.getColor());
-	}
-
 	@Then(wordPattern + ".ambient = " + doublePattern)
 	public void mAmbient(String materialName, double expectedAmbient)
 	{

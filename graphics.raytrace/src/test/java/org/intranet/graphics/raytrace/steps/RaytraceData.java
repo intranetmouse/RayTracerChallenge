@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.intranet.graphics.raytrace.Camera;
 import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.Color;
 import org.intranet.graphics.raytrace.Intersection;
@@ -32,6 +33,18 @@ public final class RaytraceData
 		if (a == null) a = getVector(tupleName);
 		return a;
 	}
+
+	private Map<String, Double> doubleMap = new HashMap<>();
+	public void put(String doubleName, double value)
+	{ doubleMap.put(doubleName, value); }
+	public double getDouble(String doubleName)
+	{ return doubleMap.get(doubleName); }
+
+	private Map<String, Integer> intMap = new HashMap<>();
+	public void put(String intName, int value)
+	{ intMap.put(intName, value); }
+	public int getInt(String intName)
+	{ return intMap.get(intName); }
 
 	private Map<String, Point> pointMap = new HashMap<>();
 	public void put(String pointName, Point point)
@@ -117,5 +130,10 @@ public final class RaytraceData
 	public IntersectionComputations getComputations(String compsName)
 	{ return compsMap.get(compsName); }
 
+	private Map<String, Camera> cameraMap = new HashMap<>();
+	public void put(String cameraName, Camera camera)
+	{ cameraMap.put(cameraName, camera); }
+	public Camera getCamera(String cameraName)
+	{ return cameraMap.get(cameraName); }
 
 }

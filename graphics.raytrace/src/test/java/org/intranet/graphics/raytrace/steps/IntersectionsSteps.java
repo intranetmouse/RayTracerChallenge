@@ -3,11 +3,9 @@ package org.intranet.graphics.raytrace.steps;
 import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionComputations;
 import org.intranet.graphics.raytrace.IntersectionList;
-import org.intranet.graphics.raytrace.Point;
 import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.SceneObject;
 import org.intranet.graphics.raytrace.Tuple;
-import org.intranet.graphics.raytrace.Vector;
 import org.junit.Assert;
 
 import cucumber.api.PendingException;
@@ -135,13 +133,6 @@ public class IntersectionsSteps
 		Assert.assertEquals(expectedValue, t, Tuple.EPSILON);
 	}
 
-	@Then(wordPattern + " is nothing")
-	public void iIsNothing(String intersectionName)
-	{
-		Intersection i = data.getIntersection(intersectionName);
-		Assert.assertNull(i);
-	}
-
 	@Given(wordPattern + " ← intersections\\(" + fourWordPattern + "\\)")
 	public void xsIntersectionsIIII(String intersectionListName, String int1,
 		String int2, String int3, String int4)
@@ -155,82 +146,5 @@ public class IntersectionsSteps
 		data.put(intersectionListName, ilist);
 	}
 
-
-	@Then(wordPattern + "\\." + wordPattern + " = " + wordPattern + "\\("
-		+ threeDoublesPattern + "\\)")
-	public void objPropEqualsTuple(String expectedObjName, String propertyName,
-		String objType, double x, double y, double z)
-	{
-		Tuple expected = "point".equals(objType) ? new Point(x, y, z) :
-			"vector".equals(objType) ? new Vector(x, y, z) :
-			null;
-		Assert.assertNotNull("Unrecognized object type " + objType, expected);
-
-		IntersectionComputations comps = data.getComputations(expectedObjName);
-		Object value = "point".equals(propertyName) ? comps.getPoint() :
-			"eyev".equals(propertyName) ? comps.getEyeVector() :
-			"normalv".equals(propertyName) ? comps.getNormalVector() :
-			null;
-		Assert.assertNotNull("Property name does not match: " + propertyName,
-			value);
-
-		Assert.assertEquals(expected, value);
-	}
-
-	@Then(wordPattern + "\\." + wordPattern + " = " + wordPattern + "\\." + wordPattern)
-	public void compsTIT(String actualObjName, String actualObjVariableName,
-		String expectedObjName, String expectedObjVariableName)
-	{
-//System.out.printf("obj=%s, var=%s, expected obj=%s, var=%s\n", actualObjName, actualObjVariableName, expectedObjName, expectedObjVariableName);
-		Assert.assertEquals(expectedObjVariableName, actualObjVariableName);
-
-		IntersectionComputations actualComps = data.getComputations(actualObjName);
-		if (actualComps != null)
-		{
-			IntersectionComputations expectedComps = data.getComputations(expectedObjName);
-
-			if (expectedComps != null)
-			{
-				switch (actualObjVariableName)
-				{
-					case "t":
-						double expectedDistance = expectedComps.getDistance();
-						double actualDistance = actualComps.getDistance();
-						Assert.assertEquals(expectedDistance,
-							actualDistance, Tuple.EPSILON);
-						return;
-					default:
-						throw new cucumber.api.PendingException(
-							"Unknown variable name " + actualObjVariableName +
-							" on obj name=" + actualObjName);
-				}
-			}
-
-			Intersection expectedIntersection = data.getIntersection(expectedObjName);
-			if (expectedIntersection != null)
-			{
-				switch (actualObjVariableName)
-				{
-					case "t":
-						double expectedDistance = expectedIntersection.getDistance();
-						double actualDistance = actualComps.getDistance();
-						Assert.assertEquals(expectedDistance,
-							actualDistance, Tuple.EPSILON);
-						return;
-					case "object":
-						SceneObject expectedObject = expectedIntersection.getObject();
-						SceneObject actualObject = actualComps.getObject();
-						Assert.assertEquals(expectedObject, actualObject);
-						return;
-					default:
-						throw new cucumber.api.PendingException(
-							"Unknown variable name " + actualObjVariableName +
-							" on obj name=" + actualObjName);
-				}
-			}
-		}
-		throw new cucumber.api.PendingException(
-			"Unknown data type for variable " + actualObjName);
-	}
 
 }

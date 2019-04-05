@@ -1,5 +1,6 @@
 package org.intranet.graphics.raytrace.steps;
 
+import org.intranet.graphics.raytrace.Camera;
 import org.intranet.graphics.raytrace.Color;
 import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionList;
@@ -168,11 +169,29 @@ public class SpheresSteps
 		SceneObject obj = data.getSceneObject(objectName);
 
 		Matrix expectedMatrix;
-		if ("identity_matrix".contentEquals(matrixName))
-			expectedMatrix = Matrix.identity(4);
-		else
-			expectedMatrix = data.getMatrix(matrixName);
-		Assert.assertEquals(expectedMatrix, obj.getTransform());
+		switch (matrixName)
+		{
+			case "identity_matrix":
+				expectedMatrix = Matrix.identity(4);
+				break;
+			default:
+				expectedMatrix = data.getMatrix(matrixName);
+		}
+
+		if (obj != null)
+		{
+			Assert.assertEquals(expectedMatrix, obj.getTransform());
+			return;
+		}
+
+		Camera camera = data.getCamera(objectName);
+		if (camera != null)
+		{
+			Assert.assertEquals(expectedMatrix, camera.getTransform());
+			return;
+		}
+
+		Assert.fail("Unknown object type for object name " + objectName);
 	}
 
 	@Then(wordPattern + " = normalize\\(" + wordPattern + "\\)")

@@ -77,11 +77,27 @@ public class CanvasSteps
 
 	@Then("^pixel_at\\(" + wordPattern + ", " + twoIntsPattern + "\\) = " +
 		wordPattern + "$")
-	public void pixel_atCRed(String canvasName, int x, int y, String colorName)
+	public void pixel_atCRed(String canvasName, int x, int y, String expectedColorName)
 	{
-		Canvas c = data.getCanvas(canvasName);
-		Color color = data.getColor(colorName);
-		Assert.assertEquals(color, c.getPixelColor(x, y));
+		Color expectedColor = data.getColor(expectedColorName);
+
+		Canvas canvas = data.getCanvas(canvasName);
+		Color actualColor = canvas.getPixelColor(x, y);
+
+		Assert.assertEquals(expectedColor, actualColor);
+	}
+
+	@Then("^pixel_at\\(" + wordPattern + ", " + twoIntsPattern + "\\) = color\\("
+		+ threeDoublesPattern + "\\)")
+	public void pixel_atImageColor(String canvasName, int x, int y, double red,
+		double green, double blue)
+	{
+		Color expectedColor = new Color(red, green, blue);
+
+		Canvas canvas = data.getCanvas(canvasName);
+		Color actualColor = canvas.getPixelColor(x, y);
+
+		Assert.assertEquals(expectedColor, actualColor);
 	}
 
 	@Then("^lines " + intPattern + "-" + intPattern + " of " + wordPattern + " are")
