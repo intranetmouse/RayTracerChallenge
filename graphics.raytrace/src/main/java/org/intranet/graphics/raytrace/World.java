@@ -8,6 +8,8 @@ public class World
 	List<PointLight> lightSources = new ArrayList<>();
 	public List<PointLight> getLightSources()
 	{ return lightSources; }
+	public void addLight(PointLight pointLight)
+	{ lightSources.add(pointLight); }
 
 	List<SceneObject> sceneObjects = new ArrayList<>();
 	public List<SceneObject> getSceneObjects()
@@ -46,5 +48,11 @@ public class World
 		intersections.sort((o1, o2) -> IntersectionList
 			.compareDouble(o1.getDistance() - o2.getDistance()));
 		return new IntersectionList(intersections);
+	}
+
+	public void addSceneObjects(SceneObject ... objects)
+	{
+		for (SceneObject object : objects)
+			sceneObjects.add(object);
 	}
 }

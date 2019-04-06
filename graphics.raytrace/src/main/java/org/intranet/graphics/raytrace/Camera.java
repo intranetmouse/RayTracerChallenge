@@ -70,9 +70,12 @@ public class Camera
 		return new Ray(origin, direction);
 	}
 
-	public Canvas render(World world)
+	public void render(World world, Canvas image)
 	{
-		Canvas image = new Canvas(hsize, vsize);
+		hsize = image.getWidth();
+		vsize = image.getHeight();
+		getPixelSize();
+//		Canvas image = new Canvas(hsize, vsize);
 		for (int y = 0; y < vsize; y++)
 		{
 			for (int x = 0; x < hsize; x++)
@@ -82,7 +85,5 @@ public class Camera
 				image.writePixel(x, y, color);
 			}
 		}
-
-		return image;
 	}
 }

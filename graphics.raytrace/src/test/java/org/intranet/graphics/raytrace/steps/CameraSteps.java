@@ -86,7 +86,8 @@ public class CameraSteps
 	{
 		Camera camera = data.getCamera(cameraName);
 		World world = data.getWorld(worldName);
-		Canvas canvas = camera.render(world);
+		Canvas canvas = new Canvas(camera.getHsize(), camera.getVsize());
+		camera.render(world, canvas);
 		data.put(imageName, canvas);
 	}
 

@@ -31,6 +31,7 @@ public final class DefaultProjectors
 		list.add(new ProjectorGroup("Phong Shading Projection",
 			phongSphereProjectors));
 
+		list.add(new ProjectorGroup("Make a Scene", new MakeAsceneProjector()));
 		return list;
 	}
 }
