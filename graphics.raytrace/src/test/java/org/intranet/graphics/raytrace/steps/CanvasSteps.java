@@ -53,17 +53,6 @@ public class CanvasSteps
 	}
 
 
-	@Then(wordPattern + ".(width|height) = " + intPattern)
-	public void cWidth(String canvasName, String dimensionStr,
-		int expectedValue)
-	{
-		Canvas c = data.getCanvas(canvasName);
-		int dimension =
-			"width".equals(dimensionStr) ? c.getWidth() : c.getHeight();
-
-		Assert.assertEquals(expectedValue, dimension);
-	}
-
 	@Then("every pixel of " + wordPattern + " is color\\(" + threeIntsPattern + "\\)")
 	public void everyPixelOfCIsColor(String canvasName, int red, int green, int blue)
 	{

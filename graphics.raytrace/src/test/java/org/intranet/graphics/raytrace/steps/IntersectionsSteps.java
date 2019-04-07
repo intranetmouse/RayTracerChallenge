@@ -8,7 +8,6 @@ import org.intranet.graphics.raytrace.SceneObject;
 import org.intranet.graphics.raytrace.Tuple;
 import org.junit.Assert;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -70,27 +69,6 @@ public class IntersectionsSteps
 		data.put(computationsName, comps);
 	}
 
-
-	@Then(wordPattern + ".count = " + intPattern)
-	public void xsCount(String intersectionName, int numIntersections)
-	{
-		IntersectionList intersectionList = data.getIntersectionList(intersectionName);
-		if (intersectionList != null)
-		{
-			Assert.assertEquals(numIntersections, intersectionList.count());
-			return;
-		}
-
-		throw new PendingException();
-	}
-
-	@Then(wordPattern + ".t = " + doublePattern)
-	public void iT(String intersectionName, double value)
-	{
-		Intersection intersection = data.getIntersection(intersectionName);
-
-		Assert.assertEquals(value, intersection.getDistance(), Tuple.EPSILON);
-	}
 
 	@Then(wordPattern + ".object = " + wordPattern)
 	public void iObjectS(String intersectionName, String sphereName)

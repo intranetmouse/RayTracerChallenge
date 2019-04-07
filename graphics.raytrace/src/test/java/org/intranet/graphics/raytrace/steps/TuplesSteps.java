@@ -82,34 +82,6 @@ public class TuplesSteps
 	}
 
 
-	@Then("^" + wordPattern + "\\.x = " + doublePattern + "$")
-	public void aX(String tupleName, double x)
-	{
-		Tuple a = data.getTuple(tupleName);
-		Assert.assertEquals(x, a.getX(), Tuple.EPSILON);
-	}
-
-	@Then("^" + wordPattern + "\\.y = " + doublePattern + "$")
-	public void aY(String tupleName, double y)
-	{
-		Tuple a = data.getTuple(tupleName);
-		Assert.assertEquals(y, a.getY(), Tuple.EPSILON);
-	}
-
-	@Then("^" + wordPattern + "\\.z = " + doublePattern + "$")
-	public void aZ(String tupleName, double z)
-	{
-		Tuple a = data.getTuple(tupleName);
-		Assert.assertEquals(z, a.getZ(), Tuple.EPSILON);
-	}
-
-	@Then("^" + wordPattern + "\\.w = " + doublePattern + "$")
-	public void aW(String tupleName, double w)
-	{
-		Tuple a = data.getTuple(tupleName);
-		Assert.assertEquals(w, a.getW(), Tuple.EPSILON);
-	}
-
 	@Then("^" + wordPattern + " is a point$")
 	public void aIsAPoint(String tupleName)
 	{
@@ -276,18 +248,18 @@ public class TuplesSteps
 	}
 
 
-	@Then("^" + wordPattern + "\\.(red|green|blue) = " + doublePattern + "$")
-	public void colorAssert(String colorVarName, String colorName,
-		double expectedColor)
-	{
-		Color color = data.getColor(colorVarName);
-		Double value = "red".equals(colorName) ? color.getRed() :
-			"green".equals(colorName) ? color.getGreen() :
-			"blue".equals(colorName) ? color.getBlue() :
-			null;
-		Assert.assertNotNull("Illegal color name " + colorName, value);
-		Assert.assertEquals(expectedColor, value, Tuple.EPSILON);
-	}
+//	@Then("^" + wordPattern + "\\.(red|green|blue) = " + doublePattern + "$")
+//	public void colorAssert(String colorVarName, String colorName,
+//		double expectedColor)
+//	{
+//		Color color = data.getColor(colorVarName);
+//		Double value = "red".equals(colorName) ? color.getRed() :
+//			"green".equals(colorName) ? color.getGreen() :
+//			"blue".equals(colorName) ? color.getBlue() :
+//			null;
+//		Assert.assertNotNull("Illegal color name " + colorName, value);
+//		Assert.assertEquals(expectedColor, value, Tuple.EPSILON);
+//	}
 
 	@Then("^" + wordPattern + " (\\+|-|\\*) " + wordPattern + " = color\\(" + threeDoublesPattern + "\\)$")
 	public void colorOperationColor_equals_Color(String color1Name, String operation, String color2Name,

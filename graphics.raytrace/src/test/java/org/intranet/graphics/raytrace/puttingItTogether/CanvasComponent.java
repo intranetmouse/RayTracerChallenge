@@ -54,21 +54,4 @@ public final class CanvasComponent
 			(int)(color.getBlue() * 255.99));
 		return awtColor;
 	}
-
-	// NOTE: Clipping is done in the canvas itself.
-//	private java.awt.Color rayColorToAwtColorClipped(Color color)
-//	{
-//		java.awt.Color awtColor = new java.awt.Color(
-//			scaleClip(color.getRed()),
-//			scaleClip(color.getGreen()),
-//			scaleClip(color.getBlue()));
-//		return awtColor;
-//	}
-//	private int scaleClip(double color)
-//	{
-//		double scaled = color * 255.9999;
-//		double clipped = Math.max(0.0, scaled);
-//		clipped = Math.min(255, clipped);
-//		return (int)clipped;
-//	}
 }

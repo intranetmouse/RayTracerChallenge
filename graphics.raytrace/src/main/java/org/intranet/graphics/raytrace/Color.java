@@ -3,8 +3,14 @@ package org.intranet.graphics.raytrace;
 public final class Color
 	extends Tuple
 {
+	boolean outOfBounds;
+
 	public Color(double x, double y, double z)
-	{ super(x, y, z, 0.0); }
+	{
+		super(x, y, z, 0.0);
+		outOfBounds = x < 0.0 || x > 1.0 || y < 0.0 || y > 1.0 || z < 0.0 ||
+			z > 1.0;
+	}
 
 	public double getRed()
 	{ return values[0]; }
@@ -39,18 +45,7 @@ public final class Color
 		return new Color(values[0]*d, values[1]*d, values[2]*d);
 	}
 
-	public void copyValues(Color other)
-	{
-		for (int i = 0; i < values.length; i++)
-			values[i] = other.values[i];
-	}
-
-	public void copyValues(Color other, double min, double max)
-	{
-		for (int i = 0; i < values.length; i++)
-			values[i] = clip(other.values[i], min, max);
-	}
-	private double clip(double value, double min, double max)
+	private static double clip(double value, double min, double max)
 	{
 		if (value < min) return min;
 		if (value > max) return max;
@@ -63,5 +58,13 @@ public final class Color
 			values[0] * c2.values[0],
 			values[1] * c2.values[1],
 			values[2] * c2.values[2]);
+	}
+
+	public Color clipped()
+	{
+		if (!outOfBounds)
+			return this;
+		return new Color(clip(values[0], 0.0, 1.0), clip(values[1], 0.0, 1.0),
+			clip(values[2], 0.0, 1.0));
 	}
 }

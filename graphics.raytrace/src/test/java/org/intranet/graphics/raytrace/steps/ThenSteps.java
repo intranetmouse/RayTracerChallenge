@@ -1,9 +1,11 @@
 package org.intranet.graphics.raytrace.steps;
 
 import org.intranet.graphics.raytrace.Camera;
+import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.Color;
 import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionComputations;
+import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Material;
 import org.intranet.graphics.raytrace.Point;
 import org.intranet.graphics.raytrace.Ray;
@@ -143,28 +145,120 @@ public class ThenSteps
 	}
 
 	@Then(wordPattern + "." + wordPattern + " = " + doublePattern)
-	public void objPropertyEqualsDouble(String cameraName, String propertyName,
-		double value)
+	public void objPropertyEqualsDouble(String objectName, String propertyName,
+		double expectedValue)
 	{
-		Camera camera = data.getCamera(cameraName);
-
-		switch (propertyName)
+		Camera camera = data.getCamera(objectName);
+		if (camera != null)
 		{
-		case "hsize":
-			Assert.assertEquals(camera.getHsize(), (int)value);
+			switch (propertyName)
+			{
+				case "hsize":
+					Assert.assertEquals((int)expectedValue, camera.getHsize());
+					return;
+				case "vsize":
+					Assert.assertEquals((int)expectedValue, camera.getVsize());
+					return;
+				case "field_of_view":
+					Assert.assertEquals(expectedValue, camera.getFieldOfView(), Tuple.EPSILON);
+					return;
+				case "pixel_size":
+					Assert.assertEquals(expectedValue, camera.getPixelSize(), Tuple.EPSILON);
+					return;
+				default:
+					Assert.fail("Unrecognized propertyName " + propertyName);
+			}
 			return;
-		case "vsize":
-			Assert.assertEquals(camera.getVsize(), (int)value);
-			return;
-			case "field_of_view":
-				Assert.assertEquals(value, camera.getFieldOfView(), Tuple.EPSILON);
-				return;
-			case "pixel_size":
-				Assert.assertEquals(value, camera.getPixelSize(), Tuple.EPSILON);
-				return;
-			default:
-				Assert.fail("Unrecognized propertyName " + propertyName);
 		}
+
+		Canvas canvas = data.getCanvas(objectName);
+		if (canvas != null)
+		{
+			switch (propertyName)
+			{
+				case "width":
+					Assert.assertEquals((int)expectedValue, canvas.getWidth());
+					return;
+				case "height":
+					Assert.assertEquals((int)expectedValue, canvas.getHeight());
+					return;
+				default:
+					Assert.fail("Unrecognized propertyName " + propertyName);
+			}
+		}
+
+		Intersection intersection = data.getIntersection(objectName);
+
+		if (intersection != null)
+		{
+			switch (propertyName)
+			{
+				case "t":
+					Assert.assertEquals(expectedValue, intersection.getDistance(), Tuple.EPSILON);
+					return;
+				default:
+					Assert.fail("Unrecognized propertyName " + propertyName);
+			}
+		}
+
+		IntersectionList intersectionList = data.getIntersectionList(objectName);
+		if (intersectionList != null)
+		{
+			switch (propertyName)
+			{
+				case "count":
+					Assert.assertEquals((int)expectedValue, intersectionList.count());
+					return;
+				default:
+					Assert.fail("Unrecognized propertyName " + propertyName);
+			}
+		}
+
+		Material material = data.getMaterial(objectName);
+		if (material != null)
+		{
+			Double actualValue = "ambient".equals(propertyName) ? material.getAmbient() :
+				"diffuse".equals(propertyName) ? material.getDiffuse() :
+				"specular".equals(propertyName) ? material.getSpecular() :
+				"shininess".equals(propertyName) ? material.getShininess() :
+				"reflective".equals(propertyName) ? material.getReflective() :
+				"transparency".equals(propertyName) ? material.getTransparency() :
+				"refractive_index".equals(propertyName) ? material.getRefractive() :
+				null;
+			Assert.assertNotNull("Illegal property name " + propertyName, actualValue);
+			Assert.assertEquals(expectedValue, actualValue, Tuple.EPSILON);
+			return;
+		}
+
+		Tuple a = data.getTuple(objectName);
+		if (a == null)
+			a = data.getPoint(objectName);
+		if (a == null)
+			a = data.getVector(objectName);
+		if (a != null)
+		{
+			Double actualValue = "x".equals(propertyName) ? a.getX() :
+				"y".equals(propertyName) ? a.getY() :
+				"z".equals(propertyName) ? a.getZ() :
+				"w".equals(propertyName) ? a.getW() : null;
+			Assert.assertNotNull("Illegal color name " + propertyName, actualValue);
+			Assert.assertEquals(expectedValue, actualValue, Tuple.EPSILON);
+			return;
+		}
+
+		Color color = data.getColor(objectName);
+		if (color != null)
+		{
+			Double colorValue = "red".equals(propertyName) ? color.getRed() :
+				"green".equals(propertyName) ? color.getGreen() :
+				"blue".equals(propertyName) ? color.getBlue() :
+				null;
+			Assert.assertNotNull("Illegal color name " + propertyName, colorValue);
+			Assert.assertEquals(expectedValue, colorValue, Tuple.EPSILON);
+			return;
+		}
+
+		Assert.fail("Unrecognized objectName " + objectName);
 	}
 
 	@Then(wordPattern + "." + wordPattern + " = π\\/" + doublePattern)

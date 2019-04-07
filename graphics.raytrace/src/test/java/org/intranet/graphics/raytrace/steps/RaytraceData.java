@@ -135,5 +135,4 @@ public final class RaytraceData
 	{ cameraMap.put(cameraName, camera); }
 	public Camera getCamera(String cameraName)
 	{ return cameraMap.get(cameraName); }
-
 }

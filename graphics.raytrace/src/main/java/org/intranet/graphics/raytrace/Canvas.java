@@ -38,7 +38,13 @@ public class Canvas
 
 	public void writePixel(int w, int h, Color color)
 	{
-		getPixelColor(w, h).copyValues(color, 0.0, 1.0);
+		pixels[h][w] = color.clipped();
+	}
+
+	public interface CanvasListener
+	{
+		void pixelUpdated(int x, int y, Color color);
+		void resized(int x, int y);
 	}
 
 	public List<String> toPpm()
@@ -80,7 +86,7 @@ public class Canvas
 		sb.append(colorStr);
 	}
 
-	private int scaleColor(double c)
+	private static int scaleColor(double c)
 	{
 		int scaledColor = (int)(c * 255 + 0.5);
 		int scaledColorMax = Math.min(255, scaledColor);
@@ -92,7 +98,7 @@ public class Canvas
 	{
 		for (int w = 0; w < width; w++)
 			for (int h = 0; h < height; h++)
-				pixels[h][w].copyValues(c);
+				pixels[h][w] = c;
 	}
 
 	public void writeFile(String fname)
@@ -110,8 +116,6 @@ public class Canvas
 
 	public void clear()
 	{
-		for (int h = 0; h < height; h++)
-			for (int w = 0; w < width; w++)
-				pixels[h][w] = new Color(0, 0, 0);
+		writeAllPixels(new Color(0, 0, 0));
 	}
 }
