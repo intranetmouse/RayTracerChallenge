@@ -27,4 +27,11 @@ public class PointLight
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString()
+	{
+		return String.format("[light:position=%s,intensity=%s]", position,
+			intensity);
+	}
 }
