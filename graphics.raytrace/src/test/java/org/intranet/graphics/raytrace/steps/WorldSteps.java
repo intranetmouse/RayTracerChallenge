@@ -205,4 +205,16 @@ public class WorldSteps
 		Assert.assertTrue(contains);
 	}
 
+	@Then("^is_shadowed\\(" + wordPattern + ", " + wordPattern
+		+ "\\) is (true|false)")
+	public void is_shadowedWPIsFalse(String worldName, String pointName,
+		String expectedResultStr)
+	{
+		World world = data.getWorld(worldName);
+		Point point = data.getPoint(pointName);
+		boolean actualResult = Tracer.isShadowed(world, point);
+		boolean expectedResult = "true".equals(expectedResultStr);
+		Assert.assertEquals(expectedResult, actualResult);
+	}
+
 }

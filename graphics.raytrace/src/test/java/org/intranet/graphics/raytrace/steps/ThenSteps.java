@@ -80,6 +80,46 @@ public class ThenSteps
 			"Unknown data type for variable " + actualObjName);
 	}
 
+	@Then(wordPattern + "." + wordPattern + "." + wordPattern + " < -EPSILON\\/" + doublePattern)
+	public void compsOver_pointZEPSILON(String objectName,
+		String objectVariableName, String coordinateName, double divisor)
+	{
+		double maxNighttimeValue = -Tuple.EPSILON / divisor;
+		IntersectionComputations comps = data.getComputations(objectName);
+		if (comps != null)
+		{
+			switch (objectVariableName)
+			{
+				case "over_point":
+					Point overPoint = comps.getOverPoint();
+					switch (coordinateName)
+					{
+						case "z":
+							Assert.assertTrue(overPoint.getZ() < maxNighttimeValue);
+							return;
+						default:
+							throw new cucumber.api.PendingException(
+								"Unknown coordinate name " + coordinateName +
+								" for variable name " + objectVariableName +
+								" on obj name=" + objectName);
+					}
+				default:
+					throw new cucumber.api.PendingException(
+						"Unknown variable name " + objectVariableName +
+						" on obj name=" + objectName);
+			}
+		}
+		throw new cucumber.api.PendingException(
+			"Unknown data type for variable " + objectName);
+	}
+
+	@Then("comps.point.z > comps.over_point.z")
+	public void compsPointZCompsOver_pointZ()
+	{
+		// Write code here that turns the phrase above into concrete actions
+		throw new cucumber.api.PendingException();
+	}
+
 	@Then(wordPattern + " is nothing")
 	public void iIsNothing(String intersectionName)
 	{

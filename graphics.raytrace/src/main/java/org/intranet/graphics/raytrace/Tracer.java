@@ -3,7 +3,7 @@ package org.intranet.graphics.raytrace;
 public final class Tracer
 {
 	public static Color lighting(Material m, PointLight light, Point position,
-		Vector eyeV, Vector normalV)
+		Vector eyeV, Vector normalV, boolean inShadow)
 	{
 		// combine the surface color with the light's color/intensity
 		Color effectiveColor = m.getColor().multiply(light.getIntensity());
@@ -19,7 +19,7 @@ public final class Tracer
 		// light is on the other side of the surface.
 		double lightDotNormal = lightV.dot(normalV);
 
-		if (lightDotNormal < 0)
+		if (lightDotNormal < 0 || inShadow)
 			return ambientColor;
 
 		// compute the diffuse contribution
@@ -53,5 +53,16 @@ public final class Tracer
 			return new Color(0, 0, 0);
 		IntersectionComputations comps = new IntersectionComputations(hit, ray);
 		return comps.shadeHit(world);
+	}
+
+	public static boolean isShadowed(World world, Point point)
+	{
+		Vector v = world.getLightSources().get(0).getPosition().subtract(point);
+		double distance = v.magnitude();
+		Vector direction = v.normalize();
+		Ray r = new Ray(point, direction);
+		IntersectionList intersections = world.intersect(r);
+		Intersection h = intersections.hit();
+		return h != null && h.getDistance() < distance;
 	}
 }

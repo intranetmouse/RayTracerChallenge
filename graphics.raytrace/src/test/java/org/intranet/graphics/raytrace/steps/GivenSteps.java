@@ -23,4 +23,10 @@ public class GivenSteps
 		data.put(varName, value);
 	}
 
+	@Given(wordPattern + " ← (true|false)")
+	public void in_shadowTrue(String booleanName, String booleanValueStr)
+	{
+		boolean booleanValue = "true".contentEquals(booleanValueStr);
+		data.put(booleanName, booleanValue);
+	}
 }

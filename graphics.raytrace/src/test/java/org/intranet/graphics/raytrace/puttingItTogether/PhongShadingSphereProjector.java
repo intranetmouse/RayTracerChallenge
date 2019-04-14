@@ -83,6 +83,6 @@ public class PhongShadingSphereProjector
 		Vector eyeV = ray.getDirection().negate();
 
 		Material material = sceneObject.getMaterial();
-		return Tracer.lighting(material, light, point, eyeV, normalV);
+		return Tracer.lighting(material, light, point, eyeV, normalV, false);
 	}
 }

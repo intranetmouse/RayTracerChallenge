@@ -43,7 +43,28 @@ public class MaterialsSteps
 		PointLight pointLight = data.getPointLight(pointLightName);
 		Vector eyev = data.getVector(eyeVectorName);
 		Vector normalv = data.getVector(normalVectorName);
-		Color color = Tracer.lighting(material, pointLight, position, eyev, normalv);
+		Color color = Tracer.lighting(material, pointLight, position, eyev,
+			normalv, false);
 		data.put(resultingColorName, color);
 	}
+
+	@When(wordPattern + " ← lighting\\(" + wordPattern + ", " + wordPattern +
+		", " + wordPattern + ", " + wordPattern + ", " + wordPattern + ", " +
+		wordPattern + "\\)")
+	public void resultLightingMLightPositionEyevNormalvIn_shadow(
+		String resultingColorName, String materialName, String pointLightName,
+		String positionName, String eyeVectorName, String normalVectorName,
+		String inShadowName)
+	{
+		Material material = data.getMaterial(materialName);
+		Point position = data.getPoint(positionName);
+		PointLight pointLight = data.getPointLight(pointLightName);
+		Vector eyev = data.getVector(eyeVectorName);
+		Vector normalv = data.getVector(normalVectorName);
+		boolean inShadow = data.getBoolean(inShadowName);
+		Color color = Tracer.lighting(material, pointLight, position, eyev,
+			normalv, inShadow);
+		data.put(resultingColorName, color);
+	}
+
 }
