@@ -8,7 +8,7 @@ import org.intranet.graphics.raytrace.Material;
 import org.intranet.graphics.raytrace.Point;
 import org.intranet.graphics.raytrace.PointLight;
 import org.intranet.graphics.raytrace.Ray;
-import org.intranet.graphics.raytrace.SceneObject;
+import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.Sphere;
 import org.intranet.graphics.raytrace.Tracer;
 import org.intranet.graphics.raytrace.Vector;
@@ -78,7 +78,7 @@ public class PhongShadingSphereProjector
 	{
 		Intersection hit = ilist.get(0);
 		Point point = ray.position(hit.getDistance());
-		SceneObject sceneObject = hit.getObject();
+		Shape sceneObject = hit.getObject();
 		Vector normalV = sceneObject.normalAt(point);
 		Vector eyeV = ray.getDirection().negate();
 

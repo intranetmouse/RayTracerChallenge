@@ -11,8 +11,8 @@ public class World
 	public void addLight(PointLight pointLight)
 	{ lightSources.add(pointLight); }
 
-	List<SceneObject> sceneObjects = new ArrayList<>();
-	public List<SceneObject> getSceneObjects()
+	List<Shape> sceneObjects = new ArrayList<>();
+	public List<Shape> getSceneObjects()
 	{
 		return sceneObjects;
 	}
@@ -40,7 +40,7 @@ public class World
 	public IntersectionList intersect(Ray ray)
 	{
 		List<Intersection> intersections = new ArrayList<>();
-		for (SceneObject sceneObject : sceneObjects)
+		for (Shape sceneObject : sceneObjects)
 		{
 			IntersectionList il = sceneObject.intersections(ray);
 			intersections.addAll(il.getIntersections());
@@ -50,9 +50,9 @@ public class World
 		return new IntersectionList(intersections);
 	}
 
-	public void addSceneObjects(SceneObject ... objects)
+	public void addSceneObjects(Shape ... objects)
 	{
-		for (SceneObject object : objects)
+		for (Shape object : objects)
 			sceneObjects.add(object);
 	}
 }

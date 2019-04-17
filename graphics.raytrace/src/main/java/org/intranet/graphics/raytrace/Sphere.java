@@ -1,7 +1,7 @@
 package org.intranet.graphics.raytrace;
 
 public class Sphere
-	implements SceneObject
+	implements Shape
 {
 	Matrix transform = Matrix.identity(4);
 	public Matrix getTransform() { return transform; }

@@ -6,7 +6,7 @@ public final class IntersectionComputations
 {
 	public double getDistance() { return intersection.getDistance(); }
 
-	public SceneObject getObject() { return intersection.getObject(); }
+	public Shape getObject() { return intersection.getObject(); }
 
 	private Point point;
 	public Point getPoint() { return point; }

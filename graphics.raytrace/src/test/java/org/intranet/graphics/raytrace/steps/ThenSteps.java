@@ -9,7 +9,7 @@ import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Material;
 import org.intranet.graphics.raytrace.Point;
 import org.intranet.graphics.raytrace.Ray;
-import org.intranet.graphics.raytrace.SceneObject;
+import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.Tuple;
 import org.intranet.graphics.raytrace.Vector;
 import org.junit.Assert;
@@ -65,8 +65,8 @@ public class ThenSteps
 							actualDistance, Tuple.EPSILON);
 						return;
 					case "object":
-						SceneObject expectedObject = expectedIntersection.getObject();
-						SceneObject actualObject = actualComps.getObject();
+						Shape expectedObject = expectedIntersection.getObject();
+						Shape actualObject = actualComps.getObject();
 						Assert.assertEquals(expectedObject, actualObject);
 						return;
 					default:

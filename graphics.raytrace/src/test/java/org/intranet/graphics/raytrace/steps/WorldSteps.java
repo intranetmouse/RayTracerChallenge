@@ -10,7 +10,7 @@ import org.intranet.graphics.raytrace.Matrix;
 import org.intranet.graphics.raytrace.Point;
 import org.intranet.graphics.raytrace.PointLight;
 import org.intranet.graphics.raytrace.Ray;
-import org.intranet.graphics.raytrace.SceneObject;
+import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.Sphere;
 import org.intranet.graphics.raytrace.Tracer;
 import org.intranet.graphics.raytrace.World;
@@ -100,7 +100,7 @@ public class WorldSteps
 	{
 		World world = data.getWorld(worldName);
 		int sceneObjIdx = "first".equals(order) ? 0 : 1;
-		SceneObject firstObject = world.getSceneObjects().get(sceneObjIdx);
+		Shape firstObject = world.getSceneObjects().get(sceneObjIdx);
 		data.put(objectName, firstObject);
 	}
 
@@ -123,7 +123,7 @@ public class WorldSteps
 	@Given(wordPattern + " is added to " + wordPattern)
 	public void sIsAddedToW(String objName, String worldName)
 	{
-		SceneObject obj = data.getSceneObject(objName);
+		Shape obj = data.getSceneObject(objName);
 		World world = data.getWorld(worldName);
 		world.getSceneObjects().add(obj);
 	}
@@ -175,7 +175,7 @@ public class WorldSteps
 	public void wContainsNoObjects(String worldName)
 	{
 		World w = data.getWorld(worldName);
-		List<SceneObject> lightSources = w.getSceneObjects();
+		List<Shape> lightSources = w.getSceneObjects();
 		Assert.assertEquals(0, lightSources.size());
 	}
 
@@ -199,8 +199,8 @@ public class WorldSteps
 	public void wContainsS(String worldName, String objectName)
 	{
 		World world = data.getWorld(worldName);
-		SceneObject object = data.getSceneObject(objectName);
-		List<SceneObject> sceneObjects = world.getSceneObjects();
+		Shape object = data.getSceneObject(objectName);
+		List<Shape> sceneObjects = world.getSceneObjects();
 		boolean contains = sceneObjects.contains(object);
 		Assert.assertTrue(contains);
 	}

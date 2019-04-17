@@ -4,7 +4,7 @@ import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionComputations;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Ray;
-import org.intranet.graphics.raytrace.SceneObject;
+import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.Tuple;
 import org.junit.Assert;
 
@@ -43,7 +43,7 @@ public class IntersectionsSteps
 	public void iIntersectionS(String intersectionName, double distance,
 		String sphereName)
 	{
-		SceneObject sphere = data.getSceneObject(sphereName);
+		Shape sphere = data.getSceneObject(sphereName);
 		Intersection intersection = new Intersection(distance, sphere);
 		data.put(intersectionName, intersection);
 	}
@@ -74,7 +74,7 @@ public class IntersectionsSteps
 	public void iObjectS(String intersectionName, String sphereName)
 	{
 		Intersection intersection = data.getIntersection(intersectionName);
-		SceneObject sphere = data.getSceneObject(sphereName);
+		Shape sphere = data.getSceneObject(sphereName);
 		Assert.assertEquals(sphere, intersection.getObject());
 	}
 
@@ -95,9 +95,9 @@ public class IntersectionsSteps
 	{
 		IntersectionList ilist = data.getIntersectionList(intersectionListName);
 		Intersection intersection = ilist.get(intersectionIdx);
-		SceneObject t = intersection.getObject();
+		Shape t = intersection.getObject();
 
-		SceneObject expectedObject = data.getSceneObject(objectName);
+		Shape expectedObject = data.getSceneObject(objectName);
 		Assert.assertEquals(t, expectedObject);
 	}
 
