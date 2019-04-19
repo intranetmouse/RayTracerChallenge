@@ -82,11 +82,11 @@ public final class RaytraceData
 	public Ray getRay(String rayName)
 	{ return raysMap.get(rayName); }
 
-	private Map<String, Shape> sceneObjectMap = new HashMap<>();
-	public void put(String sphereName, Shape r)
-	{ sceneObjectMap.put(sphereName, r); }
-	public Shape getSceneObject(String sphereName)
-	{ return sceneObjectMap.get(sphereName); }
+	private Map<String, Shape> shapeMap = new HashMap<>();
+	public void put(String shapeName, Shape r)
+	{ shapeMap.put(shapeName, r); }
+	public Shape getShape(String shapeName)
+	{ return shapeMap.get(shapeName); }
 
 	private Map<String, Intersection> intersectionsMap = new HashMap<>();
 	public void put(String intersectionName, Intersection i)

@@ -43,7 +43,7 @@ public class IntersectionsSteps
 	public void iIntersectionS(String intersectionName, double distance,
 		String sphereName)
 	{
-		Shape sphere = data.getSceneObject(sphereName);
+		Shape sphere = data.getShape(sphereName);
 		Intersection intersection = new Intersection(distance, sphere);
 		data.put(intersectionName, intersection);
 	}
@@ -74,7 +74,7 @@ public class IntersectionsSteps
 	public void iObjectS(String intersectionName, String sphereName)
 	{
 		Intersection intersection = data.getIntersection(intersectionName);
-		Shape sphere = data.getSceneObject(sphereName);
+		Shape sphere = data.getShape(sphereName);
 		Assert.assertEquals(sphere, intersection.getObject());
 	}
 
@@ -97,7 +97,7 @@ public class IntersectionsSteps
 		Intersection intersection = ilist.get(intersectionIdx);
 		Shape t = intersection.getObject();
 
-		Shape expectedObject = data.getSceneObject(objectName);
+		Shape expectedObject = data.getShape(objectName);
 		Assert.assertEquals(t, expectedObject);
 	}
 

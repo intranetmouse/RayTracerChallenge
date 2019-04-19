@@ -1,17 +1,8 @@
 package org.intranet.graphics.raytrace;
 
 public class Sphere
-	implements Shape
+	extends Shape
 {
-	Matrix transform = Matrix.identity(4);
-	public Matrix getTransform() { return transform; }
-	public void setTransform(Matrix value) { transform = value; }
-
-	private Material material = new Material();
-	@Override
-	public Material getMaterial() { return material; }
-	public void setMaterial(Material value) { material = value; }
-
 	public Sphere()
 	{
 
@@ -25,15 +16,14 @@ public class Sphere
 		Sphere otherSphere = (Sphere)other;
 		if (!transform.equals(otherSphere.transform))
 			return false;
-		if (!material.equals(otherSphere.material))
+		if (!getMaterial().equals(otherSphere.getMaterial()))
 			return false;
 		return true;
 	}
 
 	@Override
-	public IntersectionList intersections(Ray ray)
+	public IntersectionList localIntersections(Ray ray)
 	{
-		ray = ray.transform(transform.inverse());
 		Vector sphereToRay = ray.getOrigin().subtract(new Point(0, 0, 0));
 		double a = ray.getDirection().dot(ray.getDirection());
 		double b = 2 * ray.getDirection().dot(sphereToRay);
@@ -68,6 +58,6 @@ public class Sphere
 	public String toString()
 	{
 		return String.format("%s:[xform=%s,mat=%s]", getClass().getSimpleName(),
-			transform, material);
+			transform, getMaterial());
 	}
 }

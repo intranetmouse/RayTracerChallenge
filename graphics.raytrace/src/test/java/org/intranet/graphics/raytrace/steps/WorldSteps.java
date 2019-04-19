@@ -123,7 +123,7 @@ public class WorldSteps
 	@Given(wordPattern + " is added to " + wordPattern)
 	public void sIsAddedToW(String objName, String worldName)
 	{
-		Shape obj = data.getSceneObject(objName);
+		Shape obj = data.getShape(objName);
 		World world = data.getWorld(worldName);
 		world.getSceneObjects().add(obj);
 	}
@@ -199,7 +199,7 @@ public class WorldSteps
 	public void wContainsS(String worldName, String objectName)
 	{
 		World world = data.getWorld(worldName);
-		Shape object = data.getSceneObject(objectName);
+		Shape object = data.getShape(objectName);
 		List<Shape> sceneObjects = world.getSceneObjects();
 		boolean contains = sceneObjects.contains(object);
 		Assert.assertTrue(contains);

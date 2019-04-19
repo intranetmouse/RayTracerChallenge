@@ -46,7 +46,7 @@ public class SpheresSteps
 	@Given(wordPattern + ".material.ambient ← " + doublePattern)
 	public void outerMaterialAmbient(String objectName, double ambientValue)
 	{
-		Shape obj = data.getSceneObject(objectName);
+		Shape obj = data.getShape(objectName);
 		obj.getMaterial().setAmbient(ambientValue);
 	}
 
@@ -55,7 +55,7 @@ public class SpheresSteps
 	public void xsIntersectSR(String intersectionName, String sphereName,
 		String rayName)
 	{
-		Shape obj = data.getSceneObject(sphereName);
+		Shape obj = data.getShape(sphereName);
 		Ray ray = data.getRay(rayName);
 		IntersectionList intersections = obj.intersections(ray);
 		data.put(intersectionName, intersections);
@@ -64,7 +64,7 @@ public class SpheresSteps
 	@When("^set_transform\\(" + twoWordPattern + "\\)$")
 	public void set_transform_s_t(String sphereName, String matrixName)
 	{
-		Shape obj = data.getSceneObject(sphereName);
+		Shape obj = data.getShape(sphereName);
 		Matrix mtx = data.getMatrix(matrixName);
 		obj.setTransform(mtx);
 	}
@@ -74,7 +74,7 @@ public class SpheresSteps
 	public void set_transform_s_t(String sphereName, String operation, double x,
 		double y, double z)
 	{
-		Shape obj = data.getSceneObject(sphereName);
+		Shape obj = data.getShape(sphereName);
 		Matrix mtx = "scaling".equals(operation) ? Matrix.newScaling(x, y, z) :
 			Matrix.newTranslation(x, y, z);
 		obj.setTransform(mtx);
@@ -85,7 +85,7 @@ public class SpheresSteps
 	public void n_normal_at_s_point(String normalVectorName, String sphereName,
 		double x, double y, double z)
 	{
-		Shape obj = data.getSceneObject(sphereName);
+		Shape obj = data.getShape(sphereName);
 		Point point = new Point(x, y, z);
 
 		Vector normalVector = obj.normalAt(point);
@@ -101,7 +101,7 @@ public class SpheresSteps
 		double xNum, double xDenom, double yNum, double yDenom, double zNum,
 		double zDenom)
 	{
-		Shape obj = data.getSceneObject(sphereName);
+		Shape obj = data.getShape(sphereName);
 		Point point = new Point(Math.sqrt(xNum) / xDenom,
 			Math.sqrt(yNum) / yDenom, Math.sqrt(zNum) / zDenom);
 
@@ -117,7 +117,7 @@ public class SpheresSteps
 	public void nNormal_atSPoint(String normalVectorName, String objectName,
 		double x, double yNum, double yDenom, double zNum, double zDenom)
 	{
-		Shape obj = data.getSceneObject(objectName);
+		Shape obj = data.getShape(objectName);
 		Point normalPoint = new Point(x, Math.sqrt(yNum)/yDenom,
 			-Math.sqrt(zNum)/zDenom);
 		Vector normalVector = obj.normalAt(normalPoint);
@@ -141,7 +141,7 @@ public class SpheresSteps
 	@When(wordPattern + " ← " + wordPattern + ".material")
 	public void mSMaterial(String materialName, String sphereName)
 	{
-		Shape obj = data.getSceneObject(sphereName);
+		Shape obj = data.getShape(sphereName);
 		data.put(materialName, obj.getMaterial());
 	}
 
@@ -149,7 +149,7 @@ public class SpheresSteps
 	public void setSphereMaterial(String sphereName, String materialName)
 	{
 		Material m = data.getMaterial(materialName);
-		Shape obj = data.getSceneObject(sphereName);
+		Shape obj = data.getShape(sphereName);
 		obj.setMaterial(m);
 	}
 
@@ -166,7 +166,7 @@ public class SpheresSteps
 	@Then(wordPattern + ".transform = " + wordPattern)
 	public void xs(String objectName, String matrixName)
 	{
-		Shape obj = data.getSceneObject(objectName);
+		Shape obj = data.getShape(objectName);
 
 		Matrix expectedMatrix;
 		switch (matrixName)
@@ -217,7 +217,7 @@ public class SpheresSteps
 	public void sphereMaterialEqualsMaterial(String sphereName,
 		String actualMaterialName)
 	{
-		Shape obj = data.getSceneObject(sphereName);
+		Shape obj = data.getShape(sphereName);
 		Material actualMaterial = data.getMaterial(actualMaterialName);
 		Assert.assertEquals(actualMaterial, obj.getMaterial());
 	}
@@ -226,7 +226,7 @@ public class SpheresSteps
 	public void cInnerMaterialColor(String colorName, String objectName)
 	{
 		Color color = data.getColor(colorName);
-		Shape object = data.getSceneObject(objectName);
+		Shape object = data.getShape(objectName);
 		Assert.assertEquals(color, object.getMaterial().getColor());
 	}
 }

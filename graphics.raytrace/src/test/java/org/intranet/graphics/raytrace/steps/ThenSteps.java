@@ -7,6 +7,7 @@ import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionComputations;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Material;
+import org.intranet.graphics.raytrace.Matrix;
 import org.intranet.graphics.raytrace.Point;
 import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.Shape;
@@ -135,25 +136,42 @@ public class ThenSteps
 		String propertyName, String objType, double xNum, double xDenom,
 		double y, double zNum, double zDenom)
 	{
-		objPropEqualsTuple(expectedObjName, propertyName, objType,
+		objPropEqualsThreeDouble(expectedObjName, propertyName, objType,
 			Math.sqrt(xNum) / xDenom, y, -Math.sqrt(zNum) / zDenom);
 	}
 
 	@Then(wordPattern + "\\." + wordPattern + " = " + wordPattern + "\\("
 		+ threeDoublesPattern + "\\)")
-	public void objPropEqualsTuple(String expectedObjName, String propertyName,
+	public void objPropEqualsThreeDouble(String expectedObjName, String propertyName,
 		String objType, double x, double y, double z)
 	{
-		Tuple expected = "point".equals(objType) ? new Point(x, y, z) :
-			"vector".equals(objType) ? new Vector(x, y, z) :
-			"color".equals(objType) ? new Color(x, y, z) :
-			null;
-		Assert.assertNotNull("Unrecognized object type " + objType, expected);
+		switch (objType)
+		{
+			case "point":
+				assertObjPropEqualsTuple(expectedObjName, propertyName, new Point(x, y, z));
+				return;
+			case "vector":
+				assertObjPropEqualsTuple(expectedObjName, propertyName, new Vector(x, y, z));
+				return;
+			case "color":
+				assertObjPropEqualsTuple(expectedObjName, propertyName, new Vector(x, y, z));
+				return;
+			case "translation":
+				assertObjPropEqualsTuple(expectedObjName, propertyName, Matrix.newTranslation(x, y, z));
+				return;
+			default:
+				Assert.fail("Unrecognized object type " + objType);
+		}
+	}
 
+	private void assertObjPropEqualsTuple(String expectedObjName,
+		String propertyName, Object expected)
+	{
 		Object value = null;
 		IntersectionComputations comps = data.getComputations(expectedObjName);
 		Ray ray = data.getRay(expectedObjName);
 		Material material = data.getMaterial(expectedObjName);
+		Shape shape = data.getShape(expectedObjName);
 		if (comps != null)
 		{
 			value = "point".equals(propertyName) ? comps.getPoint() :
@@ -170,6 +188,11 @@ public class ThenSteps
 		else if (material != null)
 		{
 			value = "color".equals(propertyName) ? material.getColor() :
+				null;
+		}
+		else if (shape != null)
+		{
+			value = "transform".contentEquals(propertyName) ? shape.getTransform() :
 				null;
 		}
 		else
