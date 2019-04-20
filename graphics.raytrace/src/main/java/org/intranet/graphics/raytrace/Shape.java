@@ -5,9 +5,14 @@ public abstract class Shape
 	public abstract Vector normalAt(Point point);
 	public final IntersectionList intersections(Ray ray)
 	{
+//		savedRay = ray;
 		Ray localRay = ray.transform(transform.inverse());
+		savedRay = localRay;
 		return localIntersections(localRay);
 	}
+
+	private Ray savedRay;
+	public Ray getSavedRay() { return savedRay; }
 
 	public abstract IntersectionList localIntersections(Ray ray);
 

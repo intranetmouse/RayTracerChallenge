@@ -142,30 +142,33 @@ public class ThenSteps
 
 	@Then(wordPattern + "\\." + wordPattern + " = " + wordPattern + "\\("
 		+ threeDoublesPattern + "\\)")
-	public void objPropEqualsThreeDouble(String expectedObjName, String propertyName,
-		String objType, double x, double y, double z)
+	public void objPropEqualsThreeDouble(String expectedObjName,
+		String propertyName, String objType, double x, double y, double z)
+	{
+		Object expected = getObject(objType, x, y, z);
+		Object value = getObjPropValue(expectedObjName, propertyName);
+		Assert.assertEquals(expected, value);
+	}
+
+	private Object getObject(String objType, double x, double y, double z)
 	{
 		switch (objType)
 		{
 			case "point":
-				assertObjPropEqualsTuple(expectedObjName, propertyName, new Point(x, y, z));
-				return;
+				return new Point(x, y, z);
 			case "vector":
-				assertObjPropEqualsTuple(expectedObjName, propertyName, new Vector(x, y, z));
-				return;
+				return new Vector(x, y, z);
 			case "color":
-				assertObjPropEqualsTuple(expectedObjName, propertyName, new Vector(x, y, z));
-				return;
+				return new Vector(x, y, z);
 			case "translation":
-				assertObjPropEqualsTuple(expectedObjName, propertyName, Matrix.newTranslation(x, y, z));
-				return;
+				return Matrix.newTranslation(x, y, z);
 			default:
 				Assert.fail("Unrecognized object type " + objType);
+				return null;
 		}
 	}
 
-	private void assertObjPropEqualsTuple(String expectedObjName,
-		String propertyName, Object expected)
+	private Object getObjPropValue(String expectedObjName, String propertyName)
 	{
 		Object value = null;
 		IntersectionComputations comps = data.getComputations(expectedObjName);
@@ -192,7 +195,8 @@ public class ThenSteps
 		}
 		else if (shape != null)
 		{
-			value = "transform".contentEquals(propertyName) ? shape.getTransform() :
+			value = "transform".equals(propertyName) ? shape.getTransform() :
+				"saved_ray".equals(propertyName) ? shape.getSavedRay() :
 				null;
 		}
 		else
@@ -203,7 +207,29 @@ public class ThenSteps
 
 		Assert.assertNotNull("Property name does not match: " + propertyName,
 			value);
+		return value;
+	}
 
+	@Then(wordPattern + "\\." + wordPattern + "\\." + wordPattern + " = "
+		+ wordPattern + "\\(" + threeDoublesPattern + "\\)")
+	public void objPropPropEqualsThreeDouble(String expectedObjName,
+		String prop1Name, String prop2Name, String objType, double x,
+		double y, double z)
+	{
+		Object expected = getObject(objType, x, y, z);
+		Ray prop1Value = (Ray)getObjPropValue(expectedObjName, prop1Name);
+		Object value = null;
+		switch (prop2Name)
+		{
+			case "origin":
+				Assert.assertEquals(expected, prop1Value.getOrigin());
+				return;
+			case "direction":
+				Assert.assertEquals(expected, prop1Value.getDirection());
+				return;
+			default:
+				Assert.fail("unknown property: " + prop2Name);
+		}
 		Assert.assertEquals(expected, value);
 	}
 
