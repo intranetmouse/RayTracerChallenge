@@ -1,24 +1,18 @@
 package org.intranet.graphics.raytrace;
 
-public class Sphere
+public final class Sphere
 	extends Shape
 {
 	public Sphere()
 	{
-
 	}
 
 	@Override
-	public boolean equals(Object other)
+	public boolean shapeEquals(Object other)
 	{
 		if (other == null || !(other instanceof Sphere))
 			return false;
-		Sphere otherSphere = (Sphere)other;
-		if (!transform.equals(otherSphere.transform))
-			return false;
-		if (!getMaterial().equals(otherSphere.getMaterial()))
-			return false;
-		return true;
+		return super.equals(other);
 	}
 
 	@Override

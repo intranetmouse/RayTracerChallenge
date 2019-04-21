@@ -37,4 +37,16 @@ public abstract class Shape
 	Matrix transform = Matrix.identity(4);
 	public final Matrix getTransform() { return transform; }
 	public final void setTransform(Matrix value) { transform = value; }
+
+	@Override
+	public final boolean equals(Object other)
+	{
+		Shape otherSphere = (Shape)other;
+		if (!transform.equals(otherSphere.transform))
+			return false;
+		if (!getMaterial().equals(otherSphere.getMaterial()))
+			return false;
+		return true;
+	}
+	protected abstract boolean shapeEquals(Object other);
 }

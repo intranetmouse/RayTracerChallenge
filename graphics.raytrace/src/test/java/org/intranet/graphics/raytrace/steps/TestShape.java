@@ -7,7 +7,7 @@ import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.Vector;
 
-public class TestShape
+public final class TestShape
 	extends Shape
 {
 	@Override
@@ -20,5 +20,13 @@ public class TestShape
 	protected Vector localNormalAt(Point point, Matrix inverse)
 	{
 		return new Vector(point.getX(), point.getY(), point.getZ());
+	}
+
+	@Override
+	protected boolean shapeEquals(Object other)
+	{
+		if (other == null || !(other instanceof TestShape))
+			return false;
+		return super.equals(other);
 	}
 }
