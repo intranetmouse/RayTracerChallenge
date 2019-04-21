@@ -1,6 +1,6 @@
 package org.intranet.graphics.raytrace;
 
-public class Material
+public final class Material
 {
 	private Color color = new Color(1, 1, 1);
 	public Color getColor() { return color; }

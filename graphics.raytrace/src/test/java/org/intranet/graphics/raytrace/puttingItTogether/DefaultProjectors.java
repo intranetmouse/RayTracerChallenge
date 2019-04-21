@@ -32,6 +32,8 @@ public final class DefaultProjectors
 			phongSphereProjectors));
 
 		list.add(new ProjectorGroup("Make a Scene", new MakeAsceneProjector()));
+
+		list.add(new ProjectorGroup("Scene with planes", new SceneWithPlanesProjector()));
 		return list;
 	}
 }

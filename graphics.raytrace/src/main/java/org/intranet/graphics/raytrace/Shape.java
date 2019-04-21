@@ -2,15 +2,15 @@ package org.intranet.graphics.raytrace;
 
 public abstract class Shape
 {
-	final public Vector normalAt(Point point)
+	final public Vector normalAt(Point worldPoint)
 	{
 		Matrix inverse = transform.inverse();
 
-		Point localPoint = inverse.multiply(point);
+		Point localPoint = inverse.multiply(worldPoint);
 
-		Vector shapeNormalVector = localNormalAt(localPoint, inverse);
+		Vector localNormalVector = localNormalAt(localPoint, inverse);
 
-		Vector worldNormal = inverse.transpose().multiply(shapeNormalVector);
+		Vector worldNormal = inverse.transpose().multiply(localNormalVector);
 
 		Vector v = new Vector(worldNormal.getX(), worldNormal.getY(),
 			worldNormal.getZ());

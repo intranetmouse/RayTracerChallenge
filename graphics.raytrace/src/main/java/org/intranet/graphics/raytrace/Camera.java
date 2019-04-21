@@ -75,7 +75,6 @@ public class Camera
 		hsize = image.getWidth();
 		vsize = image.getHeight();
 		getPixelSize();
-//		Canvas image = new Canvas(hsize, vsize);
 		for (int y = 0; y < vsize; y++)
 		{
 			for (int x = 0; x < hsize; x++)

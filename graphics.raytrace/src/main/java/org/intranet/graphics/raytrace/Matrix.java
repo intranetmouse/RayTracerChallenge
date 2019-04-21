@@ -1,6 +1,6 @@
 package org.intranet.graphics.raytrace;
 
-public class Matrix
+public final class Matrix
 {
 	public static Matrix identity(int size)
 	{
@@ -33,6 +33,8 @@ public class Matrix
 	public void set(int row, int col, double value)
 	{
 		matrix[row][col] = value;
+		inverse = null;
+		transposed = null;
 	}
 
 	@Override
@@ -114,15 +116,20 @@ public class Matrix
 		return new Vector(values[0], values[1], values[2], values[3]);
 	}
 
+	private Matrix transposed;
 	public Matrix transpose()
 	{
-		double[][] mtx = allocateArray(matrix[0].length, matrix.length);
+		if (transposed == null)
+		{
+			double[][] mtx = allocateArray(matrix[0].length, matrix.length);
 
-		for (int origCol = 0; origCol < matrix[0].length; origCol++)
-			for (int origRow = 0; origRow < matrix.length; origRow++)
-				mtx[origCol][origRow] = matrix[origRow][origCol];
+			for (int origCol = 0; origCol < matrix[0].length; origCol++)
+				for (int origRow = 0; origRow < matrix.length; origRow++)
+					mtx[origCol][origRow] = matrix[origRow][origCol];
+			transposed = new Matrix(mtx);
+		}
 
-		return new Matrix(mtx);
+		return transposed;
 	}
 
 	public static double[][] allocateArray(int numRows, int numCols)
@@ -207,10 +214,14 @@ public class Matrix
 		return !Tuple.dblEqual(0.0, determinant());
 	}
 
+	private Matrix inverse;
 	public Matrix inverse()
 	{
 		if (!isInvertible())
 			return null;
+
+		if (inverse != null)
+			return inverse;
 
 		double determinant = determinant();
 		double[][] other = allocateArray(matrix.length, matrix[0].length);
@@ -222,7 +233,8 @@ public class Matrix
 				// accomplishes the transpose operation!
 				other[col][row] = c / determinant;
 			}
-		return new Matrix(other);
+		inverse = new Matrix(other);
+		return inverse;
 	}
 
 	public static Matrix newTranslation(double x, double y, double z)

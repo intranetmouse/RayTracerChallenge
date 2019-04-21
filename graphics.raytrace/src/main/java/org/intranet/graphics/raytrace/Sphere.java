@@ -40,8 +40,7 @@ public final class Sphere
 	@Override
 	protected Vector localNormalAt(Point point, Matrix inverse)
 	{
-		Point surfacePoint = inverse.multiply(point);
-		Vector surfaceNormalVector = surfacePoint.subtract(new Point(0, 0, 0));
+		Vector surfaceNormalVector = point.subtract(new Point(0, 0, 0));
 		return surfaceNormalVector;
 	}
 
