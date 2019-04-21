@@ -1,6 +1,7 @@
 package org.intranet.graphics.raytrace.steps;
 
 import org.intranet.graphics.raytrace.IntersectionList;
+import org.intranet.graphics.raytrace.Matrix;
 import org.intranet.graphics.raytrace.Point;
 import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.Shape;
@@ -10,16 +11,14 @@ public class TestShape
 	extends Shape
 {
 	@Override
-	public Vector normalAt(Point point)
+	public IntersectionList localIntersections(Ray ray)
 	{
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public IntersectionList localIntersections(Ray ray)
+	protected Vector localNormalAt(Point point, Matrix inverse)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return new Vector(point.getX(), point.getY(), point.getZ());
 	}
 }

@@ -2,10 +2,23 @@ package org.intranet.graphics.raytrace;
 
 public abstract class Shape
 {
-	public abstract Vector normalAt(Point point);
+	final public Vector normalAt(Point point)
+	{
+		Matrix inverse = transform.inverse();
+
+		Point localPoint = inverse.multiply(point);
+
+		Vector shapeNormalVector = localNormalAt(localPoint, inverse);
+
+		Vector worldNormal = inverse.transpose().multiply(shapeNormalVector);
+
+		Vector v = new Vector(worldNormal.getX(), worldNormal.getY(),
+			worldNormal.getZ());
+		return v.normalize();
+	}
+
 	public final IntersectionList intersections(Ray ray)
 	{
-//		savedRay = ray;
 		Ray localRay = ray.transform(transform.inverse());
 		savedRay = localRay;
 		return localIntersections(localRay);
@@ -15,6 +28,7 @@ public abstract class Shape
 	public Ray getSavedRay() { return savedRay; }
 
 	public abstract IntersectionList localIntersections(Ray ray);
+	protected abstract Vector localNormalAt(Point point, Matrix inverse);
 
 	private Material material = new Material();
 	public final Material getMaterial() { return material; }

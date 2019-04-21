@@ -44,14 +44,11 @@ public class Sphere
 	}
 
 	@Override
-	public Vector normalAt(Point point)
+	protected Vector localNormalAt(Point point, Matrix inverse)
 	{
-		Matrix inverse = transform.inverse();
-		Point objectPoint = inverse.multiply(point);
-		Vector objectNormalVector = objectPoint.subtract(new Point(0, 0, 0));
-		Vector worldNormal = inverse.transpose().multiply(objectNormalVector);
-		Vector v = new Vector(worldNormal.getX(), worldNormal.getY(), worldNormal.getZ());
-		return v.normalize();
+		Point surfacePoint = inverse.multiply(point);
+		Vector surfaceNormalVector = surfacePoint.subtract(new Point(0, 0, 0));
+		return surfaceNormalVector;
 	}
 
 	@Override
