@@ -36,25 +36,19 @@ public final class SceneWithPlanesProjector
 	{
 		World world = new World();
 
-		Material wallMaterial = new Material();
-		wallMaterial.setColor(new Color(1, 0.9, 0.9));
-		wallMaterial.setSpecular(0);
+		double wallAmbient = 0.3;
 
-		Material redMaterial = new Material();
-		redMaterial.setColor(new Color(1, 0.8, 0.8));
-		redMaterial.setSpecular(0);
+		Material wallMaterial = makeMaterial(1, 0.9, 0.9, 0.3, wallAmbient);
 
-		Material greenMaterial = new Material();
-		greenMaterial.setColor(new Color(0.5, 1, 0.5));
-		greenMaterial.setSpecular(0);
+		Material redMaterial = makeMaterial(1, 0.5, 0.5, 0, wallAmbient);
 
-		Material blueMaterial = new Material();
-		blueMaterial.setColor(new Color(0.5, 0.5, 1));
-		blueMaterial.setSpecular(0);
+		Material greenMaterial = makeMaterial(0.5, 1, 0.5, 0, wallAmbient);
 
-		Shape floor = createFloor(redMaterial);
-		Shape leftWall = createLeftWall(greenMaterial);
-		Shape rightWall = createRightWall(blueMaterial);
+		Material blueMaterial = makeMaterial(0.5, 0.5, 1, 0, wallAmbient);
+
+		Shape floor = createFloor(wallMaterial);
+		Shape leftWall = createLeftWall(redMaterial);
+		Shape rightWall = createRightWall(greenMaterial);
 
 		world.addSceneObjects(floor, leftWall, rightWall);
 
@@ -64,9 +58,18 @@ public final class SceneWithPlanesProjector
 
 		world.addSceneObjects(middle, right, left);
 
-		world.addLight(new PointLight(new Point(-10, 10, -10), new Color(1, 1, 1)));
+		world.addLight(new PointLight(new Point(-8, 7, -10), new Color(1, 1, 1)));
 
 		return world;
+	}
+
+	private static Material makeMaterial(double red, double green, double blue, double specular, double ambient)
+	{
+		Material material = new Material();
+		material.setColor(new Color(red, green, blue));
+		material.setSpecular(specular);
+		material.setAmbient(ambient);
+		return material;
 	}
 
 	private Sphere createLeftSphere()
@@ -113,7 +116,7 @@ public final class SceneWithPlanesProjector
 	{
 		Shape rightWall = new Plane();
 		rightWall.setTransform(Matrix.newTranslation(0, 0, 5)
-			.multiply(Matrix.newRotationY(Math.PI / 4))
+			.multiply(Matrix.newRotationY(Math.PI + Math.PI / 4))
 			.multiply(Matrix.newRotationX(Math.PI / 2))
 			);
 		rightWall.setMaterial(material);
@@ -124,7 +127,7 @@ public final class SceneWithPlanesProjector
 	{
 		Shape leftWall = new Plane();
 		leftWall.setTransform(Matrix.newTranslation(0, 0, 5)
-			.multiply(Matrix.newRotationY(-Math.PI / 4))
+			.multiply(Matrix.newRotationY(Math.PI + -Math.PI / 4))
 			.multiply(Matrix.newRotationX(Math.PI / 2))
 			);
 		leftWall.setMaterial(material);
