@@ -11,6 +11,7 @@ import org.intranet.graphics.raytrace.Matrix;
 import org.intranet.graphics.raytrace.Point;
 import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.Shape;
+import org.intranet.graphics.raytrace.StripePattern;
 import org.intranet.graphics.raytrace.Tuple;
 import org.intranet.graphics.raytrace.Vector;
 import org.junit.Assert;
@@ -366,6 +367,69 @@ public class ThenSteps
 			default:
 				Assert.fail("Unrecognized propertyName " + propertyName);
 		}
+	}
+
+	@Then(wordPattern + "\\." + wordPattern + " = " + wordPattern)
+	public void patternAWhite(String objectName, String propertyName,
+		String expectedObjectName)
+	{
+		Shape obj = data.getShape(objectName);
+		if (obj != null)
+		{
+			Matrix expectedMatrix = getMatrix(expectedObjectName);
+			Assert.assertEquals(expectedMatrix, obj.getTransform());
+			return;
+		}
+
+		Camera camera = data.getCamera(objectName);
+		if (camera != null)
+		{
+			Matrix expectedMatrix = getMatrix(expectedObjectName);
+			Assert.assertEquals(expectedMatrix, camera.getTransform());
+			return;
+		}
+
+		StripePattern actualPattern = (StripePattern)data.getPattern(objectName);
+		if (actualPattern != null)
+		{
+			Color expectedColor = data.getColor(expectedObjectName);
+			Color actualColor = "a".equals(propertyName) ? actualPattern.getA() :
+				"b".equals(propertyName) ? actualPattern.getB() :
+				null;
+			Assert.assertEquals(expectedColor, actualColor);
+			return;
+		}
+
+		Assert.fail("Unknown object type for object name " + objectName);
+	}
+
+	private Matrix getMatrix(String matrixName)
+	{
+		Matrix expectedMatrix;
+		switch (matrixName)
+		{
+			case "identity_matrix":
+				expectedMatrix = Matrix.identity(4);
+				break;
+			default:
+				expectedMatrix = data.getMatrix(matrixName);
+		}
+		return expectedMatrix;
+	}
+
+	@Then("^stripe_at\\(" + wordPattern + ", point\\(" + threeDoublesPattern
+		+ "\\)\\) = " + wordPattern)
+	public void stripe_atPatternPointWhite(String patternName, double x,
+		double y, double z, String expectedColorName)
+	{
+		Color expectedColor = data.getColor(expectedColorName);
+
+		StripePattern stripePattern = (StripePattern)data.getPattern(patternName);
+
+		Point point = new Point(x, y, z);
+
+		Color actualColor = stripePattern.stripeAt(point);
+		Assert.assertEquals(expectedColor, actualColor);
 	}
 
 }

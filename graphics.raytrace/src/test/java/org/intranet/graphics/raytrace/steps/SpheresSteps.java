@@ -163,37 +163,6 @@ public class SpheresSteps
 		Assert.assertEquals(expectedValue, value, Tuple.EPSILON);
 	}
 
-	@Then(wordPattern + ".transform = " + wordPattern)
-	public void xs(String objectName, String matrixName)
-	{
-		Shape obj = data.getShape(objectName);
-
-		Matrix expectedMatrix;
-		switch (matrixName)
-		{
-			case "identity_matrix":
-				expectedMatrix = Matrix.identity(4);
-				break;
-			default:
-				expectedMatrix = data.getMatrix(matrixName);
-		}
-
-		if (obj != null)
-		{
-			Assert.assertEquals(expectedMatrix, obj.getTransform());
-			return;
-		}
-
-		Camera camera = data.getCamera(objectName);
-		if (camera != null)
-		{
-			Assert.assertEquals(expectedMatrix, camera.getTransform());
-			return;
-		}
-
-		Assert.fail("Unknown object type for object name " + objectName);
-	}
-
 	@Then(wordPattern + " = normalize\\(" + wordPattern + "\\)")
 	public void nNormalizeN(String resultVectorName, String vectorName)
 	{

@@ -30,6 +30,10 @@ public final class Material
 	private double transparency = 0.0;
 	public double getTransparency() { return transparency; }
 
+	private Pattern pattern;
+	public Pattern getPattern() { return pattern; }
+	public void setPattern(Pattern value) { pattern = value; }
+
 	@Override
 	public boolean equals(Object other)
 	{

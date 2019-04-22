@@ -24,13 +24,6 @@ public class MaterialsSteps
 		data.put(materialName, new Material());
 	}
 
-	@Given(wordPattern + ".ambient ← " + doublePattern)
-	public void mAssignAmbient(String materialName, double ambientValue)
-	{
-		Material m = data.getMaterial(materialName);
-		m.setAmbient(ambientValue);
-	}
-
 
 	@When(wordPattern + " ← lighting\\(" + wordPattern + ", " + wordPattern +
 		", " + wordPattern + ", " + wordPattern + ", " + wordPattern + "\\)")

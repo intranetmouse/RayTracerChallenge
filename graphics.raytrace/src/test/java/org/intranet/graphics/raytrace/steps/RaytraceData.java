@@ -12,6 +12,7 @@ import org.intranet.graphics.raytrace.IntersectionComputations;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Material;
 import org.intranet.graphics.raytrace.Matrix;
+import org.intranet.graphics.raytrace.Pattern;
 import org.intranet.graphics.raytrace.Point;
 import org.intranet.graphics.raytrace.PointLight;
 import org.intranet.graphics.raytrace.Ray;
@@ -83,10 +84,16 @@ public final class RaytraceData
 	{ return raysMap.get(rayName); }
 
 	private Map<String, Shape> shapeMap = new HashMap<>();
-	public void put(String shapeName, Shape r)
-	{ shapeMap.put(shapeName, r); }
+	public void put(String shapeName, Shape shape)
+	{ shapeMap.put(shapeName, shape); }
 	public Shape getShape(String shapeName)
 	{ return shapeMap.get(shapeName); }
+
+	private Map<String, Pattern> patternMap = new HashMap<>();
+	public void put(String patternName, Pattern pattern)
+	{ patternMap.put(patternName, pattern); }
+	public Pattern getPattern(String patternName)
+	{ return patternMap.get(patternName); }
 
 	private Map<String, Intersection> intersectionsMap = new HashMap<>();
 	public void put(String intersectionName, Intersection i)
