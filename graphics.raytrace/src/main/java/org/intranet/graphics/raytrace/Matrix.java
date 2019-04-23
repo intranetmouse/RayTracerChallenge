@@ -34,7 +34,6 @@ public final class Matrix
 	{
 		matrix[row][col] = value;
 		inverse = null;
-		transposed = null;
 	}
 
 	@Override
@@ -116,20 +115,14 @@ public final class Matrix
 		return new Vector(values[0], values[1], values[2], values[3]);
 	}
 
-	private Matrix transposed;
 	public Matrix transpose()
 	{
-		if (transposed == null)
-		{
-			double[][] mtx = allocateArray(matrix[0].length, matrix.length);
+		double[][] mtx = allocateArray(matrix[0].length, matrix.length);
 
-			for (int origCol = 0; origCol < matrix[0].length; origCol++)
-				for (int origRow = 0; origRow < matrix.length; origRow++)
-					mtx[origCol][origRow] = matrix[origRow][origCol];
-			transposed = new Matrix(mtx);
-		}
-
-		return transposed;
+		for (int origCol = 0; origCol < matrix[0].length; origCol++)
+			for (int origRow = 0; origRow < matrix.length; origRow++)
+				mtx[origCol][origRow] = matrix[origRow][origCol];
+		return new Matrix(mtx);
 	}
 
 	public static double[][] allocateArray(int numRows, int numCols)
