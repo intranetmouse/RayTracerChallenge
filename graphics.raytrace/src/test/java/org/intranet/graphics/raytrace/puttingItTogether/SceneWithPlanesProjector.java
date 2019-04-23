@@ -63,7 +63,8 @@ public final class SceneWithPlanesProjector
 		return world;
 	}
 
-	private static Material makeMaterial(double red, double green, double blue, double specular, double ambient)
+	private static Material makeMaterial(double red, double green, double blue,
+		double specular, double ambient)
 	{
 		Material material = new Material();
 		material.setColor(new Color(red, green, blue));
