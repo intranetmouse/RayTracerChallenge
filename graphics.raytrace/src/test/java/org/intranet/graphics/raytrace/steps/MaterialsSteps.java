@@ -60,4 +60,23 @@ public class MaterialsSteps
 		data.put(resultingColorName, color);
 	}
 
+	@When(wordPattern + " ← lighting\\(" + wordPattern + ", " + wordPattern
+		+ ", point\\(" + threeDoublesPattern + "\\), " + wordPattern + ", "
+		+ wordPattern + ", (true|false)\\)")
+	public void cLightingMLightPointEyevNormalvFalse(String resultingColorName,
+		String materialName, String pointLightName, double p1x, double p1y,
+		double p1z, String eyeVectorName, String normalVectorName,
+		String inShadowString)
+	{
+		Material material = data.getMaterial(materialName);
+		Point position = new Point(p1x, p1y, p1z);
+		PointLight pointLight = data.getPointLight(pointLightName);
+		Vector eyev = data.getVector(eyeVectorName);
+		Vector normalv = data.getVector(normalVectorName);
+		boolean inShadow = "true".equals(inShadowString);
+		Color color = Tracer.lighting(material, pointLight, position, eyev,
+			normalv, inShadow);
+		data.put(resultingColorName, color);
+	}
+
 }

@@ -5,8 +5,10 @@ public final class Tracer
 	public static Color lighting(Material m, PointLight light, Point position,
 		Vector eyeV, Vector normalV, boolean inShadow)
 	{
+		Pattern p = m.getPattern();
+		Color c = p != null ? ((StripePattern)p).stripeAt(position) : m.getColor();
 		// combine the surface color with the light's color/intensity
-		Color effectiveColor = m.getColor().multiply(light.getIntensity());
+		Color effectiveColor = c.multiply(light.getIntensity());
 
 		// compute the ambient contribution
 		Color ambientColor = effectiveColor.multiply(m.getAmbient());
