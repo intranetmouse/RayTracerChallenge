@@ -3,8 +3,8 @@ package org.intranet.graphics.raytrace.puttingItTogether;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
 public class PuttingItTogether
@@ -23,9 +23,11 @@ public class PuttingItTogether
 
 		List<ProjectorGroup> projectorGroups = DefaultProjectors.createDefaultProjectors();
 
-		JTabbedPane tabPane = new TabbedProjectorUi(projectorGroups);
+		JComponent treeProjectorUi =
+//			new TabbedProjectorUi(projectorGroups);
+			new TreeProjectorUi(projectorGroups);
 
-		f.add(tabPane);
+		f.add(treeProjectorUi);
 		f.pack();
 		f.setVisible(true);
 	}

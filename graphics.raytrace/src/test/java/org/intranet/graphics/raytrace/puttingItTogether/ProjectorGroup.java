@@ -19,4 +19,7 @@ public final class ProjectorGroup
 		this.name = name;
 		this.projectors = projectors;
 	}
+
+	@Override
+	public String toString() { return name; }
 }

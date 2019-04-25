@@ -26,7 +26,7 @@ public class ClockProjector
 	@Override
 	public void projectToCanvas(Canvas canvas)
 	{
-		int imageWidth = canvas.getWidth();
+		int imageWidth = Math.min(canvas.getWidth(), canvas.getHeight());
 		int imageCenter = imageWidth / 2 + 1;
 		int circleRadius = (int)(imageWidth * 0.7 / 2);
 
@@ -43,9 +43,6 @@ public class ClockProjector
 		for (int i = 0; i < 12; i++)
 		{
 			Matrix rotate = Matrix.newRotationZ(Math.PI / 6 * i);
-//			Point p2 = rotate.multiply(p);
-//			Point p3 = scale.multiply(p2);
-//			Point transformedPoint = moveToCenter.multiply(p3);
 			Point transformedPoint = scaleMove.multiply(rotate).multiply(p);
 			canvas.writePixel((int)transformedPoint.getX(),
 				(int)transformedPoint.getY(), color);
