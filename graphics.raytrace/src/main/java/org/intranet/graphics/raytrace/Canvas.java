@@ -23,28 +23,47 @@ public class Canvas
 		this.width = width;
 		this.height = height;
 		pixels = new Color[height][];
-		for (int h = 0; h < height; h++)
+		for (int row = 0; row < height; row++)
 		{
-			pixels[h] = new Color[width];
-			for (int w = 0; w < width; w++)
-				pixels[h][w] = new Color(0, 0, 0);
+			pixels[row] = new Color[width];
+			for (int col = 0; col < width; col++)
+				pixels[row][col] = new Color(0, 0, 0);
 		}
 	}
 
-	public Color getPixelColor(int w, int h)
+	public Color getPixelColor(int col, int row)
 	{
-		return pixels[h][w];
+		return pixels[row][col];
 	}
 
-	public void writePixel(int w, int h, Color color)
+	public void writePixel(int col, int row, Color color)
 	{
-		pixels[h][w] = color.clipped();
+		Color clipped = color.clipped();
+		pixels[row][col] = clipped;
+		firePixelUpdated(col, row, clipped);
 	}
 
 	public interface CanvasListener
 	{
 		void pixelUpdated(int x, int y, Color color);
+		void allPixelsUpdated();
 		void resized(int x, int y);
+	}
+
+	private final List<CanvasListener> canvasListeners = new ArrayList<>();
+	public void addCanvasListener(CanvasListener l)
+	{ canvasListeners.add(l); }
+	public void removeCanvasListener(CanvasListener l)
+	{ canvasListeners.remove(l); }
+	public void firePixelUpdated(int x, int y, Color color)
+	{
+		for (CanvasListener l : canvasListeners)
+			l.pixelUpdated(x, y, color);
+	}
+	public void fireAllPixelsUpdated()
+	{
+		for (CanvasListener l : canvasListeners)
+			l.allPixelsUpdated();
 	}
 
 	public List<String> toPpm()
@@ -99,6 +118,7 @@ public class Canvas
 		for (int w = 0; w < width; w++)
 			for (int h = 0; h < height; h++)
 				pixels[h][w] = c;
+		fireAllPixelsUpdated();
 	}
 
 	public void writeFile(String fname)

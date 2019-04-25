@@ -14,18 +14,26 @@ public class ProjectorToolbar
 	extends JPanel
 {
 	private static final long serialVersionUID = 1L;
+	private final JToolBar toolBar = new JToolBar();
+	private final Canvas canvas;
+	private final JLabel time = new JLabel();
 
-	ProjectorToolbar(Canvas projectileCanvas, Projector... projectors)
+	ProjectorToolbar(Canvas canvas, Projector... projectors)
 	{
 		super(new BorderLayout());
+		this.canvas = canvas;
 		setOpaque(false);
 
-		JLabel time = new JLabel();
 		add(time, BorderLayout.EAST);
 
-		JToolBar toolBar = new JToolBar();
 		toolBar.setFloatable(false);
 		add(toolBar);
+		setProjectors(projectors);
+	}
+
+	public void setProjectors(Projector... projectors)
+	{
+		toolBar.removeAll();
 		for (Projector projector : projectors)
 		{
 			toolBar.add(new AbstractAction(projector.getName()) {
@@ -34,9 +42,9 @@ public class ProjectorToolbar
 				@Override
 				public void actionPerformed(ActionEvent e)
 				{
-					projectileCanvas.clear();
+					canvas.clear();
 					long startTime = System.currentTimeMillis();
-					projector.projectToCanvas(projectileCanvas);
+					projector.projectToCanvas(canvas);
 					long durationMs = System.currentTimeMillis() -
 						startTime;
 					time.setText(String.format("Time: %.3f seconds",

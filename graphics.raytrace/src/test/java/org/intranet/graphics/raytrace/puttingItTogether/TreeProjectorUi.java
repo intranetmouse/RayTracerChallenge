@@ -1,13 +1,10 @@
 package org.intranet.graphics.raytrace.puttingItTogether;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
 import java.util.List;
 
-import javax.swing.AbstractAction;
 import javax.swing.Box;
 import javax.swing.JPanel;
-import javax.swing.JToolBar;
 
 import org.intranet.graphics.raytrace.Canvas;
 
@@ -26,8 +23,7 @@ public class TreeProjectorUi
 
 		add(boxbar, BorderLayout.CENTER);
 
-		JToolBar renderBar = new JToolBar();
-		renderBar.setFloatable(false);
+		ProjectorToolbar renderBar = new ProjectorToolbar(canvas);
 		boxbar.add(renderBar);
 
 		boxbar.add(canvasComponent);
@@ -39,21 +35,7 @@ public class TreeProjectorUi
 			@Override
 			public void projectorGroupSelected(ProjectorGroup group)
 			{
-				renderBar.removeAll();
-				for (Projector proj : group.getProjectors())
-				{
-					renderBar.add(new AbstractAction(proj.getName()) {
-						private static final long serialVersionUID = 1L;
-
-						@Override
-						public void actionPerformed(ActionEvent e)
-						{
-							canvas.clear();
-							proj.projectToCanvas(canvas);
-							canvasComponent.repaint();
-						}
-					});
-				}
+				renderBar.setProjectors(group.getProjectors());
 			}
 		});
 	}

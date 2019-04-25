@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import javax.swing.JComponent;
 
 import org.intranet.graphics.raytrace.Canvas;
+import org.intranet.graphics.raytrace.Canvas.CanvasListener;
 import org.intranet.graphics.raytrace.Color;
 
 public final class CanvasComponent
@@ -16,10 +17,34 @@ public final class CanvasComponent
 
 	public CanvasComponent(Canvas c)
 	{
-		Dimension canvasSize = new Dimension(c.getWidth(), c.getHeight());
+		c.addCanvasListener(new CanvasListener() {
+			@Override
+			public void resized(int x, int y)
+			{
+				setSizeFromCanvas();
+			}
+
+			@Override
+			public void pixelUpdated(int x, int y, Color color)
+			{
+				repaint(x, y, 1, 1);
+			}
+
+			@Override
+			public void allPixelsUpdated()
+			{
+				repaint();
+			}
+		});
+		this.canvas = c;
+		setSizeFromCanvas();
+	}
+
+	private void setSizeFromCanvas()
+	{
+		Dimension canvasSize = new Dimension(canvas.getWidth(), canvas.getHeight());
 		setMinimumSize(canvasSize);
 		setPreferredSize(canvasSize);
-		this.canvas = c;
 	}
 
 	@Override
