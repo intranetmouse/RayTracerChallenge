@@ -64,8 +64,9 @@ public class Camera
 		// using the camera matrix, transform the canvas point and the origin,
 		// and then compute the ray's direction vector.
 		// (remember that the canvas is at z=-1)
-		Point pixel = transform.inverse().multiply(new Point(world_x, world_y, -1));
-		Point origin = transform.inverse().multiply(new Point(0, 0, 0));
+		Matrix inverse = transform.inverse();
+		Point pixel = inverse.multiply(new Point(world_x, world_y, -1));
+		Point origin = inverse.multiply(new Point(0, 0, 0));
 		Vector direction = pixel.subtract(origin).normalize();
 		return new Ray(origin, direction);
 	}
