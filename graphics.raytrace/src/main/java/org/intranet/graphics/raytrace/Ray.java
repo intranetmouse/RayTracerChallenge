@@ -1,5 +1,9 @@
 package org.intranet.graphics.raytrace;
 
+import org.intranet.graphics.raytrace.primitive.Matrix;
+import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.primitive.Vector;
+
 public class Ray
 {
 	private Point origin;

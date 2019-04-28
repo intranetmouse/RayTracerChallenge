@@ -4,10 +4,10 @@ import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.Color;
 import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionList;
-import org.intranet.graphics.raytrace.Point;
 import org.intranet.graphics.raytrace.Ray;
-import org.intranet.graphics.raytrace.Sphere;
-import org.intranet.graphics.raytrace.Vector;
+import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.shape.Sphere;
 
 public class BasicSphereProjector
 	implements Projector

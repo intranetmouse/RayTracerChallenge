@@ -1,7 +1,7 @@
 package org.intranet.graphics.raytrace.puttingItTogether;
 
-import org.intranet.graphics.raytrace.Point;
-import org.intranet.graphics.raytrace.Vector;
+import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.primitive.Vector;
 
 public class Projectile
 {

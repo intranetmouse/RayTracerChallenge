@@ -2,10 +2,10 @@ package org.intranet.graphics.raytrace.steps;
 
 import java.util.List;
 
-import org.intranet.graphics.raytrace.Matrix;
-import org.intranet.graphics.raytrace.Point;
-import org.intranet.graphics.raytrace.Tuple;
-import org.intranet.graphics.raytrace.Vector;
+import org.intranet.graphics.raytrace.primitive.Matrix;
+import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.primitive.Tuple;
+import org.intranet.graphics.raytrace.primitive.Vector;
 import org.junit.Assert;
 
 import cucumber.api.java.en.Given;

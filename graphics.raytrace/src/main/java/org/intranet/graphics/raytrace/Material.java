@@ -1,5 +1,7 @@
 package org.intranet.graphics.raytrace;
 
+import org.intranet.graphics.raytrace.primitive.Tuple;
+
 public final class Material
 {
 	private Color color = new Color(1, 1, 1);

@@ -1,4 +1,4 @@
-package org.intranet.graphics.raytrace;
+package org.intranet.graphics.raytrace.primitive;
 
 public final class Matrix
 {

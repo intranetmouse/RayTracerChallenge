@@ -2,6 +2,10 @@ package org.intranet.graphics.raytrace;
 
 import java.util.stream.StreamSupport;
 
+import org.intranet.graphics.raytrace.primitive.Matrix;
+import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.primitive.Vector;
+
 public class Camera
 {
 	private int hsize;
@@ -52,11 +56,11 @@ public class Camera
 		return pixelSize;
 	}
 
-	public Ray rayForPixel(int x, int y)
+	public Ray rayForPixel(PixelCoordinate coord)
 	{
 		// the offset from the edge of the canvas to the pixel's center
-		double xOffset = (x + 0.5) * getPixelSize();
-		double yOffset = (y + 0.5) * getPixelSize();
+		double xOffset = (coord.getX() + 0.5) * pixelSize;
+		double yOffset = (coord.getY() + 0.5) * pixelSize;
 
 		// the untransformed coordinates of the pixel in world space.
 		// (remember that the camera looks toward -z, so +x is to the *left*.)
@@ -73,15 +77,16 @@ public class Camera
 		return new Ray(origin, direction);
 	}
 
-	public void render(World world, Canvas image)
+	public void render(World world, Canvas image, boolean parallel)
 	{
 		hsize = image.getWidth();
 		vsize = image.getHeight();
 		getPixelSize();
-		StreamSupport.stream(new AcrossDownTraversal(hsize, vsize), true).forEach(pixel -> {
-			Ray ray = rayForPixel(pixel.getX(), pixel.getY());
-			Color color = Tracer.colorAt(world, ray);
-			image.writePixel(pixel.getX(), pixel.getY(), color);
-		});
+		StreamSupport.stream(new AcrossDownTraversal(hsize, vsize), parallel)
+			.forEach(pixel -> {
+				Ray ray = rayForPixel(pixel);
+				Color color = Tracer.colorAt(world, ray);
+				image.writePixel(pixel.getX(), pixel.getY(), color);
+			});
 	}
 }

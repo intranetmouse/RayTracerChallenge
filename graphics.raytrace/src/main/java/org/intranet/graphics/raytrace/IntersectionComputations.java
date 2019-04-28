@@ -2,6 +2,10 @@ package org.intranet.graphics.raytrace;
 
 import java.util.List;
 
+import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.primitive.Tuple;
+import org.intranet.graphics.raytrace.primitive.Vector;
+
 public final class IntersectionComputations
 {
 	public double getDistance() { return intersection.getDistance(); }

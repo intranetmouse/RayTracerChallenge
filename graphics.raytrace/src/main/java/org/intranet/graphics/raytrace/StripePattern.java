@@ -1,5 +1,7 @@
 package org.intranet.graphics.raytrace;
 
+import org.intranet.graphics.raytrace.primitive.Point;
+
 public class StripePattern
 	extends Pattern
 {

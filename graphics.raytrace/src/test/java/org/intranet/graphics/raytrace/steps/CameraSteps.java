@@ -2,11 +2,12 @@ package org.intranet.graphics.raytrace.steps;
 
 import org.intranet.graphics.raytrace.Camera;
 import org.intranet.graphics.raytrace.Canvas;
-import org.intranet.graphics.raytrace.Matrix;
-import org.intranet.graphics.raytrace.Point;
+import org.intranet.graphics.raytrace.PixelCoordinate;
 import org.intranet.graphics.raytrace.Ray;
-import org.intranet.graphics.raytrace.Vector;
 import org.intranet.graphics.raytrace.World;
+import org.intranet.graphics.raytrace.primitive.Matrix;
+import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.primitive.Vector;
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
@@ -49,7 +50,8 @@ public class CameraSteps
 	public void rRay_for_pixelC(String rayName, String cameraName, int x, int y)
 	{
 		Camera camera = data.getCamera(cameraName);
-		Ray ray = camera.rayForPixel(x, y);
+		PixelCoordinate coord = new PixelCoordinate(x, y);
+		Ray ray = camera.rayForPixel(coord);
 		data.put(rayName, ray);
 	}
 
@@ -87,7 +89,7 @@ public class CameraSteps
 		Camera camera = data.getCamera(cameraName);
 		World world = data.getWorld(worldName);
 		Canvas canvas = new Canvas(camera.getHsize(), camera.getVsize());
-		camera.render(world, canvas);
+		camera.render(world, canvas, false);
 		data.put(imageName, canvas);
 	}
 

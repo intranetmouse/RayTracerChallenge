@@ -1,17 +1,16 @@
 package org.intranet.graphics.raytrace.steps;
 
-import org.intranet.graphics.raytrace.Camera;
 import org.intranet.graphics.raytrace.Color;
 import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Material;
-import org.intranet.graphics.raytrace.Matrix;
-import org.intranet.graphics.raytrace.Point;
 import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.Shape;
-import org.intranet.graphics.raytrace.Sphere;
-import org.intranet.graphics.raytrace.Tuple;
-import org.intranet.graphics.raytrace.Vector;
+import org.intranet.graphics.raytrace.primitive.Matrix;
+import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.primitive.Tuple;
+import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.shape.Sphere;
 import org.junit.Assert;
 
 import cucumber.api.java.en.Given;

@@ -1,5 +1,9 @@
 package org.intranet.graphics.raytrace;
 
+import org.intranet.graphics.raytrace.primitive.Matrix;
+import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.primitive.Vector;
+
 public abstract class Shape
 {
 	final public Vector normalAt(Point worldPoint)
@@ -34,7 +38,7 @@ public abstract class Shape
 	public final Material getMaterial() { return material; }
 	public final void setMaterial(Material value) { material = value; }
 
-	Matrix transform = Matrix.identity(4);
+	private Matrix transform = Matrix.identity(4);
 	public final Matrix getTransform() { return transform; }
 	public final void setTransform(Matrix value) { transform = value; }
 

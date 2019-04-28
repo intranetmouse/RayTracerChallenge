@@ -1,7 +1,7 @@
 package org.intranet.graphics.raytrace.test;
 
 import org.intranet.graphics.raytrace.Color;
-import org.intranet.graphics.raytrace.Tuple;
+import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -1,6 +1,6 @@
 package org.intranet.graphics.raytrace.puttingItTogether;
 
-import org.intranet.graphics.raytrace.Vector;
+import org.intranet.graphics.raytrace.primitive.Vector;
 
 public class Environment
 {

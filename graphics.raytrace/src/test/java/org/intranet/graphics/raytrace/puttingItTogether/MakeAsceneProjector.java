@@ -4,12 +4,12 @@ import org.intranet.graphics.raytrace.Camera;
 import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.Color;
 import org.intranet.graphics.raytrace.Material;
-import org.intranet.graphics.raytrace.Matrix;
-import org.intranet.graphics.raytrace.Point;
 import org.intranet.graphics.raytrace.PointLight;
-import org.intranet.graphics.raytrace.Sphere;
-import org.intranet.graphics.raytrace.Vector;
 import org.intranet.graphics.raytrace.World;
+import org.intranet.graphics.raytrace.primitive.Matrix;
+import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.shape.Sphere;
 
 public final class MakeAsceneProjector
 	implements Projector
@@ -27,7 +27,7 @@ public final class MakeAsceneProjector
 		camera.setTransform(Matrix.newView(new Point(0, 1.5, -5),
 			new Point(0, 1, 0), new Vector(0, 1, 0)));
 
-		camera.render(world, canvas);
+		camera.render(world, canvas, true);
 	}
 
 	private World makeWorld()

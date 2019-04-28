@@ -1,5 +1,8 @@
 package org.intranet.graphics.raytrace;
 
+import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.primitive.Vector;
+
 public final class Tracer
 {
 	public static Color lighting(Material m, PointLight light, Point position,

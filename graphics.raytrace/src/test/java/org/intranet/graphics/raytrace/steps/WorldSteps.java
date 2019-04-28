@@ -6,14 +6,15 @@ import org.intranet.graphics.raytrace.Color;
 import org.intranet.graphics.raytrace.IntersectionComputations;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Material;
-import org.intranet.graphics.raytrace.Matrix;
-import org.intranet.graphics.raytrace.Point;
 import org.intranet.graphics.raytrace.PointLight;
 import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.Shape;
-import org.intranet.graphics.raytrace.Sphere;
 import org.intranet.graphics.raytrace.Tracer;
 import org.intranet.graphics.raytrace.World;
+import org.intranet.graphics.raytrace.primitive.Matrix;
+import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.shape.DefaultWorld;
+import org.intranet.graphics.raytrace.shape.Sphere;
 import org.junit.Assert;
 
 import cucumber.api.java.en.Given;
@@ -132,7 +133,7 @@ public class WorldSteps
 	@When(wordPattern + " ← default_world\\(\\)")
 	public void wDefault_world(String worldName)
 	{
-		World w = World.defaultWorld();
+		World w = DefaultWorld.defaultWorld();
 		data.put(worldName, w);
 	}
 

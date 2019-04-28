@@ -1,6 +1,6 @@
 package org.intranet.graphics.raytrace.puttingItTogether;
 
-import org.intranet.graphics.raytrace.Matrix;
+import org.intranet.graphics.raytrace.primitive.Matrix;
 
 enum SphereProjectionType
 {

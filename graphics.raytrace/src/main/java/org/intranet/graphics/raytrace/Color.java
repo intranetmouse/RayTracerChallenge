@@ -1,5 +1,7 @@
 package org.intranet.graphics.raytrace;
 
+import org.intranet.graphics.raytrace.primitive.Tuple;
+
 public final class Color
 	extends Tuple
 {

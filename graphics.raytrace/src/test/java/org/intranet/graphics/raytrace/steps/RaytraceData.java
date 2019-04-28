@@ -12,16 +12,16 @@ import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionComputations;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Material;
-import org.intranet.graphics.raytrace.Matrix;
 import org.intranet.graphics.raytrace.Pattern;
 import org.intranet.graphics.raytrace.PixelCoordinate;
-import org.intranet.graphics.raytrace.Point;
 import org.intranet.graphics.raytrace.PointLight;
 import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.Shape;
-import org.intranet.graphics.raytrace.Tuple;
-import org.intranet.graphics.raytrace.Vector;
 import org.intranet.graphics.raytrace.World;
+import org.intranet.graphics.raytrace.primitive.Matrix;
+import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.primitive.Tuple;
+import org.intranet.graphics.raytrace.primitive.Vector;
 
 public final class RaytraceData
 {

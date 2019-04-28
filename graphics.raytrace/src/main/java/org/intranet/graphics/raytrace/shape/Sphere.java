@@ -1,4 +1,12 @@
-package org.intranet.graphics.raytrace;
+package org.intranet.graphics.raytrace.shape;
+
+import org.intranet.graphics.raytrace.Intersection;
+import org.intranet.graphics.raytrace.IntersectionList;
+import org.intranet.graphics.raytrace.Ray;
+import org.intranet.graphics.raytrace.Shape;
+import org.intranet.graphics.raytrace.primitive.Matrix;
+import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.primitive.Vector;
 
 public final class Sphere
 	extends Shape
@@ -48,6 +56,6 @@ public final class Sphere
 	public String toString()
 	{
 		return String.format("%s:[xform=%s,mat=%s]", getClass().getSimpleName(),
-			transform, getMaterial());
+			getTransform(), getMaterial());
 	}
 }

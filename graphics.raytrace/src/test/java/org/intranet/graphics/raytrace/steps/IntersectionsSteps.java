@@ -5,7 +5,7 @@ import org.intranet.graphics.raytrace.IntersectionComputations;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.Shape;
-import org.intranet.graphics.raytrace.Tuple;
+import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.junit.Assert;
 
 import cucumber.api.java.en.Given;
