@@ -19,7 +19,7 @@ public class ProjectorGroupTreeModel
 	{ listeners.remove(l); }
 
 	private final List<ProjectorGroup> projectorGroups;
-	private final String ROOT = "Groups";
+	private final String ROOT = "Exercises";
 
 	public ProjectorGroupTreeModel(List<ProjectorGroup> projectorGroups)
 	{

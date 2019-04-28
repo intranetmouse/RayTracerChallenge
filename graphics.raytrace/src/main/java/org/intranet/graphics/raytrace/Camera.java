@@ -1,5 +1,7 @@
 package org.intranet.graphics.raytrace;
 
+import java.util.stream.StreamSupport;
+
 public class Camera
 {
 	private int hsize;
@@ -76,14 +78,10 @@ public class Camera
 		hsize = image.getWidth();
 		vsize = image.getHeight();
 		getPixelSize();
-		for (int y = 0; y < vsize; y++)
-		{
-			for (int x = 0; x < hsize; x++)
-			{
-				Ray ray = rayForPixel(x, y);
-				Color color = Tracer.colorAt(world, ray);
-				image.writePixel(x, y, color);
-			}
-		}
+		StreamSupport.stream(new AcrossDownTraversal(hsize, vsize), true).forEach(pixel -> {
+			Ray ray = rayForPixel(pixel.getX(), pixel.getY());
+			Color color = Tracer.colorAt(world, ray);
+			image.writePixel(pixel.getX(), pixel.getY(), color);
+		});
 	}
 }

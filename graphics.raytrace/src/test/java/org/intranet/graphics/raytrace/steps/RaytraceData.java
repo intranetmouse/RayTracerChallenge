@@ -3,6 +3,7 @@ package org.intranet.graphics.raytrace.steps;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Spliterator;
 
 import org.intranet.graphics.raytrace.Camera;
 import org.intranet.graphics.raytrace.Canvas;
@@ -13,6 +14,7 @@ import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Material;
 import org.intranet.graphics.raytrace.Matrix;
 import org.intranet.graphics.raytrace.Pattern;
+import org.intranet.graphics.raytrace.PixelCoordinate;
 import org.intranet.graphics.raytrace.Point;
 import org.intranet.graphics.raytrace.PointLight;
 import org.intranet.graphics.raytrace.Ray;
@@ -148,4 +150,16 @@ public final class RaytraceData
 	{ cameraMap.put(cameraName, camera); }
 	public Camera getCamera(String cameraName)
 	{ return cameraMap.get(cameraName); }
+
+	private Map<String, Spliterator<PixelCoordinate>> pixelCoordinateSpliteratorMap = new HashMap<>();
+	public void put(String spliteratorName, Spliterator<PixelCoordinate> spliterator)
+	{ pixelCoordinateSpliteratorMap.put(spliteratorName, spliterator); }
+	public Spliterator<PixelCoordinate> getPixelCoordinateSpliterator(String spliteratorName)
+	{ return pixelCoordinateSpliteratorMap.get(spliteratorName); }
+
+	private Map<String, PixelCoordinate> pixelCoordinateMap = new HashMap<>();
+	public void put(String pixelCoordinateName, PixelCoordinate pixelCoordinate)
+	{ pixelCoordinateMap.put(pixelCoordinateName, pixelCoordinate); }
+	public PixelCoordinate getPixelCoordinate(String pixelCoordinateName)
+	{ return pixelCoordinateMap.get(pixelCoordinateName); }
 }

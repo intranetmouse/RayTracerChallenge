@@ -17,7 +17,7 @@ public class TreeProjectorUi
 
 	public TreeProjectorUi(List<ProjectorGroup> projectorGroups)
 	{
-		Resolution res = Resolution.HDTV_720p;
+		Resolution res = Resolution.HDTV_360p;
 		Canvas canvas = new Canvas(res.getWidth(), res.getHeight());
 		CanvasComponent canvasComponent = new CanvasComponent(canvas);
 		setLayout(new BorderLayout());

@@ -8,6 +8,7 @@ import org.intranet.graphics.raytrace.IntersectionComputations;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Material;
 import org.intranet.graphics.raytrace.Matrix;
+import org.intranet.graphics.raytrace.PixelCoordinate;
 import org.intranet.graphics.raytrace.Point;
 import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.Shape;
@@ -348,6 +349,16 @@ public class ThenSteps
 			return;
 		}
 
+		PixelCoordinate pixelCoord = data.getPixelCoordinate(objectName);
+		if (pixelCoord != null)
+		{
+			Integer coord = "x".equals(propertyName) ? pixelCoord.getX() :
+				"y".equals(propertyName) ? pixelCoord.getY() :
+				null;
+			Assert.assertNotNull("Illegal property name " + propertyName, coord);
+			Assert.assertEquals((int)expectedValue, coord.intValue());
+			return;
+		}
 		Assert.fail("Unrecognized objectName " + objectName);
 	}
 

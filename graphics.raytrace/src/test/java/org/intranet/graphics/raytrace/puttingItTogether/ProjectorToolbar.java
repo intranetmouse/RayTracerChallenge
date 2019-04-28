@@ -1,6 +1,7 @@
 package org.intranet.graphics.raytrace.puttingItTogether;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
@@ -26,6 +27,9 @@ public class ProjectorToolbar
 
 		add(time, BorderLayout.EAST);
 
+		toolBar.setMinimumSize(new Dimension(0, 32));
+		toolBar.setPreferredSize(new Dimension(0, 32));
+
 		toolBar.setFloatable(false);
 		add(toolBar);
 		setProjectors(projectors);
@@ -47,19 +51,20 @@ public class ProjectorToolbar
 					Thread thread = new Thread(() -> performRender(projector));
 					thread.start();
 				}
-
-				private void performRender(Projector projector)
-				{
-					long startTime = System.currentTimeMillis();
-					projector.projectToCanvas(canvas);
-
-					long durationMs = System.currentTimeMillis() -
-						startTime;
-					time.setText(String.format("Time: %.3f seconds",
-						durationMs / 1000.0));
-					repaint();
-				}
 			});
 		}
+		toolBar.repaint();
+	}
+
+	private void performRender(Projector projector)
+	{
+		long startTime = System.currentTimeMillis();
+		projector.projectToCanvas(canvas);
+
+		long durationMs = System.currentTimeMillis() -
+			startTime;
+		time.setText(String.format("Time: %.3f seconds",
+			durationMs / 1000.0));
+		repaint();
 	}
 }
