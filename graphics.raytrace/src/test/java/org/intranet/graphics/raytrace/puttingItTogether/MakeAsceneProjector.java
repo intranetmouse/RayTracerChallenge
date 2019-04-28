@@ -19,7 +19,7 @@ public final class MakeAsceneProjector
 	{ return "Make a Scene"; }
 
 	@Override
-	public void projectToCanvas(Canvas canvas)
+	public void projectToCanvas(Canvas canvas, boolean parallel)
 	{
 		World world = makeWorld();
 
@@ -27,7 +27,7 @@ public final class MakeAsceneProjector
 		camera.setTransform(Matrix.newView(new Point(0, 1.5, -5),
 			new Point(0, 1, 0), new Vector(0, 1, 0)));
 
-		camera.render(world, canvas, true);
+		camera.render(world, canvas, parallel);
 	}
 
 	private World makeWorld()

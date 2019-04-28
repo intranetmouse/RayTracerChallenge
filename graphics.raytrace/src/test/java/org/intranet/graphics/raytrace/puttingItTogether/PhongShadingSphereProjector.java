@@ -1,5 +1,8 @@
 package org.intranet.graphics.raytrace.puttingItTogether;
 
+import java.util.stream.StreamSupport;
+
+import org.intranet.graphics.raytrace.AcrossDownTraversal;
 import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.Color;
 import org.intranet.graphics.raytrace.Intersection;
@@ -31,7 +34,7 @@ public class PhongShadingSphereProjector
 	}
 
 	@Override
-	public void projectToCanvas(Canvas canvas)
+	public void projectToCanvas(Canvas canvas, boolean parallel)
 	{
 		Point rayOrigin = new Point(0, 0, -5);
 		double wallZ = 10;
@@ -53,11 +56,11 @@ public class PhongShadingSphereProjector
 
 		double pixelSize = wallSize / Math.min(screenWidth, screenHeight);
 
-		for (int screenY = 0; screenY < screenHeight; screenY++)
-		{
-			double worldY = halfWallHeight - screenY * pixelSize;
-			for (int screenX = 0; screenX < screenWidth; screenX++)
-			{
+		StreamSupport.stream(new AcrossDownTraversal(screenWidth, screenHeight), parallel)
+			.forEach(pixel -> {
+				int screenY = pixel.getY();
+				int screenX = pixel.getX();
+				double worldY = halfWallHeight - screenY * pixelSize;
 				double worldX = -halfWallWidth + screenX * pixelSize;
 				Ray ray = new Ray(rayOrigin, new Vector(worldX, worldY, wallZ).normalize());
 
@@ -69,8 +72,7 @@ public class PhongShadingSphereProjector
 						light);
 					canvas.writePixel(screenX, screenY, colorAtPoint);
 				}
-			}
-		}
+			});
 	}
 
 	private Color determineColorAtPoint(IntersectionList ilist, Ray ray,

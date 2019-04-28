@@ -46,6 +46,8 @@ public final class CanvasComponent
 		Dimension canvasSize = new Dimension(canvas.getWidth(), canvas.getHeight());
 		setMinimumSize(canvasSize);
 		setPreferredSize(canvasSize);
+		revalidate();
+		repaint();
 	}
 
 	@Override

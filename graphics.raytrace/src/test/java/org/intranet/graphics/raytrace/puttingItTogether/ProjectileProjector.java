@@ -45,7 +45,7 @@ public class ProjectileProjector
 		int canvasWidth = 900;
 		Canvas canvas = new Canvas(canvasWidth, canvasHeight);
 
-		new ProjectileProjector().projectToCanvas(canvas);
+		new ProjectileProjector().projectToCanvas(canvas, false);
 		return canvas;
 	}
 
@@ -54,7 +54,7 @@ public class ProjectileProjector
 	{ return "Projectile"; }
 
 	@Override
-	public void projectToCanvas(Canvas canvas)
+	public void projectToCanvas(Canvas canvas, boolean parallel)
 	{
 		// projectile starts one unit above the origin.
 		// velocity is normalized to 1 unit/tick.

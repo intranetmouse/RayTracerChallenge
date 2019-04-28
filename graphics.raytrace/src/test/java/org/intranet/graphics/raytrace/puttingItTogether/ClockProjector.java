@@ -1,6 +1,7 @@
 package org.intranet.graphics.raytrace.puttingItTogether;
 
 import java.io.IOException;
+import java.util.stream.IntStream;
 
 import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.Color;
@@ -18,13 +19,13 @@ public class ClockProjector
 		int imageHeight = 301;
 		Canvas canvas = new Canvas(imageWidth, imageHeight);
 
-		projectToCanvas(canvas);
+		projectToCanvas(canvas, false);
 
 		canvas.writeFile("clock.ppm");
 	}
 
 	@Override
-	public void projectToCanvas(Canvas canvas)
+	public void projectToCanvas(Canvas canvas, boolean parallel)
 	{
 		int imageWidth = Math.min(canvas.getWidth(), canvas.getHeight());
 		int imageCenter = imageWidth / 2 + 1;
@@ -40,13 +41,15 @@ public class ClockProjector
 		Color red = new Color(1, 0, 1);
 		Color color = new Color(1, 1, 0);
 
-		for (int i = 0; i < 12; i++)
-		{
+		IntStream stream = IntStream.range(0, 12);
+		if (parallel) stream = stream.parallel();
+		stream.forEach(i -> {
 			Matrix rotate = Matrix.newRotationZ(Math.PI / 6 * i);
 			Point transformedPoint = scaleMove.multiply(rotate).multiply(p);
 			canvas.writePixel((int)transformedPoint.getX(),
 				(int)transformedPoint.getY(), color);
-		}
+		});
+
 		for (int i = imageCenter - 1; i <= imageCenter + 1; i++)
 			for (int j = imageCenter - 1; j <= imageCenter + 1; j++)
 				canvas.writePixel(i, j, red);

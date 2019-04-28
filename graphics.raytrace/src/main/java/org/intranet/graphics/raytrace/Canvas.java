@@ -10,18 +10,27 @@ public class Canvas
 {
 	private int width;
 	public int getWidth() { return width; }
-	public void setWidth(int value) { width = value; }
 
 	private int height;
 	public int getHeight() { return height; }
-	public void setHeight(int value) { height = value; }
+
+	public void resize(int width, int height)
+	{
+		this.width = width;
+		this.height = height;
+		initSize(width, height);
+		fireResized();
+	}
 
 	private Color[][] pixels;
 
 	public Canvas(int width, int height)
 	{
-		this.width = width;
-		this.height = height;
+		resize(width, height);
+	}
+
+	private void initSize(int width, int height)
+	{
 		pixels = new Color[height][];
 		for (int row = 0; row < height; row++)
 		{
@@ -55,15 +64,20 @@ public class Canvas
 	{ canvasListeners.add(l); }
 	public void removeCanvasListener(CanvasListener l)
 	{ canvasListeners.remove(l); }
-	public void firePixelUpdated(int x, int y, Color color)
+	private void firePixelUpdated(int x, int y, Color color)
 	{
 		for (CanvasListener l : canvasListeners)
 			l.pixelUpdated(x, y, color);
 	}
-	public void fireAllPixelsUpdated()
+	private void fireAllPixelsUpdated()
 	{
 		for (CanvasListener l : canvasListeners)
 			l.allPixelsUpdated();
+	}
+	private void fireResized()
+	{
+		for (CanvasListener l : canvasListeners)
+			l.resized(width, height);
 	}
 
 	public List<String> toPpm()

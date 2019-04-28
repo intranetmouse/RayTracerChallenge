@@ -3,8 +3,11 @@ package org.intranet.graphics.raytrace.puttingItTogether;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
@@ -19,13 +22,34 @@ public class ProjectorToolbar
 	private final Canvas canvas;
 	private final JLabel time = new JLabel();
 
+	private boolean parallel;
+
 	ProjectorToolbar(Canvas canvas, Projector... projectors)
 	{
 		super(new BorderLayout());
 		this.canvas = canvas;
 		setOpaque(false);
 
-		add(time, BorderLayout.EAST);
+		JPanel eastPanel = new JPanel();
+		eastPanel.setOpaque(false);
+		add(eastPanel, BorderLayout.EAST);
+
+		JComboBox<Resolution> resolutionCombo = new JComboBox<>(Resolution.resolutions);
+		resolutionCombo.addItemListener(itemEvent -> {
+				if (itemEvent.getStateChange() != ItemEvent.SELECTED)
+					return;
+				Resolution res = (Resolution)itemEvent.getItem();
+				canvas.resize(res.getWidth(), res.getHeight());
+			}
+		);
+		resolutionCombo.setSelectedItem(Resolution.HDTV_360p);
+
+		JCheckBox parallelCkb = new JCheckBox("Parallel", parallel);
+		parallelCkb.addActionListener(e -> parallel = parallelCkb.isSelected());
+
+		eastPanel.add(time);
+		eastPanel.add(parallelCkb);
+		eastPanel.add(resolutionCombo);
 
 		toolBar.setMinimumSize(new Dimension(0, 32));
 		toolBar.setPreferredSize(new Dimension(0, 32));
@@ -59,7 +83,7 @@ public class ProjectorToolbar
 	private void performRender(Projector projector)
 	{
 		long startTime = System.currentTimeMillis();
-		projector.projectToCanvas(canvas);
+		projector.projectToCanvas(canvas, parallel);
 
 		long durationMs = System.currentTimeMillis() -
 			startTime;
