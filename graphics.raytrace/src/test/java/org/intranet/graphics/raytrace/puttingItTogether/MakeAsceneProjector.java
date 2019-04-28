@@ -4,11 +4,11 @@ import org.intranet.graphics.raytrace.Camera;
 import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.Color;
 import org.intranet.graphics.raytrace.Material;
-import org.intranet.graphics.raytrace.PointLight;
 import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.shape.Sphere;
 
 public final class MakeAsceneProjector

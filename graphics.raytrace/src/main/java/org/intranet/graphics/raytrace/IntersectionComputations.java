@@ -31,7 +31,7 @@ public final class IntersectionComputations
 
 	public Color shadeHit(World world)
 	{
-		List<PointLight> lightSources = world.getLightSources();
+		List<Light> lightSources = world.getLightSources();
 		return lightSources.stream()
 			.map(lightSource -> Tracer.lighting(getObject().getMaterial(),
 				lightSource, overPoint, eyeVector, normalVector,

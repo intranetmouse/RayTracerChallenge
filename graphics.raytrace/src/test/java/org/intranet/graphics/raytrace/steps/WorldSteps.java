@@ -5,8 +5,8 @@ import java.util.List;
 import org.intranet.graphics.raytrace.Color;
 import org.intranet.graphics.raytrace.IntersectionComputations;
 import org.intranet.graphics.raytrace.IntersectionList;
+import org.intranet.graphics.raytrace.Light;
 import org.intranet.graphics.raytrace.Material;
-import org.intranet.graphics.raytrace.PointLight;
 import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.Tracer;
@@ -14,6 +14,7 @@ import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.shape.DefaultWorld;
+import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.shape.Sphere;
 import org.junit.Assert;
 
@@ -184,7 +185,7 @@ public class WorldSteps
 	public void wHasNoLightSource(String worldName)
 	{
 		World w = data.getWorld(worldName);
-		List<PointLight> lightSources = w.getLightSources();
+		List<Light> lightSources = w.getLightSources();
 		Assert.assertEquals(0, lightSources.size());
 	}
 

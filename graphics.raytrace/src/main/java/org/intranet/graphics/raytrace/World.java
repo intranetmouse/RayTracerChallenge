@@ -5,10 +5,10 @@ import java.util.List;
 
 public class World
 {
-	List<PointLight> lightSources = new ArrayList<>();
-	public List<PointLight> getLightSources()
+	List<Light> lightSources = new ArrayList<>();
+	public List<Light> getLightSources()
 	{ return lightSources; }
-	public void addLight(PointLight pointLight)
+	public void addLight(Light pointLight)
 	{ lightSources.add(pointLight); }
 
 	List<Shape> sceneObjects = new ArrayList<>();

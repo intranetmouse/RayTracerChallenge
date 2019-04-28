@@ -5,7 +5,7 @@ import org.intranet.graphics.raytrace.primitive.Vector;
 
 public final class Tracer
 {
-	public static Color lighting(Material m, PointLight light, Point position,
+	public static Color lighting(Material m, Light light, Point position,
 		Vector eyeV, Vector normalV, boolean inShadow)
 	{
 		Pattern p = m.getPattern();

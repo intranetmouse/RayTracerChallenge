@@ -1,5 +1,7 @@
-package org.intranet.graphics.raytrace;
+package org.intranet.graphics.raytrace.shape;
 
+import org.intranet.graphics.raytrace.Color;
+import org.intranet.graphics.raytrace.Light;
 import org.intranet.graphics.raytrace.primitive.Point;
 
 public class PointLight
