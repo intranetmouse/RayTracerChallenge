@@ -22,9 +22,10 @@ public final class ToolbarCanvasProjectorUi
 	{
 		super(new BorderLayout());
 
-		add(new ProjectorToolbar(projectileCanvas, projectors), BorderLayout.NORTH);
+		add(new ProjectorToolbar(projectileCanvas, projectors),
+			BorderLayout.NORTH);
 
-		CanvasComponent projectileCanvasComp = new CanvasComponent(projectileCanvas);
-		add(projectileCanvasComp, BorderLayout.CENTER);
+		CanvasComponent canvasComp = new CanvasComponent(projectileCanvas);
+		add(canvasComp, BorderLayout.CENTER);
 	}
 }

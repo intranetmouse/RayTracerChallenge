@@ -43,8 +43,16 @@ public class ProjectorToolbar
 				public void actionPerformed(ActionEvent e)
 				{
 					canvas.clear();
+
+					Thread thread = new Thread(() -> performRender(projector));
+					thread.start();
+				}
+
+				private void performRender(Projector projector)
+				{
 					long startTime = System.currentTimeMillis();
 					projector.projectToCanvas(canvas);
+
 					long durationMs = System.currentTimeMillis() -
 						startTime;
 					time.setText(String.format("Time: %.3f seconds",

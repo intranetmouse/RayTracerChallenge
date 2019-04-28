@@ -2,6 +2,7 @@ package org.intranet.graphics.raytrace.puttingItTogether;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 import javax.swing.JComponent;
 
@@ -51,10 +52,18 @@ public final class CanvasComponent
 	public void paintComponent(Graphics g)
 	{
 		g.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
-		for (int col = 0; col < canvas.getWidth(); col++)
+		Rectangle bounds = g.getClipBounds();
+		int minCol = Math.max(bounds.x, 0);
+		int maxCol = Math.min(bounds.x + bounds.width, canvas.getWidth());
+		int minRow = Math.max(bounds.y, 0);
+		int maxRow = Math.min(bounds.y + bounds.height, canvas.getHeight());
+
+		for (int col = minCol; col < maxCol; col++)
 		{
-			for (int row = 0; row < canvas.getHeight(); row++)
+			for (int row = minRow; row < maxRow; row++)
 			{
+				if (!g.hitClip(col, row, 1, 1))
+					continue;
 				Color color = canvas.getPixelColor(col, row);
 				try
 				{
