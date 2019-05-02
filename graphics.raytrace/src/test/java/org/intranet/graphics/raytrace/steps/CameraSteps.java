@@ -8,6 +8,7 @@ import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.puttingItTogether.CanvasTraversalType;
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
@@ -89,7 +90,8 @@ public class CameraSteps
 		Camera camera = data.getCamera(cameraName);
 		World world = data.getWorld(worldName);
 		Canvas canvas = new Canvas(camera.getHsize(), camera.getVsize());
-		camera.render(world, canvas, false);
+		camera.render(world, canvas, false,
+			CanvasTraversalType.AcrossDown.getTraversal(canvas));
 		data.put(imageName, canvas);
 	}
 

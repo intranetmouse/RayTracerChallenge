@@ -1,9 +1,11 @@
 package org.intranet.graphics.raytrace.steps;
 
 import java.util.Spliterator;
+import java.util.Spliterators.AbstractSpliterator;
 
 import org.intranet.graphics.raytrace.AcrossDownTraversal;
 import org.intranet.graphics.raytrace.PixelCoordinate;
+import org.intranet.graphics.raytrace.ScatteredTraversal;
 import org.junit.Assert;
 
 import cucumber.api.java.en.Given;
@@ -19,11 +21,14 @@ public class PixelCoordinateSteps
 		super(data);
 	}
 
-	@Given(wordPattern + " ← acrossDownTraversal\\(" + twoIntsPattern + "\\)")
-	public void tAcrossDownTraversal(String traversalName, int width,
+	@Given(wordPattern + " ← (acrossDownTraversal|scatteredTraversal)\\(" + twoIntsPattern + "\\)")
+	public void tAcrossDownTraversal(String traversalName, String traversalType, int width,
 		int height)
 	{
-		AcrossDownTraversal traversal = new AcrossDownTraversal(width, height);
+		AbstractSpliterator<PixelCoordinate> traversal =
+			"acrossDownTraversal".equals(traversalType)
+			? new AcrossDownTraversal(width, height)
+			: new ScatteredTraversal(width, height, null);
 		data.put(traversalName, traversal);
 	}
 

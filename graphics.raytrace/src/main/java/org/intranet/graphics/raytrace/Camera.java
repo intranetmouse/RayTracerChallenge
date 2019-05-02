@@ -1,5 +1,6 @@
 package org.intranet.graphics.raytrace;
 
+import java.util.Spliterators.AbstractSpliterator;
 import java.util.stream.StreamSupport;
 
 import org.intranet.graphics.raytrace.primitive.Matrix;
@@ -27,6 +28,7 @@ public class Camera
 		this.vsize = vsize;
 		this.fieldOfView = fieldOfView;
 		this.transform = transform;
+		updatePixelSize();
 	}
 
 	public Camera(int hsize, int vsize, double fieldOfView)
@@ -36,9 +38,10 @@ public class Camera
 
 	double halfWidth;
 	double halfHeight;
-	double pixelSize;
 
-	public double getPixelSize()
+	double pixelSize;
+	public double getPixelSize() { return pixelSize; }
+	public void updatePixelSize()
 	{
 		double halfView = Math.tan(fieldOfView / 2);
 		double aspectRatio = hsize * 1.0 / vsize;
@@ -53,7 +56,6 @@ public class Camera
 			halfWidth = halfView * aspectRatio;
 		}
 		pixelSize = halfWidth * 2 / hsize;
-		return pixelSize;
 	}
 
 	public Ray rayForPixel(PixelCoordinate coord)
@@ -77,12 +79,12 @@ public class Camera
 		return new Ray(origin, direction);
 	}
 
-	public void render(World world, Canvas image, boolean parallel)
+	public void render(World world, Canvas image, boolean parallel,
+		AbstractSpliterator<PixelCoordinate> traversal)
 	{
 		hsize = image.getWidth();
 		vsize = image.getHeight();
-		getPixelSize();
-		StreamSupport.stream(new AcrossDownTraversal(hsize, vsize), parallel)
+		StreamSupport.stream(traversal, parallel)
 			.forEach(pixel -> {
 				Ray ray = rayForPixel(pixel);
 				Color color = Tracer.colorAt(world, ray);

@@ -23,6 +23,7 @@ public class ProjectorToolbar
 	private final JLabel time = new JLabel();
 
 	private boolean parallel;
+	private Projector[] allProjectors;
 
 	ProjectorToolbar(Canvas canvas, Projector... projectors)
 	{
@@ -36,19 +37,37 @@ public class ProjectorToolbar
 
 		JComboBox<Resolution> resolutionCombo = new JComboBox<>(Resolution.resolutions);
 		resolutionCombo.addItemListener(itemEvent -> {
-				if (itemEvent.getStateChange() != ItemEvent.SELECTED)
-					return;
-				Resolution res = (Resolution)itemEvent.getItem();
+			if (itemEvent.getStateChange() != ItemEvent.SELECTED)
+				return;
+			Resolution res = (Resolution)itemEvent.getItem();
+			if (res != null)
 				canvas.resize(res.getWidth(), res.getHeight());
-			}
-		);
+		});
 		resolutionCombo.setSelectedItem(Resolution.HDTV_360p);
+
+		JComboBox<CanvasTraversalType> traversalCombo = new JComboBox<>(CanvasTraversalType.values());
+		traversalCombo.setSelectedItem(CanvasTraversalType.AcrossDown);
+		traversalCombo.addItemListener(itemEvent -> {
+			if (itemEvent.getStateChange() != ItemEvent.SELECTED)
+				return;
+			CanvasTraversalType traversalType = (CanvasTraversalType)itemEvent.getItem();
+			if (traversalType == null)
+				return;
+			for (Projector projector : allProjectors)
+			{
+				if (!(projector instanceof WorldProjector))
+					continue;
+				WorldProjector worldProjector = (WorldProjector)projector;
+				worldProjector.setTraversalType(traversalType);
+			}
+		});
 
 		JCheckBox parallelCkb = new JCheckBox("Parallel", parallel);
 		parallelCkb.addActionListener(e -> parallel = parallelCkb.isSelected());
 
 		eastPanel.add(time);
 		eastPanel.add(parallelCkb);
+		eastPanel.add(traversalCombo);
 		eastPanel.add(resolutionCombo);
 
 		toolBar.setMinimumSize(new Dimension(0, 32));
@@ -61,6 +80,7 @@ public class ProjectorToolbar
 
 	public void setProjectors(Projector... projectors)
 	{
+		allProjectors = projectors;
 		toolBar.removeAll();
 		for (Projector projector : projectors)
 		{

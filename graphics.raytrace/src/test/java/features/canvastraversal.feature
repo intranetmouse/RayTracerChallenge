@@ -51,3 +51,44 @@ Scenario: Basic Across Down Traversal - Square 2x2
 
   When fifth ← getPixelCoordinate(t)
   Then fifth is null
+
+
+Scenario: Scattered Traversal - Single Point
+  Given t ← scatteredTraversal(1, 1)
+
+  When first ← getPixelCoordinate(t)
+  Then first.x = 0
+  And first.y = 0
+
+  When second ← getPixelCoordinate(t)
+  Then second is null
+
+Scenario: Scattered Traversal - Wide
+  Given t ← scatteredTraversal(2, 1)
+
+  When first ← getPixelCoordinate(t)
+  Then first.x = 1
+  And first.y = 0
+
+  When second ← getPixelCoordinate(t)
+  Then second.x = 0
+  And second.y = 0
+
+  When third ← getPixelCoordinate(t)
+  Then third is null
+
+
+Scenario: Scattered Traversal - Tall
+  Given t ← scatteredTraversal(1, 2)
+
+  When first ← getPixelCoordinate(t)
+  Then first.x = 0
+  And first.y = 1
+
+  When second ← getPixelCoordinate(t)
+  Then second.x = 0
+  And second.y = 0
+
+  When third ← getPixelCoordinate(t)
+  Then third is null
+  
