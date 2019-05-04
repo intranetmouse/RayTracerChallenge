@@ -31,7 +31,7 @@ public final class ScatteredTraversal
 		return rect.width > 0 && rect.height > 0;
 	}
 
-	private synchronized void swapNextLevelToCurrent()
+	private void swapNextLevelToCurrent()
 	{
 		List<Rectangle> temp = nextLevel;
 		nextLevel = currentLevel;
