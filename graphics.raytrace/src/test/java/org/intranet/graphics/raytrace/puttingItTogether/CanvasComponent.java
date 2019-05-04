@@ -16,6 +16,29 @@ public final class CanvasComponent
 	private static final long serialVersionUID = 1L;
 	private final Canvas canvas;
 
+	public enum RepaintMode
+	{
+		UPDATE_PER_PIXEL {
+			@Override
+			public void pixelUpdated(CanvasComponent c, int x, int y)
+			{ c.repaint(x, y, 1, 1); }
+		},
+		UPDATE_PERIODICALLY {
+			@Override
+			public void pixelUpdated(CanvasComponent c, int x, int y)
+			{ c.repaint(500); }
+		}, UPDATE_AT_END{
+			@Override
+			public void pixelUpdated(CanvasComponent c, int x, int y)
+			{ }
+		};
+		public abstract void pixelUpdated(CanvasComponent c, int x, int y);
+	}
+
+	private RepaintMode repaintMode = RepaintMode.UPDATE_PER_PIXEL;
+	public RepaintMode getRepaintMode() { return repaintMode; }
+	public void setRepaintMode(RepaintMode value) { repaintMode = value; }
+
 	public CanvasComponent(Canvas c)
 	{
 		c.addCanvasListener(new CanvasListener() {
@@ -28,7 +51,7 @@ public final class CanvasComponent
 			@Override
 			public void pixelUpdated(int x, int y, Color color)
 			{
-				repaint(x, y, 1, 1);
+				repaintMode.pixelUpdated(CanvasComponent.this, x, y);
 			}
 
 			@Override

@@ -90,5 +90,6 @@ public class Camera
 				Color color = Tracer.colorAt(world, ray);
 				image.writePixel(pixel.getX(), pixel.getY(), color);
 			});
+		image.setDone(true);
 	}
 }

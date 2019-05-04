@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
 import org.intranet.graphics.raytrace.Canvas;
+import org.intranet.graphics.raytrace.puttingItTogether.CanvasComponent.RepaintMode;
 
 public class ProjectorToolbar
 	extends JPanel
@@ -25,7 +26,7 @@ public class ProjectorToolbar
 	private boolean parallel;
 	private Projector[] allProjectors;
 
-	ProjectorToolbar(Canvas canvas, Projector... projectors)
+	ProjectorToolbar(Canvas canvas, CanvasComponent canvasComponent, Projector... projectors)
 	{
 		super(new BorderLayout());
 		this.canvas = canvas;
@@ -44,6 +45,16 @@ public class ProjectorToolbar
 				canvas.resize(res.getWidth(), res.getHeight());
 		});
 		resolutionCombo.setSelectedItem(Resolution.HDTV_360p);
+
+		JComboBox<RepaintMode> repaintCombo = new JComboBox<>(RepaintMode.values());
+		repaintCombo.setSelectedItem(canvasComponent.getRepaintMode());
+		repaintCombo.addItemListener(itemEvent -> {
+			if (itemEvent.getStateChange() != ItemEvent.SELECTED)
+				return;
+			RepaintMode mode = (RepaintMode)itemEvent.getItem();
+			if (mode != null)
+				canvasComponent.setRepaintMode(mode);
+		});
 
 		JComboBox<CanvasTraversalType> traversalCombo = new JComboBox<>(CanvasTraversalType.values());
 		traversalCombo.setSelectedItem(CanvasTraversalType.AcrossDown);
@@ -68,6 +79,7 @@ public class ProjectorToolbar
 		eastPanel.add(time);
 		eastPanel.add(parallelCkb);
 		eastPanel.add(traversalCombo);
+		eastPanel.add(repaintCombo);
 		eastPanel.add(resolutionCombo);
 
 		toolBar.setMinimumSize(new Dimension(0, 32));

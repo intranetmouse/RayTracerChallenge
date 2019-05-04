@@ -13,16 +13,16 @@ public final class ToolbarCanvasProjectorUi
 	private static final long serialVersionUID = 1L;
 	private final Canvas projectileCanvas = new Canvas(200, 200);
 
-	public ToolbarCanvasProjectorUi(List<Projector> projectors)
+	public ToolbarCanvasProjectorUi(CanvasComponent canvasComponent, List<Projector> projectors)
 	{
-		this(projectors.toArray(new Projector[projectors.size()]));
+		this(canvasComponent, projectors.toArray(new Projector[projectors.size()]));
 	}
 
-	public ToolbarCanvasProjectorUi(Projector ... projectors)
+	public ToolbarCanvasProjectorUi(CanvasComponent canvasComponent, Projector ... projectors)
 	{
 		super(new BorderLayout());
 
-		add(new ProjectorToolbar(projectileCanvas, projectors),
+		add(new ProjectorToolbar(projectileCanvas, canvasComponent),
 			BorderLayout.NORTH);
 
 		CanvasComponent canvasComp = new CanvasComponent(projectileCanvas);

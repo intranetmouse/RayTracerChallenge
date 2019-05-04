@@ -10,10 +10,10 @@ public final class TabbedProjectorUi
 	private static final long serialVersionUID = 1L;
 
 	public TabbedProjectorUi(
-		List<ProjectorGroup> projectorGroups)
+		List<ProjectorGroup> projectorGroups, CanvasComponent canvasComponent)
 	{
 		for (ProjectorGroup group : projectorGroups)
 			addTab(group.getName(),
-				new ToolbarCanvasProjectorUi(group.getProjectors()));
+				new ToolbarCanvasProjectorUi(canvasComponent, group.getProjectors()));
 	}
 }

@@ -2,6 +2,7 @@ package org.intranet.graphics.raytrace;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.Spliterator;
@@ -19,15 +20,22 @@ public final class ScatteredTraversal
 	private Rectangle removeCurrent()
 	{
 		int currentSize = currentLevel.size();
-		int idx = r == null ? currentSize - 1 : r.nextInt(currentSize);
+		int idx = currentSize - 1;
 		return currentLevel.remove(idx);
 	}
 
 	private List<Rectangle> nextLevel = new ArrayList<>();
-	private void addToNextLevel(Rectangle rect)
+
+	private boolean hasArea(Rectangle rect)
 	{
-		if (rect.width > 0 && rect.height > 0)
-			nextLevel.add(rect);
+		return rect.width > 0 && rect.height > 0;
+	}
+
+	private synchronized void swapNextLevelToCurrent()
+	{
+		List<Rectangle> temp = nextLevel;
+		nextLevel = currentLevel;
+		currentLevel = temp;
 	}
 
 	public ScatteredTraversal(int width, int height, Long seed)
@@ -51,34 +59,51 @@ public final class ScatteredTraversal
 		Rectangle curr = removeCurrent();
 //System.out.println(" Processing curr="+curr);
 
-		int centerX = curr.x + curr.width / 2;
-		int centerY = curr.y + curr.height / 2;
-		action.accept(new PixelCoordinate(centerX, centerY));
+		PixelCoordinate chosenPoint = choosePointInRectangle(curr);
+		action.accept(chosenPoint);
 
-		Rectangle upperLeft = new Rectangle(curr.x, curr.y,
-			centerX - curr.x + 1, centerY - curr.y);
-		addToNextLevel(upperLeft);
-		Rectangle upperRight = new Rectangle(centerX + 1, curr.y,
-			curr.x + curr.width - centerX - 1, centerY - curr.y + 1);
-		addToNextLevel(upperRight);
-		Rectangle lowerLeft = new Rectangle(curr.x, centerY,
-			centerX - curr.x, curr.y + curr.height - centerY);
-		addToNextLevel(lowerLeft);
-		Rectangle lowerRight = new Rectangle(centerX, centerY + 1,
-			curr.x + curr.width - centerX, curr.y + curr.height - centerY - 1);
-		addToNextLevel(lowerRight);
+		List<Rectangle> newRectangles =
+			subdivideRectangleAroundPoint(curr, chosenPoint);
+		nextLevel.addAll(newRectangles);
 
 //System.out.println(" centerX="+centerX+",centerY="+centerY+", nextLevel="+nextLevel);
 
 		if (currentLevel.size() == 0)
 		{
-			List<Rectangle> temp = nextLevel;
-			nextLevel = currentLevel;
-			currentLevel = temp;
+			swapNextLevelToCurrent();
+			if (r != null)
+				Collections.shuffle(currentLevel, r);
 		}
 		if (currentLevel.size() == 0)
 			done = true;
 
 		return true;
+	}
+
+	private List<Rectangle> subdivideRectangleAroundPoint(Rectangle curr,
+		PixelCoordinate chosenPoint)
+	{
+		List<Rectangle> newRectangles = new ArrayList<>();
+		Rectangle upperLeft = new Rectangle(curr.x, curr.y,
+			chosenPoint.getX() - curr.x + 1, chosenPoint.getY() - curr.y);
+		if (hasArea(upperLeft)) newRectangles.add(upperLeft);
+		Rectangle upperRight = new Rectangle(chosenPoint.getX() + 1, curr.y,
+			curr.x + curr.width - chosenPoint.getX() - 1, chosenPoint.getY() - curr.y + 1);
+		if (hasArea(upperRight)) newRectangles.add(upperRight);
+		Rectangle lowerLeft = new Rectangle(curr.x, chosenPoint.getY(),
+			chosenPoint.getX() - curr.x, curr.y + curr.height - chosenPoint.getY());
+		if (hasArea(lowerLeft)) newRectangles.add(lowerLeft);
+		Rectangle lowerRight = new Rectangle(chosenPoint.getX(), chosenPoint.getY() + 1,
+			curr.x + curr.width - chosenPoint.getX(), curr.y + curr.height - chosenPoint.getY() - 1);
+		if (hasArea(lowerRight)) newRectangles.add(lowerRight);
+		return newRectangles;
+	}
+
+	private PixelCoordinate choosePointInRectangle(Rectangle curr)
+	{
+		int centerX = curr.x + curr.width / 2;
+		int centerY = curr.y + curr.height / 2;
+		PixelCoordinate chosenPoint = new PixelCoordinate(centerX, centerY);
+		return chosenPoint;
 	}
 }

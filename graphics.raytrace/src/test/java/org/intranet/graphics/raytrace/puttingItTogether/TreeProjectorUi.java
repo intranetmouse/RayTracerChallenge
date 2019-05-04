@@ -25,7 +25,7 @@ public class TreeProjectorUi
 		boxbar.setOpaque(false);
 		add(boxbar, BorderLayout.CENTER);
 
-		ProjectorToolbar renderBar = new ProjectorToolbar(canvas);
+		ProjectorToolbar renderBar = new ProjectorToolbar(canvas, canvasComponent);
 		boxbar.add(renderBar, BorderLayout.NORTH);
 
 		JScrollPane jsp = new JScrollPane(canvasComponent);

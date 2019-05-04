@@ -152,4 +152,9 @@ public class Canvas
 	{
 		writeAllPixels(new Color(0, 0, 0));
 	}
+
+	public void setDone(boolean b)
+	{
+		fireAllPixelsUpdated();
+	}
 }
