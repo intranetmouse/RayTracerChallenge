@@ -8,6 +8,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
 import org.intranet.graphics.raytrace.Canvas;
+import org.intranet.graphics.raytrace.puttingItTogether.projector.ProjectorGroup;
 
 public class TreeProjectorUi
 	extends JPanel

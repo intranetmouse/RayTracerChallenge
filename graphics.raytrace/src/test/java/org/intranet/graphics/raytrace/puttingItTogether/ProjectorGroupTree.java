@@ -9,6 +9,8 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreeSelectionModel;
 
+import org.intranet.graphics.raytrace.puttingItTogether.projector.ProjectorGroup;
+
 public class ProjectorGroupTree
 	extends JScrollPane
 	implements ProjectorSelector

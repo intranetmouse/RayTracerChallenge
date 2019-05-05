@@ -7,6 +7,8 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
+import org.intranet.graphics.raytrace.puttingItTogether.projector.ProjectorGroup;
+
 public class ProjectorGroupTreeModel
 	implements TreeModel
 {

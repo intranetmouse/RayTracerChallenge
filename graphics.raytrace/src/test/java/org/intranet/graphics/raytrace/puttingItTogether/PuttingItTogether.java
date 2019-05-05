@@ -7,6 +7,8 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import org.intranet.graphics.raytrace.puttingItTogether.projector.ProjectorGroup;
+
 public class PuttingItTogether
 {
 	public static void main(String[] args)

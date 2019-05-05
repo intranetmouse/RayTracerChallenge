@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.puttingItTogether.projector.Projector;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.junit.Test;
 

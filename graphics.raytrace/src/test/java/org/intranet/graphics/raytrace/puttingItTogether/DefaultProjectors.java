@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.intranet.graphics.raytrace.puttingItTogether.projector.Projector;
+import org.intranet.graphics.raytrace.puttingItTogether.projector.ProjectorGroup;
+
 public final class DefaultProjectors
 {
 	static List<ProjectorGroup> createDefaultProjectors()
