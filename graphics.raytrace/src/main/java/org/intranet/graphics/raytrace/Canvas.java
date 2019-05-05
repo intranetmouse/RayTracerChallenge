@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.intranet.graphics.raytrace.surface.Color;
+
 public class Canvas
 {
 	private int width;

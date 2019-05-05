@@ -3,7 +3,7 @@ package org.intranet.graphics.raytrace.steps;
 import java.util.List;
 
 import org.intranet.graphics.raytrace.Canvas;
-import org.intranet.graphics.raytrace.Color;
+import org.intranet.graphics.raytrace.surface.Color;
 import org.junit.Assert;
 
 import cucumber.api.PendingException;

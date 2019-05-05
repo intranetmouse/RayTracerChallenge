@@ -1,4 +1,4 @@
-package org.intranet.graphics.raytrace;
+package org.intranet.graphics.raytrace.surface;
 
 import org.intranet.graphics.raytrace.primitive.Tuple;
 

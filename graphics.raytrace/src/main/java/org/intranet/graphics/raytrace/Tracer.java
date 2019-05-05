@@ -2,6 +2,10 @@ package org.intranet.graphics.raytrace;
 
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.surface.Color;
+import org.intranet.graphics.raytrace.surface.Material;
+import org.intranet.graphics.raytrace.surface.Pattern;
+import org.intranet.graphics.raytrace.surface.StripePattern;
 
 public final class Tracer
 {

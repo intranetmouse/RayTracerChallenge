@@ -5,6 +5,7 @@ import java.util.List;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.surface.Color;
 
 public final class IntersectionComputations
 {

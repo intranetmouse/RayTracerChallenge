@@ -1,9 +1,9 @@
 package org.intranet.graphics.raytrace.steps;
 
-import org.intranet.graphics.raytrace.Color;
-import org.intranet.graphics.raytrace.Material;
-import org.intranet.graphics.raytrace.Pattern;
-import org.intranet.graphics.raytrace.StripePattern;
+import org.intranet.graphics.raytrace.surface.Color;
+import org.intranet.graphics.raytrace.surface.Material;
+import org.intranet.graphics.raytrace.surface.Pattern;
+import org.intranet.graphics.raytrace.surface.StripePattern;
 import org.junit.Assert;
 
 import cucumber.api.java.en.Given;

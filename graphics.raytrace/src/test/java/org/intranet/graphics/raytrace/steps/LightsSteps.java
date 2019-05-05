@@ -1,8 +1,8 @@
 package org.intranet.graphics.raytrace.steps;
 
-import org.intranet.graphics.raytrace.Color;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.shape.PointLight;
+import org.intranet.graphics.raytrace.surface.Color;
 import org.junit.Assert;
 
 import cucumber.api.java.en.Given;
