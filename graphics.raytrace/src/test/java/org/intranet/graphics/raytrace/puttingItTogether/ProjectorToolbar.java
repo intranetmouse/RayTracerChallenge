@@ -2,20 +2,14 @@ package org.intranet.graphics.raytrace.puttingItTogether;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 
 import javax.swing.AbstractAction;
-import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 
 import org.intranet.graphics.raytrace.Canvas;
@@ -62,8 +56,7 @@ public class ProjectorToolbar
 				canvasComponent.setRepaintMode(mode);
 		});
 
-		JPanel traversalPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-		ToggleButtonGroup tbg = new ToggleButtonGroup();
+		ToggleButtons traversalPanel = new ToggleButtons();
 		for (CanvasTraversalType traversalType : CanvasTraversalType.values())
 		{
 			AbstractAction toggleAction = new AbstractAction("", traversalType.getIcon()) {
@@ -75,10 +68,7 @@ public class ProjectorToolbar
 					setCanvasTraversalType(traversalType);
 				}
 			};
-			JToggleButton toggleButton = new JToggleButton(toggleAction);
-			toggleButton.setMargin(new Insets(0, 0, 0, 0));
-			tbg.add(toggleButton);
-			traversalPanel.add(toggleButton);
+			traversalPanel.addAction(toggleAction);
 		}
 
 //		JComboBox<CanvasTraversalType> traversalCombo = new JComboBox<>(CanvasTraversalType.values());
@@ -118,31 +108,6 @@ public class ProjectorToolbar
 				continue;
 			WorldProjector worldProjector = (WorldProjector)projector;
 			worldProjector.setTraversalType(traversalType);
-		}
-	}
-
-	class ToggleButtonGroup
-		extends ButtonGroup
-	{
-		private static final long serialVersionUID = 1L;
-
-		private ButtonModel prevModel;
-		private boolean isAdjusting;
-
-		@Override
-		public void setSelected(ButtonModel m, boolean b)
-		{
-			if (isAdjusting)
-				return;
-			if (m.equals(prevModel))
-			{
-				isAdjusting = true;
-				clearSelection();
-				isAdjusting = false;
-			}
-			else
-				super.setSelected(m, b);
-			prevModel = getSelection();
 		}
 	}
 
