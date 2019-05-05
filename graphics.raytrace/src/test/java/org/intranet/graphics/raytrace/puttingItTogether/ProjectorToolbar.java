@@ -2,14 +2,20 @@ package org.intranet.graphics.raytrace.puttingItTogether;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 
 import org.intranet.graphics.raytrace.Canvas;
@@ -56,29 +62,41 @@ public class ProjectorToolbar
 				canvasComponent.setRepaintMode(mode);
 		});
 
-		JComboBox<CanvasTraversalType> traversalCombo = new JComboBox<>(CanvasTraversalType.values());
-		traversalCombo.setSelectedItem(CanvasTraversalType.AcrossDown);
-		traversalCombo.addItemListener(itemEvent -> {
-			if (itemEvent.getStateChange() != ItemEvent.SELECTED)
-				return;
-			CanvasTraversalType traversalType = (CanvasTraversalType)itemEvent.getItem();
-			if (traversalType == null)
-				return;
-			for (Projector projector : allProjectors)
-			{
-				if (!(projector instanceof WorldProjector))
-					continue;
-				WorldProjector worldProjector = (WorldProjector)projector;
-				worldProjector.setTraversalType(traversalType);
-			}
-		});
+		JPanel traversalPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+		ToggleButtonGroup tbg = new ToggleButtonGroup();
+		for (CanvasTraversalType traversalType : CanvasTraversalType.values())
+		{
+			AbstractAction toggleAction = new AbstractAction("", traversalType.getIcon()) {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void actionPerformed(ActionEvent e)
+				{
+					setCanvasTraversalType(traversalType);
+				}
+			};
+			JToggleButton toggleButton = new JToggleButton(toggleAction);
+			toggleButton.setMargin(new Insets(0, 0, 0, 0));
+			tbg.add(toggleButton);
+			traversalPanel.add(toggleButton);
+		}
+
+//		JComboBox<CanvasTraversalType> traversalCombo = new JComboBox<>(CanvasTraversalType.values());
+//		traversalCombo.setSelectedItem(CanvasTraversalType.AcrossDown);
+//		traversalCombo.addItemListener(itemEvent -> {
+//			if (itemEvent.getStateChange() != ItemEvent.SELECTED)
+//				return;
+//			CanvasTraversalType traversalType = (CanvasTraversalType)itemEvent.getItem();
+//			setCanvasTraversalType(traversalType);
+//		});
 
 		JCheckBox parallelCkb = new JCheckBox("Parallel", parallel);
 		parallelCkb.addActionListener(e -> parallel = parallelCkb.isSelected());
 
 		eastPanel.add(time);
 		eastPanel.add(parallelCkb);
-		eastPanel.add(traversalCombo);
+//		eastPanel.add(traversalCombo);
+		eastPanel.add(traversalPanel);
 		eastPanel.add(repaintCombo);
 		eastPanel.add(resolutionCombo);
 
@@ -88,6 +106,44 @@ public class ProjectorToolbar
 		toolBar.setFloatable(false);
 		add(toolBar);
 		setProjectors(projectors);
+	}
+
+	private void setCanvasTraversalType(CanvasTraversalType traversalType)
+	{
+		if (traversalType == null)
+			return;
+		for (Projector projector : allProjectors)
+		{
+			if (!(projector instanceof WorldProjector))
+				continue;
+			WorldProjector worldProjector = (WorldProjector)projector;
+			worldProjector.setTraversalType(traversalType);
+		}
+	}
+
+	class ToggleButtonGroup
+		extends ButtonGroup
+	{
+		private static final long serialVersionUID = 1L;
+
+		private ButtonModel prevModel;
+		private boolean isAdjusting;
+
+		@Override
+		public void setSelected(ButtonModel m, boolean b)
+		{
+			if (isAdjusting)
+				return;
+			if (m.equals(prevModel))
+			{
+				isAdjusting = true;
+				clearSelection();
+				isAdjusting = false;
+			}
+			else
+				super.setSelected(m, b);
+			prevModel = getSelection();
+		}
 	}
 
 	public void setProjectors(Projector... projectors)

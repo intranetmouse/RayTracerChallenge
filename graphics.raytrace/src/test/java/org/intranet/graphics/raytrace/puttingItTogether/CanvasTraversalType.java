@@ -2,6 +2,8 @@ package org.intranet.graphics.raytrace.puttingItTogether;
 
 import java.util.Spliterators.AbstractSpliterator;
 
+import javax.swing.ImageIcon;
+
 import org.intranet.graphics.raytrace.AcrossDownTraversal;
 import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.PixelCoordinate;
@@ -9,7 +11,7 @@ import org.intranet.graphics.raytrace.ScatteredTraversal;
 
 public enum CanvasTraversalType
 {
-	AcrossDown {
+	AcrossDown("icon_down_across") {
 		@Override
 		public AbstractSpliterator<PixelCoordinate> getTraversal(Canvas canvas)
 		{
@@ -17,14 +19,14 @@ public enum CanvasTraversalType
 		}
 
 	},
-	QuadrantsFromEnd {
+	QuadrantsFromEnd("icon_quadrants") {
 		@Override
 		public AbstractSpliterator<PixelCoordinate> getTraversal(Canvas canvas)
 		{
 			return new ScatteredTraversal(canvas.getWidth(), canvas.getHeight(), null);
 		}
 	},
-	QuandrantsRandom {
+	QuandrantsRandom("icon_scattered") {
 		@Override
 		public AbstractSpliterator<PixelCoordinate> getTraversal(Canvas canvas)
 		{
@@ -32,4 +34,12 @@ public enum CanvasTraversalType
 		}
 	};
 	public abstract AbstractSpliterator<PixelCoordinate> getTraversal(Canvas canvas);
+
+	private final ImageIcon icon;
+	public ImageIcon getIcon() { return icon; }
+
+	CanvasTraversalType(String iconName)
+	{
+		icon = new ImageIcon(getClass().getResource(iconName + ".png"));
+	}
 }
