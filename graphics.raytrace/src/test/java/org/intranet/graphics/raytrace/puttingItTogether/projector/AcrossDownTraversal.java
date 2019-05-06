@@ -1,8 +1,10 @@
-package org.intranet.graphics.raytrace;
+package org.intranet.graphics.raytrace.puttingItTogether.projector;
 
 import java.util.Spliterator;
 import java.util.Spliterators.AbstractSpliterator;
 import java.util.function.Consumer;
+
+import org.intranet.graphics.raytrace.PixelCoordinate;
 
 public final class AcrossDownTraversal
 	extends AbstractSpliterator<PixelCoordinate>

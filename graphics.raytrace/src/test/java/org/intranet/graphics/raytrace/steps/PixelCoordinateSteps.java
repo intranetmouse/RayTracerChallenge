@@ -3,9 +3,9 @@ package org.intranet.graphics.raytrace.steps;
 import java.util.Spliterator;
 import java.util.Spliterators.AbstractSpliterator;
 
-import org.intranet.graphics.raytrace.AcrossDownTraversal;
 import org.intranet.graphics.raytrace.PixelCoordinate;
-import org.intranet.graphics.raytrace.ScatteredTraversal;
+import org.intranet.graphics.raytrace.puttingItTogether.projector.AcrossDownTraversal;
+import org.intranet.graphics.raytrace.puttingItTogether.projector.ScatteredTraversal;
 import org.junit.Assert;
 
 import cucumber.api.java.en.Given;

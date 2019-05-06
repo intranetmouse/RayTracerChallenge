@@ -2,13 +2,13 @@ package org.intranet.graphics.raytrace.puttingItTogether;
 
 import java.util.stream.StreamSupport;
 
-import org.intranet.graphics.raytrace.AcrossDownTraversal;
 import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.puttingItTogether.projector.AcrossDownTraversal;
 import org.intranet.graphics.raytrace.puttingItTogether.projector.Projector;
 import org.intranet.graphics.raytrace.shape.Sphere;
 import org.intranet.graphics.raytrace.surface.Color;
