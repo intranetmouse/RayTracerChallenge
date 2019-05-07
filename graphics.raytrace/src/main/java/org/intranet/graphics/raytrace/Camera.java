@@ -87,10 +87,15 @@ public class Camera
 		vsize = image.getHeight();
 		StreamSupport.stream(traversal, parallel)
 			.forEach(pixel -> {
-				Ray ray = rayForPixel(pixel);
-				Color color = Tracer.colorAt(world, ray);
+				Color color = renderPixel(world, pixel);
 				image.writePixel(pixel.getX(), pixel.getY(), color);
 			});
 		image.setDone(true);
+	}
+
+	private Color renderPixel(World world, PixelCoordinate pixel)
+	{
+		Ray ray = rayForPixel(pixel);
+		return Tracer.colorAt(world, ray);
 	}
 }
