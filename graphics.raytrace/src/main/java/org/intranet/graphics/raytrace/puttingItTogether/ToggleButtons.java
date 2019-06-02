@@ -7,7 +7,7 @@ import javax.swing.Action;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
-public final class ToggleButtons
+public class ToggleButtons
 	extends JPanel
 {
 	private static final long serialVersionUID = 1L;
@@ -17,11 +17,12 @@ public final class ToggleButtons
 		super(new FlowLayout(FlowLayout.LEFT, 0, 0));
 	}
 
-	public void addAction(Action toggleAction)
+	public void addAction(Action toggleAction, boolean selected)
 	{
 		JToggleButton toggleButton = new JToggleButton(toggleAction);
 		toggleButton.setMargin(new Insets(0, 0, 0, 0));
 		tbg.add(toggleButton);
 		add(toggleButton);
+		tbg.setSelected(toggleButton.getModel(), selected);
 	}
 }

@@ -3,17 +3,14 @@ package org.intranet.graphics.raytrace.puttingItTogether;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
 import org.intranet.graphics.raytrace.Canvas;
-import org.intranet.graphics.raytrace.puttingItTogether.CanvasComponent.RepaintMode;
 import org.intranet.graphics.raytrace.puttingItTogether.projector.CanvasTraversalType;
 import org.intranet.graphics.raytrace.puttingItTogether.projector.Projector;
 import org.intranet.graphics.raytrace.puttingItTogether.projector.WorldProjector;
@@ -29,7 +26,8 @@ public class ProjectorToolbar
 	private boolean parallel;
 	private Projector[] allProjectors;
 
-	ProjectorToolbar(Canvas canvas, CanvasComponent canvasComponent, Projector... projectors)
+	ProjectorToolbar(Canvas canvas, CanvasComponent canvasComponent,
+		Projector... projectors)
 	{
 		super(new BorderLayout());
 		this.canvas = canvas;
@@ -39,56 +37,23 @@ public class ProjectorToolbar
 		eastPanel.setOpaque(false);
 		add(eastPanel, BorderLayout.EAST);
 
-		JComboBox<Resolution> resolutionCombo = new JComboBox<>(Resolution.resolutions);
-		resolutionCombo.addItemListener(itemEvent -> {
-			if (itemEvent.getStateChange() != ItemEvent.SELECTED)
-				return;
-			Resolution res = (Resolution)itemEvent.getItem();
-			if (res != null)
-				canvas.resize(res.getWidth(), res.getHeight());
-		});
-		resolutionCombo.setSelectedItem(Resolution.HDTV_360p);
+		CanvasResolutionCombo resolutionCombo = new CanvasResolutionCombo(
+			Resolution.HDTV_360p,
+			res -> canvas.resize(res.getWidth(), res.getHeight()));
 
-		JComboBox<RepaintMode> repaintCombo = new JComboBox<>(RepaintMode.values());
-		repaintCombo.setSelectedItem(canvasComponent.getRepaintMode());
-		repaintCombo.addItemListener(itemEvent -> {
-			if (itemEvent.getStateChange() != ItemEvent.SELECTED)
-				return;
-			RepaintMode mode = (RepaintMode)itemEvent.getItem();
-			if (mode != null)
-				canvasComponent.setRepaintMode(mode);
-		});
+		RepaintModeCombo repaintCombo = new RepaintModeCombo(
+			canvasComponent.getRepaintMode(),
+			mode -> canvasComponent.setRepaintMode(mode));
 
-		ToggleButtons traversalPanel = new ToggleButtons();
-		for (CanvasTraversalType traversalType : CanvasTraversalType.values())
-		{
-			AbstractAction toggleAction = new AbstractAction("", traversalType.getIcon()) {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void actionPerformed(ActionEvent e)
-				{
-					setCanvasTraversalType(traversalType);
-				}
-			};
-			traversalPanel.addAction(toggleAction);
-		}
-
-//		JComboBox<CanvasTraversalType> traversalCombo = new JComboBox<>(CanvasTraversalType.values());
-//		traversalCombo.setSelectedItem(CanvasTraversalType.AcrossDown);
-//		traversalCombo.addItemListener(itemEvent -> {
-//			if (itemEvent.getStateChange() != ItemEvent.SELECTED)
-//				return;
-//			CanvasTraversalType traversalType = (CanvasTraversalType)itemEvent.getItem();
-//			setCanvasTraversalType(traversalType);
-//		});
+		ToggleButtons traversalPanel = new TraversalTypeSelection(
+			CanvasTraversalType.AcrossDown,
+			traversalType -> setCanvasTraversalType(traversalType));
 
 		JCheckBox parallelCkb = new JCheckBox("Parallel", parallel);
 		parallelCkb.addActionListener(e -> parallel = parallelCkb.isSelected());
 
 		eastPanel.add(time);
 		eastPanel.add(parallelCkb);
-//		eastPanel.add(traversalCombo);
 		eastPanel.add(traversalPanel);
 		eastPanel.add(repaintCombo);
 		eastPanel.add(resolutionCombo);
