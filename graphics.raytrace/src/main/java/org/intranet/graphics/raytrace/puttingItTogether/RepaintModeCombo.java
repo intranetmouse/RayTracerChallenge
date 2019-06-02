@@ -5,8 +5,6 @@ import java.util.function.Consumer;
 
 import javax.swing.JComboBox;
 
-import org.intranet.graphics.raytrace.puttingItTogether.CanvasComponent.RepaintMode;
-
 public final class RepaintModeCombo
 	extends JComboBox<RepaintMode>
 {
@@ -19,7 +17,7 @@ public final class RepaintModeCombo
 		addItemListener(itemEvent -> {
 			if (itemEvent.getStateChange() != ItemEvent.SELECTED)
 				return;
-			RepaintMode mode = (RepaintMode) itemEvent.getItem();
+			RepaintMode mode = (RepaintMode)itemEvent.getItem();
 			if (mode != null)
 				repaintModeSelected.accept(mode);
 		});
