@@ -38,12 +38,15 @@ public class ProjectorToolbar
 		add(eastPanel, BorderLayout.EAST);
 
 		CanvasResolutionCombo resolutionCombo = new CanvasResolutionCombo(
-			Resolution.HDTV_360p,
+			Resolution.HDTV_720p,
 			res -> canvas.resize(res.getWidth(), res.getHeight()));
 
 		RepaintModeCombo repaintCombo = new RepaintModeCombo(
 			canvasComponent.getRepaintMode(),
 			mode -> canvasComponent.setRepaintMode(mode));
+
+
+		CanvasGifWriterTool gifOption = new CanvasGifWriterTool(canvas);
 
 		ToggleButtons traversalPanel = new TraversalTypeSelection(
 			CanvasTraversalType.AcrossDown,
@@ -53,6 +56,7 @@ public class ProjectorToolbar
 		parallelCkb.addActionListener(e -> parallel = parallelCkb.isSelected());
 
 		eastPanel.add(time);
+		eastPanel.add(gifOption);
 		eastPanel.add(parallelCkb);
 		eastPanel.add(traversalPanel);
 		eastPanel.add(repaintCombo);

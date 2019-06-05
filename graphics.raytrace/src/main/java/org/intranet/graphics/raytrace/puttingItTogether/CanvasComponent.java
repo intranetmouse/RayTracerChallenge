@@ -22,25 +22,33 @@ public final class CanvasComponent
 
 	public CanvasComponent(Canvas c)
 	{
-		c.addCanvasListener(new CanvasListener() {
-			@Override
-			public void resized(int x, int y)
-			{
-				setSizeFromCanvas();
-			}
+		c.addCanvasListener(
+			new CanvasListener() {
+				@Override
+				public void resized(int x, int y)
+				{
+					setSizeFromCanvas();
+				}
 
-			@Override
-			public void pixelUpdated(int x, int y, Color color)
-			{
-				repaintMode.pixelUpdated(CanvasComponent.this, x, y);
-			}
+				@Override
+				public void initialized()
+				{
+					repaint();
+				}
 
-			@Override
-			public void allPixelsUpdated()
-			{
-				repaint();
+				@Override
+				public void pixelUpdated(int x, int y, Color color)
+				{
+					repaintMode.pixelUpdated(CanvasComponent.this, x, y);
+				}
+
+				@Override
+				public void completed()
+				{
+					repaint();
+				}
 			}
-		});
+		);
 		this.canvas = c;
 		setSizeFromCanvas();
 	}
@@ -73,7 +81,7 @@ public final class CanvasComponent
 				Color color = canvas.getPixelColor(col, row);
 				try
 				{
-					java.awt.Color awtColor = rayColorToAwtColor(color);
+					java.awt.Color awtColor = Color.rayColorToAwtColor(color);
 					g.setColor(awtColor);
 					g.drawLine(col, row, col, row);
 				}
@@ -84,14 +92,5 @@ public final class CanvasComponent
 				}
 			}
 		}
-	}
-
-	private java.awt.Color rayColorToAwtColor(Color color)
-	{
-		java.awt.Color awtColor = new java.awt.Color(
-			(int)(color.getRed() * 255.99),
-			(int)(color.getGreen() * 255.99),
-			(int)(color.getBlue() * 255.99));
-		return awtColor;
 	}
 }

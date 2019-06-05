@@ -69,4 +69,13 @@ public final class Color
 		return new Color(clip(values[0], 0.0, 1.0), clip(values[1], 0.0, 1.0),
 			clip(values[2], 0.0, 1.0));
 	}
+
+	public static final java.awt.Color rayColorToAwtColor(Color color)
+	{
+		java.awt.Color awtColor = new java.awt.Color(
+			(int)(color.getRed() * 255.99),
+			(int)(color.getGreen() * 255.99),
+			(int)(color.getBlue() * 255.99));
+		return awtColor;
+	}
 }

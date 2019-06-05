@@ -56,9 +56,10 @@ public class Canvas
 
 	public interface CanvasListener
 	{
-		void pixelUpdated(int x, int y, Color color);
-		void allPixelsUpdated();
 		void resized(int x, int y);
+		void initialized();
+		void pixelUpdated(int x, int y, Color color);
+		void completed();
 	}
 
 	private final List<CanvasListener> canvasListeners = new ArrayList<>();
@@ -66,20 +67,25 @@ public class Canvas
 	{ canvasListeners.add(l); }
 	public void removeCanvasListener(CanvasListener l)
 	{ canvasListeners.remove(l); }
+	private void fireResized()
+	{
+		for (CanvasListener l : canvasListeners)
+			l.resized(width, height);
+	}
+	private void fireInitialized()
+	{
+		for (CanvasListener l : canvasListeners)
+			l.initialized();
+	}
 	private void firePixelUpdated(int x, int y, Color color)
 	{
 		for (CanvasListener l : canvasListeners)
 			l.pixelUpdated(x, y, color);
 	}
-	private void fireAllPixelsUpdated()
+	private void fireCompleted()
 	{
 		for (CanvasListener l : canvasListeners)
-			l.allPixelsUpdated();
-	}
-	private void fireResized()
-	{
-		for (CanvasListener l : canvasListeners)
-			l.resized(width, height);
+			l.completed();
 	}
 
 	public List<String> toPpm()
@@ -134,7 +140,7 @@ public class Canvas
 		for (int w = 0; w < width; w++)
 			for (int h = 0; h < height; h++)
 				pixels[h][w] = c;
-		fireAllPixelsUpdated();
+		fireInitialized();
 	}
 
 	public void writeFile(String fname)
@@ -157,6 +163,6 @@ public class Canvas
 
 	public void setDone(boolean b)
 	{
-		fireAllPixelsUpdated();
+		fireCompleted();
 	}
 }
