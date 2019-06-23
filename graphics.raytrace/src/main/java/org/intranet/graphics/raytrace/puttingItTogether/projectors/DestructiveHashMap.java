@@ -3,6 +3,11 @@ package org.intranet.graphics.raytrace.puttingItTogether.projectors;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+* Getting an item also removes it.
+* @param <K>
+* @param <V>
+*/
 public class DestructiveHashMap<K, V>
 	extends HashMap<K, V>
 {

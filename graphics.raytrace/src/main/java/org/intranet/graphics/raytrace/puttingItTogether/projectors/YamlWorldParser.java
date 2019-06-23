@@ -102,28 +102,34 @@ public class YamlWorldParser
 
 	}
 
-	private static void parseRawMaterial(Material mat, Map<String, Object> valueMap)
+	private static void parseRawMaterial(Material mat,
+		Map<String, Object> materialMap)
 	{
-		String ambient = (String)valueMap.get("ambient");
+		materialMap = new DestructiveHashMap<>(materialMap);
+
+		String ambient = (String)materialMap.get("ambient");
 		if (ambient != null)
 			mat.setAmbient(stringToDbl(ambient));
 
-		String diffuse = (String)valueMap.get("diffuse");
+		String diffuse = (String)materialMap.get("diffuse");
 		if (diffuse != null)
 			mat.setDiffuse(stringToDbl(diffuse));
 
-		String specular = (String)valueMap.get("specular");
+		String specular = (String)materialMap.get("specular");
 		if (specular != null)
 			mat.setSpecular(stringToDbl(specular));
 
-		String shininess = (String)valueMap.get("shininess");
+		String shininess = (String)materialMap.get("shininess");
 		if (shininess != null)
 			mat.setShininess(stringToDbl(shininess));
 
 		@SuppressWarnings("unchecked")
-		List<String> colorsLst = (List<String>)valueMap.get("color");
+		List<String> colorsLst = (List<String>)materialMap.get("color");
 		if (colorsLst != null)
 			mat.setColor(listToColor(colorsLst));
+
+		if (materialMap.size() > 0)
+			System.err.printf("Leftovers for material: %s", materialMap);
 	}
 
 	private static void addObject(World world, Map<String, Object> objMap,
@@ -137,8 +143,8 @@ public class YamlWorldParser
 				String width = (String)objMap.get("width");
 				String height = (String)objMap.get("height");
 				String fieldOfView = (String)objMap.get("field-of-view");
-				Camera camera = new Camera(stringToInt(width), stringToInt(height),
-					stringToDbl(fieldOfView));
+				Camera camera = new Camera(stringToInt(width),
+					stringToInt(height), stringToDbl(fieldOfView));
 
 				@SuppressWarnings("unchecked")
 				ArrayList<String> from = (ArrayList<String>)objMap.get("from");
@@ -168,26 +174,9 @@ public class YamlWorldParser
 					(ArrayList<ArrayList<String>>)objMap.get("transform");
 				if (transformData != null)
 					parseTransform(s, transformData);
-				Object materialObj = objMap.get("material");
-				if (materialObj instanceof String)
-				{
-					Material mat = materialDefines.get(materialObj);
-					if (mat == null)
-					{
-						System.err.printf("Material %s not found\n", materialObj);
-						break;
-					}
-					s.setMaterial(mat);
-				}
-				else if (materialObj instanceof Map)
-				{
-					@SuppressWarnings("unchecked")
-					Map<String, Object> materialData =
-						(Map<String, Object>)materialObj;
-					Material mat = s.getMaterial().duplicate();
-					parseRawMaterial(mat, materialData);
-					s.setMaterial(mat);
-				}
+
+				Object materialData = objMap.get("material");
+				setMaterialForShape(s, materialData, materialDefines);
 
 				world.addSceneObjects(s);
 				break;
@@ -197,6 +186,28 @@ public class YamlWorldParser
 		}
 		if (objMap.size() > 0)
 			System.err.printf("Leftovers for type %s = %s\n", type, objMap);
+	}
+
+	private static void setMaterialForShape(Shape s, Object materialData,
+		Map<String, Material> materialDefines)
+	{
+		if (materialData instanceof String)
+		{
+			Material mat = materialDefines.get(materialData);
+			if (mat == null)
+				System.err.printf("Material %s not found\n", materialData);
+			else
+				s.setMaterial(mat);
+		}
+		else if (materialData instanceof Map)
+		{
+			@SuppressWarnings("unchecked")
+			Map<String, Object> materialMap =
+				(Map<String, Object>)materialData;
+			Material mat = s.getMaterial().duplicate();
+			parseRawMaterial(mat, materialMap);
+			s.setMaterial(mat);
+		}
 	}
 
 	private static void parseTransform(Shape s, ArrayList<ArrayList<String>> object)
