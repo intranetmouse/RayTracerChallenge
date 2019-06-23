@@ -22,15 +22,19 @@ public final class Material
 
 	private double shininess = 200.0;
 	public double getShininess() { return shininess; }
+	public void setShininess(double value) { shininess = value; }
 
 	private double reflective = 0.0;
 	public double getReflective() { return reflective; }
+	public void setReflective(double value) { reflective = value; }
 
 	private double refractive = 1.0;
 	public double getRefractive() { return refractive; }
+	public void setRefractive(double value) { refractive = value; }
 
 	private double transparency = 0.0;
 	public double getTransparency() { return transparency; }
+	public void setTransparency(double value) { transparency = value; }
 
 	private Pattern pattern;
 	public Pattern getPattern() { return pattern; }
@@ -70,5 +74,20 @@ public final class Material
 			"%s:[color=%s,ambient=%.2f,diffuse=%.2f,specular=%.2f,shininess=%.2f,reflective=%.2f,refractive=%.2f,transparency=%.2f]",
 			getClass().getSimpleName(), color, ambient, diffuse, specular,
 			shininess, reflective, refractive, transparency);
+	}
+
+	public Material duplicate()
+	{
+		Material m = new Material();
+		m.setAmbient(ambient);
+		m.setColor(color);
+		m.setDiffuse(diffuse);
+		m.setPattern(pattern);
+		m.setReflective(reflective);
+		m.setRefractive(refractive);
+		m.setShininess(shininess);
+		m.setSpecular(specular);
+		m.setTransparency(transparency);
+		return m;
 	}
 }

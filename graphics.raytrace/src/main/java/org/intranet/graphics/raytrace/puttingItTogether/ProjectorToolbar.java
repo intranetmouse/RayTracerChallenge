@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
@@ -108,7 +109,16 @@ public class ProjectorToolbar
 	private void performRender(Projector projector)
 	{
 		long startTime = System.currentTimeMillis();
-		projector.projectToCanvas(canvas, parallel);
+		try
+		{
+			projector.projectToCanvas(canvas, parallel);
+		}
+		catch (RuntimeException re)
+		{
+			JOptionPane.showMessageDialog(this, re.getMessage(),
+				"Render Failed", JOptionPane.ERROR_MESSAGE);
+			re.printStackTrace();
+		}
 
 		long durationMs = System.currentTimeMillis() -
 			startTime;

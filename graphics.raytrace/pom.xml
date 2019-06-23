@@ -14,9 +14,15 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <cucumber.version>4.2.6</cucumber.version>
     <junit.version>4.12</junit.version>
+    <yamlbeans.version>1.13</yamlbeans.version>
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>com.esotericsoftware.yamlbeans</groupId>
+      <artifactId>yamlbeans</artifactId>
+      <version>${yamlbeans.version}</version>
+    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

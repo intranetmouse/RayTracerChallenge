@@ -12,9 +12,11 @@ public class Camera
 {
 	private int hsize;
 	public int getHsize() { return hsize; }
+	public void setHsize(int value) { hsize = value; }
 
 	private int vsize;
 	public int getVsize() { return vsize; }
+	public void setVsize(int value) { vsize = value; }
 
 	private double fieldOfView;
 	public double getFieldOfView() { return fieldOfView; }

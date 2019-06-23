@@ -37,6 +37,8 @@ public final class DefaultProjectors
 		list.add(new ProjectorGroup("Make a Scene", new MakeAsceneProjector()));
 
 		list.add(new ProjectorGroup("Scene with planes", new SceneWithPlanesProjector()));
+
+		list.add(new ProjectorGroup("Puppets", new YamlProjector()));
 		return list;
 	}
 }

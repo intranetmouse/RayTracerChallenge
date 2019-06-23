@@ -1,7 +1,6 @@
 package org.intranet.graphics.raytrace.puttingItTogether;
 
 import org.intranet.graphics.raytrace.Shape;
-import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.puttingItTogether.projector.WorldProjector;
 import org.intranet.graphics.raytrace.shape.Plane;
@@ -9,17 +8,15 @@ import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
 
 public final class SceneWithPlanesProjector
-	extends WorldProjector
+	extends ThreeSphereProjector
 {
 	public SceneWithPlanesProjector()
 	{ super("Plane Walls Scene"); }
 
 
 	@Override
-	protected World makeWorld()
+	protected void fillWorld()
 	{
-		World world = new World();
-
 		double wallAmbient = 0.3;
 
 		Material wallMaterial = makeMaterial(1, 0.9, 0.9, 0.3, wallAmbient);
@@ -35,12 +32,6 @@ public final class SceneWithPlanesProjector
 		Shape rightWall = createRightWall(greenMaterial);
 
 		world.addSceneObjects(floor, leftWall, rightWall);
-
-		world.addSceneObjects(createMiddleSphere(), createRightSphere(), createLeftSphere());
-
-		world.addLight(createLight());
-
-		return world;
 	}
 
 

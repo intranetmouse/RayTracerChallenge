@@ -35,4 +35,8 @@ public class World
 		for (Shape object : objects)
 			sceneObjects.add(object);
 	}
+
+	private Camera camera;
+	public Camera getCamera() { return camera; }
+	public void setCamera(Camera value) { camera = value; }
 }

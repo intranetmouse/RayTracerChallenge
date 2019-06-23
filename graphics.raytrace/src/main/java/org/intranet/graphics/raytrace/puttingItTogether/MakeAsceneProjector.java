@@ -1,23 +1,19 @@
 package org.intranet.graphics.raytrace.puttingItTogether;
 
-import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Matrix;
-import org.intranet.graphics.raytrace.puttingItTogether.projector.WorldProjector;
 import org.intranet.graphics.raytrace.shape.Sphere;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
 
 public final class MakeAsceneProjector
-	extends WorldProjector
+	extends ThreeSphereProjector
 {
 	public MakeAsceneProjector()
 	{ super("Make a Scene"); }
 
 	@Override
-	protected World makeWorld()
+	protected void fillWorld()
 	{
-		World world = new World();
-
 		Material material = new Material();
 		material.setColor(new Color(1, 0.9, 0.9));
 		material.setSpecular(0);
@@ -27,12 +23,6 @@ public final class MakeAsceneProjector
 		Sphere rightWall = createRightWall(material);
 
 		world.addSceneObjects(floor, leftWall, rightWall);
-
-		world.addSceneObjects(createMiddleSphere(), createRightSphere(), createLeftSphere());
-
-		world.addLight(createLight());
-
-		return world;
 	}
 
 	private Sphere createRightWall(Material material)
