@@ -1,4 +1,4 @@
-package org.intranet.graphics.raytrace.puttingItTogether;
+package org.intranet.graphics.raytrace.puttingItTogether.projectors;
 
 import java.util.HashMap;
 import java.util.Map;

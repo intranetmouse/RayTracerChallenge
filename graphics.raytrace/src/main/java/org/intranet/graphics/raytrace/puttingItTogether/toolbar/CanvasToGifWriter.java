@@ -1,4 +1,4 @@
-package org.intranet.graphics.raytrace.puttingItTogether;
+package org.intranet.graphics.raytrace.puttingItTogether.toolbar;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;

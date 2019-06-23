@@ -1,8 +1,7 @@
-package org.intranet.graphics.raytrace.puttingItTogether;
+package org.intranet.graphics.raytrace.puttingItTogether.projectors;
 
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.primitive.Matrix;
-import org.intranet.graphics.raytrace.puttingItTogether.projector.WorldProjector;
 import org.intranet.graphics.raytrace.shape.Plane;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;

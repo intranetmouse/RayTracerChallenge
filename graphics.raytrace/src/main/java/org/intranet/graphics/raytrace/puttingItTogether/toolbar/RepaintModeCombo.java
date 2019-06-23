@@ -1,9 +1,11 @@
-package org.intranet.graphics.raytrace.puttingItTogether;
+package org.intranet.graphics.raytrace.puttingItTogether.toolbar;
 
 import java.awt.event.ItemEvent;
 import java.util.function.Consumer;
 
 import javax.swing.JComboBox;
+
+import org.intranet.graphics.raytrace.puttingItTogether.canvas.RepaintMode;
 
 public final class RepaintModeCombo
 	extends JComboBox<RepaintMode>

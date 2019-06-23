@@ -1,4 +1,4 @@
-package org.intranet.graphics.raytrace.puttingItTogether;
+package org.intranet.graphics.raytrace.puttingItTogether.toolbar;
 
 import java.awt.event.ActionEvent;
 import java.util.function.Consumer;

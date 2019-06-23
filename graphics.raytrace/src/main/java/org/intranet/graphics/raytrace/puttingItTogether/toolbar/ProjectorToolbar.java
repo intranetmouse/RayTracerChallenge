@@ -1,4 +1,4 @@
-package org.intranet.graphics.raytrace.puttingItTogether;
+package org.intranet.graphics.raytrace.puttingItTogether.toolbar;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
 import org.intranet.graphics.raytrace.Canvas;
+import org.intranet.graphics.raytrace.puttingItTogether.canvas.CanvasComponent;
 import org.intranet.graphics.raytrace.puttingItTogether.projector.CanvasTraversalType;
 import org.intranet.graphics.raytrace.puttingItTogether.projector.Projector;
 import org.intranet.graphics.raytrace.puttingItTogether.projector.WorldProjector;
@@ -27,7 +28,7 @@ public class ProjectorToolbar
 	private boolean parallel;
 	private Projector[] allProjectors;
 
-	ProjectorToolbar(Canvas canvas, CanvasComponent canvasComponent,
+	public ProjectorToolbar(Canvas canvas, CanvasComponent canvasComponent,
 		Projector... projectors)
 	{
 		super(new BorderLayout());

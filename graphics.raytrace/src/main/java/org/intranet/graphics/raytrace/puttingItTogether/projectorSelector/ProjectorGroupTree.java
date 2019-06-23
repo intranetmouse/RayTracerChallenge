@@ -1,4 +1,4 @@
-package org.intranet.graphics.raytrace.puttingItTogether;
+package org.intranet.graphics.raytrace.puttingItTogether.projectorSelector;
 
 import java.util.ArrayList;
 import java.util.List;

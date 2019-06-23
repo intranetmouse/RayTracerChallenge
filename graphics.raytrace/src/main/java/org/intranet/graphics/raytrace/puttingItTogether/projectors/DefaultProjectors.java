@@ -1,4 +1,4 @@
-package org.intranet.graphics.raytrace.puttingItTogether;
+package org.intranet.graphics.raytrace.puttingItTogether.projectors;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,7 +10,7 @@ import org.intranet.graphics.raytrace.puttingItTogether.projector.ProjectorGroup
 
 public final class DefaultProjectors
 {
-	static List<ProjectorGroup> createDefaultProjectors()
+	public static List<ProjectorGroup> createDefaultProjectors()
 	{
 		List<ProjectorGroup> list = new ArrayList<>();
 
