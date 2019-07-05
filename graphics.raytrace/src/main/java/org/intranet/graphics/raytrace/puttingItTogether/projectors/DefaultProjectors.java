@@ -34,11 +34,11 @@ public final class DefaultProjectors
 		list.add(new ProjectorGroup("Phong Shading Projection",
 			phongSphereProjectors));
 
-		list.add(new ProjectorGroup("Make a Scene", new MakeAsceneProjector()));
+		list.add(new ProjectorGroup("Sphere Walls", new Yaml07SphereWallsProjector()));
 
 		list.add(new ProjectorGroup("Scene with planes", new SceneWithPlanesProjector()));
 
-		list.add(new ProjectorGroup("Puppets", new YamlProjector()));
+		list.add(new ProjectorGroup("Puppets", new YamlPuppetProjector()));
 		return list;
 	}
 }
