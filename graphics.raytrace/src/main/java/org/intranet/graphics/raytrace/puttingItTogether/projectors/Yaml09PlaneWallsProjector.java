@@ -4,18 +4,18 @@ import java.io.InputStream;
 
 import org.intranet.graphics.raytrace.puttingItTogether.projector.WorldProjector;
 
-public final class Yaml07SphereWallsProjector
+public final class Yaml09PlaneWallsProjector
 	extends WorldProjector
 {
-	public Yaml07SphereWallsProjector()
-	{ super("07-Sphere Walls"); }
+	public Yaml09PlaneWallsProjector()
+	{ super("09-Plane Walls"); }
 
 
 	@Override
 	protected void fillWorld()
 	{
 		InputStream ymlStream = getClass().getResourceAsStream(
-			"/org/intranet/graphics/raytrace/yml/07-3_balls_sphere_walls.yml");
+			"/org/intranet/graphics/raytrace/yml/09-3_balls_plane_walls.yml");
 		YamlWorldParser parser = new YamlWorldParser();
 		world = parser.parse(ymlStream);
 	}

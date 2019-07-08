@@ -4,10 +4,10 @@ import java.io.InputStream;
 
 import org.intranet.graphics.raytrace.puttingItTogether.projector.WorldProjector;
 
-public final class YamlPuppetProjector
+public final class Yaml08PuppetProjector
 	extends WorldProjector
 {
-	public YamlPuppetProjector()
+	public Yaml08PuppetProjector()
 	{ super("Puppets"); }
 
 

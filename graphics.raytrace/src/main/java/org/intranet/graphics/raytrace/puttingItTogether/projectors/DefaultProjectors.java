@@ -14,8 +14,8 @@ public final class DefaultProjectors
 	{
 		List<ProjectorGroup> list = new ArrayList<>();
 
-		list.add(new ProjectorGroup("Clock", new ClockProjector()));
-		list.add(new ProjectorGroup("Projectile", new ProjectileProjector()));
+		list.add(new ProjectorGroup("02-Projectile", new ProjectileProjector()));
+		list.add(new ProjectorGroup("04-Clock", new ClockProjector()));
 
 		List<SphereProjectionType> sphereProjectionTypeList =
 			Arrays.asList(SphereProjectionType.values());
@@ -24,21 +24,22 @@ public final class DefaultProjectors
 			.stream()
 			.map(BasicSphereProjector::new)
 			.collect(Collectors.toList());
-		list.add(new ProjectorGroup("Sphere Projection",
+		list.add(new ProjectorGroup("05-Sphere Projection",
 			basicSphereProjectors));
 
 		List<Projector> phongSphereProjectors = sphereProjectionTypeList
 			.stream()
 			.map(PhongShadingSphereProjector::new)
 			.collect(Collectors.toList());
-		list.add(new ProjectorGroup("Phong Shading Projection",
+		list.add(new ProjectorGroup("06-Phong Shading Projection",
 			phongSphereProjectors));
 
-		list.add(new ProjectorGroup("Sphere Walls", new Yaml07SphereWallsProjector()));
+		list.add(new ProjectorGroup("07-Sphere Walls", new Yaml07SphereWallsProjector()));
 
-		list.add(new ProjectorGroup("Scene with planes", new SceneWithPlanesProjector()));
+		list.add(new ProjectorGroup("08-Puppets", new Yaml08PuppetProjector()));
 
-		list.add(new ProjectorGroup("Puppets", new YamlPuppetProjector()));
+		list.add(new ProjectorGroup("09-Plane Walls", new Yaml09PlaneWallsProjector()));
+
 		return list;
 	}
 }

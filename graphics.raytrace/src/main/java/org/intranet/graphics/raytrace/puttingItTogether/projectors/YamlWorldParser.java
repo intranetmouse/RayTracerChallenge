@@ -13,6 +13,7 @@ import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.shape.Plane;
 import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.shape.Sphere;
 import org.intranet.graphics.raytrace.surface.Color;
@@ -168,17 +169,30 @@ public class YamlWorldParser
 				world.addLight(pointLight);
 				break;
 			case "sphere":
-				Sphere s = new Sphere();
+				Sphere sphere = new Sphere();
 				@SuppressWarnings("unchecked")
-				ArrayList<ArrayList<String>> transformData =
+				ArrayList<ArrayList<String>> sphereTransform =
 					(ArrayList<ArrayList<String>>)objMap.get("transform");
-				if (transformData != null)
-					parseTransform(s, transformData);
+				if (sphereTransform != null)
+					parseTransform(sphere, sphereTransform);
 
-				Object materialData = objMap.get("material");
-				setMaterialForShape(s, materialData, materialDefines);
+				Object sphereMaterial = objMap.get("material");
+				setMaterialForShape(sphere, sphereMaterial, materialDefines);
 
-				world.addSceneObjects(s);
+				world.addSceneObjects(sphere);
+				break;
+			case "plane":
+				Plane plane = new Plane();
+				@SuppressWarnings("unchecked")
+				ArrayList<ArrayList<String>> planeTransform =
+					(ArrayList<ArrayList<String>>)objMap.get("transform");
+				if (planeTransform != null)
+					parseTransform(plane, planeTransform);
+
+				Object planeMaterial = objMap.get("material");
+				setMaterialForShape(plane, planeMaterial, materialDefines);
+
+				world.addSceneObjects(plane);
 				break;
 			default:
 				System.err.println("Unknown object type to add: " + type +
