@@ -70,25 +70,6 @@ public class IntersectionsSteps
 	}
 
 
-	@Then(wordPattern + ".object = " + wordPattern)
-	public void iObjectS(String intersectionName, String sphereName)
-	{
-		Intersection intersection = data.getIntersection(intersectionName);
-		Shape sphere = data.getShape(sphereName);
-		Assert.assertEquals(sphere, intersection.getObject());
-	}
-
-	@Then(wordPattern + ".inside = " + wordPattern)
-	public void objPropertyEqualsBoolean(String actualObjName,
-		String expectedBoolean)
-	{
-		IntersectionComputations actualComps = data.getComputations(actualObjName);
-
-		boolean isFalseExpected = !"false".equalsIgnoreCase(expectedBoolean);
-
-		Assert.assertEquals(isFalseExpected, actualComps.isInside());
-	}
-
 	@Then(wordPattern + "\\[" + intPattern + "\\].object = " + wordPattern)
 	public void intersectionSetObject(String intersectionListName,
 		int intersectionIdx, String objectName)

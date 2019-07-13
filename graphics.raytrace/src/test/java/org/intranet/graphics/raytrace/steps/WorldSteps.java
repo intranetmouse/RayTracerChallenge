@@ -189,14 +189,6 @@ public class WorldSteps
 		Assert.assertEquals(0, lightSources.size());
 	}
 
-	@Then(wordPattern + ".light = " + wordPattern)
-	public void wLightLight(String worldName, String lightName)
-	{
-		World w = data.getWorld(worldName);
-		PointLight light = data.getPointLight(lightName);
-		Assert.assertEquals(light, w.getLightSources().get(0));
-	}
-
 	@Then(wordPattern + " contains " + wordPattern)
 	public void wContainsS(String worldName, String objectName)
 	{

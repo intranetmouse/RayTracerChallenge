@@ -52,24 +52,6 @@ public class RaysSteps
 
 
 
-	@Then("^" + wordPattern + ".origin = " + wordPattern)
-	public void rOriginOrigin(String originRayName, String originPointName)
-	{
-		Ray originRay = data.getRay(originRayName);
-		Point rayOriginPoint = originRay.getOrigin();
-		Point originPoint = data.getPoint(originPointName);
-		Assert.assertEquals(rayOriginPoint, originPoint);
-	}
-
-	@Then("^" + wordPattern + ".direction = " + wordPattern)
-	public void rDirectionDirection(String directionRayName, String directionVectorName)
-	{
-		Ray directionRay = data.getRay(directionRayName);
-		Vector rayDirectionVector = directionRay.getDirection();
-		Vector directionVector = data.getVector(directionVectorName);
-		Assert.assertEquals(rayDirectionVector, directionVector);
-	}
-
 	@Then("^position\\(" + wordPattern + ", " + doublePattern + "\\) = point\\(" + threeDoublesPattern + "\\)$")
 	public void positionRPoint(String rayName, double t, double x, double y, double z)
 	{
