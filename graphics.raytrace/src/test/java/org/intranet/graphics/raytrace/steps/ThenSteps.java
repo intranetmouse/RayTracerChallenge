@@ -382,6 +382,12 @@ public class ThenSteps
 		}
 	}
 
+	private void unknownProperty(String objName, String propertyName)
+	{
+		throw new IllegalArgumentException(
+			"Unknown " + objName + " property name " + propertyName);
+	}
+
 	@Then(wordPattern + "\\." + wordPattern + " = " + wordPattern)
 	public void testPropertyEqualsObject(String objectName, String propertyName,
 		String expectedObjectName)
@@ -400,8 +406,7 @@ public class ThenSteps
 					Assert.assertEquals(expectedMatrix, obj.getTransform());
 					return;
 				default:
-					throw new IllegalArgumentException(
-						"Unknown shape property name " + propertyName);
+					unknownProperty("shape", propertyName);
 			}
 		}
 
@@ -415,8 +420,7 @@ public class ThenSteps
 					Assert.assertEquals(light, w.getLightSources().get(0));
 					return;
 				default:
-					throw new IllegalArgumentException(
-						"Unknown shape property name " + propertyName);
+					unknownProperty("world", propertyName);
 			}
 		}
 
@@ -436,8 +440,7 @@ public class ThenSteps
 					Assert.assertEquals(rayDirectionVector, directionVector);
 					return;
 				default:
-					throw new IllegalArgumentException(
-						"Unknown ray property name " + propertyName);
+					unknownProperty("ray", propertyName);
 			}
 		}
 
@@ -451,8 +454,7 @@ public class ThenSteps
 					Assert.assertEquals(shape, intersection.getObject());
 					return;
 				default:
-					throw new IllegalArgumentException(
-						"Unknown intersection property name " + propertyName);
+					unknownProperty("intersection", propertyName);
 			}
 		}
 
@@ -470,39 +472,56 @@ public class ThenSteps
 					Assert.assertEquals(expectedIntensity, pointLight.getIntensity());
 					return;
 				default:
-					throw new IllegalArgumentException(
-						"Unknown light property name " + propertyName);
+					unknownProperty("light", propertyName);
 			}
 		}
 
 		IntersectionComputations actualComps = data.getComputations(objectName);
 		if (actualComps != null)
 		{
-			if (!"inside".equals(propertyName))
-				Assert.fail("Unrecognized property " + propertyName
-					+ " on IntersectionComputations");
-			boolean isFalseExpected = !"false".equalsIgnoreCase(expectedObjectName);
-			Assert.assertEquals(isFalseExpected, actualComps.isInside());
-			return;
+			switch (propertyName)
+			{
+				case "inside":
+					boolean isFalseExpected = !"false".equalsIgnoreCase(expectedObjectName);
+					Assert.assertEquals(isFalseExpected, actualComps.isInside());
+					return;
+				default:
+					unknownProperty("IntersectionComputations", propertyName);
+			}
 		}
 
 		Camera camera = data.getCamera(objectName);
 		if (camera != null)
 		{
-			Matrix expectedMatrix = getMatrix(expectedObjectName);
-			Assert.assertEquals(expectedMatrix, camera.getTransform());
+			switch (propertyName)
+			{
+				case "transform":
+					Matrix expectedMatrix = getMatrix(expectedObjectName);
+					Assert.assertEquals(expectedMatrix, camera.getTransform());
+					return;
+				default:
+					unknownProperty("camera", propertyName);
+			}
 			return;
 		}
 
 		StripePattern actualPattern = (StripePattern)data.getPattern(objectName);
 		if (actualPattern != null)
 		{
-			Color expectedColor = data.getColor(expectedObjectName);
-			Color actualColor = "a".equals(propertyName) ? actualPattern.getA() :
-				"b".equals(propertyName) ? actualPattern.getB() :
-				null;
-			Assert.assertEquals(expectedColor, actualColor);
-			return;
+			switch (propertyName)
+			{
+				case "a":
+				case "b":
+					Color expectedColor = data.getColor(expectedObjectName);
+					Color actualColor =
+						"a".equals(propertyName) ? actualPattern.getA() :
+						"b".equals(propertyName) ? actualPattern.getB() :
+						null;
+					Assert.assertEquals(expectedColor, actualColor);
+					return;
+				default:
+					unknownProperty("stripePattern", propertyName);
+			}
 		}
 
 		Assert.fail("Unknown object type for object name " + objectName);
