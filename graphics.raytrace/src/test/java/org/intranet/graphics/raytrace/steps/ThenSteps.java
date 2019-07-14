@@ -118,11 +118,13 @@ public class ThenSteps
 			"Unknown data type for variable " + objectName);
 	}
 
-	@Then("comps.point.z > comps.over_point.z")
-	public void compsPointZCompsOver_pointZ()
+	@Then(wordPattern + ".point.z > " + wordPattern + ".over_point.z")
+	public void compsPointZCompsOver_pointZ(String object1Name,
+		String object2Name)
 	{
-		// Write code here that turns the phrase above into concrete actions
-		throw new cucumber.api.PendingException();
+		IntersectionComputations comps1 = data.getComputations(object1Name);
+		IntersectionComputations comps2 = data.getComputations(object2Name);
+		Assert.assertTrue(comps1.getPoint().getZ() > comps2.getOverPoint().getZ());
 	}
 
 	@Then(wordPattern + " is nothing")

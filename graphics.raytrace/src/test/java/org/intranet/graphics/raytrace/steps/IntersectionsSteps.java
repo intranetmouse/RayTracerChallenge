@@ -48,6 +48,16 @@ public class IntersectionsSteps
 		data.put(intersectionName, intersection);
 	}
 
+	@When("^" + wordPattern + " ← intersection\\(√" + doublePattern + ", " + wordPattern + "\\)$")
+	public void iIntersectionSqrRt(String intersectionName, double distance,
+		String shapeName)
+	{
+		distance = Math.sqrt(distance);
+		Shape sphere = data.getShape(shapeName);
+		Intersection intersection = new Intersection(distance, sphere);
+		data.put(intersectionName, intersection);
+	}
+
 	@When(wordPattern + " ← hit\\(" + wordPattern + "\\)")
 	public void iHitXs(String intersectionName, String intersectionListName)
 	{

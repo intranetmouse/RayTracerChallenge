@@ -49,13 +49,13 @@ public final class IntersectionComputations
 		this.point = ray.position(getDistance());
 		this.eyeVector = ray.getDirection().normalize().negate();
 		this.normalVector = getObject().normalAt(point);
-		this.overPoint = point.add(normalVector.multiply(Tuple.EPSILON));
 
 		if (normalVector.dot(eyeVector) < 0)
 		{
 			inside = true;
 			normalVector = normalVector.negate();
 		}
+		this.overPoint = point.add(normalVector.multiply(Tuple.EPSILON));
 		// else inside = false;
 	}
 }

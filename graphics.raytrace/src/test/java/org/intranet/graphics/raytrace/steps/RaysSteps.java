@@ -29,10 +29,25 @@ public class RaysSteps
 	}
 
 	@When("^" + wordPattern + " ← ray\\(point\\(" + threeDoublesPattern + "\\), vector\\(" + threeDoublesPattern + "\\)\\)")
-	public void rRayPointVector(String rayName, double pointx, double pointy, double pointz,
-		double vectorx, double vectory, double vectorz)
+	public void rRayPointVector(String rayName, double pointx, double pointy,
+		double pointz, double vectorx, double vectory, double vectorz)
 	{
 		Point point = new Point(pointx, pointy, pointz);
+		Vector vector = new Vector(vectorx, vectory, vectorz);
+
+		Ray ray = new Ray(point, vector);
+		data.put(rayName, ray);
+	}
+
+	@When("^" + wordPattern + " ← ray\\(point\\(" + threeDoublesPattern + "\\), vector\\(0, -√2/2, √2/2\\)\\)")
+	public void rRayPointVector(String rayName, double pointx, double pointy,
+		double pointz)
+	{
+		Point point = new Point(pointx, pointy, pointz);
+		double vectorx = 0.0;
+		double sqrt2div2 = Math.sqrt(2.0) / 2.0;
+		double vectory = -sqrt2div2;
+		double vectorz = sqrt2div2;
 		Vector vector = new Vector(vectorx, vectory, vectorz);
 
 		Ray ray = new Ray(point, vector);
