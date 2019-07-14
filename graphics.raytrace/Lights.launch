@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="cucumber.eclipse.launching.localCucumberFeature">
 <stringAttribute key="cucumber feature" value="classpath:/features/lights.feature"/>
-<stringAttribute key="glue path" value=""/>
+<stringAttribute key="glue path" value="org.intranet.graphics.raytrace.steps"/>
 <booleanAttribute key="is html formatter?" value="true"/>
 <booleanAttribute key="is json formatter?" value="false"/>
 <booleanAttribute key="is junit formatter" value="true"/>
