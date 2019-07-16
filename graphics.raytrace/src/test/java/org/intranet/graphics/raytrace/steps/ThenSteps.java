@@ -558,18 +558,33 @@ public class ThenSteps
 		return expectedMatrix;
 	}
 
-	@Then("^stripe_at\\(" + wordPattern + ", point\\(" + threeDoublesPattern
+	@Then("^(?:stripe|pattern)_at\\(" + wordPattern + ", point\\(" + threeDoublesPattern
 		+ "\\)\\) = " + wordPattern)
 	public void stripe_atPatternPointWhite(String patternName, double x,
 		double y, double z, String expectedColorName)
 	{
 		Color expectedColor = data.getColor(expectedColorName);
 
-		StripePattern stripePattern = (StripePattern)data.getPattern(patternName);
+		Pattern pattern = (Pattern)data.getPattern(patternName);
 
 		Point point = new Point(x, y, z);
 
-		Color actualColor = stripePattern.colorAt(point);
+		Color actualColor = pattern.colorAt(point);
+		Assert.assertEquals(expectedColor, actualColor);
+	}
+
+	@Then("^(?:stripe|pattern)_at\\(" + wordPattern + ", point\\(" + threeDoublesPattern
+		+ "\\)\\) = color\\(" + threeDoublesPattern + "\\)")
+	public void stripe_atPatternPointColor(String patternName, double x,
+		double y, double z, double red, double green, double blue)
+	{
+		Color expectedColor = new Color(red, green, blue);
+
+		Pattern pattern = (Pattern)data.getPattern(patternName);
+
+		Point point = new Point(x, y, z);
+
+		Color actualColor = pattern.colorAt(point);
 		Assert.assertEquals(expectedColor, actualColor);
 	}
 }

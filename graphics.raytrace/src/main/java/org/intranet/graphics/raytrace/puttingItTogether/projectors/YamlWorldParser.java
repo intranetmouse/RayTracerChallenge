@@ -18,7 +18,9 @@ import org.intranet.graphics.raytrace.shape.Plane;
 import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.shape.Sphere;
 import org.intranet.graphics.raytrace.surface.Color;
+import org.intranet.graphics.raytrace.surface.GradientPattern;
 import org.intranet.graphics.raytrace.surface.Material;
+import org.intranet.graphics.raytrace.surface.Pattern;
 import org.intranet.graphics.raytrace.surface.StripePattern;
 
 import com.esotericsoftware.yamlbeans.YamlException;
@@ -141,26 +143,33 @@ public class YamlWorldParser
 		{
 			patternMap = new DestructiveHashMap<>(patternMap);
 //System.out.println("YamlWorldParser.parseRawMaterial: Got pattern="+patternMap);
-			Object patternType = patternMap.get("type");
-			if ("stripes".equals(patternType))
+			String patternType = (String)patternMap.get("type");
+			Pattern pattern = null;
+			switch (patternType)
 			{
-				@SuppressWarnings("unchecked")
-				List<List<String>> colors = (List<List<String>>)patternMap.get("colors");
-//System.out.println("YamlWorldParser.parseRawMaterial: Got colors="+colors);
+				case "stripes":
+				case "gradient":
+					@SuppressWarnings("unchecked")
+					List<List<String>> colors = (List<List<String>>)patternMap.get("colors");
+	//System.out.println("YamlWorldParser.parseRawMaterial: Got colors="+colors);
 
-				Color color1 = listToColor(colors.get(0));
-				Color color2 = listToColor(colors.get(1));
-				StripePattern stripePattern = new StripePattern(color1, color2);
-				mat.setPattern(stripePattern);
-
+					Color color1 = listToColor(colors.get(0));
+					Color color2 = listToColor(colors.get(1));
+					pattern = "stripes".equals(patternType) ? new StripePattern(color1, color2) :
+						new GradientPattern(color1, color2);
+					break;
+				default:
+					System.err.println("Unknown pattern type " + patternType);
+			}
+			if (pattern != null)
+			{
 				@SuppressWarnings("unchecked")
 				List<List<String>> patternTransform =
 					(List<List<String>>)patternMap.get("transform");
 				if (patternTransform != null)
-					parseTransform(stripePattern, patternTransform);
+					parseTransform(pattern, patternTransform);
 			}
-			else
-				System.err.println("Unknown pattern type " + patternType);
+
 
 System.out.println("YamlWorldParser.parseRawMaterial: pattern leftovers="+patternMap);
 		}

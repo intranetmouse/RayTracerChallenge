@@ -4,6 +4,7 @@ import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.surface.Color;
+import org.intranet.graphics.raytrace.surface.GradientPattern;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.intranet.graphics.raytrace.surface.Pattern;
 import org.intranet.graphics.raytrace.surface.StripePattern;
@@ -50,14 +51,16 @@ public class GivenSteps
 		data.put(booleanName, booleanValue);
 	}
 
-	@Given(wordPattern + " ← stripe_pattern\\(" + twoWordPattern + "\\)")
+	@Given(wordPattern + " ← (stripe|gradient)_pattern\\(" + twoWordPattern + "\\)")
 	public void patternStripe_patternWhiteBlack(String patternName,
-		String color1Name, String color2Name)
+		String patternType, String color1Name, String color2Name)
 	{
 		Color color1 = data.getColor(color1Name);
 		Color color2 = data.getColor(color2Name);
 
-		Pattern pattern = new StripePattern(color1, color2);
+		Pattern pattern = "stripe".equals(patternType) ?
+			new StripePattern(color1, color2) :
+			new GradientPattern(color1, color2);
 		data.put(patternName, pattern);
 	}
 
