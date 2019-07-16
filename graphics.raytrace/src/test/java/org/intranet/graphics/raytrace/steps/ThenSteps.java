@@ -16,6 +16,7 @@ import org.intranet.graphics.raytrace.primitive.Vector;
 import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
+import org.intranet.graphics.raytrace.surface.Pattern;
 import org.intranet.graphics.raytrace.surface.StripePattern;
 import org.junit.Assert;
 
@@ -154,6 +155,7 @@ public class ThenSteps
 		Object expected = getObject(objType, x, y, z);
 		Object value = getObjPropValue(expectedObjName, propertyName);
 		Assert.assertEquals(expected, value);
+		return;
 	}
 
 	private Object getObject(String objType, double x, double y, double z)
@@ -181,6 +183,7 @@ public class ThenSteps
 		Ray ray = data.getRay(expectedObjName);
 		Material material = data.getMaterial(expectedObjName);
 		Shape shape = data.getShape(expectedObjName);
+		Pattern pattern = data.getPattern(expectedObjName);
 		if (comps != null)
 		{
 			value = "point".equals(propertyName) ? comps.getPoint() :
@@ -203,6 +206,11 @@ public class ThenSteps
 		{
 			value = "transform".equals(propertyName) ? shape.getTransform() :
 				"saved_ray".equals(propertyName) ? shape.getSavedRay() :
+				null;
+		}
+		else if (pattern != null)
+		{
+			value = "transform".equals(propertyName) ? pattern.getTransform() :
 				null;
 		}
 		else
@@ -507,9 +515,10 @@ public class ThenSteps
 			return;
 		}
 
-		StripePattern actualPattern = (StripePattern)data.getPattern(objectName);
-		if (actualPattern != null)
+		Pattern pattern = (Pattern)data.getPattern(objectName);
+		if (pattern instanceof StripePattern)
 		{
+			StripePattern actualPattern = (StripePattern)pattern;
 			switch (propertyName)
 			{
 				case "a":
@@ -525,6 +534,12 @@ public class ThenSteps
 					unknownProperty("stripePattern", propertyName);
 			}
 		}
+		else
+			return;
+//		{
+//			throw new IllegalArgumentException(
+//				"Unknown pattern type " + pattern.getClass().getName());
+//		}
 
 		Assert.fail("Unknown object type for object name " + objectName);
 	}

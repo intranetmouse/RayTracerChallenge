@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.intranet.graphics.raytrace.Camera;
 import org.intranet.graphics.raytrace.Shape;
+import org.intranet.graphics.raytrace.Transformable;
 import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
@@ -151,6 +152,12 @@ public class YamlWorldParser
 				Color color2 = listToColor(colors.get(1));
 				StripePattern stripePattern = new StripePattern(color1, color2);
 				mat.setPattern(stripePattern);
+
+				@SuppressWarnings("unchecked")
+				List<List<String>> patternTransform =
+					(List<List<String>>)patternMap.get("transform");
+				if (patternTransform != null)
+					parseTransform(stripePattern, patternTransform);
 			}
 			else
 				System.err.println("Unknown pattern type " + patternType);
@@ -200,8 +207,8 @@ System.out.println("YamlWorldParser.parseRawMaterial: pattern leftovers="+patter
 			case "sphere":
 				Sphere sphere = new Sphere();
 				@SuppressWarnings("unchecked")
-				ArrayList<ArrayList<String>> sphereTransform =
-					(ArrayList<ArrayList<String>>)objMap.get("transform");
+				List<List<String>> sphereTransform =
+					(List<List<String>>)objMap.get("transform");
 				if (sphereTransform != null)
 					parseTransform(sphere, sphereTransform);
 
@@ -213,8 +220,8 @@ System.out.println("YamlWorldParser.parseRawMaterial: pattern leftovers="+patter
 			case "plane":
 				Plane plane = new Plane();
 				@SuppressWarnings("unchecked")
-				ArrayList<ArrayList<String>> planeTransform =
-					(ArrayList<ArrayList<String>>)objMap.get("transform");
+				List<List<String>> planeTransform =
+					(List<List<String>>)objMap.get("transform");
 				if (planeTransform != null)
 					parseTransform(plane, planeTransform);
 
@@ -253,16 +260,17 @@ System.out.println("YamlWorldParser.parseRawMaterial: pattern leftovers="+patter
 		}
 	}
 
-	private static void parseTransform(Shape s, ArrayList<ArrayList<String>> object)
+	private static void parseTransform(Transformable xform,
+		List<List<String>> object)
 	{
-		for (ArrayList<String> obj : object)
+		for (List<String> obj : object)
 		{
 			String transformType = obj.get(0);
-			Matrix originalTransform = s.getTransform();
+			Matrix originalTransform = xform.getTransform();
 			switch (transformType)
 			{
 				case "scale":
-					s.setTransform(
+					xform.setTransform(
 						Matrix.newScaling(
 							stringToDbl(obj.get(1)),
 							stringToDbl(obj.get(2)),
@@ -271,7 +279,7 @@ System.out.println("YamlWorldParser.parseRawMaterial: pattern leftovers="+patter
 					);
 					break;
 				case "translate":
-					s.setTransform(
+					xform.setTransform(
 						Matrix.newTranslation(
 							stringToDbl(obj.get(1)),
 							stringToDbl(obj.get(2)),
@@ -280,21 +288,21 @@ System.out.println("YamlWorldParser.parseRawMaterial: pattern leftovers="+patter
 					);
 					break;
 				case "rotate-z":
-					s.setTransform(
+					xform.setTransform(
 						Matrix.newRotationZ(
 							stringToDbl(obj.get(1))
 						).multiply(originalTransform)
 					);
 					break;
 				case "rotate-x":
-					s.setTransform(
+					xform.setTransform(
 						Matrix.newRotationX(
 							stringToDbl(obj.get(1))
 						).multiply(originalTransform)
 					);
 					break;
 				case "rotate-y":
-					s.setTransform(
+					xform.setTransform(
 						Matrix.newRotationY(
 							stringToDbl(obj.get(1))
 						).multiply(originalTransform)

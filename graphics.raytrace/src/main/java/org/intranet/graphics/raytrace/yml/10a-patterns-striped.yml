@@ -21,9 +21,18 @@
       colors:
         - [0.8, 0.3, 0.4]
         - [0.95, 0.95, 0.95]
-      transform:
-        - [ scale, 0.25, 0.25, 0.25 ]
-        - [ rotate-y, 1.5708 ]
+    ambient: 0.1
+    diffuse: 0.8
+    specular: 0.1
+    reflective: 0.3
+
+- define: sphere-material
+  value:
+    pattern:
+      type: stripes
+      colors:
+        - [0.8, 0.3, 0.4]
+        - [0.95, 0.95, 0.95]
     ambient: 0.1
     diffuse: 0.8
     specular: 0.1
@@ -35,55 +44,37 @@
 - add: plane
   material: wall-material
 
-# LEFT WALL - a plane
+# BACK WALL - a plane
 - add: plane
   material: wall-material
   transform:
     - [ rotate-x, 1.5707963267948966192313216916398 ] # pi/2
     - [ rotate-y, 3.14159265 ] # pi
     - [ translate, 0, 0, 5 ]
- 
- 
- 
- 
-- define: large-green-material
-  value:
-    color: [ 0.5, 1, 0.1 ]
-    diffuse: 0.7
-    specular: 0.3
 
-- define: small-green-material
-  value:
-    color: [ 0.1, 1, 0.5 ]
-    diffuse: 0.7
-    specular: 0.3
 
-- define: smallest-material
-  value:
-    color: [ 1, 0.8, 0.1 ]
-    diffuse: 0.7
-    specular: 0.3
- 
-# LARGE GREEN SPHERE
+
+
+# LARGE SPHERE
 - add: sphere
-#  material: large-green-material
-  material: wall-material
+  material: sphere-material
   transform:
     - [ translate, -0.5, 1, 0.5 ]
 
-# SMALL GREEN SPHERE
+# SMALL SPHERE
 - add: sphere
-#  material: small-green-material
-  material: wall-material
+  material: sphere-material
   transform:
+    - [ rotate-z, 0.77 ]
+    - [ rotate-y, 0.77 ]
     - [ scale, 0.5, 0.5, 0.5 ]
     - [ translate, 1.0, 0.5, -0.5 ]
 
 # SMALLEST SPHERE
 - add: sphere
-#  material: smallest-material
-  material: wall-material
+  material: sphere-material
   transform:
     - [ scale, 0.33, 0.33, 0.33 ]
+    - [ rotate-x, 1.5707963267948966192313216916398 ]
     - [ translate, -2.2, 0.33, -0.75 ]
  

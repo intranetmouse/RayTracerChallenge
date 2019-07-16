@@ -15,6 +15,16 @@ import cucumber.api.java.en.When;
 public class GivenSteps
 	extends StepsParent
 {
+	private final class TestPattern
+		extends Pattern
+	{
+		@Override
+		public Color colorAt(Point point)
+		{
+			return new Color(point.getX(), point.getY(), point.getZ());
+		}
+	}
+
 	public GivenSteps(RaytraceData data)
 	{
 		super(data);
@@ -102,17 +112,23 @@ public class GivenSteps
 		pattern.setTransform(mtx);
 	}
 
-	@When(wordPattern + " ← stripe_at_object\\(" + twoWordPattern + ", point\\(" + threeDoublesPattern + "\\)\\)")
+	@When(wordPattern + " ← (?:stripe_at_object|pattern_at_shape)\\(" + twoWordPattern + ", point\\(" + threeDoublesPattern + "\\)\\)")
 	public void cStripe_at_objectPatternObjectPoint(String assignColorName,
-		String patternName, String objectName, Double pointX, Double pointY,
+		String patternName, String shapeName, Double pointX, Double pointY,
 		Double pointZ)
 	{
 		Point pt = new Point(pointX, pointY, pointZ);
 		Pattern pattern = data.getPattern(patternName);
-		Shape object = data.getShape(objectName);
+		Shape shape = data.getShape(shapeName);
 
-		Color c = object.colorAt(pattern, pt);
+		Color c = shape.colorAt(pattern, pt);
 		data.put(assignColorName, c);
 	}
 
+	@Given(wordPattern + " ← test_pattern\\(\\)")
+	public void patternTest_pattern(String patternName)
+	{
+		Pattern pattern = new TestPattern();
+		data.put(patternName, pattern);
+	}
 }

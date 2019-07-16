@@ -8,6 +8,7 @@ import org.intranet.graphics.raytrace.surface.Material;
 import org.intranet.graphics.raytrace.surface.Pattern;
 
 public abstract class Shape
+	implements Transformable
 {
 	final public Vector normalAt(Point worldPoint)
 	{
@@ -42,7 +43,9 @@ public abstract class Shape
 	public final void setMaterial(Material value) { material = value; }
 
 	private Matrix transform = Matrix.identity(4);
+	@Override
 	public final Matrix getTransform() { return transform; }
+	@Override
 	public final void setTransform(Matrix value) { transform = value; }
 
 	@Override
