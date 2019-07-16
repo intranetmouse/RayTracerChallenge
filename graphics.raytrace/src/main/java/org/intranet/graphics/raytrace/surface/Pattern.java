@@ -1,5 +1,6 @@
 package org.intranet.graphics.raytrace.surface;
 
+import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 
 public abstract class Pattern
@@ -8,5 +9,9 @@ public abstract class Pattern
 	{
 	}
 
-	public abstract Color colorAt(Point p);
+	public abstract Color colorAt(Point point);
+
+	private Matrix transform = Matrix.identity(4);
+	public void setTransform(Matrix mtx) { transform = mtx; }
+	public Matrix getTransform() { return transform; }
 }

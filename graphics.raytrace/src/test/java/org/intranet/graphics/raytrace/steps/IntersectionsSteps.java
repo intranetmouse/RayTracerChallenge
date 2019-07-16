@@ -48,6 +48,16 @@ public class IntersectionsSteps
 		data.put(intersectionName, intersection);
 	}
 
+	@When("^" + wordPattern + " ← intersection\\(√" + doublePattern + ", " + wordPattern + "\\)$")
+	public void iIntersectionSqrRt(String intersectionName, double distance,
+		String shapeName)
+	{
+		distance = Math.sqrt(distance);
+		Shape sphere = data.getShape(shapeName);
+		Intersection intersection = new Intersection(distance, sphere);
+		data.put(intersectionName, intersection);
+	}
+
 	@When(wordPattern + " ← hit\\(" + wordPattern + "\\)")
 	public void iHitXs(String intersectionName, String intersectionListName)
 	{
@@ -69,25 +79,6 @@ public class IntersectionsSteps
 		data.put(computationsName, comps);
 	}
 
-
-	@Then(wordPattern + ".object = " + wordPattern)
-	public void iObjectS(String intersectionName, String sphereName)
-	{
-		Intersection intersection = data.getIntersection(intersectionName);
-		Shape sphere = data.getShape(sphereName);
-		Assert.assertEquals(sphere, intersection.getObject());
-	}
-
-	@Then(wordPattern + ".inside = " + wordPattern)
-	public void objPropertyEqualsBoolean(String actualObjName,
-		String expectedBoolean)
-	{
-		IntersectionComputations actualComps = data.getComputations(actualObjName);
-
-		boolean isFalseExpected = !"false".equalsIgnoreCase(expectedBoolean);
-
-		Assert.assertEquals(isFalseExpected, actualComps.isInside());
-	}
 
 	@Then(wordPattern + "\\[" + intPattern + "\\].object = " + wordPattern)
 	public void intersectionSetObject(String intersectionListName,

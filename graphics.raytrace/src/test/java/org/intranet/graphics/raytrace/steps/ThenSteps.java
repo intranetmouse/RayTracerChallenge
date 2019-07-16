@@ -8,10 +8,12 @@ import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.PixelCoordinate;
 import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.Shape;
+import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.intranet.graphics.raytrace.surface.StripePattern;
@@ -116,11 +118,13 @@ public class ThenSteps
 			"Unknown data type for variable " + objectName);
 	}
 
-	@Then("comps.point.z > comps.over_point.z")
-	public void compsPointZCompsOver_pointZ()
+	@Then(wordPattern + ".point.z > " + wordPattern + ".over_point.z")
+	public void compsPointZCompsOver_pointZ(String object1Name,
+		String object2Name)
 	{
-		// Write code here that turns the phrase above into concrete actions
-		throw new cucumber.api.PendingException();
+		IntersectionComputations comps1 = data.getComputations(object1Name);
+		IntersectionComputations comps2 = data.getComputations(object2Name);
+		Assert.assertTrue(comps1.getPoint().getZ() > comps2.getOverPoint().getZ());
 	}
 
 	@Then(wordPattern + " is nothing")
@@ -380,35 +384,146 @@ public class ThenSteps
 		}
 	}
 
+	private void unknownProperty(String objName, String propertyName)
+	{
+		throw new IllegalArgumentException(
+			"Unknown " + objName + " property name " + propertyName);
+	}
+
 	@Then(wordPattern + "\\." + wordPattern + " = " + wordPattern)
-	public void patternAWhite(String objectName, String propertyName,
+	public void testPropertyEqualsObject(String objectName, String propertyName,
 		String expectedObjectName)
 	{
 		Shape obj = data.getShape(objectName);
 		if (obj != null)
 		{
-			Matrix expectedMatrix = getMatrix(expectedObjectName);
-			Assert.assertEquals(expectedMatrix, obj.getTransform());
-			return;
+			switch (propertyName)
+			{
+				case "material":
+					Material actualMaterial = data.getMaterial(expectedObjectName);
+					Assert.assertEquals(actualMaterial, obj.getMaterial());
+					return;
+				case "transform":
+					Matrix expectedMatrix = getMatrix(expectedObjectName);
+					Assert.assertEquals(expectedMatrix, obj.getTransform());
+					return;
+				default:
+					unknownProperty("shape", propertyName);
+			}
+		}
+
+		World w = data.getWorld(objectName);
+		if (w != null)
+		{
+			switch (propertyName)
+			{
+				case "light":
+					PointLight light = data.getPointLight(expectedObjectName);
+					Assert.assertEquals(light, w.getLightSources().get(0));
+					return;
+				default:
+					unknownProperty("world", propertyName);
+			}
+		}
+
+		Ray ray = data.getRay(objectName);
+		if (ray != null)
+		{
+			switch (propertyName)
+			{
+				case "origin":
+					Point rayOriginPoint = ray.getOrigin();
+					Point originPoint = data.getPoint(expectedObjectName);
+					Assert.assertEquals(rayOriginPoint, originPoint);
+					return;
+				case "direction":
+					Vector rayDirectionVector = ray.getDirection();
+					Vector directionVector = data.getVector(expectedObjectName);
+					Assert.assertEquals(rayDirectionVector, directionVector);
+					return;
+				default:
+					unknownProperty("ray", propertyName);
+			}
+		}
+
+		Intersection intersection = data.getIntersection(objectName);
+		if (intersection != null)
+		{
+			switch (propertyName)
+			{
+				case "object":
+					Shape shape = data.getShape(expectedObjectName);
+					Assert.assertEquals(shape, intersection.getObject());
+					return;
+				default:
+					unknownProperty("intersection", propertyName);
+			}
+		}
+
+		PointLight pointLight = data.getPointLight(objectName);
+		if (pointLight != null)
+		{
+			switch (propertyName)
+			{
+				case "position":
+					Point expectedPosition = data.getPoint(expectedObjectName);
+					Assert.assertEquals(expectedPosition, pointLight.getPosition());
+					return;
+				case "intensity":
+					Color expectedIntensity = data.getColor(expectedObjectName);
+					Assert.assertEquals(expectedIntensity, pointLight.getIntensity());
+					return;
+				default:
+					unknownProperty("light", propertyName);
+			}
+		}
+
+		IntersectionComputations actualComps = data.getComputations(objectName);
+		if (actualComps != null)
+		{
+			switch (propertyName)
+			{
+				case "inside":
+					boolean isFalseExpected = !"false".equalsIgnoreCase(expectedObjectName);
+					Assert.assertEquals(isFalseExpected, actualComps.isInside());
+					return;
+				default:
+					unknownProperty("IntersectionComputations", propertyName);
+			}
 		}
 
 		Camera camera = data.getCamera(objectName);
 		if (camera != null)
 		{
-			Matrix expectedMatrix = getMatrix(expectedObjectName);
-			Assert.assertEquals(expectedMatrix, camera.getTransform());
+			switch (propertyName)
+			{
+				case "transform":
+					Matrix expectedMatrix = getMatrix(expectedObjectName);
+					Assert.assertEquals(expectedMatrix, camera.getTransform());
+					return;
+				default:
+					unknownProperty("camera", propertyName);
+			}
 			return;
 		}
 
 		StripePattern actualPattern = (StripePattern)data.getPattern(objectName);
 		if (actualPattern != null)
 		{
-			Color expectedColor = data.getColor(expectedObjectName);
-			Color actualColor = "a".equals(propertyName) ? actualPattern.getA() :
-				"b".equals(propertyName) ? actualPattern.getB() :
-				null;
-			Assert.assertEquals(expectedColor, actualColor);
-			return;
+			switch (propertyName)
+			{
+				case "a":
+				case "b":
+					Color expectedColor = data.getColor(expectedObjectName);
+					Color actualColor =
+						"a".equals(propertyName) ? actualPattern.getA() :
+						"b".equals(propertyName) ? actualPattern.getB() :
+						null;
+					Assert.assertEquals(expectedColor, actualColor);
+					return;
+				default:
+					unknownProperty("stripePattern", propertyName);
+			}
 		}
 
 		Assert.fail("Unknown object type for object name " + objectName);
@@ -442,5 +557,4 @@ public class ThenSteps
 		Color actualColor = stripePattern.colorAt(point);
 		Assert.assertEquals(expectedColor, actualColor);
 	}
-
 }

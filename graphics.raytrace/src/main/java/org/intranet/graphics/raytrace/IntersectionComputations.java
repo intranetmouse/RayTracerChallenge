@@ -35,7 +35,7 @@ public final class IntersectionComputations
 		List<Light> lightSources = world.getLightSources();
 		return lightSources.stream()
 			.map(lightSource -> Tracer.lighting(getObject().getMaterial(),
-				lightSource, overPoint, eyeVector, normalVector,
+				getObject(), lightSource, overPoint, eyeVector, normalVector,
 				Tracer.isShadowed(world, overPoint)))
 			.reduce((a, b) -> a.add(b)).orElse(new Color(0, 0, 0));
 	}
@@ -49,13 +49,13 @@ public final class IntersectionComputations
 		this.point = ray.position(getDistance());
 		this.eyeVector = ray.getDirection().normalize().negate();
 		this.normalVector = getObject().normalAt(point);
-		this.overPoint = point.add(normalVector.multiply(Tuple.EPSILON));
 
 		if (normalVector.dot(eyeVector) < 0)
 		{
 			inside = true;
 			normalVector = normalVector.negate();
 		}
+		this.overPoint = point.add(normalVector.multiply(Tuple.EPSILON));
 		// else inside = false;
 	}
 }

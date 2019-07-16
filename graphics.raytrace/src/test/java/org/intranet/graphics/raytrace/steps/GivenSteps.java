@@ -1,5 +1,8 @@
 package org.intranet.graphics.raytrace.steps;
 
+import org.intranet.graphics.raytrace.Shape;
+import org.intranet.graphics.raytrace.primitive.Matrix;
+import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.intranet.graphics.raytrace.surface.Pattern;
@@ -7,6 +10,7 @@ import org.intranet.graphics.raytrace.surface.StripePattern;
 import org.junit.Assert;
 
 import cucumber.api.java.en.Given;
+import cucumber.api.java.en.When;
 
 public class GivenSteps
 	extends StepsParent
@@ -85,6 +89,30 @@ public class GivenSteps
 		Color color2 = new Color(red2, green2, blue2);
 		Pattern pattern = new StripePattern(color1, color2);
 		material.setPattern(pattern);
+	}
+
+	@Given("^set_pattern_transform\\(" + wordPattern + ", (scaling|translation)\\(" + threeDoublesPattern + "\\)\\)")
+	public void set_pattern_transformPatternScaling(String patternName,
+		String operation, double xformX, double xformY, double xformZ)
+	{
+		Pattern pattern = data.getPattern(patternName);
+		Matrix mtx = "scaling".equals(operation) ?
+			Matrix.newScaling(xformX, xformY, xformZ) :
+			Matrix.newTranslation(xformX, xformY, xformZ);
+		pattern.setTransform(mtx);
+	}
+
+	@When(wordPattern + " ← stripe_at_object\\(" + twoWordPattern + ", point\\(" + threeDoublesPattern + "\\)\\)")
+	public void cStripe_at_objectPatternObjectPoint(String assignColorName,
+		String patternName, String objectName, Double pointX, Double pointY,
+		Double pointZ)
+	{
+		Point pt = new Point(pointX, pointY, pointZ);
+		Pattern pattern = data.getPattern(patternName);
+		Shape object = data.getShape(objectName);
+
+		Color c = object.colorAt(pattern, pt);
+		data.put(assignColorName, c);
 	}
 
 }

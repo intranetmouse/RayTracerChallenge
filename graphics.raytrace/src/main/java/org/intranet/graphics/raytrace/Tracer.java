@@ -8,11 +8,11 @@ import org.intranet.graphics.raytrace.surface.Pattern;
 
 public final class Tracer
 {
-	public static Color lighting(Material m, Light light, Point position,
+	public static Color lighting(Material m, Shape shape, Light light, Point position,
 		Vector eyeV, Vector normalV, boolean inShadow)
 	{
 		Pattern p = m.getPattern();
-		Color c = p != null ? ((Pattern)p).colorAt(position) : m.getColor();
+		Color c = p != null ? shape.colorAt(p, position) : m.getColor();
 		// combine the surface color with the light's color/intensity
 		Color effectiveColor = c.multiply(light.getIntensity());
 

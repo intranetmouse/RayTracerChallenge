@@ -181,15 +181,6 @@ public class SpheresSteps
 		Assert.assertEquals(actualMaterial, expectedMaterial);
 	}
 
-	@Then(wordPattern + ".material = " + wordPattern)
-	public void sphereMaterialEqualsMaterial(String sphereName,
-		String actualMaterialName)
-	{
-		Shape obj = data.getShape(sphereName);
-		Material actualMaterial = data.getMaterial(actualMaterialName);
-		Assert.assertEquals(actualMaterial, obj.getMaterial());
-	}
-
 	@Then(wordPattern + " = " + wordPattern + ".material.color")
 	public void cInnerMaterialColor(String colorName, String objectName)
 	{

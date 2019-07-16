@@ -98,7 +98,8 @@ public class WorldSteps
 	}
 
 	@Given(wordPattern + " ← the (first|second) object in " + wordPattern)
-	public void shapeTheFirstObjectInW(String objectName, String order, String worldName)
+	public void assignNthObjectInWorldToObj(String objectName, String order,
+		String worldName)
 	{
 		World world = data.getWorld(worldName);
 		int sceneObjIdx = "first".equals(order) ? 0 : 1;
@@ -112,7 +113,8 @@ public class WorldSteps
 		double pointX, double pointY, double pointZ, double red, double green,
 		double blue)
 	{
-		Assert.assertEquals("Only light is supported property name", "light", propertyName);
+		Assert.assertEquals("Only light is supported property name", "light",
+			propertyName);
 
 		Point position = new Point(pointX, pointY, pointZ);
 		Color color = new Color(red, green, blue);
@@ -187,14 +189,6 @@ public class WorldSteps
 		World w = data.getWorld(worldName);
 		List<Light> lightSources = w.getLightSources();
 		Assert.assertEquals(0, lightSources.size());
-	}
-
-	@Then(wordPattern + ".light = " + wordPattern)
-	public void wLightLight(String worldName, String lightName)
-	{
-		World w = data.getWorld(worldName);
-		PointLight light = data.getPointLight(lightName);
-		Assert.assertEquals(light, w.getLightSources().get(0));
 	}
 
 	@Then(wordPattern + " contains " + wordPattern)
