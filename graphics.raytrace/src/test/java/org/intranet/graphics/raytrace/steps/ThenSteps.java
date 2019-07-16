@@ -554,7 +554,7 @@ public class ThenSteps
 
 		Point point = new Point(x, y, z);
 
-		Color actualColor = stripePattern.stripeAt(point);
+		Color actualColor = stripePattern.patternAt(point);
 		Assert.assertEquals(expectedColor, actualColor);
 	}
 

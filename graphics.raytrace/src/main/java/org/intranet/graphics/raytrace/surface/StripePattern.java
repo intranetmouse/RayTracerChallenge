@@ -17,7 +17,8 @@ public class StripePattern
 		b = color2;
 	}
 
-	public Color stripeAt(Point point)
+	@Override
+	public Color patternAt(Point point)
 	{
 		int xInt = ((int)Math.floor(point.getX())) % 2;
 		return xInt == 0 ? a : b;

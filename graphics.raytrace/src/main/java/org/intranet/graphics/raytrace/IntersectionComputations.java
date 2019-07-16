@@ -35,7 +35,7 @@ public final class IntersectionComputations
 		List<Light> lightSources = world.getLightSources();
 		return lightSources.stream()
 			.map(lightSource -> Tracer.lighting(getObject().getMaterial(),
-				lightSource, overPoint, eyeVector, normalVector,
+				getObject(), lightSource, overPoint, eyeVector, normalVector,
 				Tracer.isShadowed(world, overPoint)))
 			.reduce((a, b) -> a.add(b)).orElse(new Color(0, 0, 0));
 	}

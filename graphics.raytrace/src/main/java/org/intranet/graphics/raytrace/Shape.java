@@ -3,7 +3,9 @@ package org.intranet.graphics.raytrace;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
+import org.intranet.graphics.raytrace.surface.Pattern;
 
 public abstract class Shape
 {
@@ -54,4 +56,11 @@ public abstract class Shape
 		return true;
 	}
 	protected abstract boolean shapeEquals(Object other);
+
+	public Color colorAt(Pattern pattern, Point pt)
+	{
+		Point objectPt = transform.inverse().multiply(pt);
+		Point patternPt = pattern.getTransform().inverse().multiply(objectPt);
+		return pattern.patternAt(patternPt);
+	}
 }
