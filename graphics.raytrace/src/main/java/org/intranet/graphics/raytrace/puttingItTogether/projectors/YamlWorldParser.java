@@ -155,8 +155,10 @@ public class YamlWorldParser
 
 					Color color1 = listToColor(colors.get(0));
 					Color color2 = listToColor(colors.get(1));
-					pattern = "stripes".equals(patternType) ? new StripePattern(color1, color2) :
+					pattern = "stripes".equals(patternType) ?
+						new StripePattern(color1, color2) :
 						new GradientPattern(color1, color2);
+					mat.setPattern(pattern);
 					break;
 				default:
 					System.err.println("Unknown pattern type " + patternType);
