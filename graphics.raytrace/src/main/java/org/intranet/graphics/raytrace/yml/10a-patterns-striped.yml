@@ -66,6 +66,20 @@
     reflective: 0.3
 
 
+- define: checker-material
+  value:
+    pattern:
+      type: checker
+      colors:
+        - [0.8, 0.4, 0.3]
+        - [0.45, 0.95, 0.95]
+      transform:
+        - [ scale, 0.3, 0.3, 0.3 ]
+    ambient: 0.1
+    diffuse: 0.8
+    specular: 0.1
+    reflective: 0.3
+
 
 
 # FLOOR - a plane
@@ -116,12 +130,20 @@
     - [ rotate-x, 1.0 ]
     - [ translate, -1.5, 1.0, -1.0 ]
 
+# Checker Sphere
+- add: sphere
+  material: checker-material
+  transform:
+    - [ scale, 0.25, 0.25, 0.25 ]
+    - [ rotate-x, 1.0 ]
+    - [ translate, -1.0, 1.0, -1.25 ]
+
 
 # SMALLEST SPHERE
 - add: sphere
   material: sphere-material
   transform:
     - [ scale, 0.33, 0.33, 0.33 ]
-    - [ rotate-x, 1.5707963267948966192313216916398 ]
+    - [ rotate-z, 1.5707963267948966192313216916398 ]
     - [ translate, -2.2, 0.33, -0.75 ]
  

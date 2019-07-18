@@ -3,6 +3,7 @@ package org.intranet.graphics.raytrace.steps;
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.surface.CheckerPattern;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.GradientPattern;
 import org.intranet.graphics.raytrace.surface.Material;
@@ -136,21 +137,15 @@ public class GivenSteps
 		data.put(patternName, pattern);
 	}
 
-	@Given(wordPattern + " ← ring_pattern\\(" + twoWordPattern + "\\)")
-	public void patternRing_patternWhiteBlack(String patternName, String color1, String color2)
+	@Given(wordPattern + " ← (ring|checkers)_pattern\\(" + twoWordPattern + "\\)")
+	public void patternRing_patternWhiteBlack(String patternName,
+		String patternType, String color1, String color2)
 	{
 		Color c1 = data.getColor(color1);
 		Color c2 = data.getColor(color2);
 
-		Pattern pattern = new RingPattern(c1, c2);
+		Pattern pattern = "ring".equals(patternType) ? new RingPattern(c1, c2) :
+			new CheckerPattern(c1, c2);
 		data.put(patternName, pattern);
 	}
-
-	@Given(wordPattern + " ← checkers_pattern\\(" + twoWordPattern + "\\)")
-	public void patternCheckers_patternWhiteBlack()
-	{
-		// Write code here that turns the phrase above into concrete actions
-		throw new cucumber.api.PendingException();
-	}
-
 }

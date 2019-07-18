@@ -17,6 +17,7 @@ import org.intranet.graphics.raytrace.primitive.Vector;
 import org.intranet.graphics.raytrace.shape.Plane;
 import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.shape.Sphere;
+import org.intranet.graphics.raytrace.surface.CheckerPattern;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.GradientPattern;
 import org.intranet.graphics.raytrace.surface.Material;
@@ -146,6 +147,7 @@ public class YamlWorldParser
 			switch (patternType)
 			{
 				case "stripes":
+				case "checker":
 				case "gradient":
 				case "ring":
 					@SuppressWarnings("unchecked")
@@ -158,7 +160,9 @@ public class YamlWorldParser
 						new StripePattern(color1, color2) :
 						"gradient".equals(patternType) ?
 						new GradientPattern(color1, color2) :
-						new RingPattern(color1, color2);
+						"ring".equals(patternType) ?
+						new RingPattern(color1, color2) :
+						new CheckerPattern(color1, color2);
 					mat.setPattern(pattern);
 					break;
 				default:
