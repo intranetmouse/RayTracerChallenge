@@ -21,6 +21,7 @@ import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.GradientPattern;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.intranet.graphics.raytrace.surface.Pattern;
+import org.intranet.graphics.raytrace.surface.RingPattern;
 import org.intranet.graphics.raytrace.surface.StripePattern;
 
 import com.esotericsoftware.yamlbeans.YamlException;
@@ -100,11 +101,8 @@ public class YamlWorldParser
 		{
 		}
 
-
 		if (defineMap.size() > 0)
 			System.err.printf("Leftovers for define %s = %s\n", name, defineMap);
-
-
 	}
 
 	private static void parseRawMaterial(Material mat,
@@ -149,15 +147,18 @@ public class YamlWorldParser
 			{
 				case "stripes":
 				case "gradient":
+				case "ring":
 					@SuppressWarnings("unchecked")
 					List<List<String>> colors = (List<List<String>>)patternMap.get("colors");
-	//System.out.println("YamlWorldParser.parseRawMaterial: Got colors="+colors);
+//System.out.println("YamlWorldParser.parseRawMaterial: Got colors="+colors);
 
 					Color color1 = listToColor(colors.get(0));
 					Color color2 = listToColor(colors.get(1));
 					pattern = "stripes".equals(patternType) ?
 						new StripePattern(color1, color2) :
-						new GradientPattern(color1, color2);
+						"gradient".equals(patternType) ?
+						new GradientPattern(color1, color2) :
+						new RingPattern(color1, color2);
 					mat.setPattern(pattern);
 					break;
 				default:
@@ -172,8 +173,8 @@ public class YamlWorldParser
 					parseTransform(pattern, patternTransform);
 			}
 
-
-System.out.println("YamlWorldParser.parseRawMaterial: pattern leftovers="+patternMap);
+			if (patternMap.size() > 0)
+				System.err.println("YamlWorldParser.parseRawMaterial: pattern leftovers="+patternMap);
 		}
 
 		if (materialMap.size() > 0)

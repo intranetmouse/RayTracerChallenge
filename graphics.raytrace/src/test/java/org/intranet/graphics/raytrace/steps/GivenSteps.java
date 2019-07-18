@@ -134,4 +134,19 @@ public class GivenSteps
 		Pattern pattern = new TestPattern();
 		data.put(patternName, pattern);
 	}
+
+	@Given(wordPattern + " ← ring_pattern\\(" + twoWordPattern + "\\)")
+	public void patternRing_patternWhiteBlack(String patternName, String color1, String color2)
+	{
+		// Write code here that turns the phrase above into concrete actions
+		throw new cucumber.api.PendingException();
+	}
+
+	@Given(wordPattern + " ← checkers_pattern\\(" + twoWordPattern + "\\)")
+	public void patternCheckers_patternWhiteBlack()
+	{
+		// Write code here that turns the phrase above into concrete actions
+		throw new cucumber.api.PendingException();
+	}
+
 }

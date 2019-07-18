@@ -38,6 +38,34 @@
     specular: 0.1
     reflective: 0.3
 
+- define: gradient-material
+  value:
+    pattern:
+      type: gradient
+      colors:
+        - [0.3, 0.4, 0.8]
+        - [0.95, 0.95, 0.95]
+    ambient: 0.1
+    diffuse: 0.8
+    specular: 0.1
+    reflective: 0.3
+
+
+- define: ring-material
+  value:
+    pattern:
+      type: ring
+      colors:
+        - [0.3, 0.8, 0.4]
+        - [0.95, 0.95, 0.55]
+      transform:
+        - [ scale, 0.1, 0.1, 0.1 ]
+    ambient: 0.1
+    diffuse: 0.8
+    specular: 0.1
+    reflective: 0.3
+
+
 
 
 # FLOOR - a plane
@@ -69,6 +97,25 @@
     - [ rotate-y, 0.77 ]
     - [ scale, 0.5, 0.5, 0.5 ]
     - [ translate, 1.0, 0.5, -0.5 ]
+
+# Gradient Sphere
+- add: sphere
+  material: gradient-material
+  transform:
+    - [ scale, 0.4, 0.3, 0.6 ]
+    - [ rotate-z, 1.0 ]
+    - [ rotate-y, 1.0 ]
+    - [ translate, 1.5, 1.0, -1.0 ]
+
+
+# Ring Sphere
+- add: sphere
+  material: ring-material
+  transform:
+    - [ scale, 0.25, 0.25, 0.25 ]
+    - [ rotate-x, 1.0 ]
+    - [ translate, -1.5, 1.0, -1.0 ]
+
 
 # SMALLEST SPHERE
 - add: sphere
