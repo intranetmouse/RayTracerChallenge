@@ -7,6 +7,7 @@ import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.GradientPattern;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.intranet.graphics.raytrace.surface.Pattern;
+import org.intranet.graphics.raytrace.surface.RingPattern;
 import org.intranet.graphics.raytrace.surface.StripePattern;
 import org.junit.Assert;
 
@@ -138,8 +139,11 @@ public class GivenSteps
 	@Given(wordPattern + " ← ring_pattern\\(" + twoWordPattern + "\\)")
 	public void patternRing_patternWhiteBlack(String patternName, String color1, String color2)
 	{
-		// Write code here that turns the phrase above into concrete actions
-		throw new cucumber.api.PendingException();
+		Color c1 = data.getColor(color1);
+		Color c2 = data.getColor(color2);
+
+		Pattern pattern = new RingPattern(c1, c2);
+		data.put(patternName, pattern);
 	}
 
 	@Given(wordPattern + " ← checkers_pattern\\(" + twoWordPattern + "\\)")
