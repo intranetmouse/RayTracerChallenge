@@ -40,6 +40,7 @@ public final class DefaultProjectors
 
 		list.add(new ProjectorGroup("09-Plane Walls", new Yaml09PlaneWallsProjector()));
 
+		list.add(new ProjectorGroup("10a-Pattern Striped", new Yaml10aStripesProjector()));
 		return list;
 	}
 }

@@ -18,6 +18,7 @@ import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.shape.Sphere;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
+import org.intranet.graphics.raytrace.surface.StripePattern;
 
 import com.esotericsoftware.yamlbeans.YamlException;
 import com.esotericsoftware.yamlbeans.YamlReader;
@@ -124,10 +125,38 @@ public class YamlWorldParser
 		if (shininess != null)
 			mat.setShininess(stringToDbl(shininess));
 
+		String reflective = (String)materialMap.get("reflective");
+		if (reflective != null)
+			mat.setReflective(stringToDbl(reflective));
+
 		@SuppressWarnings("unchecked")
 		List<String> colorsLst = (List<String>)materialMap.get("color");
 		if (colorsLst != null)
 			mat.setColor(listToColor(colorsLst));
+
+		@SuppressWarnings("unchecked")
+		Map<Object, Object> patternMap = (Map<Object, Object>)materialMap.get("pattern");
+		if (patternMap != null)
+		{
+			patternMap = new DestructiveHashMap<>(patternMap);
+//System.out.println("YamlWorldParser.parseRawMaterial: Got pattern="+patternMap);
+			Object patternType = patternMap.get("type");
+			if ("stripes".equals(patternType))
+			{
+				@SuppressWarnings("unchecked")
+				List<List<String>> colors = (List<List<String>>)patternMap.get("colors");
+//System.out.println("YamlWorldParser.parseRawMaterial: Got colors="+colors);
+
+				Color color1 = listToColor(colors.get(0));
+				Color color2 = listToColor(colors.get(1));
+				StripePattern stripePattern = new StripePattern(color1, color2);
+				mat.setPattern(stripePattern);
+			}
+			else
+				System.err.println("Unknown pattern type " + patternType);
+
+System.out.println("YamlWorldParser.parseRawMaterial: pattern leftovers="+patternMap);
+		}
 
 		if (materialMap.size() > 0)
 			System.err.printf("Leftovers for material: %s", materialMap);

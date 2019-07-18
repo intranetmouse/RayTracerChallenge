@@ -56,11 +56,11 @@
     ambient: 0.3
 
 
-# FLOOR - a flattened sphere
+# FLOOR - a plane
 - add: plane
   material: blue-material
 
-# LEFT WALL - a flattened sphere
+# LEFT WALL - a plane
 - add: plane
   material: red-material
   transform:
@@ -69,7 +69,7 @@
     - [ translate, 0, 0, 5 ]
 
 
-# RIGHT WALL - a flattened sphere
+# RIGHT WALL - a plane
 - add: plane
   material: green-material
   transform:

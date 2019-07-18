@@ -5,7 +5,6 @@ import org.intranet.graphics.raytrace.primitive.Vector;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.intranet.graphics.raytrace.surface.Pattern;
-import org.intranet.graphics.raytrace.surface.StripePattern;
 
 public final class Tracer
 {
@@ -13,7 +12,7 @@ public final class Tracer
 		Vector eyeV, Vector normalV, boolean inShadow)
 	{
 		Pattern p = m.getPattern();
-		Color c = p != null ? ((StripePattern)p).stripeAt(position) : m.getColor();
+		Color c = p != null ? ((Pattern)p).colorAt(position) : m.getColor();
 		// combine the surface color with the light's color/intensity
 		Color effectiveColor = c.multiply(light.getIntensity());
 
