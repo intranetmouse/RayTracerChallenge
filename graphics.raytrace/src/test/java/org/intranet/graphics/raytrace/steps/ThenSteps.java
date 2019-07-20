@@ -158,6 +158,21 @@ public class ThenSteps
 		return;
 	}
 
+	@Then(wordPattern + "\\." + wordPattern + " = " + wordPattern + "\\("
+		+ doublePattern + ", √" + doublePattern + "/" + doublePattern
+		+ ", √" + doublePattern + "/" + doublePattern + "\\)")
+	public void objPropEqualsThreeDoubleYZ(String expectedObjName,
+		String propertyName, String objType, double x, double yNum,
+		double yDenom, double zNum, double zDenom)
+	{
+		double y = Math.sqrt(yNum) / yDenom;
+		double z = Math.sqrt(zNum) / zDenom;
+		Object expected = getObject(objType, x, y, z);
+		Object value = getObjPropValue(expectedObjName, propertyName);
+		Assert.assertEquals(expected, value);
+		return;
+	}
+
 	private Object getObject(String objType, double x, double y, double z)
 	{
 		switch (objType)
@@ -184,32 +199,39 @@ public class ThenSteps
 		Material material = data.getMaterial(expectedObjName);
 		Shape shape = data.getShape(expectedObjName);
 		Pattern pattern = data.getPattern(expectedObjName);
+		String type = "unknown";
 		if (comps != null)
 		{
+			type = "comps";
 			value = "point".equals(propertyName) ? comps.getPoint() :
 				"eyev".equals(propertyName) ? comps.getEyeVector() :
 				"normalv".equals(propertyName) ? comps.getNormalVector() :
+				"reflectv".equals(propertyName) ? comps.getReflectVector() :
 				null;
 		}
 		else if (ray != null)
 		{
+			type = "ray";
 			value = "origin".equals(propertyName) ? ray.getOrigin() :
 				"direction".equals(propertyName) ? ray.getDirection() :
 				null;
 		}
 		else if (material != null)
 		{
+			type = "material";
 			value = "color".equals(propertyName) ? material.getColor() :
 				null;
 		}
 		else if (shape != null)
 		{
+			type = "shape";
 			value = "transform".equals(propertyName) ? shape.getTransform() :
 				"saved_ray".equals(propertyName) ? shape.getSavedRay() :
 				null;
 		}
 		else if (pattern != null)
 		{
+			type = "pattern";
 			value = "transform".equals(propertyName) ? pattern.getTransform() :
 				null;
 		}
@@ -219,8 +241,8 @@ public class ThenSteps
 				+ " not found. obj=" + comps);
 		}
 
-		Assert.assertNotNull("Property name does not match: " + propertyName,
-			value);
+		Assert.assertNotNull("On object name=" + expectedObjName
+			+ ", property name " + propertyName + " does not match.", value);
 		return value;
 	}
 

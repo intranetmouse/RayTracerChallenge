@@ -22,6 +22,9 @@ public final class IntersectionComputations
 	private Vector normalVector;
 	public Vector getNormalVector() { return normalVector; }
 
+	private Vector reflectVector;
+	public Vector getReflectVector() { return reflectVector; }
+
 	private Intersection intersection;
 
 	private boolean inside;
@@ -56,6 +59,7 @@ public final class IntersectionComputations
 			normalVector = normalVector.negate();
 		}
 		this.overPoint = point.add(normalVector.multiply(Tuple.EPSILON));
-		// else inside = false;
+
+		reflectVector = ray.getDirection().reflect(normalVector);
 	}
 }
