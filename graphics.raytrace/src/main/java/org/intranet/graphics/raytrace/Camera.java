@@ -95,9 +95,10 @@ public class Camera
 		image.setDone(true);
 	}
 
+	public static int MAX_REFLEXION_RECURSION = 4;
 	private Color renderPixel(World world, PixelCoordinate pixel)
 	{
 		Ray ray = rayForPixel(pixel);
-		return Tracer.colorAt(world, ray);
+		return Tracer.colorAt(world, ray, MAX_REFLEXION_RECURSION);
 	}
 }

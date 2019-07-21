@@ -1,0 +1,149 @@
+
+- add: camera
+  width: 100
+  height: 50
+  field-of-view: 1.0471975511965977461542144610932
+  from: [ -2, 1.5, -5 ]
+  to: [ 0, 1, 0 ]
+  up: [ 0, 1, 0 ]
+
+
+- add: light
+  at: [ -10, 10, -10 ]
+  intensity: [ 1, 1, 1 ]
+
+
+
+- define: wall-material
+  value:
+    pattern:
+      type: stripes
+      colors:
+        - [0.8, 0.3, 0.4]
+        - [0.95, 0.95, 0.95]
+    ambient: 0.1
+    diffuse: 0.8
+    specular: 0.1
+    reflective: 0.0
+
+- define: sphere-material
+  value:
+    pattern:
+      type: stripes
+      colors:
+        - [0.8, 0.3, 0.4]
+        - [0.95, 0.95, 0.95]
+    ambient: 0.1
+    diffuse: 0.8
+    specular: 0.1
+    reflective: 0.0
+
+- define: gradient-material
+  value:
+    pattern:
+      type: gradient
+      colors:
+        - [0.3, 0.4, 0.8]
+        - [0.95, 0.95, 0.95]
+    ambient: 0.1
+    diffuse: 0.8
+    specular: 0.1
+    reflective: 0.0
+
+
+- define: ring-material
+  value:
+    pattern:
+      type: ring
+      colors:
+        - [0.3, 0.8, 0.4]
+        - [0.95, 0.95, 0.55]
+      transform:
+        - [ scale, 0.1, 0.1, 0.1 ]
+    ambient: 0.1
+    diffuse: 0.8
+    specular: 0.1
+    reflective: 0.0
+
+
+- define: checker-material
+  value:
+    pattern:
+      type: checker
+      colors:
+        - [0.8, 0.4, 0.3]
+        - [0.45, 0.95, 0.95]
+      transform:
+        - [ scale, 0.3, 0.3, 0.3 ]
+    ambient: 0.1
+    diffuse: 0.8
+    specular: 0.1
+    reflective: 0.0
+
+
+
+# FLOOR - a plane
+- add: plane
+  material: wall-material
+
+# BACK WALL - a plane
+- add: plane
+  material: wall-material
+  transform:
+    - [ rotate-x, 1.5707963267948966192313216916398 ] # pi/2
+    - [ rotate-y, 3.14159265 ] # pi
+    - [ translate, 0, 0, 5 ]
+
+
+
+
+# LARGE SPHERE
+- add: sphere
+  material: sphere-material
+  transform:
+    - [ translate, -0.5, 1, 0.5 ]
+
+# SMALL SPHERE
+- add: sphere
+  material: sphere-material
+  transform:
+    - [ rotate-z, 0.77 ]
+    - [ rotate-y, 0.77 ]
+    - [ scale, 0.5, 0.5, 0.5 ]
+    - [ translate, 1.0, 0.5, -0.5 ]
+
+# Gradient Sphere
+- add: sphere
+  material: gradient-material
+  transform:
+    - [ scale, 0.4, 0.3, 0.6 ]
+    - [ rotate-z, 1.0 ]
+    - [ rotate-y, 1.0 ]
+    - [ translate, 1.5, 1.0, -1.0 ]
+
+
+# Ring Sphere
+- add: sphere
+  material: ring-material
+  transform:
+    - [ scale, 0.25, 0.25, 0.25 ]
+    - [ rotate-x, 1.0 ]
+    - [ translate, -1.5, 1.0, -1.0 ]
+
+# Checker Sphere
+- add: sphere
+  material: checker-material
+  transform:
+    - [ scale, 0.25, 0.25, 0.25 ]
+    - [ rotate-x, 1.0 ]
+    - [ translate, -1.0, 1.0, -1.25 ]
+
+
+# SMALLEST SPHERE
+- add: sphere
+  material: sphere-material
+  transform:
+    - [ scale, 0.33, 0.33, 0.33 ]
+    - [ rotate-z, 1.5707963267948966192313216916398 ]
+    - [ translate, -2.2, 0.33, -0.75 ]
+ 

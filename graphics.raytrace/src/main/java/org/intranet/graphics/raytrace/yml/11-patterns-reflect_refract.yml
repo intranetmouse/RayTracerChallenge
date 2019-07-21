@@ -36,7 +36,7 @@
     ambient: 0.1
     diffuse: 0.8
     specular: 0.1
-    reflective: 0.3
+    reflective: 0.0
 
 - define: gradient-material
   value:
@@ -48,7 +48,7 @@
     ambient: 0.1
     diffuse: 0.8
     specular: 0.1
-    reflective: 0.3
+    reflective: 0.0
 
 
 - define: ring-material
@@ -63,7 +63,7 @@
     ambient: 0.1
     diffuse: 0.8
     specular: 0.1
-    reflective: 0.3
+    reflective: 0.0
 
 
 - define: checker-material
@@ -78,7 +78,7 @@
     ambient: 0.1
     diffuse: 0.8
     specular: 0.1
-    reflective: 0.3
+    reflective: 0.0
 
 
 
@@ -111,6 +111,20 @@
     - [ rotate-y, 0.77 ]
     - [ scale, 0.5, 0.5, 0.5 ]
     - [ translate, 1.0, 0.5, -0.5 ]
+
+# REFLECTIVE SPHERE
+- add: sphere
+  material:
+    color: [ 0.1, 0.1, 0.1 ]
+    reflective: 0.9
+    ambient: 0.0
+    diffuse: 0.1
+    specular: 0.0
+  transform:
+    - [ rotate-z, 0.77 ]
+    - [ rotate-y, 0.77 ]
+    - [ scale, 0.75, 0.75, 0.75 ]
+    - [ translate, 1.0, 1.5, 0.5 ]
 
 # Gradient Sphere
 - add: sphere

@@ -8,6 +8,7 @@ import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.PixelCoordinate;
 import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.Shape;
+import org.intranet.graphics.raytrace.Tracer;
 import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
@@ -241,8 +242,9 @@ public class ThenSteps
 				+ " not found. obj=" + comps);
 		}
 
-		Assert.assertNotNull("On object name=" + expectedObjName
-			+ ", property name " + propertyName + " does not match.", value);
+		Assert.assertNotNull("On object name=" + expectedObjName + " of type " +
+			type + ", property name " + propertyName + " does not match.",
+			value);
 		return value;
 	}
 
@@ -608,5 +610,16 @@ public class ThenSteps
 
 		Color actualColor = pattern.colorAt(point);
 		Assert.assertEquals(expectedColor, actualColor);
+	}
+
+	@Then("^color_at\\(" + wordPattern + ", " + wordPattern + "\\) should terminate successfully")
+	public void color_atWRShouldTerminateSuccessfully(String worldName,
+		String rayName)
+	{
+		World world = data.getWorld(worldName);
+		Ray ray = data.getRay(rayName);
+		Color c = Tracer.colorAt(world, ray, 5);
+		// TODO: Figure out how to test for failure case (not terminated)
+		Assert.assertNotNull(c);
 	}
 }

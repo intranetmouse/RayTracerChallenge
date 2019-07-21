@@ -2,6 +2,7 @@ package org.intranet.graphics.raytrace.steps;
 
 import java.util.List;
 
+import org.intranet.graphics.raytrace.Camera;
 import org.intranet.graphics.raytrace.IntersectionComputations;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Light;
@@ -12,6 +13,7 @@ import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.shape.DefaultWorld;
+import org.intranet.graphics.raytrace.shape.Plane;
 import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.shape.Sphere;
 import org.intranet.graphics.raytrace.surface.Color;
@@ -38,12 +40,12 @@ public class WorldSteps
 		data.put(worldName, w);
 	}
 
-	@Given(wordPattern + " ← sphere\\(\\) with:")
-	public void sSphereWith(String sphereName,
+	@Given(wordPattern + " ← (sphere|plane)\\(\\) with:")
+	public void sSphereWith(String sphereName, String shapeName,
 		DataTable dataTable)
 	{
-		Sphere sphere = new Sphere();
-		Material material = sphere.getMaterial();
+		Shape shape = "sphere".equals(shapeName) ? new Sphere() : new Plane();
+		Material material = shape.getMaterial();
 		for (List<String> strings : dataTable.asLists())
 		{
 			String property = strings.get(0);
@@ -60,7 +62,7 @@ public class WorldSteps
 							double scaleX = Double.parseDouble(scalingValues[0]);
 							double scaleY = Double.parseDouble(scalingValues[1]);
 							double scaleZ = Double.parseDouble(scalingValues[2]);
-							sphere.setTransform(Matrix.newScaling(scaleX, scaleY, scaleZ));
+							shape.setTransform(Matrix.newScaling(scaleX, scaleY, scaleZ));
 							break;
 						case "translation":
 							String translationValue = args[1].replaceAll("[\\) ]", "");
@@ -68,7 +70,7 @@ public class WorldSteps
 							double xlateX = Double.parseDouble(translationValues[0]);
 							double xlateY = Double.parseDouble(translationValues[1]);
 							double xlateZ = Double.parseDouble(translationValues[2]);
-							sphere.setTransform(Matrix.newTranslation(xlateX, xlateY, xlateZ));
+							shape.setTransform(Matrix.newTranslation(xlateX, xlateY, xlateZ));
 							break;
 						default:
 							throw new cucumber.api.PendingException("Unknown sphere transform property " + args[0]);
@@ -90,11 +92,15 @@ public class WorldSteps
 					double specular = Double.parseDouble(value);
 					material.setSpecular(specular);
 					break;
+				case "material.reflective":
+					double reflective = Double.parseDouble(value);
+					material.setReflective(reflective);
+					break;
 				default:
 					throw new cucumber.api.PendingException("Unknown sphere property " + property);
 			}
 		}
-		data.put(sphereName, sphere);
+		data.put(sphereName, shape);
 	}
 
 	@Given(wordPattern + " ← the (first|second) object in " + wordPattern)
@@ -157,9 +163,23 @@ public class WorldSteps
 		String intersectionComputationsName)
 	{
 		World world = data.getWorld(worldName);
-		IntersectionComputations comps = data.getComputations(intersectionComputationsName);
+		IntersectionComputations comps = data.getComputations(
+			intersectionComputationsName);
 
-		Color c = comps.shadeHit(world);
+		Color c = comps.shadeHit(world, Camera.MAX_REFLEXION_RECURSION);
+
+		data.put(colorName, c);
+	}
+
+	@When(wordPattern + " ← reflected_color\\(" + wordPattern + ", " + wordPattern + "\\)")
+	public void colorReflected_colorWComps(String colorName, String worldName,
+		String intersectionComputationsName)
+	{
+		World world = data.getWorld(worldName);
+		IntersectionComputations comps = data.getComputations(
+			intersectionComputationsName);
+
+		Color c = Tracer.reflectedColor(world, comps, Camera.MAX_REFLEXION_RECURSION);
 
 		data.put(colorName, c);
 	}
@@ -170,7 +190,7 @@ public class WorldSteps
 		World world = data.getWorld(worldName);
 		Ray ray = data.getRay(rayName);
 
-		Color color = Tracer.colorAt(world, ray);
+		Color color = Tracer.colorAt(world, ray, Camera.MAX_REFLEXION_RECURSION);
 		data.put(colorName, color);
 	}
 
@@ -213,4 +233,12 @@ public class WorldSteps
 		Assert.assertEquals(expectedResult, actualResult);
 	}
 
+	@When(wordPattern + " ← reflected_color\\(" + wordPattern + ", " + wordPattern + ", " + intPattern + "\\)")
+	public void colorReflected_colorWComps(String colorName, String worldName, String compsName, Integer remaining)
+	{
+		World world = data.getWorld(worldName);
+		IntersectionComputations comps = data.getComputations(compsName);
+		Color color = Tracer.reflectedColor(world, comps, remaining);
+		data.put(colorName, color);
+	}
 }

@@ -33,14 +33,16 @@ public final class IntersectionComputations
 	private Point overPoint;
 	public Point getOverPoint() { return overPoint; }
 
-	public Color shadeHit(World world)
+	public Color shadeHit(World world, int remaining)
 	{
 		List<Light> lightSources = world.getLightSources();
-		return lightSources.stream()
+		Color surfaceColor = lightSources.stream()
 			.map(lightSource -> Tracer.lighting(getObject().getMaterial(),
 				getObject(), lightSource, overPoint, eyeVector, normalVector,
 				Tracer.isShadowed(world, overPoint)))
 			.reduce((a, b) -> a.add(b)).orElse(new Color(0, 0, 0));
+		Color reflectedColor = Tracer.reflectedColor(world, this, remaining);
+		return surfaceColor.add(reflectedColor);
 	}
 
 	public IntersectionComputations(Intersection intersection,

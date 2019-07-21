@@ -182,7 +182,7 @@ public class YamlWorldParser
 		}
 
 		if (materialMap.size() > 0)
-			System.err.printf("Leftovers for material: %s", materialMap);
+			System.err.printf("Leftovers for material: %s\n", materialMap);
 	}
 
 	private static void addObject(World world, Map<String, Object> objMap,
