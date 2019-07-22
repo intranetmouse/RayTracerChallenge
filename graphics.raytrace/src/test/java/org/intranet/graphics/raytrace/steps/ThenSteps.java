@@ -395,6 +395,19 @@ public class ThenSteps
 			Assert.assertEquals((int)expectedValue, coord.intValue());
 			return;
 		}
+
+		IntersectionComputations comps = data.getComputations(objectName);
+		if (comps != null)
+		{
+			Double value = "n1".equals(propertyName) ? comps.getN1() :
+				"n2".equals(propertyName) ? comps.getN2() :
+				null;
+			Assert.assertNotNull("Unknown property name " + propertyName +
+				" on object " + objectName, value);
+			Assert.assertEquals(expectedValue, value, Tuple.EPSILON);
+			return;
+		}
+
 		Assert.fail("Unrecognized objectName " + objectName);
 	}
 
@@ -621,5 +634,21 @@ public class ThenSteps
 		Color c = Tracer.colorAt(world, ray, 5);
 		// TODO: Figure out how to test for failure case (not terminated)
 		Assert.assertNotNull(c);
+	}
+
+	@Then(wordPattern + ".material.(transparency|refractive_index) = " + doublePattern)
+	public void sMaterialTransparency(String shapeName, String propertyName, Double doubleValue)
+	{
+		Shape s = data.getShape(shapeName);
+		Material material = s.getMaterial();
+		switch (propertyName)
+		{
+			case "transparency":
+				material.setTransparency(doubleValue);
+				break;
+			case "refractive_index":
+				material.setRefractive(doubleValue);
+				break;
+		}
 	}
 }

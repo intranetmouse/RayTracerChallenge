@@ -8,6 +8,10 @@ public final class Material
 	public Color getColor() { return color; }
 	public void setColor(Color value) { color = value; }
 
+	private Pattern pattern;
+	public Pattern getPattern() { return pattern; }
+	public void setPattern(Pattern value) { pattern = value; }
+
 	private double ambient = 0.1;
 	public double getAmbient() { return ambient; }
 	public void setAmbient(double value) { ambient = value; }
@@ -35,10 +39,6 @@ public final class Material
 	private double transparency = 0.0;
 	public double getTransparency() { return transparency; }
 	public void setTransparency(double value) { transparency = value; }
-
-	private Pattern pattern;
-	public Pattern getPattern() { return pattern; }
-	public void setPattern(Pattern value) { pattern = value; }
 
 	@Override
 	public boolean equals(Object other)

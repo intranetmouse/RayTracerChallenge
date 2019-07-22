@@ -1,5 +1,6 @@
 package org.intranet.graphics.raytrace;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.intranet.graphics.raytrace.primitive.Point;
@@ -33,6 +34,14 @@ public final class IntersectionComputations
 	private Point overPoint;
 	public Point getOverPoint() { return overPoint; }
 
+	private Point underPoint;
+	public Tuple getUnderPoint() { return underPoint; }
+
+	private double n1;
+	public double getN1() { return n1; }
+	private double n2;
+	public double getN2() { return n2; }
+
 	public Color shadeHit(World world, int remaining)
 	{
 		List<Light> lightSources = world.getLightSources();
@@ -45,10 +54,10 @@ public final class IntersectionComputations
 		return surfaceColor.add(reflectedColor);
 	}
 
-	public IntersectionComputations(Intersection intersection,
-		Ray ray)
+	public IntersectionComputations(Intersection hit,
+		Ray ray, List<Intersection> allIntersections)
 	{
-		this.intersection = intersection;
+		this.intersection = hit;
 		// copy the intersection's properties, for convenience
 		// precompute some useful values
 		this.point = ray.position(getDistance());
@@ -60,8 +69,40 @@ public final class IntersectionComputations
 			inside = true;
 			normalVector = normalVector.negate();
 		}
-		this.overPoint = point.add(normalVector.multiply(Tuple.EPSILON));
+
+		Vector normalFraction = normalVector.multiply(Tuple.EPSILON);
+		this.overPoint = point.add(normalFraction);
+		this.underPoint = point.subtract(normalFraction);
 
 		reflectVector = ray.getDirection().reflect(normalVector);
+
+		List<Shape> containers = new ArrayList<>();
+		for (Intersection i : allIntersections)
+		{
+			if (i == hit)
+			{
+				if (containers.isEmpty())
+					n1 = 1.0;
+				else
+					n1 = containers.get(containers.size() - 1).getMaterial().getRefractive();
+			}
+			if (containers.contains(i.getObject()))
+			{
+				containers.remove(i.getObject());
+			}
+			else
+			{
+				containers.add(i.getObject());
+			}
+			if (i == hit)
+			{
+				if (containers.isEmpty())
+					n2 = 1.0;
+				else
+					n2 = containers.get(containers.size() - 1).getMaterial().getRefractive();
+				break;
+			}
+		}
+
 	}
 }

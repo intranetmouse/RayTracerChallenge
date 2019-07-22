@@ -16,6 +16,7 @@ import org.junit.Assert;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import io.cucumber.datatable.DataTable;
 
 public class SpheresSteps
 	extends StepsParent
@@ -31,6 +32,31 @@ public class SpheresSteps
 		data.put(sphereName, new Sphere());
 	}
 
+	@Given(wordPattern + " ← glass_sphere\\(\\)")
+	public void sGlass_sphere(String sphereName)
+	{
+		Sphere sphere = createGlassSphere(sphereName);
+
+		sphere.getSavedRay();
+	}
+
+	private Sphere createGlassSphere(String sphereName)
+	{
+		Sphere sphere = new Sphere();
+		Material material = sphere.getMaterial();
+		material.setTransparency(1.0);
+		material.setRefractive(1.5);
+		data.put(sphereName, sphere);
+		return sphere;
+	}
+
+	@Given(wordPattern + " ← glass_sphere\\(\\) with:")
+	public void sGlass_sphere(String sphereName, DataTable dataTable)
+	{
+		Sphere sphere = createGlassSphere(sphereName);
+		WorldSteps.setShapePropertiesFromDataTable(dataTable, sphere);
+	}
+
 	@Given(wordPattern + " ← scaling\\(" + threeDoublesPattern +
 		"\\) \\* rotation_z\\(π\\/" + doublePattern + "\\)")
 	public void mScalingRotation_zPi(String matrixName, double scaleX,
@@ -42,11 +68,26 @@ public class SpheresSteps
 		data.put(matrixName, product);
 	}
 
-	@Given(wordPattern + ".material.ambient ← " + doublePattern)
-	public void outerMaterialAmbient(String objectName, double ambientValue)
+	@Given(wordPattern + ".material.(ambient|transparency|refractive_index) ← " + doublePattern)
+	public void outerMaterialAmbient(String objectName, String propertyName,
+		double doubleValue)
 	{
 		Shape obj = data.getShape(objectName);
-		obj.getMaterial().setAmbient(ambientValue);
+		Material material = obj.getMaterial();
+		switch (propertyName)
+		{
+			case "ambient":
+				material.setAmbient(doubleValue);
+				break;
+			case "transparency":
+				material.setTransparency(doubleValue);
+				break;
+			case "refractive_index":
+				material.setRefractive(doubleValue);
+				break;
+			default:
+				Assert.fail("Illegal property name " + propertyName);
+		}
 	}
 
 

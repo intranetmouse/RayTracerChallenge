@@ -60,7 +60,8 @@ public final class Tracer
 		Intersection hit = intersectionList.hit();
 		if (hit == null)
 			return new Color(0, 0, 0);
-		IntersectionComputations comps = new IntersectionComputations(hit, ray);
+		IntersectionComputations comps = new IntersectionComputations(hit, ray,
+			intersectionList.getIntersections());
 		return comps.shadeHit(world, remaining);
 	}
 

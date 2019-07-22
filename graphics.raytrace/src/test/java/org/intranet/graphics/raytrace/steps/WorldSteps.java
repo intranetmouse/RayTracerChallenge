@@ -45,6 +45,12 @@ public class WorldSteps
 		DataTable dataTable)
 	{
 		Shape shape = "sphere".equals(shapeName) ? new Sphere() : new Plane();
+		setShapePropertiesFromDataTable(dataTable, shape);
+		data.put(sphereName, shape);
+	}
+
+	public static void setShapePropertiesFromDataTable(DataTable dataTable, Shape shape)
+	{
 		Material material = shape.getMaterial();
 		for (List<String> strings : dataTable.asLists())
 		{
@@ -96,11 +102,14 @@ public class WorldSteps
 					double reflective = Double.parseDouble(value);
 					material.setReflective(reflective);
 					break;
+				case "material.refractive_index":
+					double refractiveIndex = Double.parseDouble(value);
+					material.setRefractive(refractiveIndex);
+					break;
 				default:
 					throw new cucumber.api.PendingException("Unknown sphere property " + property);
 			}
 		}
-		data.put(sphereName, shape);
 	}
 
 	@Given(wordPattern + " ← the (first|second) object in " + wordPattern)

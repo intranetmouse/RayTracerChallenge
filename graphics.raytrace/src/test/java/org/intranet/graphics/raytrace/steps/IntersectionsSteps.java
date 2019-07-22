@@ -1,5 +1,8 @@
 package org.intranet.graphics.raytrace.steps;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionComputations;
 import org.intranet.graphics.raytrace.IntersectionList;
@@ -27,6 +30,53 @@ public class IntersectionsSteps
 		Intersection intersection = data.getIntersection(intersectionName);
 		IntersectionList ilist = new IntersectionList(intersection);
 		data.put(intersectionsName, ilist);
+	}
+
+	@Given(wordPattern + " ← intersections\\(" + fourWordPattern + "\\)")
+	public void xsIntersectionsIIII(String intersectionListName, String int1,
+		String int2, String int3, String int4)
+	{
+		Intersection i1 = data.getIntersection(int1);
+		Intersection i2 = data.getIntersection(int2);
+		Intersection i3 = data.getIntersection(int3);
+		Intersection i4 = data.getIntersection(int4);
+
+		IntersectionList ilist = new IntersectionList(i1, i2, i3, i4);
+		data.put(intersectionListName, ilist);
+	}
+
+	public static final String indexShapePattern = doublePattern + ":" + wordPattern;
+	public static final String twoIndexShapePatterns = indexShapePattern + ", " + indexShapePattern;
+	public static final String sixIndexShapePatterns = twoIndexShapePatterns + ", " + twoIndexShapePatterns + ", " + twoIndexShapePatterns;
+	@Given(wordPattern + " ← intersections\\(" + sixIndexShapePatterns + "\\)")
+	public void xsIntersectionsABCBCA(String intersectionListName,
+		double shape1Dist, String shape1Name,
+		double shape2Dist, String shape2Name,
+		double shape3Dist, String shape3Name,
+		double shape4Dist, String shape4Name,
+		double shape5Dist, String shape5Name,
+		double shape6Dist, String shape6Name)
+	{
+		Shape shape1 = data.getShape(shape1Name);
+		Intersection i1 = new Intersection(shape1Dist, shape1);
+
+		Shape shape2 = data.getShape(shape2Name);
+		Intersection i2 = new Intersection(shape2Dist, shape2);
+
+		Shape shape3 = data.getShape(shape3Name);
+		Intersection i3 = new Intersection(shape3Dist, shape3);
+
+		Shape shape4 = data.getShape(shape4Name);
+		Intersection i4 = new Intersection(shape4Dist, shape4);
+
+		Shape shape5 = data.getShape(shape5Name);
+		Intersection i5 = new Intersection(shape5Dist, shape5);
+
+		Shape shape6 = data.getShape(shape6Name);
+		Intersection i6 = new Intersection(shape6Dist, shape6);
+
+		IntersectionList ilist = new IntersectionList(i1, i2, i3, i4, i5, i6);
+		data.put(intersectionListName, ilist);
 	}
 
 	@When(wordPattern + " ← intersections\\(" + wordPattern + ", " + wordPattern + "\\)")
@@ -72,13 +122,51 @@ public class IntersectionsSteps
 		String intersectionName, String rayName)
 	{
 		Intersection intersection = data.getIntersection(intersectionName);
+
+		List<Intersection> intersectionArray = Arrays.asList(intersection);
+
+		prepareComputations(computationsName, rayName, intersection,
+			intersectionArray);
+	}
+
+	private void prepareComputations(String computationsName, String rayName,
+		Intersection intersection, List<Intersection> intersectionArray)
+	{
 		Ray ray = data.getRay(rayName);
 
 		IntersectionComputations comps = new IntersectionComputations(
-			intersection, ray);
+			intersection, ray, intersectionArray);
 		data.put(computationsName, comps);
 	}
 
+	@When(wordPattern + " ← prepare_computations\\(" + wordPattern + "\\[" + intPattern + "\\], " + wordPattern + ", " + wordPattern + "\\)")
+	public void compsPrepare_computationsXsRXs(String computationsName,
+		String intersectionListName, int intersectionIndex, String rayName,
+		String intersectionList2Name)
+	{
+		Assert.assertEquals(intersectionListName, intersectionList2Name);
+
+		IntersectionList intersectionList = data.getIntersectionList(intersectionListName);
+		Intersection intersection = intersectionList.get(intersectionIndex);
+
+		List<Intersection> intersectionArray = intersectionList.getIntersections();
+
+		prepareComputations(computationsName, rayName, intersection,
+			intersectionArray);
+	}
+
+	@When(wordPattern + " ← prepare_computations\\(" + threeWordPattern + "\\)")
+	public void compsPrepare_computationsIRXs(String computationsName,
+		String intersectionName, String rayName, String intersectionListName)
+	{
+		Intersection intersection = data.getIntersection(intersectionName);
+
+		IntersectionList intersectionList = data.getIntersectionList(intersectionListName);
+		List<Intersection> intersectionArray = intersectionList.getIntersections();
+
+		prepareComputations(computationsName, rayName, intersection,
+			intersectionArray);
+	}
 
 	@Then(wordPattern + "\\[" + intPattern + "\\].object = " + wordPattern)
 	public void intersectionSetObject(String intersectionListName,
@@ -102,18 +190,20 @@ public class IntersectionsSteps
 		Assert.assertEquals(expectedValue, t, Tuple.EPSILON);
 	}
 
-	@Given(wordPattern + " ← intersections\\(" + fourWordPattern + "\\)")
-	public void xsIntersectionsIIII(String intersectionListName, String int1,
-		String int2, String int3, String int4)
+	@Then(wordPattern + ".under_point.z > EPSILON\\/" + intPattern)
+	public void compsUnder_pointZEPSILON(String compsName, Integer divisor)
 	{
-		Intersection i1 = data.getIntersection(int1);
-		Intersection i2 = data.getIntersection(int2);
-		Intersection i3 = data.getIntersection(int3);
-		Intersection i4 = data.getIntersection(int4);
+		IntersectionComputations comps = data.getComputations(compsName);
 
-		IntersectionList ilist = new IntersectionList(i1, i2, i3, i4);
-		data.put(intersectionListName, ilist);
+		Assert.assertTrue(comps.getUnderPoint().getZ() > Tuple.EPSILON / divisor);
 	}
 
+	@Then(wordPattern + ".point.z < " + wordPattern + ".under_point.z")
+	public void compsPointZCompsUnder_pointZ(String compsName1, String compsName2)
+	{
+		IntersectionComputations comps1 = data.getComputations(compsName1);
+		IntersectionComputations comps2 = data.getComputations(compsName2);
 
+		Assert.assertTrue(comps1.getPoint().getZ() < comps2.getUnderPoint().getZ());
+	}
 }
