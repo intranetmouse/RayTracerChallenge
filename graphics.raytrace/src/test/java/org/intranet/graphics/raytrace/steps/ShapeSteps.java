@@ -1,6 +1,6 @@
 package org.intranet.graphics.raytrace.steps;
 
-import cucumber.api.java.en.Given;
+import io.cucumber.java.en.Given;
 
 public class ShapeSteps extends StepsParent
 {

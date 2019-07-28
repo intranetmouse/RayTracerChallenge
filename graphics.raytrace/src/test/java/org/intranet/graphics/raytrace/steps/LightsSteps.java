@@ -4,8 +4,8 @@ import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.surface.Color;
 
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.When;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.When;
 
 public class LightsSteps
 	extends StepsParent

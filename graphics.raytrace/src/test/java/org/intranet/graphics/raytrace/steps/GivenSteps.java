@@ -12,8 +12,8 @@ import org.intranet.graphics.raytrace.surface.RingPattern;
 import org.intranet.graphics.raytrace.surface.StripePattern;
 import org.junit.Assert;
 
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.When;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.When;
 
 public class GivenSteps
 	extends StepsParent

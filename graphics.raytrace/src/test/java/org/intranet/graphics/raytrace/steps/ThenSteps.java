@@ -21,7 +21,7 @@ import org.intranet.graphics.raytrace.surface.Pattern;
 import org.intranet.graphics.raytrace.surface.StripePattern;
 import org.junit.Assert;
 
-import cucumber.api.java.en.Then;
+import io.cucumber.java.en.Then;
 
 public class ThenSteps
 	extends StepsParent

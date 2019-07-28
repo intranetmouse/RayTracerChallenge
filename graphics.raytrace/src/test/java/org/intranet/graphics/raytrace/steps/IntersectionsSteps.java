@@ -11,9 +11,9 @@ import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.junit.Assert;
 
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
 public class IntersectionsSteps
 	extends StepsParent

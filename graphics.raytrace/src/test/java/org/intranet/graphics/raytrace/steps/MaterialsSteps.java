@@ -8,8 +8,8 @@ import org.intranet.graphics.raytrace.shape.Sphere;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
 
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.When;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.When;
 
 public class MaterialsSteps
 	extends StepsParent
