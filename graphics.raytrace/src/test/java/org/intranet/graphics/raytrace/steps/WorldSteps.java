@@ -102,6 +102,14 @@ public class WorldSteps
 					double reflective = Double.parseDouble(value);
 					material.setReflective(reflective);
 					break;
+				case "material.transparency":
+					double transparency = Double.parseDouble(value);
+					material.setTransparency(transparency);
+					break;
+				case "material.ambient":
+					double ambient = Double.parseDouble(value);
+					material.setAmbient(ambient);
+					break;
 				case "material.refractive_index":
 					double refractiveIndex = Double.parseDouble(value);
 					material.setRefractive(refractiveIndex);
@@ -155,7 +163,7 @@ public class WorldSteps
 		data.put(worldName, w);
 	}
 
-	@When(wordPattern + " ← intersect_world\\(" + wordPattern + ", " + wordPattern + "\\)")
+	@When(wordPattern + " ← intersect_world\\(" + twoWordPattern + "\\)")
 	public void xsIntersect_worldWR(String intersectionListName,
 		String worldName, String rayName)
 	{
@@ -167,7 +175,7 @@ public class WorldSteps
 		data.put(intersectionListName, il);
 	}
 
-	@When(wordPattern + " ← shade_hit\\(" + wordPattern + ", " + wordPattern + "\\)")
+	@When(wordPattern + " ← shade_hit\\(" + twoWordPattern + "\\)")
 	public void cShade_hitWComps(String colorName, String worldName,
 		String intersectionComputationsName)
 	{
@@ -180,20 +188,46 @@ public class WorldSteps
 		data.put(colorName, c);
 	}
 
-	@When(wordPattern + " ← reflected_color\\(" + wordPattern + ", " + wordPattern + "\\)")
+	@When(wordPattern + " ← reflected_color\\(" + twoWordPattern + "\\)")
 	public void colorReflected_colorWComps(String colorName, String worldName,
+		String compsName)
+	{
+		colorReflected_colorWComps(colorName, worldName, compsName,
+			Camera.MAX_REFLEXION_RECURSION);
+	}
+
+	@When(wordPattern + " ← reflected_color\\(" + twoWordPattern + ", " + intPattern + "\\)")
+	public void colorReflected_colorWComps(String colorName, String worldName,
+		String compsName, Integer remaining)
+	{
+		World world = data.getWorld(worldName);
+		IntersectionComputations comps = data.getComputations(compsName);
+		Color color = Tracer.reflectedColor(world, comps, remaining);
+		data.put(colorName, color);
+	}
+
+	@When(wordPattern + " ← refracted_color\\(" + wordPattern + ", " + wordPattern + "\\)")
+	public void colorRefracted_colorWComps(String colorName, String worldName,
 		String intersectionComputationsName)
+	{
+		colorRefracted_colorWCompsInt(colorName, worldName,
+			intersectionComputationsName, Camera.MAX_REFLEXION_RECURSION);
+	}
+
+	@When(wordPattern + " ← refracted_color\\(" + twoWordPattern + ", " + intPattern + "\\)")
+	public void colorRefracted_colorWCompsInt(String colorName, String worldName,
+		String intersectionComputationsName, Integer remaining)
 	{
 		World world = data.getWorld(worldName);
 		IntersectionComputations comps = data.getComputations(
 			intersectionComputationsName);
 
-		Color c = Tracer.reflectedColor(world, comps, Camera.MAX_REFLEXION_RECURSION);
+		Color c = Tracer.refractedColor(world, comps, remaining);
 
 		data.put(colorName, c);
 	}
 
-	@When(wordPattern + " ← color_at\\(" + wordPattern + ", " + wordPattern + "\\)")
+	@When(wordPattern + " ← color_at\\(" + twoWordPattern + "\\)")
 	public void cColor_atWR(String colorName, String worldName, String rayName)
 	{
 		World world = data.getWorld(worldName);
@@ -240,14 +274,5 @@ public class WorldSteps
 		boolean actualResult = Tracer.isShadowed(world, point);
 		boolean expectedResult = "true".equals(expectedResultStr);
 		Assert.assertEquals(expectedResult, actualResult);
-	}
-
-	@When(wordPattern + " ← reflected_color\\(" + wordPattern + ", " + wordPattern + ", " + intPattern + "\\)")
-	public void colorReflected_colorWComps(String colorName, String worldName, String compsName, Integer remaining)
-	{
-		World world = data.getWorld(worldName);
-		IntersectionComputations comps = data.getComputations(compsName);
-		Color color = Tracer.reflectedColor(world, comps, remaining);
-		data.put(colorName, color);
 	}
 }

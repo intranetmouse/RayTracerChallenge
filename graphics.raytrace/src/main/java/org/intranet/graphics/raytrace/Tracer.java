@@ -86,4 +86,16 @@ public final class Tracer
 		Color color = colorAt(world, reflectRay, remaining - 1);
 		return color.multiply(comps.getObject().getMaterial().getReflective());
 	}
+
+	public static Color refractedColor(World world,
+		IntersectionComputations comps, int remaining)
+	{
+		if (remaining <= 0 || comps.getObject().getMaterial().getTransparency() < Tuple.EPSILON)
+			return new Color(0, 0, 0);
+
+		return new Color(1, 1, 1);
+//		Ray reflectRay = new Ray(comps.getOverPoint(), comps.getReflectVector());
+//		Color color = colorAt(world, reflectRay, remaining - 1);
+//		return color.multiply(comps.getObject().getMaterial().getReflective());
+	}
 }

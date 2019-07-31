@@ -79,6 +79,21 @@ public class IntersectionsSteps
 		data.put(intersectionListName, ilist);
 	}
 
+	@Given(wordPattern + " ← intersections\\(" + twoIndexShapePatterns + "\\)")
+	public void xsIntersectionsShapeShape(String intersectionListName,
+		double shape1Dist, String shape1Name,
+		double shape2Dist, String shape2Name)
+	{
+		Shape shape1 = data.getShape(shape1Name);
+		Intersection i1 = new Intersection(shape1Dist, shape1);
+
+		Shape shape2 = data.getShape(shape2Name);
+		Intersection i2 = new Intersection(shape2Dist, shape2);
+
+		IntersectionList ilist = new IntersectionList(i1, i2);
+		data.put(intersectionListName, ilist);
+	}
+
 	@When(wordPattern + " ← intersections\\(" + wordPattern + ", " + wordPattern + "\\)")
 	public void xsIntersectionsII(String intersectionsName,
 		String intersection1Name, String intersection2Name)
