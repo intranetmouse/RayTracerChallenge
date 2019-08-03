@@ -35,7 +35,7 @@ public final class IntersectionComputations
 	public Point getOverPoint() { return overPoint; }
 
 	private Point underPoint;
-	public Tuple getUnderPoint() { return underPoint; }
+	public Point getUnderPoint() { return underPoint; }
 
 	private double n1;
 	public double getN1() { return n1; }

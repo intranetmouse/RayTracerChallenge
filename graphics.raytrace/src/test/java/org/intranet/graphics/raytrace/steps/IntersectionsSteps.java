@@ -47,6 +47,7 @@ public class IntersectionsSteps
 
 	public static final String indexShapePattern = doublePattern + ":" + wordPattern;
 	public static final String twoIndexShapePatterns = indexShapePattern + ", " + indexShapePattern;
+	public static final String fourIndexShapePatterns = twoIndexShapePatterns + ", " + twoIndexShapePatterns;
 	public static final String sixIndexShapePatterns = twoIndexShapePatterns + ", " + twoIndexShapePatterns + ", " + twoIndexShapePatterns;
 	@Given(wordPattern + " ← intersections\\(" + sixIndexShapePatterns + "\\)")
 	public void xsIntersectionsABCBCA(String intersectionListName,
@@ -76,6 +77,44 @@ public class IntersectionsSteps
 		Intersection i6 = new Intersection(shape6Dist, shape6);
 
 		IntersectionList ilist = new IntersectionList(i1, i2, i3, i4, i5, i6);
+		data.put(intersectionListName, ilist);
+	}
+
+	@Given(wordPattern + " ← intersections\\(" + fourIndexShapePatterns + "\\)")
+	public void xsIntersectionsABCB(String intersectionListName,
+		double shape1Dist, String shape1Name,
+		double shape2Dist, String shape2Name,
+		double shape3Dist, String shape3Name,
+		double shape4Dist, String shape4Name)
+	{
+		Shape shape1 = data.getShape(shape1Name);
+		Intersection i1 = new Intersection(shape1Dist, shape1);
+
+		Shape shape2 = data.getShape(shape2Name);
+		Intersection i2 = new Intersection(shape2Dist, shape2);
+
+		Shape shape3 = data.getShape(shape3Name);
+		Intersection i3 = new Intersection(shape3Dist, shape3);
+
+		Shape shape4 = data.getShape(shape4Name);
+		Intersection i4 = new Intersection(shape4Dist, shape4);
+
+		IntersectionList ilist = new IntersectionList(i1, i2, i3, i4);
+		data.put(intersectionListName, ilist);
+	}
+
+	@Given(wordPattern + " ← intersections\\(-√2\\/2:" + wordPattern + ", √2\\/2:" + wordPattern + "\\)")
+	public void xsIntersectionsShapeShape(String intersectionListName,
+		String shape1Name, String shape2Name)
+	{
+		double sqrtTwoDivTwo = Math.sqrt(2) / 2;
+		Shape shape1 = data.getShape(shape1Name);
+		Intersection i1 = new Intersection(-sqrtTwoDivTwo, shape1);
+
+		Shape shape2 = data.getShape(shape2Name);
+		Intersection i2 = new Intersection(sqrtTwoDivTwo, shape2);
+
+		IntersectionList ilist = new IntersectionList(i1, i2);
 		data.put(intersectionListName, ilist);
 	}
 

@@ -54,6 +54,21 @@ public class RaysSteps
 		data.put(rayName, ray);
 	}
 
+	@When("^" + wordPattern + " ← ray\\(point\\(0, 0, √2/2\\), vector\\(" + threeDoublesPattern + "\\)\\)")
+	public void rRayPointSqrtVector(String rayName, double vectorx, double vectory,
+		double vectorz)
+	{
+		double pointx = 0.0;
+		double sqrt2div2 = Math.sqrt(2.0) / 2.0;
+		double pointy = 0;
+		double pointz = sqrt2div2;
+		Point point = new Point(pointx, pointy, pointz);
+		Vector vector = new Vector(vectorx, vectory, vectorz);
+
+		Ray ray = new Ray(point, vector);
+		data.put(rayName, ray);
+	}
+
 	@When(wordPattern + " ← transform\\(" + twoWordPattern + "\\)")
 	public void rTransformRM(String newRayName, String rayName,
 		String translationName)

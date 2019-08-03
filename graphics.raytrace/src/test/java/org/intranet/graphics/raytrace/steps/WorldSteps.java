@@ -114,8 +114,13 @@ public class WorldSteps
 					double refractiveIndex = Double.parseDouble(value);
 					material.setRefractive(refractiveIndex);
 					break;
+				case "material.pattern":
+					if (!"test_pattern()".equals(value))
+						return;
+					material.setPattern(new TestPattern());
+					break;
 				default:
-					throw new cucumber.api.PendingException("Unknown sphere property " + property);
+					throw new cucumber.api.PendingException("Unknown shape property " + property);
 			}
 		}
 	}

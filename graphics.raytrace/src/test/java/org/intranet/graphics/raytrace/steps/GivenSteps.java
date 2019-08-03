@@ -12,22 +12,13 @@ import org.intranet.graphics.raytrace.surface.RingPattern;
 import org.intranet.graphics.raytrace.surface.StripePattern;
 import org.junit.Assert;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 
 public class GivenSteps
 	extends StepsParent
 {
-	private final class TestPattern
-		extends Pattern
-	{
-		@Override
-		public Color colorAt(Point point)
-		{
-			return new Color(point.getX(), point.getY(), point.getZ());
-		}
-	}
-
 	public GivenSteps(RaytraceData data)
 	{
 		super(data);
@@ -147,5 +138,13 @@ public class GivenSteps
 		Pattern pattern = "ring".equals(patternType) ? new RingPattern(c1, c2) :
 			new CheckerPattern(c1, c2);
 		data.put(patternName, pattern);
+	}
+
+	@Given(wordPattern + " has:")
+	public void shapeHas(String shapeName, DataTable dataTable)
+	{
+		Shape shape = data.getShape(shapeName);
+
+		WorldSteps.setShapePropertiesFromDataTable(dataTable, shape);
 	}
 }

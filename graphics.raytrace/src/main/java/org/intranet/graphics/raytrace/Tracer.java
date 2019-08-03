@@ -93,7 +93,25 @@ public final class Tracer
 		if (remaining <= 0 || comps.getObject().getMaterial().getTransparency() < Tuple.EPSILON)
 			return new Color(0, 0, 0);
 
-		return new Color(1, 1, 1);
+		double nRatio = comps.getN1() / comps.getN2();
+		double cosI = comps.getEyeVector().dot(comps.getNormalVector());
+		double sin2T = nRatio * nRatio * (1 - cosI * cosI);
+
+		if (sin2T > 1)
+			return new Color(0, 0, 0);
+
+		double cosT = Math.sqrt(1.0 - sin2T);
+
+		Vector direction = comps.getNormalVector().multiply(nRatio * cosI - cosT)
+			.subtract(comps.getEyeVector().multiply(nRatio));
+
+		Ray refractRay = new Ray(comps.getUnderPoint(), direction);
+
+		Color color = colorAt(world, refractRay, remaining - 1)
+			.multiply(comps.getObject().getMaterial().getTransparency());
+
+		return color;
+
 //		Ray reflectRay = new Ray(comps.getOverPoint(), comps.getReflectVector());
 //		Color color = colorAt(world, reflectRay, remaining - 1);
 //		return color.multiply(comps.getObject().getMaterial().getReflective());

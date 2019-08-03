@@ -127,6 +127,10 @@ public class YamlWorldParser
 		if (shininess != null)
 			mat.setShininess(stringToDbl(shininess));
 
+		String transparency = (String)materialMap.get("transparency");
+		if (transparency != null)
+			mat.setTransparency(stringToDbl(transparency));
+
 		String reflective = (String)materialMap.get("reflective");
 		if (reflective != null)
 			mat.setReflective(stringToDbl(reflective));
