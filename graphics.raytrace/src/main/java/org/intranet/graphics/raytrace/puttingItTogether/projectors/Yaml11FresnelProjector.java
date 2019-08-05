@@ -4,10 +4,10 @@ import java.io.InputStream;
 
 import org.intranet.graphics.raytrace.puttingItTogether.projector.WorldProjector;
 
-public final class Yaml11RefractSphereProjector
+public final class Yaml11FresnelProjector
 	extends WorldProjector
 {
-	public Yaml11RefractSphereProjector()
+	public Yaml11FresnelProjector()
 	{ super("11-Refraction glass sphere"); }
 
 
@@ -15,7 +15,7 @@ public final class Yaml11RefractSphereProjector
 	protected void fillWorld()
 	{
 		InputStream ymlStream = getClass().getResourceAsStream(
-			"/org/intranet/graphics/raytrace/yml/11b-refract-glass-sphere.yml");
+			"/org/intranet/graphics/raytrace/yml/11c-refract-fresnel.yml");
 		YamlWorldParser parser = new YamlWorldParser();
 		world = parser.parse(ymlStream);
 	}

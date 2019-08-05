@@ -1,5 +1,6 @@
 package org.intranet.graphics.raytrace.puttingItTogether.projectors;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -25,7 +26,6 @@ import org.intranet.graphics.raytrace.surface.Pattern;
 import org.intranet.graphics.raytrace.surface.RingPattern;
 import org.intranet.graphics.raytrace.surface.StripePattern;
 
-import com.esotericsoftware.yamlbeans.YamlException;
 import com.esotericsoftware.yamlbeans.YamlReader;
 
 public class YamlWorldParser
@@ -37,11 +37,10 @@ public class YamlWorldParser
 	{
 		World world = new World();
 
-		InputStreamReader ymlReader = new InputStreamReader(ymlStream);
-		YamlReader reader = new YamlReader(ymlReader);
-
-		try
+		try (InputStreamReader ymlReader = new InputStreamReader(ymlStream))
 		{
+			YamlReader reader = new YamlReader(ymlReader);
+
 			Map<String, Material> materialDefines = new HashMap<>();
 			while (true)
 			{
@@ -67,7 +66,7 @@ public class YamlWorldParser
 				}
 			}
 		}
-		catch (YamlException e)
+		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
@@ -138,6 +137,9 @@ public class YamlWorldParser
 		String refractive = (String)materialMap.get("refractive");
 		if (refractive != null)
 			mat.setRefractive(stringToDbl(refractive));
+		refractive = (String)materialMap.get("refractive-index");
+		if (refractive != null)
+			mat.setRefractive(stringToDbl(refractive));
 
 		@SuppressWarnings("unchecked")
 		List<String> colorsLst = (List<String>)materialMap.get("color");
@@ -156,6 +158,7 @@ public class YamlWorldParser
 			{
 				case "stripes":
 				case "checker":
+				case "checkers":
 				case "gradient":
 				case "ring":
 					@SuppressWarnings("unchecked")

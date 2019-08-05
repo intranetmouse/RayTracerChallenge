@@ -12,7 +12,7 @@
 
 
 - add: light
-  at: [ -10, 10, -10 ]
+  at: [ -8, 10, -8 ]
   intensity: [ 1, 1, 1 ]
 
 
@@ -25,20 +25,17 @@
         - [0.15, 0.15, 0.15]
         - [0.95, 0.95, 0.95]
       transform:
-        - [ scale, 0.3, 0.3, 0.3 ]
-    ambient: 0.1
-    diffuse: 0.8
-    specular: 0.1
-    reflective: 0.5
+        - [ scale, 0.70, 0.70, 0.70 ]
+    ambient: 0.7
 
 
 # GLASS SPHERE
 - add: sphere
   material:
     color: [ 0.3, 0.3, 0.3 ]
-    refractive: 1.52
-    transparency: 0.7
-    ambient: 0.0
+    refractive-index: 1.52
+    reflective: 0.5
+    transparency: 1.0
     diffuse: 0.8
     specular: 0.1
   transform:
@@ -50,9 +47,9 @@
 - add: sphere
   material:
     color: [ 0.3, 0.3, 0.3 ]
-    refractive: 1.00029
-    transparency: 0.7
-    ambient: 0.0
+    refractive-index: 1.00029
+    reflective: 0.5
+    transparency: 1.0
     diffuse: 0.8
     specular: 0.1
   transform:

@@ -4,18 +4,18 @@ import java.io.InputStream;
 
 import org.intranet.graphics.raytrace.puttingItTogether.projector.WorldProjector;
 
-public final class Yaml11RefractSphereProjector
+public final class Yaml11BookReflectRefractProjector
 	extends WorldProjector
 {
-	public Yaml11RefractSphereProjector()
-	{ super("11-Refraction glass sphere"); }
+	public Yaml11BookReflectRefractProjector()
+	{ super("11-Book Reflection & Refraction"); }
 
 
 	@Override
 	protected void fillWorld()
 	{
 		InputStream ymlStream = getClass().getResourceAsStream(
-			"/org/intranet/graphics/raytrace/yml/11b-refract-glass-sphere.yml");
+			"/org/intranet/graphics/raytrace/yml/reflect-refract.yml");
 		YamlWorldParser parser = new YamlWorldParser();
 		world = parser.parse(ymlStream);
 	}

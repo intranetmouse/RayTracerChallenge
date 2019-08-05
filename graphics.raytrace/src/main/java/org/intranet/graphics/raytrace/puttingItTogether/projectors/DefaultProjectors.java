@@ -41,8 +41,10 @@ public final class DefaultProjectors
 		list.add(new ProjectorGroup("09-Plane Walls", new Yaml09PlaneWallsProjector()));
 
 		list.add(new ProjectorGroup("10-Pattern Striped", new Yaml10StripesProjector()));
-		list.add(new ProjectorGroup("11-Pattern Reflection & Refraction", new Yaml11ReflectRefractProjector()));
-		list.add(new ProjectorGroup("11-Pattern Refract Sphere", new Yaml11RefractSphereProjector()));
+		list.add(new ProjectorGroup("11-Reflection & Refraction", new Yaml11ReflectRefractProjector()));
+		list.add(new ProjectorGroup("11-Book Reflection & Refraction", new Yaml11BookReflectRefractProjector()));
+		list.add(new ProjectorGroup("11-Refract Sphere", new Yaml11RefractSphereProjector()));
+		list.add(new ProjectorGroup("11-Fresnel", new Yaml11FresnelProjector()));
 		return list;
 	}
 }

@@ -271,7 +271,7 @@ public class ThenSteps
 		Assert.assertEquals(expected, value);
 	}
 
-	@Then(wordPattern + "." + wordPattern + " = " + doublePattern)
+	@Then(wordPattern + "\\." + wordPattern + " = " + doublePattern)
 	public void objPropertyEqualsDouble(String objectName, String propertyName,
 		double expectedValue)
 	{
@@ -409,6 +409,14 @@ public class ThenSteps
 		}
 
 		Assert.fail("Unrecognized objectName " + objectName);
+	}
+
+	@Then(wordPattern + " = " + doublePattern)
+	public void reflectance(String doubleName, Double expectedValue)
+	{
+		double actualValue = data.getDouble(doubleName);
+
+		Assert.assertEquals(expectedValue, actualValue, Tuple.EPSILON);
 	}
 
 	@Then(wordPattern + "." + wordPattern + " = π\\/" + doublePattern)

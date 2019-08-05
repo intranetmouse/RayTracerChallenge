@@ -8,14 +8,14 @@ public final class Yaml11ReflectRefractProjector
 	extends WorldProjector
 {
 	public Yaml11ReflectRefractProjector()
-	{ super("11-Pattern Reflection & Refraction"); }
+	{ super("11-Reflection & Refraction"); }
 
 
 	@Override
 	protected void fillWorld()
 	{
 		InputStream ymlStream = getClass().getResourceAsStream(
-			"/org/intranet/graphics/raytrace/yml/11-patterns-reflect_refract.yml");
+			"/org/intranet/graphics/raytrace/yml/11a-reflect-refract.yml");
 		YamlWorldParser parser = new YamlWorldParser();
 		world = parser.parse(ymlStream);
 	}

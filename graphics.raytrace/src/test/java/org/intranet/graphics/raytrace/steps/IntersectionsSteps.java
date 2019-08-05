@@ -145,6 +145,17 @@ public class IntersectionsSteps
 		data.put(intersectionListName, ilist);
 	}
 
+	@Given(wordPattern + " ← intersections\\(" + indexShapePattern + "\\)")
+	public void xsIntersectionsShape(String intersectionListName,
+		double shape1Dist, String shape1Name)
+	{
+		Shape shape1 = data.getShape(shape1Name);
+		Intersection i1 = new Intersection(shape1Dist, shape1);
+
+		IntersectionList ilist = new IntersectionList(i1);
+		data.put(intersectionListName, ilist);
+	}
+
 	@When(wordPattern + " ← intersections\\(" + wordPattern + ", " + wordPattern + "\\)")
 	public void xsIntersectionsII(String intersectionsName,
 		String intersection1Name, String intersection2Name)
@@ -233,6 +244,17 @@ public class IntersectionsSteps
 		prepareComputations(computationsName, rayName, intersection,
 			intersectionArray);
 	}
+
+	@When(wordPattern + " ← schlick\\(" + wordPattern + "\\)")
+	public void reflectanceSchlickComps(String doubleName,
+		String computationsName)
+	{
+		IntersectionComputations comps = data.getComputations(computationsName);
+
+		data.put(doubleName, comps.schlick());
+	}
+
+
 
 	@Then(wordPattern + "\\[" + intPattern + "\\].object = " + wordPattern)
 	public void intersectionSetObject(String intersectionListName,

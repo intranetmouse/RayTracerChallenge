@@ -7,6 +7,7 @@ import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.primitive.Vector;
 import org.intranet.graphics.raytrace.surface.Color;
+import org.intranet.graphics.raytrace.surface.Material;
 
 public final class IntersectionComputations
 {
@@ -52,11 +53,25 @@ public final class IntersectionComputations
 			.reduce((a, b) -> a.add(b)).orElse(new Color(0, 0, 0));
 //String indent = "       ".substring(remaining);
 //System.out.printf("%ssurface=%s\n", indent, surfaceColor);
+
 		Color reflectedColor = Tracer.reflectedColor(world, this, remaining);
 //System.out.printf("%sreflected=%s\n", indent, reflectedColor);
+
 		Color refractedColor = Tracer.refractedColor(world, this, remaining);
 //System.out.printf("%srefracted=%s\n", indent, refractedColor);
-		Color result = surfaceColor.add(reflectedColor).add(refractedColor);
+
+		Material mat = getObject().getMaterial();
+		if (mat.getReflective() > 0 && mat.getTransparency() > 0)
+		{
+			double reflectance = schlick();
+			reflectedColor = reflectedColor.multiply(reflectance);
+			refractedColor = refractedColor.multiply(1 - reflectance);
+		}
+
+		Color result = surfaceColor
+			.add(reflectedColor)
+			.add(refractedColor);
+
 //System.out.printf("%sresult=%s\n", indent, result);
 //System.out.println("surface="+surfaceColor+", reflected="+reflectedColor+", refracted="+refractedColor+",result="+result+",remaining="+remaining);
 		return result;
@@ -112,5 +127,24 @@ public final class IntersectionComputations
 			}
 		}
 
+	}
+
+	public double schlick()
+	{
+		double cos = eyeVector.dot(normalVector);
+
+		// total internal reflection can only occur if n1 > n2
+		if (n1 > n2)
+		{
+			double n = n1 / n2;
+			double sin2_t = n*n * (1.0 - cos*cos);
+			if (sin2_t > 1.0)
+				return 1.0;
+			cos = Math.sqrt(1.0 - sin2_t);
+		}
+
+		double r0 = Math.pow((n1 - n2) / (n1 + n2), 2);
+
+		return r0 + (1 - r0) * Math.pow(1 - cos, 5);
 	}
 }

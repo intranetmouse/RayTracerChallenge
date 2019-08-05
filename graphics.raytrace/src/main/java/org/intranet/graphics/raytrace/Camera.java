@@ -23,14 +23,20 @@ public class Camera
 
 	private Matrix transform;
 	public Matrix getTransform() { return transform; }
-	public void setTransform(Matrix value) { transform = value; }
+	public void setTransform(Matrix value)
+	{
+		if (!value.isInvertible())
+			throw new IllegalArgumentException(
+				"Camera transform must be invertible. " + value);
+		transform = value;
+	}
 
 	public Camera(int hsize, int vsize, double fieldOfView, Matrix transform)
 	{
 		this.hsize = hsize;
 		this.vsize = vsize;
 		this.fieldOfView = fieldOfView;
-		this.transform = transform;
+		setTransform(transform);
 		updatePixelSize();
 	}
 
@@ -76,6 +82,7 @@ public class Camera
 		// and then compute the ray's direction vector.
 		// (remember that the canvas is at z=-1)
 		Matrix inverse = transform.inverse();
+if (inverse == null) throw new NullPointerException("null inverse from camera transform " + transform);
 		Point pixel = inverse.multiply(new Point(world_x, world_y, -1));
 		Point origin = inverse.multiply(new Point(0, 0, 0));
 		Vector direction = pixel.subtract(origin).normalize();
