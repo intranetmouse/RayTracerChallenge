@@ -184,11 +184,19 @@ public class WorldSteps
 	public void cShade_hitWComps(String colorName, String worldName,
 		String intersectionComputationsName)
 	{
+		cShade_hitWComps(colorName, worldName, intersectionComputationsName,
+			Camera.MAX_REFLEXION_RECURSION);
+	}
+
+	@When(wordPattern + " ← shade_hit\\(" + twoWordPattern + ", " + intPattern + "\\)")
+	public void cShade_hitWComps(String colorName, String worldName,
+		String intersectionComputationsName, Integer numRecursion)
+	{
 		World world = data.getWorld(worldName);
 		IntersectionComputations comps = data.getComputations(
 			intersectionComputationsName);
 
-		Color c = comps.shadeHit(world, Camera.MAX_REFLEXION_RECURSION);
+		Color c = comps.shadeHit(world, numRecursion);
 
 		data.put(colorName, c);
 	}

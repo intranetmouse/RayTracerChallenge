@@ -131,6 +131,7 @@
   material:
     color: [ 0.3, 0.3, 0.3 ]
     # reflective: 0.7
+    refractive: 0.6
     transparency: 0.7
     ambient: 0.0
     diffuse: 0.1

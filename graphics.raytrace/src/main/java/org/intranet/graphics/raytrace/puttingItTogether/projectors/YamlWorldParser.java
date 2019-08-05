@@ -135,6 +135,10 @@ public class YamlWorldParser
 		if (reflective != null)
 			mat.setReflective(stringToDbl(reflective));
 
+		String refractive = (String)materialMap.get("refractive");
+		if (refractive != null)
+			mat.setRefractive(stringToDbl(refractive));
+
 		@SuppressWarnings("unchecked")
 		List<String> colorsLst = (List<String>)materialMap.get("color");
 		if (colorsLst != null)

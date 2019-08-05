@@ -79,18 +79,22 @@ public final class Tracer
 	public static Color reflectedColor(World world,
 		IntersectionComputations comps, int remaining)
 	{
-		if (remaining <= 0 || comps.getObject().getMaterial().getReflective() < Tuple.EPSILON)
+		Material material = comps.getObject().getMaterial();
+		if (remaining <= 0 || material.getReflective() < Tuple.EPSILON)
 			return new Color(0, 0, 0);
 
 		Ray reflectRay = new Ray(comps.getOverPoint(), comps.getReflectVector());
 		Color color = colorAt(world, reflectRay, remaining - 1);
-		return color.multiply(comps.getObject().getMaterial().getReflective());
+//String indent = "       ".substring(remaining);
+//System.out.printf("%sreflective=%f\n", indent, material.getReflective());
+		return color.multiply(material.getReflective());
 	}
 
 	public static Color refractedColor(World world,
 		IntersectionComputations comps, int remaining)
 	{
-		if (remaining <= 0 || comps.getObject().getMaterial().getTransparency() < Tuple.EPSILON)
+		Material material = comps.getObject().getMaterial();
+		if (remaining <= 0 || material.getTransparency() < Tuple.EPSILON)
 			return new Color(0, 0, 0);
 
 		double nRatio = comps.getN1() / comps.getN2();
@@ -102,18 +106,17 @@ public final class Tracer
 
 		double cosT = Math.sqrt(1.0 - sin2T);
 
-		Vector direction = comps.getNormalVector().multiply(nRatio * cosI - cosT)
+		Vector direction = comps.getNormalVector()
+			.multiply(nRatio * cosI - cosT)
 			.subtract(comps.getEyeVector().multiply(nRatio));
 
 		Ray refractRay = new Ray(comps.getUnderPoint(), direction);
 
 		Color color = colorAt(world, refractRay, remaining - 1)
-			.multiply(comps.getObject().getMaterial().getTransparency());
+			.multiply(material.getTransparency());
+//String indent = "       ".substring(remaining);
+//System.out.printf("%srefractive=%f, transparency=%f\n", indent, material.getRefractive(), material.getTransparency());
 
 		return color;
-
-//		Ray reflectRay = new Ray(comps.getOverPoint(), comps.getReflectVector());
-//		Color color = colorAt(world, reflectRay, remaining - 1);
-//		return color.multiply(comps.getObject().getMaterial().getReflective());
 	}
 }

@@ -118,6 +118,18 @@ public class IntersectionsSteps
 		data.put(intersectionListName, ilist);
 	}
 
+	@Given(wordPattern + " ← intersections\\(√2:" + wordPattern + "\\)")
+	public void xsIntersectionsShape(String intersectionListName,
+		String shape1Name)
+	{
+		double sqrtTwo = Math.sqrt(2);
+		Shape shape1 = data.getShape(shape1Name);
+		Intersection i1 = new Intersection(sqrtTwo, shape1);
+
+		IntersectionList ilist = new IntersectionList(i1);
+		data.put(intersectionListName, ilist);
+	}
+
 	@Given(wordPattern + " ← intersections\\(" + twoIndexShapePatterns + "\\)")
 	public void xsIntersectionsShapeShape(String intersectionListName,
 		double shape1Dist, String shape1Name,

@@ -50,8 +50,16 @@ public final class IntersectionComputations
 				getObject(), lightSource, overPoint, eyeVector, normalVector,
 				Tracer.isShadowed(world, overPoint)))
 			.reduce((a, b) -> a.add(b)).orElse(new Color(0, 0, 0));
+//String indent = "       ".substring(remaining);
+//System.out.printf("%ssurface=%s\n", indent, surfaceColor);
 		Color reflectedColor = Tracer.reflectedColor(world, this, remaining);
-		return surfaceColor.add(reflectedColor);
+//System.out.printf("%sreflected=%s\n", indent, reflectedColor);
+		Color refractedColor = Tracer.refractedColor(world, this, remaining);
+//System.out.printf("%srefracted=%s\n", indent, refractedColor);
+		Color result = surfaceColor.add(reflectedColor).add(refractedColor);
+//System.out.printf("%sresult=%s\n", indent, result);
+//System.out.println("surface="+surfaceColor+", reflected="+reflectedColor+", refracted="+refractedColor+",result="+result+",remaining="+remaining);
+		return result;
 	}
 
 	public IntersectionComputations(Intersection hit,
