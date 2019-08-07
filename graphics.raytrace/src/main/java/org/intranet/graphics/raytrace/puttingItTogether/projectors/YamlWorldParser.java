@@ -15,6 +15,7 @@ import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.shape.Cube;
 import org.intranet.graphics.raytrace.shape.Plane;
 import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.shape.Sphere;
@@ -232,37 +233,44 @@ public class YamlWorldParser
 				world.addLight(pointLight);
 				break;
 			case "sphere":
-				Sphere sphere = new Sphere();
-				@SuppressWarnings("unchecked")
-				List<List<String>> sphereTransform =
-					(List<List<String>>)objMap.get("transform");
-				if (sphereTransform != null)
-					parseTransform(sphere, sphereTransform);
-
-				Object sphereMaterial = objMap.get("material");
-				setMaterialForShape(sphere, sphereMaterial, materialDefines);
-
-				world.addSceneObjects(sphere);
+			{
+				Shape shape = new Sphere();
+				processShape(world, objMap, materialDefines, shape);
 				break;
+			}
 			case "plane":
-				Plane plane = new Plane();
-				@SuppressWarnings("unchecked")
-				List<List<String>> planeTransform =
-					(List<List<String>>)objMap.get("transform");
-				if (planeTransform != null)
-					parseTransform(plane, planeTransform);
-
-				Object planeMaterial = objMap.get("material");
-				setMaterialForShape(plane, planeMaterial, materialDefines);
-
-				world.addSceneObjects(plane);
+			{
+				Shape shape = new Plane();
+				processShape(world, objMap, materialDefines, shape);
 				break;
+			}
+			case "cube":
+			{
+				Shape shape = new Cube();
+				processShape(world, objMap, materialDefines, shape);
+				break;
+			}
 			default:
 				System.err.println("Unknown object type to add: " + type +
 					": data=" + objMap);
 		}
 		if (objMap.size() > 0)
 			System.err.printf("Leftovers for type %s = %s\n", type, objMap);
+	}
+
+	private static void processShape(World world, Map<String, Object> objMap,
+		Map<String, Material> materialDefines, Shape sphere)
+	{
+		@SuppressWarnings("unchecked")
+		List<List<String>> sphereTransform =
+			(List<List<String>>)objMap.get("transform");
+		if (sphereTransform != null)
+			parseTransform(sphere, sphereTransform);
+
+		Object sphereMaterial = objMap.get("material");
+		setMaterialForShape(sphere, sphereMaterial, materialDefines);
+
+		world.addSceneObjects(sphere);
 	}
 
 	private static void setMaterialForShape(Shape s, Object materialData,

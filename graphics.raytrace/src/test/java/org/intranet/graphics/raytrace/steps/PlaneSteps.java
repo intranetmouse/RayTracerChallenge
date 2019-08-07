@@ -31,19 +31,36 @@ public final class PlaneSteps
 	public void nLocal_normal_atPPoint(String normalVectorName, String shapeName,
 		double x, double y, double z)
 	{
-		Shape shape = data.getShape(shapeName);
 		Point normalLocation = new Point(x, y, z);
+
+		localNormalAt(normalVectorName, shapeName, normalLocation);
+	}
+
+	@When(wordPattern + " ← local_normal_at\\(" + twoWordPattern + "\\)")
+	public void normalLocal_normal_atCP(String normalVectorName,
+		String shapeName, String pointName)
+	{
+		Point normalLocation = data.getPoint(pointName);
+
+		localNormalAt(normalVectorName, shapeName, normalLocation);
+	}
+
+	private void localNormalAt(String normalVectorName, String shapeName,
+		Point normalLocation)
+	{
+		Shape shape = data.getShape(shapeName);
 
 		Vector normalVector = shape.normalAt(normalLocation);
 		data.put(normalVectorName, normalVector);
 	}
 
+
 	@When(wordPattern + " ← local_intersect\\(" + twoWordPattern + "\\)")
-	public void xsLocal_intersectPR(String intersectionsName, String planeName,
+	public void xsLocal_intersectPR(String intersectionsName, String shapeName,
 		String rayName)
 	{
 		Ray ray = data.getRay(rayName);
-		Shape shape = data.getShape(planeName);
+		Shape shape = data.getShape(shapeName);
 		IntersectionList ilist = shape.intersections(ray);
 		data.put(intersectionsName, ilist);
 	}
