@@ -14,6 +14,7 @@ import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.shape.Cylinder;
 import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
@@ -272,8 +273,8 @@ public class ThenSteps
 	}
 
 	@Then(wordPattern + "\\." + wordPattern + " = " + doublePattern)
-	public void objPropertyEqualsDouble(String objectName, String propertyName,
-		double expectedValue)
+	public void assertObjPropertyEqualsDouble(String objectName,
+		String propertyName, double expectedValue)
 	{
 		Camera camera = data.getCamera(objectName);
 		if (camera != null)
@@ -315,7 +316,6 @@ public class ThenSteps
 		}
 
 		Intersection intersection = data.getIntersection(objectName);
-
 		if (intersection != null)
 		{
 			switch (propertyName)
@@ -408,6 +408,19 @@ public class ThenSteps
 			return;
 		}
 
+		Shape s = data.getShape(objectName);
+		if (s != null)
+		{
+			Double value =
+				"minimum".equals(propertyName) ? ((Cylinder)s).getMinimum() :
+				"maximum".equals(propertyName) ? ((Cylinder)s).getMaximum() :
+				null;
+			Assert.assertNotNull("Unknown property name " + propertyName +
+				" on shape " + objectName, value);
+			Assert.assertEquals(expectedValue, value, Tuple.EPSILON);
+			return;
+		}
+
 		Assert.fail("Unrecognized objectName " + objectName);
 	}
 
@@ -443,11 +456,21 @@ public class ThenSteps
 			"Unknown " + objName + " property name " + propertyName);
 	}
 
-	@Then(wordPattern + "\\." + wordPattern + " = " + wordPattern)
+	@Then(wordPattern + "\\." + wordPattern + " = (-|)" + wordPattern)
 	public void testPropertyEqualsObject(String objectName, String propertyName,
-		String expectedObjectName)
+		String signStr, String expectedObjectName)
 	{
+		boolean negative = "-".equals(signStr);
+		if ("infinity".equals(expectedObjectName))
+		{
+			double value = negative ? Double.NEGATIVE_INFINITY :
+				Double.POSITIVE_INFINITY;
+			assertObjPropertyEqualsDouble(objectName, propertyName, value);
+			return;
+		}
+
 		Shape obj = data.getShape(objectName);
+
 		if (obj != null)
 		{
 			switch (propertyName)
@@ -459,6 +482,11 @@ public class ThenSteps
 				case "transform":
 					Matrix expectedMatrix = getMatrix(expectedObjectName);
 					Assert.assertEquals(expectedMatrix, obj.getTransform());
+					return;
+				case "closed":
+					boolean closed = ((Cylinder)obj).isClosed();
+					boolean expectedClosed = "true".equals(expectedObjectName);
+					Assert.assertEquals(expectedClosed, closed);
 					return;
 				default:
 					unknownProperty("shape", propertyName);

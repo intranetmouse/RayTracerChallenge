@@ -71,6 +71,13 @@ public class TuplesSteps
 		data.put(varName, vector.normalize());
 	}
 
+	@When("^" + wordPattern + " ← normalize\\(vector\\(" + threeDoublesPattern + "\\)\\)$")
+	public void v2Vector(String varName, double x, double y, double z)
+	{
+		Vector vector = new Vector(x, y, z);
+		data.put(varName, vector.normalize());
+	}
+
 	@When(wordPattern + " ← reflect\\(" + wordPattern + ", " + wordPattern + "\\)")
 	public void rReflectVN(String reflectedVectorName, String bounceVectorName,
 		String normalVectorName)

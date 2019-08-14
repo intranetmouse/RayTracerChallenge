@@ -3,6 +3,7 @@ package org.intranet.graphics.raytrace.steps;
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.shape.Cylinder;
 import org.intranet.graphics.raytrace.surface.CheckerPattern;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.GradientPattern;
@@ -81,6 +82,29 @@ public class GivenSteps
 			}
 		}
 
+		Shape shape = data.getShape(objectName);
+
+		if (shape != null)
+		{
+			switch (propertyName)
+			{
+				case "minimum":
+					if (shape instanceof Cylinder)
+						((Cylinder)shape).setMinimum(value);
+					else
+						Assert.fail("Shape property minimum not valid for object type " + shape.getClass().getSimpleName());
+					return;
+				case "maximum":
+					if (shape instanceof Cylinder)
+						((Cylinder)shape).setMaximum(value);
+					else
+						Assert.fail("Shape property maximum not valid for object type " + shape.getClass().getSimpleName());
+					return;
+				default:
+					Assert.fail("Unknown shape property " + propertyName);
+			}
+		}
+
 		Assert.fail("Unknown object name " + objectName);
 	}
 
@@ -146,5 +170,21 @@ public class GivenSteps
 		Shape shape = data.getShape(shapeName);
 
 		WorldSteps.setShapePropertiesFromDataTable(dataTable, shape);
+	}
+
+	@Given(wordPattern + "." + wordPattern + " ← (true|false)")
+	public void cylClosedTrue(String shapeName, String propertyName,
+		String booleanString)
+	{
+		Shape shape = data.getShape(shapeName);
+		Assert.assertNotNull(shape);
+		switch (propertyName)
+		{
+			case "closed":
+				((Cylinder)shape).setClosed("true".equals(booleanString));
+				return;
+			default:
+				Assert.fail("Unknown shape property " + propertyName);
+		}
 	}
 }

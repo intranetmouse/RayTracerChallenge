@@ -16,6 +16,7 @@ import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
 import org.intranet.graphics.raytrace.shape.Cube;
+import org.intranet.graphics.raytrace.shape.Cylinder;
 import org.intranet.graphics.raytrace.shape.Plane;
 import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.shape.Sphere;
@@ -250,6 +251,12 @@ public class YamlWorldParser
 				processShape(world, objMap, materialDefines, shape);
 				break;
 			}
+			case "cylinder":
+			{
+				Shape shape = new Cylinder();
+				processShape(world, objMap, materialDefines, shape);
+				break;
+			}
 			default:
 				System.err.println("Unknown object type to add: " + type +
 					": data=" + objMap);
@@ -259,18 +266,28 @@ public class YamlWorldParser
 	}
 
 	private static void processShape(World world, Map<String, Object> objMap,
-		Map<String, Material> materialDefines, Shape sphere)
+		Map<String, Material> materialDefines, Shape shape)
 	{
 		@SuppressWarnings("unchecked")
 		List<List<String>> sphereTransform =
 			(List<List<String>>)objMap.get("transform");
 		if (sphereTransform != null)
-			parseTransform(sphere, sphereTransform);
+			parseTransform(shape, sphereTransform);
 
 		Object sphereMaterial = objMap.get("material");
-		setMaterialForShape(sphere, sphereMaterial, materialDefines);
+		setMaterialForShape(shape, sphereMaterial, materialDefines);
 
-		world.addSceneObjects(sphere);
+		String min = (String)objMap.get("min");
+		if (min != null)
+			((Cylinder)shape).setMinimum(Double.parseDouble(min));
+		String max = (String)objMap.get("max");
+		if (max != null)
+			((Cylinder)shape).setMaximum(Double.parseDouble(max));
+		String closedString = (String)objMap.get("closed");
+		if (closedString != null)
+			((Cylinder)shape).setClosed("true".equals(closedString));
+
+		world.addSceneObjects(shape);
 	}
 
 	private static void setMaterialForShape(Shape s, Object materialData,

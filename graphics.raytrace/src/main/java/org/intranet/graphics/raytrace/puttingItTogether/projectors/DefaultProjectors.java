@@ -48,6 +48,8 @@ public final class DefaultProjectors
 		list.add(new ProjectorGroup("11-Fresnel", new Yaml11FresnelProjector()));
 
 		list.add(new ProjectorGroup("12-Book Cube Table", new Yaml12BookCubeTableProjector()));
+		list.add(new ProjectorGroup("13-Book Cylinders", new Yaml13BookCylinderProjector()));
+
 		return list;
 	}
 }
