@@ -143,7 +143,8 @@ public class TuplesSteps
 	public void vEqualsVector(String vectorName, double x, double y, double z)
 	{
 		Vector expectedVector = new Vector(x, y, z);
-		Assert.assertEquals(expectedVector, data.getVector(vectorName));
+		Vector actualVector = data.getVector(vectorName);
+		Assert.assertEquals(expectedVector, actualVector);
 	}
 
 	@Then("^(p[a-zA-Z0-9_]*) \\+ v2 = tuple\\(" + threeDoublesPattern + ", 1\\)$")

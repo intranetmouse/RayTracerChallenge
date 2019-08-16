@@ -22,7 +22,9 @@ public abstract class Shape
 
 		Vector v = new Vector(worldNormal.getX(), worldNormal.getY(),
 			worldNormal.getZ());
+System.out.println("worldNormal = " + worldNormal+", v="+v);
 		return v.normalize();
+//		return worldNormal.normalize();
 	}
 
 	public final IntersectionList intersections(Ray ray)
@@ -37,6 +39,11 @@ public abstract class Shape
 
 	public abstract IntersectionList localIntersections(Ray ray);
 	protected abstract Vector localNormalAt(Point point, Matrix inverse);
+
+	public final Vector testLocalNormalAt(Point p)
+	{
+		return localNormalAt(p, Matrix.identity(4));
+	}
 
 	private Material material = new Material();
 	public final Material getMaterial() { return material; }

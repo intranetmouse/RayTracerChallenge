@@ -3,7 +3,7 @@ package org.intranet.graphics.raytrace.steps;
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
-import org.intranet.graphics.raytrace.shape.Cylinder;
+import org.intranet.graphics.raytrace.shape.TubeLike;
 import org.intranet.graphics.raytrace.surface.CheckerPattern;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.GradientPattern;
@@ -45,6 +45,27 @@ public class GivenSteps
 		data.put(booleanName, booleanValue);
 	}
 
+	@Given(wordPattern + "\\." + wordPattern + " ← (true|false)")
+	public void cylClosedTrue(String shapeName, String propertyName,
+		String booleanString)
+	{
+		Shape shape = data.getShape(shapeName);
+		Assert.assertNotNull(shape);
+		switch (propertyName)
+		{
+			case "closed":
+				if (shape instanceof TubeLike)
+				{
+					((TubeLike)shape).setClosed("true".equals(booleanString));
+					return;
+				}
+				else
+					Assert.fail("Shape " + shape.getClass().getSimpleName() +
+						" doesn't have property " + propertyName);
+			default:
+				Assert.fail("Unknown shape property " + propertyName);
+		}
+	}
 	@Given(wordPattern + " ← (stripe|gradient)_pattern\\(" + twoWordPattern + "\\)")
 	public void patternStripe_patternWhiteBlack(String patternName,
 		String patternType, String color1Name, String color2Name)
@@ -89,14 +110,14 @@ public class GivenSteps
 			switch (propertyName)
 			{
 				case "minimum":
-					if (shape instanceof Cylinder)
-						((Cylinder)shape).setMinimum(value);
+					if (shape instanceof TubeLike)
+						((TubeLike)shape).setMinimum(value);
 					else
-						Assert.fail("Shape property minimum not valid for object type " + shape.getClass().getSimpleName());
+						Assert.fail("Shape property minimum not valid for object type " + shape.getClass().getName());
 					return;
 				case "maximum":
-					if (shape instanceof Cylinder)
-						((Cylinder)shape).setMaximum(value);
+					if (shape instanceof TubeLike)
+						((TubeLike)shape).setMaximum(value);
 					else
 						Assert.fail("Shape property maximum not valid for object type " + shape.getClass().getSimpleName());
 					return;
@@ -170,21 +191,5 @@ public class GivenSteps
 		Shape shape = data.getShape(shapeName);
 
 		WorldSteps.setShapePropertiesFromDataTable(dataTable, shape);
-	}
-
-	@Given(wordPattern + "." + wordPattern + " ← (true|false)")
-	public void cylClosedTrue(String shapeName, String propertyName,
-		String booleanString)
-	{
-		Shape shape = data.getShape(shapeName);
-		Assert.assertNotNull(shape);
-		switch (propertyName)
-		{
-			case "closed":
-				((Cylinder)shape).setClosed("true".equals(booleanString));
-				return;
-			default:
-				Assert.fail("Unknown shape property " + propertyName);
-		}
 	}
 }

@@ -687,4 +687,11 @@ public class ThenSteps
 				break;
 		}
 	}
+
+	@Then(wordPattern + " = vector\\(" + doublePattern + ", -√" + doublePattern + ", " + doublePattern + "\\)")
+	public void nVector(String vectorName, Double x, Double y, Double z)
+	{
+		Vector v = new Vector(x, -Math.sqrt(y), z);
+		data.put(vectorName, v);
+	}
 }

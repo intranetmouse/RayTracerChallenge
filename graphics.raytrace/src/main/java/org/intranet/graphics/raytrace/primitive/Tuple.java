@@ -16,7 +16,11 @@ public class Tuple
 	public static final double EPSILON4 = 0.0001;
 	public static boolean dblEqual(double a, double b)
 	{
-		return Math.abs(a - b) < EPSILON;
+		return Math.abs(a - b) <= EPSILON;
+	}
+	public static boolean isZero(double a)
+	{
+		return Math.abs(a) <= EPSILON;
 	}
 
 	public double getX() { return values[0]; }
@@ -67,9 +71,9 @@ public class Tuple
 	@Override
 	public String toString()
 	{
-		return String.format("%s(%.8f,%.8f,%.8f)",
+		return String.format("%s(%.8f,%.8f,%.8f[,%.8f])",
 			getClass().getSimpleName(),
-			values[0], values[1], values[2]);
+			values[0], values[1], values[2], values[3]);
 	}
 
 	public Tuple multiply(double d)

@@ -3,6 +3,7 @@ package org.intranet.graphics.raytrace.steps;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.Shape;
+import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
 import org.intranet.graphics.raytrace.shape.Plane;
@@ -50,7 +51,7 @@ public final class PlaneSteps
 	{
 		Shape shape = data.getShape(shapeName);
 
-		Vector normalVector = shape.normalAt(normalLocation);
+		Vector normalVector = shape.testLocalNormalAt(normalLocation);
 		data.put(normalVectorName, normalVector);
 	}
 

@@ -15,11 +15,13 @@ import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.shape.Cone;
 import org.intranet.graphics.raytrace.shape.Cube;
 import org.intranet.graphics.raytrace.shape.Cylinder;
 import org.intranet.graphics.raytrace.shape.Plane;
 import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.shape.Sphere;
+import org.intranet.graphics.raytrace.shape.TubeLike;
 import org.intranet.graphics.raytrace.surface.CheckerPattern;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.GradientPattern;
@@ -257,6 +259,12 @@ public class YamlWorldParser
 				processShape(world, objMap, materialDefines, shape);
 				break;
 			}
+			case "cone":
+			{
+				Shape shape = new Cone();
+				processShape(world, objMap, materialDefines, shape);
+				break;
+			}
 			default:
 				System.err.println("Unknown object type to add: " + type +
 					": data=" + objMap);
@@ -279,13 +287,13 @@ public class YamlWorldParser
 
 		String min = (String)objMap.get("min");
 		if (min != null)
-			((Cylinder)shape).setMinimum(Double.parseDouble(min));
+			((TubeLike)shape).setMinimum(Double.parseDouble(min));
 		String max = (String)objMap.get("max");
 		if (max != null)
-			((Cylinder)shape).setMaximum(Double.parseDouble(max));
+			((TubeLike)shape).setMaximum(Double.parseDouble(max));
 		String closedString = (String)objMap.get("closed");
 		if (closedString != null)
-			((Cylinder)shape).setClosed("true".equals(closedString));
+			((TubeLike)shape).setClosed("true".equals(closedString));
 
 		world.addSceneObjects(shape);
 	}
