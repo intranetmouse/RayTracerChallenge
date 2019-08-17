@@ -8,7 +8,6 @@ import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.primitive.Vector;
-import org.intranet.graphics.raytrace.shape.Sphere;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.junit.Assert;
@@ -16,7 +15,6 @@ import org.junit.Assert;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.datatable.DataTable;
 
 public class SpheresSteps
 	extends StepsParent
@@ -24,37 +22,6 @@ public class SpheresSteps
 	public SpheresSteps(RaytraceData data)
 	{
 		super(data);
-	}
-
-	@Given(wordPattern + " ← sphere\\(\\)")
-	public void sSphere(String sphereName)
-	{
-		data.put(sphereName, new Sphere());
-	}
-
-	@Given(wordPattern + " ← glass_sphere\\(\\)")
-	public void sGlass_sphere(String sphereName)
-	{
-		Sphere sphere = createGlassSphere(sphereName);
-
-		sphere.getSavedRay();
-	}
-
-	private Sphere createGlassSphere(String sphereName)
-	{
-		Sphere sphere = new Sphere();
-		Material material = sphere.getMaterial();
-		material.setTransparency(1.0);
-		material.setRefractive(1.5);
-		data.put(sphereName, sphere);
-		return sphere;
-	}
-
-	@Given(wordPattern + " ← glass_sphere\\(\\) with:")
-	public void sGlass_sphere(String sphereName, DataTable dataTable)
-	{
-		Sphere sphere = createGlassSphere(sphereName);
-		WorldSteps.setShapePropertiesFromDataTable(dataTable, sphere);
 	}
 
 	@Given(wordPattern + " ← scaling\\(" + threeDoublesPattern +

@@ -3,6 +3,7 @@ package org.intranet.graphics.raytrace;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.shape.Group;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.intranet.graphics.raytrace.surface.Pattern;
@@ -33,6 +34,10 @@ System.out.println("worldNormal = " + worldNormal+", v="+v);
 		savedRay = localRay;
 		return localIntersections(localRay);
 	}
+
+	private Group parent;
+	public Group getParent() { return parent; }
+	public void setParent(Group value) { parent = value; }
 
 	private Ray savedRay;
 	public Ray getSavedRay() { return savedRay; }

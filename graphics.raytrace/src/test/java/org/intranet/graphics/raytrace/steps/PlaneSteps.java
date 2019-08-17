@@ -3,13 +3,11 @@ package org.intranet.graphics.raytrace.steps;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.Shape;
-import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
-import org.intranet.graphics.raytrace.shape.Plane;
+import org.intranet.graphics.raytrace.shape.Group;
 import org.junit.Assert;
 
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
@@ -19,12 +17,6 @@ public final class PlaneSteps
 	public PlaneSteps(RaytraceData data)
 	{
 		super(data);
-	}
-
-	@Given(wordPattern + " ← plane\\(\\)")
-	public void pPlane(String planeName)
-	{
-		data.put(planeName, new Plane());
 	}
 
 	@When(wordPattern + " ← local_normal_at\\(" + wordPattern + ", point\\(" +
@@ -67,11 +59,26 @@ public final class PlaneSteps
 	}
 
 	@Then(wordPattern + " is empty")
-	public void xsIsEmpty(String intersectionListName)
+	public void xsIsEmpty(String objectName)
 	{
 		IntersectionList intersections = data.getIntersectionList(
-			intersectionListName);
-		Assert.assertEquals(0, intersections.count());
+			objectName);
+		Shape shape = data.getShape(objectName);
+		if (shape != null)
+			Assert.assertTrue(((Group)shape).isEmpty());
+		if (intersections != null)
+			Assert.assertEquals(0, intersections.count());
 	}
 
+	@Then(wordPattern + " is not empty")
+	public void xsIsNotEmpty(String objectName)
+	{
+		IntersectionList intersections = data.getIntersectionList(
+			objectName);
+		Shape shape = data.getShape(objectName);
+		if (shape != null)
+			Assert.assertFalse(((Group)shape).isEmpty());
+		if (intersections != null)
+			Assert.assertTrue(intersections.count() > 0);
+	}
 }

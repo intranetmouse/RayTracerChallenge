@@ -488,6 +488,11 @@ public class ThenSteps
 					boolean expectedClosed = "true".equals(expectedObjectName);
 					Assert.assertEquals(expectedClosed, closed);
 					return;
+				case "parent":
+					Shape expectedObject = data.getShape(expectedObjectName);
+					Shape parent = obj.getParent();
+					Assert.assertEquals(expectedObject, parent);
+					break;
 				default:
 					unknownProperty("shape", propertyName);
 			}
