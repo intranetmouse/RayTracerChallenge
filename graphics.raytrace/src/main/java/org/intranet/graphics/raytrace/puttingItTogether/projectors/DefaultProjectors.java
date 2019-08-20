@@ -50,6 +50,7 @@ public final class DefaultProjectors
 		list.add(new ProjectorGroup("12-Book Cube Table", new Yaml12BookCubeTableProjector()));
 		list.add(new ProjectorGroup("13-Book Cylinders", new Yaml13BookCylinderProjector()));
 
+		list.add(new ProjectorGroup("14-Book Groups", new Yaml14BookGroupProjector()));
 		return list;
 	}
 }

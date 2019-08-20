@@ -18,6 +18,7 @@ import org.intranet.graphics.raytrace.primitive.Vector;
 import org.intranet.graphics.raytrace.shape.Cone;
 import org.intranet.graphics.raytrace.shape.Cube;
 import org.intranet.graphics.raytrace.shape.Cylinder;
+import org.intranet.graphics.raytrace.shape.Group;
 import org.intranet.graphics.raytrace.shape.Plane;
 import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.shape.Sphere;
@@ -85,6 +86,11 @@ public class YamlWorldParser
 
 		if (!name.endsWith("-material"))
 		{
+			Map<String, Object> valueMap = (Map<String, Object>)defineMap.get("value");
+			if (valueMap != null)
+			{
+				// TODO: Implement parseDefinedObject, save into defines
+			}
 			System.err.println("Unknown define name: " + name);
 			return;
 		}
@@ -262,6 +268,12 @@ public class YamlWorldParser
 			case "cone":
 			{
 				Shape shape = new Cone();
+				processShape(world, objMap, materialDefines, shape);
+				break;
+			}
+			case "group":
+			{
+				Shape shape = new Group();
 				processShape(world, objMap, materialDefines, shape);
 				break;
 			}

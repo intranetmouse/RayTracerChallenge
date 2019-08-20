@@ -23,7 +23,7 @@ public abstract class Shape
 
 		Vector v = new Vector(worldNormal.getX(), worldNormal.getY(),
 			worldNormal.getZ());
-System.out.println("worldNormal = " + worldNormal+", v="+v);
+//System.out.println("worldNormal = " + worldNormal+", v="+v);
 		return v.normalize();
 //		return worldNormal.normalize();
 	}

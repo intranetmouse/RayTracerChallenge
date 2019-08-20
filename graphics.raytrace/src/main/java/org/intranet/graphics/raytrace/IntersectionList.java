@@ -1,5 +1,6 @@
 package org.intranet.graphics.raytrace;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -42,5 +43,15 @@ public final class IntersectionList
 				intersection = i;
 		}
 		return intersection;
+	}
+
+	public IntersectionList mergeWith(IntersectionList other)
+	{
+		int newSize = intersections.size() + other.intersections.size();
+		List<Intersection> all = new ArrayList<>(newSize);
+		all.addAll(intersections);
+		all.addAll(other.intersections);
+		intersections.sort((o1, o2) -> compareDouble(o1.getDistance() - o2.getDistance()));
+		return new IntersectionList(intersections);
 	}
 }

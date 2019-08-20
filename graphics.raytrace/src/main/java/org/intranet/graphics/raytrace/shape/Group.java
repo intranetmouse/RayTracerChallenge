@@ -1,8 +1,11 @@
 package org.intranet.graphics.raytrace.shape;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.Shape;
@@ -18,7 +21,12 @@ public class Group
 	@Override
 	public IntersectionList localIntersections(Ray ray)
 	{
-		return new IntersectionList();
+		List<Intersection> intersections = children.parallelStream()
+			.map(e -> e.intersections(ray).getIntersections())
+			.flatMap(e -> e.stream())
+			.sorted(Comparator.comparingDouble(Intersection::getDistance))
+			.collect(Collectors.toList());
+		return new IntersectionList(intersections);
 	}
 
 	@Override
