@@ -3,6 +3,7 @@ package org.intranet.graphics.raytrace.steps;
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.primitive.Vector;
 import org.intranet.graphics.raytrace.shape.TubeLike;
 import org.intranet.graphics.raytrace.surface.CheckerPattern;
 import org.intranet.graphics.raytrace.surface.Color;
@@ -191,5 +192,29 @@ public class GivenSteps
 		Shape shape = data.getShape(shapeName);
 
 		WorldSteps.setShapePropertiesFromDataTable(dataTable, shape);
+	}
+
+	@When(wordPattern + " ← world_to_object\\(" + wordPattern + ", point\\(" + threeDoublesPattern + "\\)\\)")
+	public void pWorld_to_objectSPoint(String pointName, String shapeName, double x, double y, double z)
+	{
+		Point p = new Point(x, y, z);
+		Shape shape = data.getShape(shapeName);
+		Point newPoint = shape.worldToObject(p);
+		data.put(pointName, newPoint);
+	}
+
+	@When(wordPattern + " ← normal_to_world\\(" + wordPattern + ", vector\\(√" + doublePattern + "/" + doublePattern + ", √" + doublePattern + "/" + doublePattern + ", √" + doublePattern + "/" + doublePattern + "\\)\\)")
+	public void nNormal_to_worldSVector(String normalName, String shapeName,
+		double vectorXnum, double vectorXdenom, double vectorYnum,
+		double vectorYdenom, double vectorZnum, double vectorZdenom)
+	{
+		Vector normal = new Vector(
+			Math.sqrt(vectorXnum) / vectorXdenom,
+			Math.sqrt(vectorYnum) / vectorYdenom,
+			Math.sqrt(vectorZnum) / vectorZdenom);
+		Shape shape = data.getShape(shapeName);
+
+		Vector worldNormal = shape.normalToWorld(normal);
+		data.put(normalName, worldNormal);
 	}
 }

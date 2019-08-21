@@ -7,7 +7,6 @@ import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.Shape;
-import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.primitive.Vector;
@@ -70,7 +69,7 @@ public abstract class TubeLike
 	}
 
 	@Override
-	protected final Vector localNormalAt(Point point, Matrix inverse)
+	protected final Vector localNormalAt(Point point)
 	{
 		// compute the square of the distance from the y axis
 		double pointX = point.getX();

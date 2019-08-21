@@ -4,7 +4,6 @@ import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.Shape;
-import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
 
@@ -87,7 +86,7 @@ public final class Cube
 	}
 
 	@Override
-	protected final Vector localNormalAt(Point point, Matrix inverse)
+	protected final Vector localNormalAt(Point point)
 	{
 		double maxc = Math.max(Math.max(Math.abs(point.getX()), Math.abs(point.getY())), Math.abs(point.getZ()));
 

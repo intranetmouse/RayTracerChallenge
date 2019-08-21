@@ -1,0 +1,3 @@
+- Get groups YAML file from book working
+- Create a file to test patterns in groups
+- Convert Color to a pattern; test embedded patterns

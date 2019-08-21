@@ -58,4 +58,9 @@ public class Vector
 	{
 		return subtract(normalVector.multiply(2 * dot(normalVector)));
 	}
+
+	public Vector withW(double newW)
+	{
+		return new Vector(getX(), getY(), getZ(), newW);
+	}
 }

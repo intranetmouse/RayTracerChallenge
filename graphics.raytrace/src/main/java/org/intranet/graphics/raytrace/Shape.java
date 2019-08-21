@@ -13,19 +13,11 @@ public abstract class Shape
 {
 	final public Vector normalAt(Point worldPoint)
 	{
-		Matrix inverse = transform.inverse();
+		Point localPoint = worldToObject(worldPoint);
 
-		Point localPoint = inverse.multiply(worldPoint);
+		Vector localNormalVector = localNormalAt(localPoint);
 
-		Vector localNormalVector = localNormalAt(localPoint, inverse);
-
-		Vector worldNormal = inverse.transpose().multiply(localNormalVector);
-
-		Vector v = new Vector(worldNormal.getX(), worldNormal.getY(),
-			worldNormal.getZ());
-//System.out.println("worldNormal = " + worldNormal+", v="+v);
-		return v.normalize();
-//		return worldNormal.normalize();
+		return normalToWorld(localNormalVector);
 	}
 
 	public final IntersectionList intersections(Ray ray)
@@ -43,11 +35,11 @@ public abstract class Shape
 	public Ray getSavedRay() { return savedRay; }
 
 	public abstract IntersectionList localIntersections(Ray ray);
-	protected abstract Vector localNormalAt(Point point, Matrix inverse);
+	protected abstract Vector localNormalAt(Point point);
 
 	public final Vector testLocalNormalAt(Point p)
 	{
-		return localNormalAt(p, Matrix.identity(4));
+		return localNormalAt(p);
 	}
 
 	private Material material = new Material();
@@ -74,8 +66,27 @@ public abstract class Shape
 
 	public Color colorAt(Pattern pattern, Point pt)
 	{
-		Point objectPt = transform.inverse().multiply(pt);
+		Point objectPt = worldToObject(pt);
 		Point patternPt = pattern.getTransform().inverse().multiply(objectPt);
 		return pattern.colorAt(patternPt);
+	}
+
+	public Point worldToObject(Point point)
+	{
+		if (parent != null)
+			point = parent.worldToObject(point);
+
+		return transform.inverse().multiply(point);
+	}
+
+	public Vector normalToWorld(Vector normal)
+	{
+		normal = transform.inverse().transpose().multiply(normal);
+		normal = normal.withW(0).normalize();
+
+		if (parent != null)
+			normal = parent.normalToWorld(normal);
+
+		return normal;
 	}
 }

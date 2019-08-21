@@ -87,6 +87,14 @@ public class SpheresSteps
 		obj.setTransform(mtx);
 	}
 
+	@Given("set_transform\\(" + wordPattern + ", rotation_y\\(π\\/" + doublePattern + "\\)\\)")
+	public void set_transformGRotation_yΠ(String shapeName, Double divisor)
+	{
+		Shape s = data.getShape(shapeName);
+		Matrix mtx = Matrix.newRotationY(Math.PI / divisor);
+		s.setTransform(mtx);
+	}
+
 	@When(wordPattern + " ← normal_at\\(" + wordPattern +
 		", point\\(" + threeDoublesPattern + "\\)\\)")
 	public void n_normal_at_s_point(String normalVectorName, String sphereName,

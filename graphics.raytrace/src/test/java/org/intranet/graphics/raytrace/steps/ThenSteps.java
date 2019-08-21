@@ -622,6 +622,25 @@ public class ThenSteps
 		Assert.fail("Unknown object type for object name " + objectName);
 	}
 
+	@Then(wordPattern + "." + wordPattern + " is nothing")
+	public void sParentIsNothing(String objectName, String propertyName)
+	{
+		Shape s = data.getShape(objectName);
+		if (s != null)
+		{
+			switch (propertyName)
+			{
+				case "parent":
+					Assert.assertNull(s.getParent());
+					return;
+				default:
+					Assert.fail("Unknown property name " + propertyName +
+						" for object name " + objectName);
+			}
+		}
+		Assert.fail("Unknown object type for object name " + objectName);
+	}
+
 	private Matrix getMatrix(String matrixName)
 	{
 		Matrix expectedMatrix;
