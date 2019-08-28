@@ -28,4 +28,8 @@ public final class TestShape
 			return false;
 		return super.equals(other);
 	}
+
+	@Override
+	public Shape deepCopy()
+	{ return null; }
 }

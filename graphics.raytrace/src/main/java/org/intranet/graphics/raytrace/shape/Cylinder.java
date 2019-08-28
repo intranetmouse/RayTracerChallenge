@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.Ray;
+import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.primitive.Vector;
@@ -51,5 +52,13 @@ public final class Cylinder
 		if (other == null || !(other instanceof Cylinder))
 			return false;
 		return super.equals(other);
+	}
+
+	@Override
+	public Shape deepCopy()
+	{
+		Cylinder shape = new Cylinder();
+		shape.deepCopyFrom(this);
+		return shape;
 	}
 }

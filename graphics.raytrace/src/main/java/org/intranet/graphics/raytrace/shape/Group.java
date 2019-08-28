@@ -55,4 +55,21 @@ public class Group
 	{
 		return children.contains(s);
 	}
+
+	@Override
+	public Shape deepCopy()
+	{
+		Group shape = new Group();
+
+		shape.deepCopyFrom(this);
+		for (Shape child : children)
+			shape.addChild(child.deepCopy());
+		return shape;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Group [" + super.toString() + ", children=" + children + "]";
+	}
 }

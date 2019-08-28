@@ -185,7 +185,7 @@ public class WorldSteps
 		String intersectionComputationsName)
 	{
 		cShade_hitWComps(colorName, worldName, intersectionComputationsName,
-			Camera.MAX_REFLEXION_RECURSION);
+			Camera.MAX_REFLECTION_RECURSION);
 	}
 
 	@When(wordPattern + " ← shade_hit\\(" + twoWordPattern + ", " + intPattern + "\\)")
@@ -206,7 +206,7 @@ public class WorldSteps
 		String compsName)
 	{
 		colorReflected_colorWComps(colorName, worldName, compsName,
-			Camera.MAX_REFLEXION_RECURSION);
+			Camera.MAX_REFLECTION_RECURSION);
 	}
 
 	@When(wordPattern + " ← reflected_color\\(" + twoWordPattern + ", " + intPattern + "\\)")
@@ -224,7 +224,7 @@ public class WorldSteps
 		String intersectionComputationsName)
 	{
 		colorRefracted_colorWCompsInt(colorName, worldName,
-			intersectionComputationsName, Camera.MAX_REFLEXION_RECURSION);
+			intersectionComputationsName, Camera.MAX_REFLECTION_RECURSION);
 	}
 
 	@When(wordPattern + " ← refracted_color\\(" + twoWordPattern + ", " + intPattern + "\\)")
@@ -246,7 +246,7 @@ public class WorldSteps
 		World world = data.getWorld(worldName);
 		Ray ray = data.getRay(rayName);
 
-		Color color = Tracer.colorAt(world, ray, Camera.MAX_REFLEXION_RECURSION);
+		Color color = Tracer.colorAt(world, ray, Camera.MAX_REFLECTION_RECURSION);
 		data.put(colorName, color);
 	}
 

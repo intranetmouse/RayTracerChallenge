@@ -105,4 +105,12 @@ public final class Cube
 			return false;
 		return super.equals(other);
 	}
+
+	@Override
+	public Shape deepCopy()
+	{
+		Cube cube = new Cube();
+		cube.deepCopyFrom(this);
+		return cube;
+	}
 }

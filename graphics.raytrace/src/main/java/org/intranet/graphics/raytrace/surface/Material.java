@@ -88,6 +88,7 @@ public final class Material
 		m.setShininess(shininess);
 		m.setSpecular(specular);
 		m.setTransparency(transparency);
+		m.setPattern(pattern); // TODO: Determine if this needs to be copied for use in YML object define
 		return m;
 	}
 }

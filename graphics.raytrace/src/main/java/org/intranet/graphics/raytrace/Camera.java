@@ -102,10 +102,19 @@ if (inverse == null) throw new NullPointerException("null inverse from camera tr
 		image.setDone(true);
 	}
 
-	public static int MAX_REFLEXION_RECURSION = 4;
+	public static int MAX_REFLECTION_RECURSION = 4;
 	private Color renderPixel(World world, PixelCoordinate pixel)
 	{
 		Ray ray = rayForPixel(pixel);
-		return Tracer.colorAt(world, ray, MAX_REFLEXION_RECURSION);
+		return Tracer.colorAt(world, ray, MAX_REFLECTION_RECURSION);
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Camera [hsize=" + hsize + ", vsize=" + vsize + ", fieldOfView="
+			+ fieldOfView + ", transform=" + transform + ", halfWidth="
+			+ halfWidth + ", halfHeight=" + halfHeight + ", pixelSize="
+			+ pixelSize + "]";
 	}
 }

@@ -9,8 +9,8 @@ import org.intranet.graphics.raytrace.surface.Pattern;
 
 public final class Tracer
 {
-	public static Color lighting(Material m, Shape shape, Light light, Point position,
-		Vector eyeV, Vector normalV, boolean inShadow)
+	public static Color lighting(Material m, Shape shape, Light light,
+		Point position, Vector eyeV, Vector normalV, boolean inShadow)
 	{
 		Pattern p = m.getPattern();
 		Color c = p != null ? shape.colorAt(p, position) : m.getColor();

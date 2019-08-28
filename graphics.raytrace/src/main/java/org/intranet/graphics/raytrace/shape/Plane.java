@@ -38,4 +38,18 @@ public final class Plane
 			return false;
 		return super.equals(other);
 	}
+
+	@Override
+	public Shape deepCopy()
+	{
+		Plane shape = new Plane();
+		shape.deepCopyFrom(this);
+		return shape;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Plane [" + super.toString() + "]";
+	}
 }

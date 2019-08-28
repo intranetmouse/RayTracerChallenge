@@ -56,4 +56,12 @@ public final class Sphere
 		return String.format("%s:[xform=%s,mat=%s]", getClass().getSimpleName(),
 			getTransform(), getMaterial());
 	}
+
+	@Override
+	public Shape deepCopy()
+	{
+		Sphere sphere = new Sphere();
+		sphere.deepCopyFrom(this);
+		return sphere;
+	}
 }

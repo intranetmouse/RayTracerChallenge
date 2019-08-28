@@ -89,4 +89,21 @@ public abstract class Shape
 
 		return normal;
 	}
+
+	protected void deepCopyFrom(Shape other)
+	{
+		material = other.material.duplicate();
+		transform = other.transform.inverse().inverse();
+		// Rays are immutable
+		savedRay = other.savedRay;
+	}
+
+	public abstract Shape deepCopy();
+
+	@Override
+	public String toString()
+	{
+		return "Shape [parent=" + parent + ", savedRay=" + savedRay
+			+ ", material=" + material + ", transform=" + transform + "]";
+	}
 }

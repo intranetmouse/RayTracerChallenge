@@ -227,6 +227,7 @@ public final class Matrix
 				other[col][row] = c / determinant;
 			}
 		inverse = new Matrix(other);
+		inverse.inverse = this;
 		return inverse;
 	}
 

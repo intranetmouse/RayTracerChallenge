@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.Ray;
+import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.primitive.Vector;
@@ -67,5 +68,14 @@ public final class Cone
 		if (other == null || !(other instanceof Cone))
 			return false;
 		return super.equals(other);
+	}
+
+
+	@Override
+	public Shape deepCopy()
+	{
+		Cone shape = new Cone();
+		shape.deepCopyFrom(this);
+		return shape;
 	}
 }

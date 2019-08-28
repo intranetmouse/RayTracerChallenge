@@ -47,6 +47,7 @@ public class YamlWorldParser
 			YamlReader reader = new YamlReader(ymlReader);
 
 			Map<String, Material> materialDefines = new HashMap<>();
+			Map<String, Shape> shapeDefines = new HashMap<>();
 			while (true)
 			{
 				@SuppressWarnings({ "unchecked" })
@@ -58,11 +59,11 @@ public class YamlWorldParser
 				{
 					if (paramMap.containsKey("add"))
 					{
-						addObject(world, paramMap, materialDefines);
+						addObject(world, paramMap, materialDefines, shapeDefines);
 					}
 					else if (paramMap.containsKey("define"))
 					{
-						define(world, paramMap, materialDefines);
+						define(world, paramMap, materialDefines, shapeDefines);
 					}
 					else
 					{
@@ -79,36 +80,51 @@ public class YamlWorldParser
 	}
 
 	private void define(World world, Map<String, Object> defineMap,
-		Map<String, Material> materialDefines)
+		Map<String, Material> materialDefines, Map<String, Shape> shapeDefines)
 	{
 		defineMap = new DestructiveHashMap<String, Object>(defineMap);
 		String name = (String)defineMap.get("define");
 
 		if (!name.endsWith("-material"))
 		{
+			@SuppressWarnings("unchecked")
 			Map<String, Object> valueMap = (Map<String, Object>)defineMap.get("value");
 			if (valueMap != null)
+				valueMap = new DestructiveHashMap<String, Object>(valueMap);
+			String type = (String)valueMap.get("add");
+			if (valueMap != null)
 			{
-				// TODO: Implement parseDefinedObject, save into defines
+				Shape s = createShape(type, world, valueMap, materialDefines,
+					shapeDefines);
+				shapeDefines.put(name, s);
+
+				if (valueMap.size() > 0)
+					System.err.printf("Leftovers for define value map %s = %s\n", type, valueMap);
 			}
-			System.err.println("Unknown define name: " + name);
-			return;
-		}
-
-		String extendKey = (String)defineMap.get("extend");
-		Material mat = extendKey == null ? new Material() :
-				materialDefines.get(extendKey).duplicate();
-
-		@SuppressWarnings("unchecked")
-		Map<String, Object> valueMap = (Map<String, Object>)defineMap.get("value");
-		if (valueMap != null)
-		{
-			parseRawMaterial(mat, valueMap);
-
-			materialDefines.put(name, mat);
+			else
+			{
+				System.err.println("Unknown define name: " + name);
+				return;
+			}
 		}
 		else
 		{
+
+			String extendKey = (String)defineMap.get("extend");
+			Material mat = extendKey == null ? new Material() :
+					materialDefines.get(extendKey).duplicate();
+
+			@SuppressWarnings("unchecked")
+			Map<String, Object> valueMap = (Map<String, Object>)defineMap.get("value");
+			if (valueMap != null)
+			{
+				parseRawMaterial(mat, valueMap);
+
+				materialDefines.put(name, mat);
+			}
+			else
+			{
+			}
 		}
 
 		if (defineMap.size() > 0)
@@ -207,10 +223,11 @@ public class YamlWorldParser
 	}
 
 	private static void addObject(World world, Map<String, Object> objMap,
-		Map<String, Material> materialDefines)
+		Map<String, Material> materialDefines, Map<String, Shape> shapeDefines)
 	{
 		objMap = new DestructiveHashMap<String, Object>(objMap);
 		String type = (String)objMap.get("add");
+		if (!addShape(type, world, objMap, materialDefines, shapeDefines))
 		switch (type)
 		{
 			case "camera":
@@ -241,73 +258,110 @@ public class YamlWorldParser
 					listToColor(intensity));
 				world.addLight(pointLight);
 				break;
-			case "sphere":
-			{
-				Shape shape = new Sphere();
-				processShape(world, objMap, materialDefines, shape);
-				break;
-			}
-			case "plane":
-			{
-				Shape shape = new Plane();
-				processShape(world, objMap, materialDefines, shape);
-				break;
-			}
-			case "cube":
-			{
-				Shape shape = new Cube();
-				processShape(world, objMap, materialDefines, shape);
-				break;
-			}
-			case "cylinder":
-			{
-				Shape shape = new Cylinder();
-				processShape(world, objMap, materialDefines, shape);
-				break;
-			}
-			case "cone":
-			{
-				Shape shape = new Cone();
-				processShape(world, objMap, materialDefines, shape);
-				break;
-			}
-			case "group":
-			{
-				Shape shape = new Group();
-				processShape(world, objMap, materialDefines, shape);
-				break;
-			}
 			default:
-				System.err.println("Unknown object type to add: " + type +
+				System.err.println("Unknown shape type to add: " + type +
 					": data=" + objMap);
 		}
 		if (objMap.size() > 0)
 			System.err.printf("Leftovers for type %s = %s\n", type, objMap);
 	}
 
-	private static void processShape(World world, Map<String, Object> objMap,
-		Map<String, Material> materialDefines, Shape shape)
+	public static boolean addShape(String shapeName, World world,
+		Map<String, Object> objMap, Map<String, Material> materialDefines,
+		Map<String, Shape> shapeDefines)
+	{
+		Shape shape = createShape(shapeName, world, objMap, materialDefines,
+			shapeDefines);
+		if (shape == null)
+		{
+			shape = shapeDefines.get(shapeName);
+			if (shape != null)
+			{
+				shape = shape.deepCopy();
+				processShapeProperties(world, objMap, materialDefines, shapeDefines, shape);
+			}
+		}
+
+		if (shape != null)
+			world.addSceneObjects(shape);
+		return shape != null;
+	}
+
+	private static Shape createShape(String shapeName, World world,
+		Map<String, Object> objMap, Map<String, Material> materialDefines,
+		Map<String, Shape> shapeDefines)
+	{
+		Shape shape = shapeName.equals("plane") ? new Plane() :
+			shapeName.equals("sphere") ? new Sphere() :
+			shapeName.equals("cube") ? new Cube() :
+			shapeName.equals("cylinder") ? new Cylinder() :
+			shapeName.equals("cone") ? new Cone() :
+			shapeName.equals("group") ? new Group() :
+			null;
+		if (shape == null)
+			return null;
+
+		processShapeProperties(world, objMap, materialDefines, shapeDefines, shape);
+		return shape;
+	}
+
+	private static Shape processShapeProperties(World world,
+		Map<String, Object> objMap, Map<String, Material> materialDefines,
+		Map<String, Shape> shapeDefines, Shape shape)
 	{
 		@SuppressWarnings("unchecked")
-		List<List<String>> sphereTransform =
+		List<List<String>> shapeTransform =
 			(List<List<String>>)objMap.get("transform");
-		if (sphereTransform != null)
-			parseTransform(shape, sphereTransform);
+		if (shapeTransform != null)
+			parseTransform(shape, shapeTransform);
 
-		Object sphereMaterial = objMap.get("material");
-		setMaterialForShape(shape, sphereMaterial, materialDefines);
+		Object shapeMaterial = objMap.get("material");
+		if (shapeMaterial != null)
+		setMaterialForShape(shape, shapeMaterial, materialDefines);
 
-		String min = (String)objMap.get("min");
-		if (min != null)
-			((TubeLike)shape).setMinimum(Double.parseDouble(min));
-		String max = (String)objMap.get("max");
-		if (max != null)
-			((TubeLike)shape).setMaximum(Double.parseDouble(max));
-		String closedString = (String)objMap.get("closed");
-		if (closedString != null)
-			((TubeLike)shape).setClosed("true".equals(closedString));
+		if (shape instanceof TubeLike)
+		{
+			String min = (String)objMap.get("min");
+			TubeLike tubelike = (TubeLike)shape;
+			if (min != null)
+				tubelike.setMinimum(Double.parseDouble(min));
+			String max = (String)objMap.get("max");
+			if (max != null)
+				tubelike.setMaximum(Double.parseDouble(max));
+			String closedString = (String)objMap.get("closed");
+			if (closedString != null)
+				tubelike.setClosed("true".equals(closedString));
+		}
+		if (shape instanceof Group)
+		{
+			Group group = (Group)shape;
+			@SuppressWarnings("unchecked")
+			List<Map<Object, Object>> childrenPropMapList =
+				(List<Map<Object, Object>>)objMap.get("children");
+			if (childrenPropMapList != null)
+			{
+				for (Map<Object, Object> childPropMap : childrenPropMapList)
+				{
+					String shapeName = (String)childPropMap.get("add");
+					Shape childShape = createShape(shapeName, world, objMap,
+						materialDefines, shapeDefines);
+					if (childShape == null)
+					{
+						childShape = shapeDefines.get(shapeName);
+						if (childShape != null)
+						{
+							childShape = shape.deepCopy();
+							processShapeProperties(world, objMap,
+								materialDefines, shapeDefines, childShape);
+						}
+					}
+					if (childShape != null)
+						group.addChild(childShape.deepCopy());
+				}
+			}
+		}
 
-		world.addSceneObjects(shape);
+		return shape;
 	}
 
 	private static void setMaterialForShape(Shape s, Object materialData,
