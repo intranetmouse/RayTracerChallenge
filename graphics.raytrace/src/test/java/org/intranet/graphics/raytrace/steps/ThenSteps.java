@@ -8,6 +8,7 @@ import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.PixelCoordinate;
 import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.Shape;
+import org.intranet.graphics.raytrace.ShapeParent;
 import org.intranet.graphics.raytrace.Tracer;
 import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Matrix;
@@ -490,7 +491,7 @@ public class ThenSteps
 					return;
 				case "parent":
 					Shape expectedObject = data.getShape(expectedObjectName);
-					Shape parent = obj.getParent();
+					ShapeParent parent = obj.getParent();
 					Assert.assertEquals(expectedObject, parent);
 					break;
 				default:

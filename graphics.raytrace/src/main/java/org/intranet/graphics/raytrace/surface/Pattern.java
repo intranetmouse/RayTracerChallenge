@@ -1,8 +1,8 @@
 package org.intranet.graphics.raytrace.surface;
 
-import org.intranet.graphics.raytrace.Transformable;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.primitive.Transformable;
 
 public abstract class Pattern
 	implements Transformable
