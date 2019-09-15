@@ -25,7 +25,7 @@ public final class Cylinder
 		double a = directionX * directionX +
 			directionZ * directionZ;
 
-		if (!Tuple.dblEqual(a, Tuple.EPSILON))
+		if (!Tuple.isZero(a))
 		{
 			Point rayOrigin = ray.getOrigin();
 			double originX = rayOrigin.getX();
@@ -61,4 +61,10 @@ public final class Cylinder
 		shape.deepCopyFrom(this);
 		return shape;
 	}
+
+	@Override
+	protected double getMinimumRadius() { return 1; }
+
+	@Override
+	protected double getMaximumRadius() { return 1; }
 }

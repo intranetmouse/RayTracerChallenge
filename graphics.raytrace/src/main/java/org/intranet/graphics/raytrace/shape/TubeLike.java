@@ -58,14 +58,22 @@ public abstract class TubeLike
 				t1 = temp;
 			}
 
-			double y0 = originY + t0 * directionY;
-			if (minimum < y0 && y0 < maximum)
-				xs.add(new Intersection(t0, this));
-
-			double y1 = originY + t1 * directionY;
-			if (minimum < y1 && y1 < maximum)
-				xs.add(new Intersection(t1, this));
+			addSideIntersection(xs, t0, originY, directionY);
+			addSideIntersection(xs, t1, originY, directionY);
 		}
+	}
+
+	private final void addSideIntersection(List<Intersection> xs, double t,
+		double originY, double directionY)
+	{
+// This does not work.  In cylinders.yml, the refraction is incorrect.
+//		if (t <= 0)
+//			return;
+
+		double y = originY + t * directionY;
+//System.out.println("t="+t+", y="+y+", minimum="+minimum+", maximum="+maximum);
+		if (minimum < y && y < maximum)
+			xs.add(new Intersection(t, this));
 	}
 
 	@Override
@@ -77,9 +85,9 @@ public abstract class TubeLike
 		double pointY = point.getY();
 
 		double dist = pointX * pointX + pointZ * pointZ;
-		if (dist < 1 && pointY >= (maximum - Tuple.EPSILON))
+		if (closed && dist < 1 && pointY >= (maximum - Tuple.EPSILON))
 			return new Vector(0, 1, 0);
-		else if (dist < 1 && pointY <= (minimum + Tuple.EPSILON))
+		else if (closed && dist < 1 && pointY <= (minimum + Tuple.EPSILON))
 			return new Vector(0, -1, 0);
 		else
 		{
@@ -95,23 +103,26 @@ public abstract class TubeLike
 
 		// caps only matter if the cylinder is closed, and might possibly be
 		// intersected by the ray.
-		if (!closed || Tuple.dblEqual(rayDirectionY, Tuple.EPSILON))
+		if (!closed || Tuple.isZero(rayDirectionY))
 			return;
 
 		double rayOriginY = ray.getOrigin().getY();
 
 		// check for an intersection with the lower end cap by intersecting
 		// the ray with the plane at y=cyl.minimum
-		double t = (minimum - rayOriginY) / rayDirectionY;
-		if (checkCap(ray, t, minimum))
-			xs.add(new Intersection(t, this));
+		double tMin = (minimum - rayOriginY) / rayDirectionY;
+		if (checkCap(ray, tMin, getMinimumRadius()))
+			xs.add(new Intersection(tMin, this));
 
 		// check for an intersection with the upper end cap by intersecting
 		// the ray with the plane at y=cyl.maximum
-		t = (maximum - rayOriginY) / rayDirectionY;
-		if (checkCap(ray, t, maximum))
-			xs.add(new Intersection(t, this));
+		double tMax = (maximum - rayOriginY) / rayDirectionY;
+		if (checkCap(ray, tMax, getMaximumRadius()))
+			xs.add(new Intersection(tMax, this));
 	}
+
+	protected abstract double getMinimumRadius();
+	protected abstract double getMaximumRadius();
 
 	/** a helper function to reduce duplication.
 	* checks to see if the intersection at `t` is within a radius

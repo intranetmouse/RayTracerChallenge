@@ -78,4 +78,10 @@ public final class Cone
 		shape.deepCopyFrom(this);
 		return shape;
 	}
+
+	@Override
+	protected double getMinimumRadius() { return minimum; }
+
+	@Override
+	protected double getMaximumRadius() { return maximum; }
 }
