@@ -67,7 +67,7 @@ Scenario: The default closed value for a cylinder
   Given cyl ← cylinder()
   Then cyl.closed = false
 
-Scenario Outline: Intersecting the caps of a closed cylinder
+Scenario Outline: Intersecting the caps of a closed cylinder <idx>
   Given cyl ← cylinder()
     And cyl.minimum ← 1
     And cyl.maximum ← 2
@@ -78,12 +78,19 @@ Scenario Outline: Intersecting the caps of a closed cylinder
   Then xs.count = <count>
 
   Examples:
-    |   | point            | direction        | count |
+    |idx| point            | direction        | count |
     | 1 | point(0, 3, 0)   | vector(0, -1, 0) | 2     |
     | 2 | point(0, 3, -2)  | vector(0, -1, 2) | 2     |
     | 3 | point(0, 4, -2)  | vector(0, -1, 1) | 2     | # corner case
     | 4 | point(0, 0, -2)  | vector(0, 1, 2)  | 2     |
     | 5 | point(0, -1, -2) | vector(0, 1, 1)  | 2     | # corner case
+    # Cylinder lid
+    | 6 | point(0, 0.5, 0.999) | vector(0, 1, 0) | 2     |
+    | 7 | point(0, 0.5, 1.001) | vector(0, 1, 0) | 0     |
+    | 8 | point(0, 1.5, 1.414213562373) | vector(0, 1, 0) | 0     |
+    | 9 | point(0, 1.5, 1.414213562374) | vector(0, 1, 0) | 0     |
+    |10 | point(0, 1.5, 0.999) | vector(0, 0, 1) | 2     | # Cylinder side near edge
+    |11 | point(0, 1.5, 5.505) | vector(0, 0, 1) | 2     | # Outside cylinder
 
 Scenario Outline: The normal vector on a cylinder's end caps
   Given cyl ← cylinder()
