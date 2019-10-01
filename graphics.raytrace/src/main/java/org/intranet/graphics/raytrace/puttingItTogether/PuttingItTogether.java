@@ -9,7 +9,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.SwingUtilities;
 
-import org.intranet.graphics.raytrace.puttingItTogether.projector.ProjectorGroup;
+import org.intranet.graphics.raytrace.puttingItTogether.projectorGroup.ProjectorGroup;
 import org.intranet.graphics.raytrace.puttingItTogether.projectors.DefaultProjectors;
 
 public class PuttingItTogether

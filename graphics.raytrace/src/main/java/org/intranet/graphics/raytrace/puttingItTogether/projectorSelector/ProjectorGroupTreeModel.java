@@ -7,7 +7,7 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-import org.intranet.graphics.raytrace.puttingItTogether.projector.ProjectorGroup;
+import org.intranet.graphics.raytrace.puttingItTogether.projectorGroup.ProjectorGroup;
 
 public class ProjectorGroupTreeModel
 	implements TreeModel

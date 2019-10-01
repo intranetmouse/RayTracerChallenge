@@ -4,8 +4,8 @@ import org.intranet.graphics.raytrace.Camera;
 import org.intranet.graphics.raytrace.Light;
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.World;
+import org.intranet.graphics.raytrace.persistence.YamlWorldParser;
 import org.intranet.graphics.raytrace.puttingItTogether.projectors.Yaml14BookGroupProjector;
-import org.intranet.graphics.raytrace.puttingItTogether.projectors.YamlWorldParser;
 import org.junit.Assert;
 import org.junit.Test;
 

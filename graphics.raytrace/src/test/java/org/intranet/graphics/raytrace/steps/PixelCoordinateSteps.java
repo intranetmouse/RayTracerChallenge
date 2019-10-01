@@ -4,8 +4,8 @@ import java.util.Spliterator;
 import java.util.Spliterators.AbstractSpliterator;
 
 import org.intranet.graphics.raytrace.PixelCoordinate;
-import org.intranet.graphics.raytrace.puttingItTogether.projector.AcrossDownTraversal;
-import org.intranet.graphics.raytrace.puttingItTogether.projector.ScatteredTraversal;
+import org.intranet.graphics.raytrace.traversal.AcrossDownTraversal;
+import org.intranet.graphics.raytrace.traversal.ScatteredTraversal;
 import org.junit.Assert;
 
 import io.cucumber.java.en.Given;

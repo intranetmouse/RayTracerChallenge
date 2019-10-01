@@ -1,8 +1,10 @@
-package org.intranet.graphics.raytrace.puttingItTogether.projector;
+package org.intranet.graphics.raytrace.puttingItTogether.worldProjector;
 
 import org.intranet.graphics.raytrace.Camera;
 import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.World;
+import org.intranet.graphics.raytrace.puttingItTogether.projector.Projector;
+import org.intranet.graphics.raytrace.traversal.CanvasTraversalType;
 
 public abstract class WorldProjector
 	implements Projector

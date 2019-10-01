@@ -8,7 +8,7 @@ import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
-import org.intranet.graphics.raytrace.puttingItTogether.projector.CanvasTraversalType;
+import org.intranet.graphics.raytrace.traversal.CanvasTraversalType;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;

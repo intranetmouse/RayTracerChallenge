@@ -1,6 +1,8 @@
-package org.intranet.graphics.raytrace.puttingItTogether.projector;
+package org.intranet.graphics.raytrace.puttingItTogether.projectorGroup;
 
 import java.util.List;
+
+import org.intranet.graphics.raytrace.puttingItTogether.projector.Projector;
 
 public final class ProjectorGroup
 {

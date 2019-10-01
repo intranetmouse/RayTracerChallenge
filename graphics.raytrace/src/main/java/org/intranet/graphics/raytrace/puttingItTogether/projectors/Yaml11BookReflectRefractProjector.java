@@ -2,7 +2,8 @@ package org.intranet.graphics.raytrace.puttingItTogether.projectors;
 
 import java.io.InputStream;
 
-import org.intranet.graphics.raytrace.puttingItTogether.projector.WorldProjector;
+import org.intranet.graphics.raytrace.persistence.YamlWorldParser;
+import org.intranet.graphics.raytrace.puttingItTogether.worldProjector.WorldProjector;
 
 public final class Yaml11BookReflectRefractProjector
 	extends WorldProjector

@@ -1,4 +1,4 @@
-package org.intranet.graphics.raytrace.puttingItTogether.projectors;
+package org.intranet.graphics.raytrace.persistence;
 
 import java.io.IOException;
 import java.io.InputStream;

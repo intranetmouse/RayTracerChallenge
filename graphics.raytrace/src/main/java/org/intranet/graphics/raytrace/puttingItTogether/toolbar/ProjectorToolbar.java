@@ -13,9 +13,9 @@ import javax.swing.JToolBar;
 
 import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.puttingItTogether.canvas.CanvasComponent;
-import org.intranet.graphics.raytrace.puttingItTogether.projector.CanvasTraversalType;
 import org.intranet.graphics.raytrace.puttingItTogether.projector.Projector;
-import org.intranet.graphics.raytrace.puttingItTogether.projector.WorldProjector;
+import org.intranet.graphics.raytrace.puttingItTogether.worldProjector.WorldProjector;
+import org.intranet.graphics.raytrace.traversal.CanvasTraversalType;
 
 public class ProjectorToolbar
 	extends JPanel

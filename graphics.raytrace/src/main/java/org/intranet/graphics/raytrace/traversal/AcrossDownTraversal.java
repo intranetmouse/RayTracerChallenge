@@ -1,4 +1,4 @@
-package org.intranet.graphics.raytrace.puttingItTogether.projector;
+package org.intranet.graphics.raytrace.traversal;
 
 import java.util.Spliterator;
 import java.util.Spliterators.AbstractSpliterator;

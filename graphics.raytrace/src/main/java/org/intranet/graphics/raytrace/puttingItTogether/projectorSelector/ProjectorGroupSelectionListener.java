@@ -1,6 +1,6 @@
 package org.intranet.graphics.raytrace.puttingItTogether.projectorSelector;
 
-import org.intranet.graphics.raytrace.puttingItTogether.projector.ProjectorGroup;
+import org.intranet.graphics.raytrace.puttingItTogether.projectorGroup.ProjectorGroup;
 
 public interface ProjectorGroupSelectionListener
 {

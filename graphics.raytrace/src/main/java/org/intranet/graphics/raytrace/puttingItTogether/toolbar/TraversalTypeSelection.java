@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 
 import javax.swing.AbstractAction;
 
-import org.intranet.graphics.raytrace.puttingItTogether.projector.CanvasTraversalType;
+import org.intranet.graphics.raytrace.traversal.CanvasTraversalType;
 
 public final class TraversalTypeSelection
 	extends ToggleButtons

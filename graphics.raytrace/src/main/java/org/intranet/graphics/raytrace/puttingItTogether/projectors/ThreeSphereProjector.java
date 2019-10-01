@@ -4,7 +4,7 @@ import org.intranet.graphics.raytrace.Camera;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
-import org.intranet.graphics.raytrace.puttingItTogether.projector.WorldProjector;
+import org.intranet.graphics.raytrace.puttingItTogether.worldProjector.WorldProjector;
 import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.shape.Sphere;
 import org.intranet.graphics.raytrace.surface.Color;
