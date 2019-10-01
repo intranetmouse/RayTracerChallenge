@@ -1,7 +1,7 @@
 package org.intranet.graphics.raytrace;
 
 import org.intranet.graphics.raytrace.primitive.Point;
-import org.intranet.graphics.raytrace.primitive.Tuple;
+import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Vector;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
@@ -54,17 +54,6 @@ public final class Tracer
 		return ambientDiffuseColor.add(specularColor);
 	}
 
-	public static Color colorAt(World world, Ray ray, int remaining)
-	{
-		IntersectionList intersectionList = world.intersect(ray);
-		Intersection hit = intersectionList.hit();
-		if (hit == null)
-			return new Color(0, 0, 0);
-		IntersectionComputations comps = new IntersectionComputations(hit, ray,
-			intersectionList.getIntersections());
-		return comps.shadeHit(world, remaining);
-	}
-
 	public static boolean isShadowed(World world, Point point)
 	{
 		Vector v = world.getLightSources().get(0).getPosition().subtract(point);
@@ -74,49 +63,5 @@ public final class Tracer
 		IntersectionList intersections = world.intersect(r);
 		Intersection h = intersections.hit();
 		return h != null && h.getDistance() < distance;
-	}
-
-	public static Color reflectedColor(World world,
-		IntersectionComputations comps, int remaining)
-	{
-		Material material = comps.getObject().getMaterial();
-		if (remaining <= 0 || material.getReflective() < Tuple.EPSILON)
-			return new Color(0, 0, 0);
-
-		Ray reflectRay = new Ray(comps.getOverPoint(), comps.getReflectVector());
-		Color color = colorAt(world, reflectRay, remaining - 1);
-//String indent = "       ".substring(remaining);
-//System.out.printf("%sreflective=%f\n", indent, material.getReflective());
-		return color.multiply(material.getReflective());
-	}
-
-	public static Color refractedColor(World world,
-		IntersectionComputations comps, int remaining)
-	{
-		Material material = comps.getObject().getMaterial();
-		if (remaining <= 0 || material.getTransparency() < Tuple.EPSILON)
-			return new Color(0, 0, 0);
-
-		double nRatio = comps.getN1() / comps.getN2();
-		double cosI = comps.getEyeVector().dot(comps.getNormalVector());
-		double sin2T = nRatio * nRatio * (1 - cosI * cosI);
-
-		if (sin2T > 1)
-			return new Color(0, 0, 0);
-
-		double cosT = Math.sqrt(1.0 - sin2T);
-
-		Vector direction = comps.getNormalVector()
-			.multiply(nRatio * cosI - cosT)
-			.subtract(comps.getEyeVector().multiply(nRatio));
-
-		Ray refractRay = new Ray(comps.getUnderPoint(), direction);
-
-		Color color = colorAt(world, refractRay, remaining - 1)
-			.multiply(material.getTransparency());
-//String indent = "       ".substring(remaining);
-//System.out.printf("%srefractive=%f, transparency=%f\n", indent, material.getRefractive(), material.getTransparency());
-
-		return color;
 	}
 }

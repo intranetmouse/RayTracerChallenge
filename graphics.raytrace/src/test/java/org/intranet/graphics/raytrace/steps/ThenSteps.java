@@ -6,13 +6,12 @@ import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionComputations;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.PixelCoordinate;
-import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.ShapeParent;
-import org.intranet.graphics.raytrace.Tracer;
 import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.primitive.Vector;
 import org.intranet.graphics.raytrace.shape.Cylinder;
@@ -692,7 +691,7 @@ public class ThenSteps
 	{
 		World world = data.getWorld(worldName);
 		Ray ray = data.getRay(rayName);
-		Color c = Tracer.colorAt(world, ray, 5);
+		Color c = IntersectionComputations.colorAt(world, ray, 5);
 		// TODO: Figure out how to test for failure case (not terminated)
 		Assert.assertNotNull(c);
 	}

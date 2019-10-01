@@ -5,6 +5,7 @@ import java.util.stream.StreamSupport;
 
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Vector;
 import org.intranet.graphics.raytrace.surface.Color;
 
@@ -106,7 +107,7 @@ if (inverse == null) throw new NullPointerException("null inverse from camera tr
 	private Color renderPixel(World world, PixelCoordinate pixel)
 	{
 		Ray ray = rayForPixel(pixel);
-		return Tracer.colorAt(world, ray, MAX_REFLECTION_RECURSION);
+		return IntersectionComputations.colorAt(world, ray, MAX_REFLECTION_RECURSION);
 	}
 
 	@Override

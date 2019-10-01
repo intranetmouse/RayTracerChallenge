@@ -1,9 +1,9 @@
 package org.intranet.graphics.raytrace.steps;
 
 import org.intranet.graphics.raytrace.IntersectionList;
-import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Vector;
 
 public final class TestShape

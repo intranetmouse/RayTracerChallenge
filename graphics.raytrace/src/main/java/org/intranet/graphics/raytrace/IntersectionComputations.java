@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.primitive.Vector;
 import org.intranet.graphics.raytrace.surface.Color;
@@ -54,10 +55,10 @@ public final class IntersectionComputations
 //String indent = "       ".substring(remaining);
 //System.out.printf("%ssurface=%s\n", indent, surfaceColor);
 
-		Color reflectedColor = Tracer.reflectedColor(world, this, remaining);
+		Color reflectedColor = reflectedColor(world, remaining);
 //System.out.printf("%sreflected=%s\n", indent, reflectedColor);
 
-		Color refractedColor = Tracer.refractedColor(world, this, remaining);
+		Color refractedColor = refractedColor(world, remaining);
 //System.out.printf("%srefracted=%s\n", indent, refractedColor);
 
 		Material mat = getObject().getMaterial();
@@ -146,5 +147,58 @@ public final class IntersectionComputations
 		double r0 = Math.pow((n1 - n2) / (n1 + n2), 2);
 
 		return r0 + (1 - r0) * Math.pow(1 - cos, 5);
+	}
+
+	public static Color colorAt(World world, Ray ray, int remaining)
+	{
+		IntersectionList intersectionList = world.intersect(ray);
+		Intersection hit = intersectionList.hit();
+		if (hit == null)
+			return new Color(0, 0, 0);
+		IntersectionComputations comps = new IntersectionComputations(hit, ray,
+			intersectionList.getIntersections());
+		return comps.shadeHit(world, remaining);
+	}
+
+	public Color reflectedColor(World world, int remaining)
+	{
+		Material material = getObject().getMaterial();
+		if (remaining <= 0 || material.getReflective() < Tuple.EPSILON)
+			return new Color(0, 0, 0);
+
+		Ray reflectRay = new Ray(getOverPoint(), getReflectVector());
+		Color color = IntersectionComputations.colorAt(world, reflectRay, remaining - 1);
+//String indent = "       ".substring(remaining);
+//System.out.printf("%sreflective=%f\n", indent, material.getReflective());
+		return color.multiply(material.getReflective());
+	}
+
+	public Color refractedColor(World world, int remaining)
+	{
+		Material material = getObject().getMaterial();
+		if (remaining <= 0 || material.getTransparency() < Tuple.EPSILON)
+			return new Color(0, 0, 0);
+
+		double nRatio = getN1() / getN2();
+		double cosI = getEyeVector().dot(getNormalVector());
+		double sin2T = nRatio * nRatio * (1 - cosI * cosI);
+
+		if (sin2T > 1)
+			return new Color(0, 0, 0);
+
+		double cosT = Math.sqrt(1.0 - sin2T);
+
+		Vector direction = getNormalVector()
+			.multiply(nRatio * cosI - cosT)
+			.subtract(getEyeVector().multiply(nRatio));
+
+		Ray refractRay = new Ray(getUnderPoint(), direction);
+
+		Color color = IntersectionComputations.colorAt(world, refractRay, remaining - 1)
+			.multiply(material.getTransparency());
+//String indent = "       ".substring(remaining);
+//System.out.printf("%srefractive=%f, transparency=%f\n", indent, material.getRefractive(), material.getTransparency());
+
+		return color;
 	}
 }

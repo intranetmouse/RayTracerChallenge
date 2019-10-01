@@ -6,8 +6,8 @@ import java.util.List;
 import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionComputations;
 import org.intranet.graphics.raytrace.IntersectionList;
-import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.Shape;
+import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.junit.Assert;
 

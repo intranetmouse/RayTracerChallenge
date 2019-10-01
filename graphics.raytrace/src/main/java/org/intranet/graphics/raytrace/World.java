@@ -3,6 +3,8 @@ package org.intranet.graphics.raytrace;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.intranet.graphics.raytrace.primitive.Ray;
+
 public class World
 {
 	List<Light> lightSources = new ArrayList<>();

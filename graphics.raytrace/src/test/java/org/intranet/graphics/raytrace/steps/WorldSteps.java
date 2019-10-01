@@ -6,12 +6,12 @@ import org.intranet.graphics.raytrace.Camera;
 import org.intranet.graphics.raytrace.IntersectionComputations;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Light;
-import org.intranet.graphics.raytrace.Ray;
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.Tracer;
 import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.shape.DefaultWorld;
 import org.intranet.graphics.raytrace.shape.Plane;
 import org.intranet.graphics.raytrace.shape.PointLight;
@@ -215,7 +215,7 @@ public class WorldSteps
 	{
 		World world = data.getWorld(worldName);
 		IntersectionComputations comps = data.getComputations(compsName);
-		Color color = Tracer.reflectedColor(world, comps, remaining);
+		Color color = comps.reflectedColor(world, remaining);
 		data.put(colorName, color);
 	}
 
@@ -235,7 +235,7 @@ public class WorldSteps
 		IntersectionComputations comps = data.getComputations(
 			intersectionComputationsName);
 
-		Color c = Tracer.refractedColor(world, comps, remaining);
+		Color c = comps.refractedColor(world, remaining);
 
 		data.put(colorName, c);
 	}
@@ -246,7 +246,7 @@ public class WorldSteps
 		World world = data.getWorld(worldName);
 		Ray ray = data.getRay(rayName);
 
-		Color color = Tracer.colorAt(world, ray, Camera.MAX_REFLECTION_RECURSION);
+		Color color = IntersectionComputations.colorAt(world, ray, Camera.MAX_REFLECTION_RECURSION);
 		data.put(colorName, color);
 	}
 

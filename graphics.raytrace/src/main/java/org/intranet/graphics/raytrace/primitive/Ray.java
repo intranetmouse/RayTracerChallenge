@@ -1,8 +1,4 @@
-package org.intranet.graphics.raytrace;
-
-import org.intranet.graphics.raytrace.primitive.Matrix;
-import org.intranet.graphics.raytrace.primitive.Point;
-import org.intranet.graphics.raytrace.primitive.Vector;
+package org.intranet.graphics.raytrace.primitive;
 
 public class Ray
 {
