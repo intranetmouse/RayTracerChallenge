@@ -1,8 +1,8 @@
 package org.intranet.graphics.raytrace;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public final class IntersectionList
@@ -35,23 +35,9 @@ public final class IntersectionList
 
 	public Intersection hit()
 	{
-		Intersection intersection = null;
-		for (Intersection i : intersections)
-		{
-			double distance = i.getDistance();
-			if (distance > 0 && (intersection == null || distance < intersection.getDistance()))
-				intersection = i;
-		}
-		return intersection;
-	}
-
-	public IntersectionList mergeWith(IntersectionList other)
-	{
-		int newSize = intersections.size() + other.intersections.size();
-		List<Intersection> all = new ArrayList<>(newSize);
-		all.addAll(intersections);
-		all.addAll(other.intersections);
-		intersections.sort((o1, o2) -> compareDouble(o1.getDistance() - o2.getDistance()));
-		return new IntersectionList(intersections);
+		return intersections.stream()
+			.filter(i -> i.getDistance() > 0)
+			.min(Comparator.comparing(Intersection::getDistance))
+			.orElse(null);
 	}
 }
