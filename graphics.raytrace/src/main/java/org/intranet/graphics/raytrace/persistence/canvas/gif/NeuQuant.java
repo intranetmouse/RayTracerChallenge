@@ -1,4 +1,4 @@
-package org.intranet.graphics.raytrace.puttingItTogether.gif;
+package org.intranet.graphics.raytrace.persistence.canvas.gif;
 
 /**
 * NeuQuant Neural-Net Quantization Algorithm.

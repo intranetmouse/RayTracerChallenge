@@ -1,4 +1,4 @@
-package org.intranet.graphics.raytrace.puttingItTogether.toolbar;
+package org.intranet.graphics.raytrace.persistence.canvas;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -6,7 +6,7 @@ import java.io.File;
 
 import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.Canvas.CanvasListener;
-import org.intranet.graphics.raytrace.puttingItTogether.gif.AnimatedGifEncoder;
+import org.intranet.graphics.raytrace.persistence.canvas.gif.AnimatedGifEncoder;
 import org.intranet.graphics.raytrace.surface.Color;
 
 public final class CanvasToGifWriter

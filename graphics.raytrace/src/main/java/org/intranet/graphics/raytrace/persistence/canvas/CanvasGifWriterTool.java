@@ -1,4 +1,4 @@
-package org.intranet.graphics.raytrace.puttingItTogether.toolbar;
+package org.intranet.graphics.raytrace.persistence.canvas;
 
 import java.io.File;
 
