@@ -1,4 +1,4 @@
-package org.intranet.graphics.raytrace.puttingItTogether.canvas;
+package org.intranet.graphics.raytrace.ui.swing.canvas;
 
 import java.awt.Component;
 

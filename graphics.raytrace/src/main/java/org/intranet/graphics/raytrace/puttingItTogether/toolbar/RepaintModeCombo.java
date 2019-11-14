@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 
 import javax.swing.JComboBox;
 
-import org.intranet.graphics.raytrace.puttingItTogether.canvas.RepaintMode;
+import org.intranet.graphics.raytrace.ui.swing.canvas.RepaintMode;
 
 public final class RepaintModeCombo
 	extends JComboBox<RepaintMode>

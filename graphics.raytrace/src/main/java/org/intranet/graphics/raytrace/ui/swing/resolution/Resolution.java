@@ -1,4 +1,4 @@
-package org.intranet.graphics.raytrace.puttingItTogether.toolbar;
+package org.intranet.graphics.raytrace.ui.swing.resolution;
 
 public class Resolution
 {
