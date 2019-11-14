@@ -1,4 +1,4 @@
-package org.intranet.graphics.raytrace.puttingItTogether.toolbar;
+package org.intranet.graphics.raytrace.ui.swing.traversalType;
 
 import java.awt.FlowLayout;
 import java.awt.Insets;

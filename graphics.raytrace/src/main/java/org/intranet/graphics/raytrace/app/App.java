@@ -26,6 +26,7 @@ import org.intranet.graphics.raytrace.traversal.CanvasTraversalType;
 import org.intranet.graphics.raytrace.ui.swing.canvas.CanvasComponent;
 import org.intranet.graphics.raytrace.ui.swing.resolution.CanvasResolutionCombo;
 import org.intranet.graphics.raytrace.ui.swing.resolution.Resolution;
+import org.intranet.graphics.raytrace.ui.swing.traversalType.TraversalTypeSelection;
 
 public class App
 	extends JFrame
@@ -120,6 +121,10 @@ public class App
 		renderButton.addActionListener(e -> render());
 		renderButton.setEnabled(false);
 		toolBar.add(renderButton);
+
+		TraversalTypeSelection tts = new TraversalTypeSelection(traversalType,
+			tt -> { traversalType = tt; });
+		toolBar.add(tts);
 
 		pack();
 	}

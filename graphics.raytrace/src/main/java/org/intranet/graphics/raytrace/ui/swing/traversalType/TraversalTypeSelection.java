@@ -1,4 +1,4 @@
-package org.intranet.graphics.raytrace.puttingItTogether.toolbar;
+package org.intranet.graphics.raytrace.ui.swing.traversalType;
 
 import java.awt.event.ActionEvent;
 import java.util.function.Consumer;
@@ -12,7 +12,7 @@ public final class TraversalTypeSelection
 {
 	private static final long serialVersionUID = 1L;
 
-	TraversalTypeSelection(CanvasTraversalType defaultTraversalType,
+	public TraversalTypeSelection(CanvasTraversalType defaultTraversalType,
 		Consumer<CanvasTraversalType> traversalTypeChanged)
 	{
 		CanvasTraversalType[] canvasTraversalTypes = CanvasTraversalType.values();
