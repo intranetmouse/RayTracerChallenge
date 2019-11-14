@@ -16,7 +16,7 @@ public final class CanvasComponent
 	private static final long serialVersionUID = 1L;
 	private final Canvas canvas;
 
-	private RepaintMode repaintMode = RepaintMode.UPDATE_PER_PIXEL;
+	private RepaintMode repaintMode = RepaintMode.UPDATE_PERIODICALLY;
 	public RepaintMode getRepaintMode() { return repaintMode; }
 	public void setRepaintMode(RepaintMode value) { repaintMode = value; }
 

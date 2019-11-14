@@ -1,4 +1,4 @@
-package org.intranet.graphics.raytrace.puttingItTogether.toolbar;
+package org.intranet.graphics.raytrace.ui.swing.repaintMode;
 
 import java.awt.event.ItemEvent;
 import java.util.function.Consumer;
@@ -12,7 +12,7 @@ public final class RepaintModeCombo
 {
 	private static final long serialVersionUID = 1L;
 
-	RepaintModeCombo(RepaintMode defaultMode,
+	public RepaintModeCombo(RepaintMode defaultMode,
 		Consumer<RepaintMode> repaintModeSelected)
 	{
 		super(RepaintMode.values());

@@ -24,6 +24,7 @@ import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.persistence.YamlWorldParser;
 import org.intranet.graphics.raytrace.traversal.CanvasTraversalType;
 import org.intranet.graphics.raytrace.ui.swing.canvas.CanvasComponent;
+import org.intranet.graphics.raytrace.ui.swing.repaintMode.RepaintModeCombo;
 import org.intranet.graphics.raytrace.ui.swing.resolution.CanvasResolutionCombo;
 import org.intranet.graphics.raytrace.ui.swing.resolution.Resolution;
 import org.intranet.graphics.raytrace.ui.swing.traversalType.TraversalTypeSelection;
@@ -121,6 +122,11 @@ public class App
 		renderButton.addActionListener(e -> render());
 		renderButton.setEnabled(false);
 		toolBar.add(renderButton);
+
+		RepaintModeCombo repaintCombo = new RepaintModeCombo(
+			canvasComp.getRepaintMode(),
+			mode -> canvasComp.setRepaintMode(mode));
+		toolBar.add(repaintCombo);
 
 		TraversalTypeSelection tts = new TraversalTypeSelection(traversalType,
 			tt -> { traversalType = tt; });
