@@ -5,13 +5,16 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Spliterators.AbstractSpliterator;
 
 import javax.swing.Action;
 
 import org.intranet.graphics.raytrace.Camera;
 import org.intranet.graphics.raytrace.Canvas;
+import org.intranet.graphics.raytrace.PixelCoordinate;
 import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.persistence.YamlWorldParser;
+import org.intranet.graphics.raytrace.traversal.CanvasTraversalType;
 
 public final class SceneDocument
 	implements Document
@@ -51,6 +54,7 @@ public final class SceneDocument
 		return docActions;
 	}
 
+
 	void render(RenderSettings renderSettings, Canvas canvas)
 	{
 		canvas.clear();
@@ -62,10 +66,13 @@ public final class SceneDocument
 		camera.setVsize(canvas.getHeight());
 		camera.updatePixelSize();
 
+		boolean parallel = renderSettings.isParallel();
+		CanvasTraversalType traversalType = renderSettings.getTraversalType();
+		AbstractSpliterator<PixelCoordinate> traversal =
+			traversalType.getTraversal(canvas);
 
 		Runnable renderer = () -> {
-			camera.render(world, canvas, renderSettings.isParallel(),
-				renderSettings.getTraversalType().getTraversal(canvas));
+			camera.render(world, canvas, parallel, traversal);
 		};
 		new Thread(renderer).start();
 	}

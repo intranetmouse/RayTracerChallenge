@@ -53,7 +53,8 @@ public final class SceneDocumentView
 		resizeDocCanvas();
 
 		canvasResolutionCombo = new CanvasResolutionCombo(
-			renderSettings.getResolution(), res -> renderSettings.setResolution(res));
+			renderSettings.getResolution(),
+			res -> renderSettings.setResolution(res));
 		canvasResolutionCombo.addActionListener(e -> {
 			resizeDocCanvas();
 		});

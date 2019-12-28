@@ -15,7 +15,6 @@ public enum CanvasTraversalType
 		{
 			return new AcrossDownTraversal(canvas.getWidth(), canvas.getHeight());
 		}
-
 	},
 	QuadrantsFromEnd("icon_quadrants") {
 		@Override

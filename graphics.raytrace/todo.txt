@@ -1,8 +1,10 @@
-- Get groups YAML file from book working
-  o Still something wrong!
+- Tree outline of objects
+- Property browser
 
 - Create a file to test patterns in groups
 - Chapter 14 Groups - Using Bounding Boxes to Optimize Large Scenes
 - Chapter 10 Patterns - Putting It Together : Nested Patterns (Convert Color to a pattern)
 - Chapter 10 Patterns - Putting It Together : Blended Patterns
 - Chapter 10 Patterns - Putting It Together : Radial Gradient Pattern,
+
+- Cancellable : when switching to Java 9+, use takeWhile
