@@ -2,7 +2,9 @@ package org.intranet.graphics.raytrace.ui.swing.traversalType;
 
 import java.awt.FlowLayout;
 import java.awt.Insets;
+import java.util.Enumeration;
 
+import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
@@ -24,5 +26,20 @@ public class ToggleButtons
 		tbg.add(toggleButton);
 		add(toggleButton);
 		tbg.setSelected(toggleButton.getModel(), selected);
+	}
+
+	public void selectAction(Action toggleAction)
+	{
+		Enumeration<AbstractButton> elements = tbg.getElements();
+		while (elements.hasMoreElements())
+		{
+			AbstractButton btn = elements.nextElement();
+			if (btn.getAction() == toggleAction)
+			{
+				tbg.setSelected(btn.getModel(), true);
+				return;
+			}
+		}
+		throw new IllegalArgumentException("action not found");
 	}
 }
