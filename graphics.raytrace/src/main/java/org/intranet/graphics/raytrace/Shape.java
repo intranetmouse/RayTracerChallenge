@@ -104,7 +104,8 @@ public abstract class Shape
 	@Override
 	public String toString()
 	{
-		return "Shape [parent=" + parent + ", savedRay=" + savedRay
+		String parentName = parent == null ? "none" : parent.getClass().getName();
+		return getClass().getSimpleName() + " [parent=" + parentName + ", savedRay=" + savedRay
 			+ ", material=" + material + ", transform=" + transform + "]";
 	}
 }
