@@ -76,6 +76,9 @@ public final class Cone
 	{
 		Cone shape = new Cone();
 		shape.deepCopyFrom(this);
+		shape.setMinimum(getMinimum());
+		shape.setMaximum(getMaximum());
+		shape.setClosed(isClosed());
 		return shape;
 	}
 

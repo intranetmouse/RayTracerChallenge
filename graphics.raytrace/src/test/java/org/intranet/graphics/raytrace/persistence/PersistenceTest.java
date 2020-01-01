@@ -3,8 +3,14 @@ package org.intranet.graphics.raytrace.persistence;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.List;
 
+import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.World;
+import org.intranet.graphics.raytrace.shape.Cube;
+import org.intranet.graphics.raytrace.shape.Group;
+import org.intranet.graphics.raytrace.shape.Plane;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -81,14 +87,56 @@ public class PersistenceTest
 	public void loadGrouptest1()
 		throws FileNotFoundException
 	{
-		testFile("grouptest1.yml");
+		World world = testFile("grouptest1.yml");
+		List<Shape> objs = world.getSceneObjects();
+
+		Assert.assertEquals(3, objs.size());
+
+		Shape s1 = objs.get(0);
+		Assert.assertEquals(Cube.class, s1.getClass());
+	}
+
+	@Test
+	public void loadGrouptest2()
+		throws FileNotFoundException
+	{
+		World world = testFile("grouptest2.yml");
+		List<Shape> objs = world.getSceneObjects();
+
+		Assert.assertEquals(1, objs.size());
+
+		Shape s1 = objs.get(0);
+		Assert.assertEquals(Group.class, s1.getClass());
+
+		Group g1 = (Group)s1;
+
+		List<Shape> children = g1.getChildren();
+		Assert.assertEquals(3, children.size());
+		Assert.assertEquals(Cube.class, children.get(0).getClass());
 	}
 
 	@Test
 	public void loadGroup()
 		throws FileNotFoundException
 	{
-		testFile("group.yml");
+		World world = testFile("group.yml");
+		List<Shape> objs = world.getSceneObjects();
+
+		Assert.assertEquals(2, objs.size());
+
+		Shape plane = objs.get(0);
+		Assert.assertTrue(Plane.class.isInstance(plane));
+
+		Shape obj = objs.get(1);
+		Assert.assertTrue(Group.class.isInstance(obj));
+
+		Group wackyGrp = (Group)obj;
+		List<Shape> wackyChildren = wackyGrp.getChildren();
+		Assert.assertEquals(8, wackyChildren.size());
+
+		Group firstLegGrp = (Group)wackyChildren.get(0);
+		List<Shape> firstLegChildren = firstLegGrp.getChildren();
+		Assert.assertEquals(2, firstLegChildren.size());
 	}
 
 	@Test
@@ -133,11 +181,12 @@ public class PersistenceTest
 		testFile("table-groups.yml");
 	}
 
-	private void testFile(String yamlName)
+	private World testFile(String yamlName)
 		throws FileNotFoundException
 	{
 		File file = new File(defaultDirectory, yamlName);
-		World world = parser.parse(new FileInputStream(file));
-
+		FileInputStream ymlStream = new FileInputStream(file);
+		World world = parser.parse(ymlStream);
+		return world;
 	}
 }

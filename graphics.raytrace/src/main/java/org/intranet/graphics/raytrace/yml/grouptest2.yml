@@ -1,0 +1,52 @@
+# ======================================================
+# the camera
+# ======================================================
+
+- add: camera
+  width: 400
+  height: 200
+  field-of-view: 0.785
+  from: [8, 6, -8]
+  to: [0, 1, 0]
+  up: [0, 1, 0]
+
+# ======================================================
+# light sources
+# ======================================================
+
+- add: light
+  at: [0, 6.9, -5]
+  intensity: [1, 1, 0.9]
+
+
+- define: leg
+  value:
+    add: cube
+    transform:
+      - [ scale, 0.25, 1, 0.25 ]
+    material:
+      color: [ 0.5529, 0.4235, 0.3255 ]
+      ambient: 0.2
+      diffuse: 0.7
+
+
+- define: legs
+  value: 
+    add: group
+    children:
+      - add: leg
+        value:
+          transform:
+            - [ translate, 1, 0, 1 ]
+      - add: leg
+        value:
+          transform:
+            - [ translate, -2, 0, 1 ]
+      - add: leg
+        value:
+          transform:
+            - [ translate, 1, 0, 3 ]
+
+- add: legs
+  transform:
+    - [ scale, 1, 1, 1 ]

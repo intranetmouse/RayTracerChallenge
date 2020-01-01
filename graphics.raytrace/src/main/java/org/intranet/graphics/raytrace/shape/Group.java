@@ -13,11 +13,12 @@ import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Vector;
 
-public class Group
+public final class Group
 	extends Shape
 	implements ShapeParent
 {
 	private final List<Shape> children = new ArrayList<>();
+	public List<Shape> getChildren() { return children; }
 
 	@Override
 	public IntersectionList localIntersections(Ray ray)
