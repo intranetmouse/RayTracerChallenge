@@ -300,12 +300,10 @@ public class YamlWorldParser
 			shapeName.equals("cone") ? new Cone() :
 			shapeName.equals("group") ? new Group() :
 			null;
-		if (shape == null)
-		{
-			return null;
-		}
 
-		processShapeProperties(world, objMap, materialDefines, shapeDefines, shape);
+		if (shape != null)
+			processShapeProperties(world, objMap, materialDefines, shapeDefines,
+				shape);
 		return shape;
 	}
 
@@ -323,7 +321,7 @@ public class YamlWorldParser
 
 		Object shapeMaterial = objMap.get("material");
 		if (shapeMaterial != null)
-		setMaterialForShape(shape, shapeMaterial, materialDefines);
+			setMaterialForShape(shape, shapeMaterial, materialDefines);
 
 		if (shape instanceof TubeLike)
 		{
@@ -351,18 +349,19 @@ public class YamlWorldParser
 					String shapeName = (String)childPropMap.get("add");
 					Shape childShape = createShape(shapeName, null, world,
 						objMap, materialDefines, shapeDefines);
-					if (childShape == null)
+					if (childShape != null)
+						group.addChild(childShape);
+					else
 					{
 						childShape = shapeDefines.get(shapeName);
 						if (childShape != null)
 						{
-							childShape = shape.deepCopy();
+							childShape = childShape.deepCopy();
 							processShapeProperties(world, objMap,
 								materialDefines, shapeDefines, childShape);
+							group.addChild(childShape.deepCopy());
 						}
 					}
-					if (childShape != null)
-						group.addChild(childShape.deepCopy());
 				}
 			}
 		}

@@ -59,6 +59,9 @@ public final class Cylinder
 	{
 		Cylinder shape = new Cylinder();
 		shape.deepCopyFrom(this);
+		shape.setMinimum(getMinimum());
+		shape.setMaximum(getMaximum());
+		shape.setClosed(isClosed());
 		return shape;
 	}
 
