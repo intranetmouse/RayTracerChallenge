@@ -22,8 +22,8 @@ public class PixelCoordinateSteps
 	}
 
 	@Given(wordPattern + " ← (acrossDownTraversal|scatteredTraversal)\\(" + twoIntsPattern + "\\)")
-	public void tAcrossDownTraversal(String traversalName, String traversalType, int width,
-		int height)
+	public void tAcrossDownTraversal(String traversalName, String traversalType,
+		int width, int height)
 	{
 		AbstractSpliterator<PixelCoordinate> traversal =
 			"acrossDownTraversal".equals(traversalType)
@@ -39,7 +39,8 @@ public class PixelCoordinateSteps
 	public void firstGetPixelCoordinateT(String pixelCoordName,
 		String traversalName)
 	{
-		Spliterator<PixelCoordinate> traversal = data.getPixelCoordinateSpliterator(traversalName);
+		Spliterator<PixelCoordinate> traversal = data.getPixelCoordinateSpliterator(
+			traversalName);
 		pixel = null;
 		if (traversal.tryAdvance(e -> pixel = e))
 			data.put(pixelCoordName, pixel);

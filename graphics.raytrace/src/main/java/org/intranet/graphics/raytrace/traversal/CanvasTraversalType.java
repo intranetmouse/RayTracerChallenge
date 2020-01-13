@@ -16,6 +16,13 @@ public enum CanvasTraversalType
 			return new AcrossDownTraversal(canvas.getWidth(), canvas.getHeight());
 		}
 	},
+	Random("icon_random") {
+		@Override
+		public AbstractSpliterator<PixelCoordinate> getTraversal(Canvas canvas)
+		{
+			return new RandomTraversal(canvas.getWidth(), canvas.getHeight(), null);
+		}
+	},
 	QuadrantsFromEnd("icon_quadrants") {
 		@Override
 		public AbstractSpliterator<PixelCoordinate> getTraversal(Canvas canvas)
