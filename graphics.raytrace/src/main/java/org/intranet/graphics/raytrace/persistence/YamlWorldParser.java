@@ -263,8 +263,7 @@ public class YamlWorldParser
 		Map<String, Object> objMap, Map<String, Material> materialDefines,
 		Map<String, Shape> shapeDefines)
 	{
-		Shape shape = createShape(shapeName, null, world, objMap,
-			materialDefines, shapeDefines);
+		Shape shape = createBasicShape(shapeName, null, shapeDefines);
 		if (shape == null)
 		{
 			shape = shapeDefines.get(shapeName);
@@ -272,24 +271,34 @@ public class YamlWorldParser
 			if (shape != null)
 			{
 				shape = shape.deepCopy();
-				@SuppressWarnings("unchecked")
-				Map<String, Object> objectValues =
-					(Map<String, Object>)objMap.get("value");
+				objMap = (Map<String, Object>)objMap.get("value");
 //System.out.println("  objMap map="+objMap);
-				processShapeProperties(world,
-					objectValues, materialDefines,
-					shapeDefines, shape);
 			}
 		}
+		if (shape == null)
+			return false;
 
-		if (shape != null)
-			world.addSceneObjects(shape);
+		processShapeProperties(world, objMap, materialDefines, shapeDefines,
+			shape);
+
+		world.addSceneObjects(shape);
 		return shape != null;
 	}
 
 	private static Shape createShape(String shapeName, String extendName,
 		World world, Map<String, Object> objMap,
 		Map<String, Material> materialDefines, Map<String, Shape> shapeDefines)
+	{
+		Shape shape = createBasicShape(shapeName, extendName, shapeDefines);
+
+		if (shape != null)
+			processShapeProperties(world, objMap, materialDefines, shapeDefines,
+				shape);
+		return shape;
+	}
+
+	private static Shape createBasicShape(String shapeName, String extendName,
+		Map<String, Shape> shapeDefines)
 	{
 		Shape shape =
 			extendName != null ? shapeDefines.get(extendName).deepCopy() :
@@ -300,10 +309,6 @@ public class YamlWorldParser
 			shapeName.equals("cone") ? new Cone() :
 			shapeName.equals("group") ? new Group() :
 			null;
-
-		if (shape != null)
-			processShapeProperties(world, objMap, materialDefines, shapeDefines,
-				shape);
 		return shape;
 	}
 
@@ -340,27 +345,30 @@ public class YamlWorldParser
 		{
 			Group group = (Group)shape;
 			@SuppressWarnings("unchecked")
-			List<Map<Object, Object>> childrenPropMapList =
-				(List<Map<Object, Object>>)objMap.get("children");
+			List<Map<String, Object>> childrenPropMapList =
+				(List<Map<String, Object>>)objMap.get("children");
 			if (childrenPropMapList != null)
 			{
-				for (Map<Object, Object> childPropMap : childrenPropMapList)
+				for (Map<String, Object> childPropMap : childrenPropMapList)
 				{
 					String shapeName = (String)childPropMap.get("add");
-					Shape childShape = createShape(shapeName, null, world,
-						objMap, materialDefines, shapeDefines);
-					if (childShape != null)
-						group.addChild(childShape);
-					else
+					Shape childShape = createBasicShape(shapeName, null, shapeDefines);
+					if (childShape == null)
 					{
 						childShape = shapeDefines.get(shapeName);
 						if (childShape != null)
 						{
 							childShape = childShape.deepCopy();
-							processShapeProperties(world, objMap,
-								materialDefines, shapeDefines, childShape);
-							group.addChild(childShape.deepCopy());
+							@SuppressWarnings("unchecked")
+							Map<String, Object> unchecked = (Map<String, Object>)childPropMap.get("value");
+							childPropMap = unchecked;
 						}
+					}
+					if (childShape != null)
+					{
+						processShapeProperties(world, childPropMap,
+							materialDefines, shapeDefines, childShape);
+						group.addChild(childShape.deepCopy());
 					}
 				}
 			}

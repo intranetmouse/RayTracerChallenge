@@ -68,10 +68,11 @@ public class Tuple
 		return new Tuple(doubles[0], doubles[1], doubles[2], doubles[3]);
 	}
 
+	private static final int DEC = 4;
 	@Override
 	public String toString()
 	{
-		return String.format("%s(%.8f,%.8f,%.8f[,%.8f])",
+		return String.format("%s(%." + DEC + "f,%." + DEC + "f,%." + DEC + "f[,%." + DEC + "f])",
 			getClass().getSimpleName(),
 			values[0], values[1], values[2], values[3]);
 	}

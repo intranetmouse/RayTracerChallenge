@@ -13,7 +13,6 @@ public final class RayTracingApp
 	@Override
 	public SceneDocument openFile(File file)
 	{
-		SceneDocument sceneDocument = new SceneDocument(file);
-		return sceneDocument;
+		return new SceneDocument(file);
 	}
 }
