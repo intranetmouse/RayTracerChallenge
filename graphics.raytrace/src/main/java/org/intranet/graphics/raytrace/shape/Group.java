@@ -69,10 +69,4 @@ public final class Group
 			shape.addChild(child.deepCopy());
 		return shape;
 	}
-
-	@Override
-	public String toString()
-	{
-		return "Group [" + super.toString() + ", children=" + children + "]";
-	}
 }
