@@ -218,42 +218,40 @@ public class YamlWorldParser
 	{
 		objMap = new DestructiveHashMap<String, Object>(objMap);
 		String type = (String)objMap.get("add");
-		if (!addShape(type, world, objMap, materialDefines, shapeDefines))
+		switch (type)
 		{
-			switch (type)
-			{
-				case "camera":
-					String width = (String)objMap.get("width");
-					String height = (String)objMap.get("height");
-					String fieldOfView = (String)objMap.get("field-of-view");
-					Camera camera = new Camera(stringToInt(width),
-						stringToInt(height), stringToDbl(fieldOfView));
+			case "camera":
+				String width = (String)objMap.get("width");
+				String height = (String)objMap.get("height");
+				String fieldOfView = (String)objMap.get("field-of-view");
+				Camera camera = new Camera(stringToInt(width),
+					stringToInt(height), stringToDbl(fieldOfView));
 
-					@SuppressWarnings("unchecked")
-					ArrayList<String> from = (ArrayList<String>)objMap.get("from");
-					@SuppressWarnings("unchecked")
-					ArrayList<String> to = (ArrayList<String>)objMap.get("to");
-					@SuppressWarnings("unchecked")
-					ArrayList<String> up = (ArrayList<String>)objMap.get("up");
-					Matrix mtx = Matrix.newView(listToPoint(from), listToPoint(to),
-						listToVector(up));
-					camera.setTransform(mtx);
-					world.setCamera(camera);
-					break;
-				case "light":
-					@SuppressWarnings("unchecked")
-					ArrayList<String> at = (ArrayList<String>)objMap.get("at");
-					@SuppressWarnings("unchecked")
-					ArrayList<String> intensity = (ArrayList<String>)objMap.get("intensity");
+				@SuppressWarnings("unchecked")
+				ArrayList<String> from = (ArrayList<String>)objMap.get("from");
+				@SuppressWarnings("unchecked")
+				ArrayList<String> to = (ArrayList<String>)objMap.get("to");
+				@SuppressWarnings("unchecked")
+				ArrayList<String> up = (ArrayList<String>)objMap.get("up");
+				Matrix mtx = Matrix.newView(listToPoint(from), listToPoint(to),
+					listToVector(up));
+				camera.setTransform(mtx);
+				world.setCamera(camera);
+				break;
+			case "light":
+				@SuppressWarnings("unchecked")
+				ArrayList<String> at = (ArrayList<String>)objMap.get("at");
+				@SuppressWarnings("unchecked")
+				ArrayList<String> intensity = (ArrayList<String>)objMap.get("intensity");
 
-					PointLight pointLight = new PointLight(listToPoint(at),
-						listToColor(intensity));
-					world.addLight(pointLight);
-					break;
-				default:
+				PointLight pointLight = new PointLight(listToPoint(at),
+					listToColor(intensity));
+				world.addLight(pointLight);
+				break;
+			default:
+				if (!addShape(type, world, objMap, materialDefines, shapeDefines))
 					System.err.println("Unknown shape type to add: " + type +
 						": data=" + objMap);
-			}
 		}
 		if (objMap.size() > 0)
 			System.err.printf("Leftovers for type %s = %s\n", type, objMap);
@@ -269,11 +267,7 @@ public class YamlWorldParser
 			shape = shapeDefines.get(shapeName);
 //System.out.println("addShape: shapeName="+shapeName);
 			if (shape != null)
-			{
 				shape = shape.deepCopy();
-				objMap = (Map<String, Object>)objMap.get("value");
-//System.out.println("  objMap map="+objMap);
-			}
 		}
 		if (shape == null)
 			return false;
@@ -357,12 +351,7 @@ public class YamlWorldParser
 					{
 						childShape = shapeDefines.get(shapeName);
 						if (childShape != null)
-						{
 							childShape = childShape.deepCopy();
-							@SuppressWarnings("unchecked")
-							Map<String, Object> unchecked = (Map<String, Object>)childPropMap.get("value");
-							childPropMap = unchecked;
-						}
 					}
 					if (childShape != null)
 					{
