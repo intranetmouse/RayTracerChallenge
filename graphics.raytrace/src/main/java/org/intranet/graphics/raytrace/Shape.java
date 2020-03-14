@@ -56,6 +56,8 @@ public abstract class Shape
 	@Override
 	public final boolean equals(Object other)
 	{
+		if (!(other instanceof Shape))
+			return false;
 		Shape otherSphere = (Shape)other;
 		if (!transform.equals(otherSphere.transform))
 			return false;

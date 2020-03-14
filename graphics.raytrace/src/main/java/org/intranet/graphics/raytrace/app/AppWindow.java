@@ -53,6 +53,8 @@ public abstract class AppWindow<DOC extends Document>
 					DOC doc = app.openFile(file);
 
 					view.setDocument(doc);
+
+					setTitle(app.getTitle() + " - " + file.getName());
 				}
 			}
 		};
