@@ -84,13 +84,13 @@ public class PersistenceTest
 	}
 
 	@Test
-	public void loadGrouptest1()
+	public void loadGroupOneLevel()
 		throws FileNotFoundException
 	{
 		World world = testFile("grouptest1.yml");
 		List<Shape> objs = world.getSceneObjects();
 
-		Assert.assertEquals(3, objs.size());
+		Assert.assertEquals(5, objs.size());
 
 		Shape s1 = objs.get(0);
 		Assert.assertEquals(Cube.class, s1.getClass());

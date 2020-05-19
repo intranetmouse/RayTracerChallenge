@@ -1,8 +1,11 @@
 package org.intranet.graphics.raytrace.steps;
 
+import java.util.Spliterators.AbstractSpliterator;
+
 import org.intranet.graphics.raytrace.Camera;
 import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.PixelCoordinate;
+import org.intranet.graphics.raytrace.RayTraceStatistics;
 import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
@@ -90,9 +93,9 @@ public class CameraSteps
 		Camera camera = data.getCamera(cameraName);
 		World world = data.getWorld(worldName);
 		Canvas canvas = new Canvas(camera.getHsize(), camera.getVsize());
-		camera.render(world, canvas, false,
-			CanvasTraversalType.AcrossDown.getTraversal(canvas));
+		AbstractSpliterator<PixelCoordinate> traversal = CanvasTraversalType.AcrossDown.getTraversal(canvas);
+		RayTraceStatistics stats = new RayTraceStatistics();
+		camera.render(world, canvas, false, traversal, stats);
 		data.put(imageName, canvas);
 	}
-
 }

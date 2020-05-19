@@ -12,6 +12,7 @@ import javax.swing.Action;
 import org.intranet.graphics.raytrace.Camera;
 import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.PixelCoordinate;
+import org.intranet.graphics.raytrace.RayTraceStatistics;
 import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.persistence.YamlWorldParser;
 import org.intranet.graphics.raytrace.traversal.CanvasTraversalType;
@@ -55,7 +56,8 @@ public final class SceneDocument
 	}
 
 
-	void render(RenderSettings renderSettings, Canvas canvas)
+	void render(RenderSettings renderSettings, Canvas canvas,
+		RayTraceStatistics stats)
 	{
 		canvas.clear();
 		if (world == null)
@@ -72,7 +74,7 @@ public final class SceneDocument
 			traversalType.getTraversal(canvas);
 
 		Runnable renderer = () -> {
-			camera.render(world, canvas, parallel, traversal);
+			camera.render(world, canvas, parallel, traversal, stats);
 		};
 		new Thread(renderer).start();
 	}

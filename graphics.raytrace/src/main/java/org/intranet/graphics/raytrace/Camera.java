@@ -94,16 +94,20 @@ public class Camera
 	}
 
 	public void render(World world, Canvas image, boolean parallel,
-		AbstractSpliterator<PixelCoordinate> traversal)
+		AbstractSpliterator<PixelCoordinate> traversal, RayTraceStatistics stats)
 	{
 		hsize = image.getWidth();
 		vsize = image.getHeight();
+		stats.start(hsize * vsize);
 		StreamSupport.stream(traversal, parallel)
 			.forEach(pixel -> {
+				stats.startPixel();
 				Color color = renderPixel(world, pixel);
 				image.writePixel(pixel.getX(), pixel.getY(), color);
+				stats.finishPixel();
 			});
 		image.setDone(true);
+		stats.stop();
 	}
 
 	public static int MAX_REFLECTION_RECURSION = 4;
