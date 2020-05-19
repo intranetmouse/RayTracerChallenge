@@ -12,7 +12,7 @@ import org.intranet.graphics.raytrace.surface.Pattern;
 public abstract class Shape
 	implements Transformable
 {
-	final public Vector normalAt(Point worldPoint)
+	public final Vector normalAt(Point worldPoint)
 	{
 		Point localPoint = worldToObject(worldPoint);
 

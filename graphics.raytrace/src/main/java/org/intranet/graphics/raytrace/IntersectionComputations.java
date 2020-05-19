@@ -47,11 +47,12 @@ public final class IntersectionComputations
 	public Color shadeHit(World world, int remaining)
 	{
 		List<Light> lightSources = world.getLightSources();
+		Material material = getObject().getMaterial();
 		Color surfaceColor = lightSources.stream()
-			.map(lightSource -> Tracer.lighting(getObject().getMaterial(),
+			.map(lightSource -> Tracer.lighting(material,
 				getObject(), lightSource, overPoint, eyeVector, normalVector,
 				Tracer.isShadowed(world, overPoint)))
-			.reduce((a, b) -> a.add(b)).orElse(new Color(0, 0, 0));
+			.reduce(Color::add).orElse(Color.BLACK);
 //String indent = "       ".substring(remaining);
 //System.out.printf("%ssurface=%s\n", indent, surfaceColor);
 
@@ -154,7 +155,7 @@ public final class IntersectionComputations
 		IntersectionList intersectionList = world.intersect(ray);
 		Intersection hit = intersectionList.hit();
 		if (hit == null)
-			return new Color(0, 0, 0);
+			return Color.BLACK;
 		IntersectionComputations comps = new IntersectionComputations(hit, ray,
 			intersectionList.getIntersections());
 		return comps.shadeHit(world, remaining);
@@ -164,7 +165,7 @@ public final class IntersectionComputations
 	{
 		Material material = getObject().getMaterial();
 		if (remaining <= 0 || material.getReflective() < Tuple.EPSILON)
-			return new Color(0, 0, 0);
+			return Color.BLACK;
 
 		Ray reflectRay = new Ray(getOverPoint(), getReflectVector());
 		Color color = IntersectionComputations.colorAt(world, reflectRay, remaining - 1);

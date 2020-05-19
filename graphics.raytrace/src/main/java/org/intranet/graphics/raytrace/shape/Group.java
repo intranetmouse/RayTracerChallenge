@@ -24,8 +24,9 @@ public final class Group
 	public IntersectionList localIntersections(Ray ray)
 	{
 		List<Intersection> intersections = children.parallelStream()
-			.map(e -> e.intersections(ray).getIntersections())
-			.flatMap(e -> e.stream())
+			.map(e -> e.intersections(ray))
+			.map(IntersectionList::getIntersections)
+			.flatMap(List<Intersection>::stream)
 			.sorted(Comparator.comparingDouble(Intersection::getDistance))
 			.collect(Collectors.toList());
 		return new IntersectionList(intersections);
@@ -34,13 +35,13 @@ public final class Group
 	@Override
 	protected Vector localNormalAt(Point point)
 	{
-		return new Vector(0, 1, 0);
+		throw new IllegalStateException("See Ch. 14 p. 200.");
 	}
 
 	@Override
 	protected boolean shapeEquals(Object other)
 	{
-		return false;
+		return other == this;
 	}
 
 	public boolean isEmpty()
