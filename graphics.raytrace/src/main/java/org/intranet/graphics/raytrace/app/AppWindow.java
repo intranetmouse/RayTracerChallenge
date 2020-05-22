@@ -40,6 +40,25 @@ public abstract class AppWindow<DOC extends Document>
 		view = createView();
 		add(view, BorderLayout.CENTER);
 
+		Action reloadSceneAction = new AbstractAction("Reload") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				File file = fc.getSelectedFile();
+				if (file.exists())
+				{
+					DOC doc = app.openFile(file);
+
+					view.setDocument(doc);
+
+					setTitle(app.getTitle() + " - " + file.getName());
+				}
+			}
+		};
+		reloadSceneAction.setEnabled(false);
+
 		JMenu sceneMenu = new JMenu(app.getDocType());
 		Action openSceneAction = new AbstractAction("Open ...") {
 			private static final long serialVersionUID = 1L;
@@ -55,10 +74,14 @@ public abstract class AppWindow<DOC extends Document>
 					view.setDocument(doc);
 
 					setTitle(app.getTitle() + " - " + file.getName());
+					reloadSceneAction.setEnabled(true);
 				}
 			}
 		};
+
 		sceneMenu.add(openSceneAction);
+		sceneMenu.add(reloadSceneAction);
+
 		menuBar.add(sceneMenu);
 
 		JToolBar toolBar = new JToolBar();
