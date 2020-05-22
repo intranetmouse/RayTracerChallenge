@@ -28,6 +28,10 @@ public abstract class Shape
 		return localIntersections(localRay);
 	}
 
+	private boolean castShadow = true;
+	public boolean isCastShadow() { return castShadow; }
+	public void setCastShadow(boolean value) { castShadow = value; }
+
 	private ShapeParent parent;
 	public ShapeParent getParent() { return parent; }
 	public void setParent(ShapeParent value) { parent = value; }

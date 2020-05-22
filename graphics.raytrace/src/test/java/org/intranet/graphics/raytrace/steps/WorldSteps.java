@@ -175,7 +175,7 @@ public class WorldSteps
 		World w = data.getWorld(worldName);
 		Ray r = data.getRay(rayName);
 
-		IntersectionList il = w.intersect(r);
+		IntersectionList il = w.intersect(r, false);
 
 		data.put(intersectionListName, il);
 	}
@@ -284,7 +284,8 @@ public class WorldSteps
 	{
 		World world = data.getWorld(worldName);
 		Point point = data.getPoint(pointName);
-		boolean actualResult = Tracer.isShadowed(world, point);
+		Light light = world.getLightSources().get(0);
+		boolean actualResult = Tracer.isShadowed(world, point, light);
 		boolean expectedResult = "true".equals(expectedResultStr);
 		Assert.assertEquals(expectedResult, actualResult);
 	}

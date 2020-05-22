@@ -322,6 +322,13 @@ public class YamlWorldParser
 		if (shapeMaterial != null)
 			setMaterialForShape(shape, shapeMaterial, materialDefines);
 
+		String shadow = (String)objMap.get("shadow");
+		if (shadow != null)
+		{
+			boolean castShadow = "true".equals(shadow);
+			shape.setCastShadow(castShadow);
+		}
+
 		if (shape instanceof TubeLike)
 		{
 			String min = (String)objMap.get("min");

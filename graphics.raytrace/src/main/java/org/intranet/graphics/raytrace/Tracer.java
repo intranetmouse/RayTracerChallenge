@@ -54,13 +54,13 @@ public final class Tracer
 		return ambientDiffuseColor.add(specularColor);
 	}
 
-	public static boolean isShadowed(World world, Point point)
+	public static boolean isShadowed(World world, Point point, Light light)
 	{
-		Vector v = world.getLightSources().get(0).getPosition().subtract(point);
+		Vector v = light.getPosition().subtract(point);
 		double distance = v.magnitude();
 		Vector direction = v.normalize();
 		Ray r = new Ray(point, direction);
-		IntersectionList intersections = world.intersect(r);
+		IntersectionList intersections = world.intersect(r, true);
 		Intersection h = intersections.hit();
 		return h != null && h.getDistance() < distance;
 	}

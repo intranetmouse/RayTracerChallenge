@@ -19,13 +19,16 @@ public class World
 		return sceneObjects;
 	}
 
-	public IntersectionList intersect(Ray ray)
+	public IntersectionList intersect(Ray ray, boolean omitShadowless)
 	{
 		List<Intersection> intersections = new ArrayList<>();
 		for (Shape sceneObject : sceneObjects)
 		{
-			IntersectionList il = sceneObject.intersections(ray);
-			intersections.addAll(il.getIntersections());
+			if (!omitShadowless || sceneObject.isCastShadow())
+			{
+				IntersectionList il = sceneObject.intersections(ray);
+				intersections.addAll(il.getIntersections());
+			}
 		}
 		intersections.sort((o1, o2) -> IntersectionList
 			.compareDouble(o1.getDistance() - o2.getDistance()));
