@@ -31,6 +31,15 @@ public final class Plane
 		return LOCAL_NORMAL;
 	}
 
+	private BoundingBox boundingBox = new BoundingBox(
+		new Point(Double.NEGATIVE_INFINITY, 0, Double.NEGATIVE_INFINITY),
+		new Point(Double.POSITIVE_INFINITY, 0, Double.POSITIVE_INFINITY));
+
+	public BoundingBox getBoundingBox()
+	{
+		return boundingBox;
+	}
+
 	@Override
 	protected boolean shapeEquals(Object other)
 	{

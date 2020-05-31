@@ -14,6 +14,7 @@ import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.shape.BoundingBox;
 import org.intranet.graphics.raytrace.shape.Cylinder;
 import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.surface.Color;
@@ -22,6 +23,7 @@ import org.intranet.graphics.raytrace.surface.Pattern;
 import org.intranet.graphics.raytrace.surface.StripePattern;
 import org.junit.Assert;
 
+import cucumber.api.PendingException;
 import io.cucumber.java.en.Then;
 
 public class ThenSteps
@@ -55,7 +57,7 @@ public class ThenSteps
 							actualDistance, Tuple.EPSILON);
 						return;
 					default:
-						throw new cucumber.api.PendingException(
+						throw new PendingException(
 							"Unknown variable name " + actualObjVariableName +
 							" on obj name=" + actualObjName);
 				}
@@ -78,13 +80,13 @@ public class ThenSteps
 						Assert.assertEquals(expectedObject, actualObject);
 						return;
 					default:
-						throw new cucumber.api.PendingException(
+						throw new PendingException(
 							"Unknown variable name " + actualObjVariableName +
 							" on obj name=" + actualObjName);
 				}
 			}
 		}
-		throw new cucumber.api.PendingException(
+		throw new PendingException(
 			"Unknown data type for variable " + actualObjName);
 	}
 
@@ -106,18 +108,18 @@ public class ThenSteps
 							Assert.assertTrue(overPoint.getZ() < maxNighttimeValue);
 							return;
 						default:
-							throw new cucumber.api.PendingException(
+							throw new PendingException(
 								"Unknown coordinate name " + coordinateName +
 								" for variable name " + objectVariableName +
 								" on obj name=" + objectName);
 					}
 				default:
-					throw new cucumber.api.PendingException(
+					throw new PendingException(
 						"Unknown variable name " + objectVariableName +
 						" on obj name=" + objectName);
 			}
 		}
-		throw new cucumber.api.PendingException(
+		throw new PendingException(
 			"Unknown data type for variable " + objectName);
 	}
 
@@ -156,8 +158,12 @@ public class ThenSteps
 	{
 		Object expected = getObject(objType, x, y, z);
 		Object value = getObjPropValue(expectedObjName, propertyName);
-		Assert.assertEquals(expected, value);
-		return;
+		if (expected != null)
+		{
+			Assert.assertEquals(expected, value);
+			return;
+		}
+		Assert.fail("Unkonwn object type " + objType);
 	}
 
 	@Then(wordPattern + "\\." + wordPattern + " = " + wordPattern + "\\("
@@ -201,6 +207,7 @@ public class ThenSteps
 		Material material = data.getMaterial(expectedObjName);
 		Shape shape = data.getShape(expectedObjName);
 		Pattern pattern = data.getPattern(expectedObjName);
+		BoundingBox box = data.getBoundingBox(expectedObjName);
 		String type = "unknown";
 		if (comps != null)
 		{
@@ -235,6 +242,12 @@ public class ThenSteps
 		{
 			type = "pattern";
 			value = "transform".equals(propertyName) ? pattern.getTransform() :
+				null;
+		}
+		else if (box != null)
+		{
+			value = "min".equals(propertyName) ? box.getMin() :
+				"max".equals(propertyName) ? box.getMax() :
 				null;
 		}
 		else
@@ -717,5 +730,69 @@ public class ThenSteps
 	{
 		Vector v = new Vector(x, -Math.sqrt(y), z);
 		data.put(vectorName, v);
+	}
+
+	@Then("^" + wordPattern + "." + wordPattern + " = point\\(" +
+		signPattern + "infinity, " + signPattern + "infinity, " +
+		signPattern + "infinity\\)")
+	public void boxMinPointInfinityInfinityInfinity(String objName,
+		String varName, String xSign, String ySign, String zSign)
+	{
+		BoundingBox box = data.getBoundingBox(objName);
+		Point point = "min".equals(varName) ? box.getMin() : box.getMax();
+		double x = infinityForSign(xSign);
+		double y = infinityForSign(ySign);
+		double z = infinityForSign(zSign);
+		Point infinityPoint = new Point(x, y, z);
+		Assert.assertEquals(infinityPoint, point);
+	}
+
+	@Then("^" + wordPattern + "." + wordPattern + " = point\\(" +
+		signPattern + "infinity, 0, " + signPattern + "infinity\\)")
+	public void boxMinPointInfinityZeroInfinity(String objName,
+		String varName, String xSign, String zSign)
+	{
+		BoundingBox box = data.getBoundingBox(objName);
+		Point point = "min".equals(varName) ? box.getMin() : box.getMax();
+		double x = infinityForSign(xSign);
+		double z = infinityForSign(zSign);
+		Point infinityPoint = new Point(x, 0, z);
+		Assert.assertEquals(infinityPoint, point);
+	}
+
+	private double infinityForSign(String xSign)
+	{
+		return "-".equals(xSign) ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY;
+	}
+
+	@Then("^" + wordPattern + "." + wordPattern + " = point\\(" + doublePattern + ", " + signPattern + "infinity, " + doublePattern + "\\)")
+	public void boxMaxPointDoubleMinusInfinityDouble(String boxName,
+		String varName, Double x, String ySign, Double z)
+	{
+		double y = infinityForSign(ySign);
+		BoundingBox box = data.getBoundingBox(boxName);
+		Point point = "min".equals(varName) ? box.getMin() : box.getMax();
+		Point infinityPoint = new Point(x, y, z);
+		Assert.assertEquals(infinityPoint, point);
+	}
+
+	@Then("^box_contains_point\\(" + wordPattern + ", " + wordPattern + "\\) is " + trueFalsePattern)
+	public void boxContainsPointIsTrue(String boxName, String pointName, String tf)
+	{
+		BoundingBox box = data.getBoundingBox(boxName);
+		Point p = data.getPoint(pointName);
+		boolean expectedResult = "true".equals(tf);
+
+		Assert.assertEquals(expectedResult, box.containsPoint(p));
+	}
+
+	@Then("^box_contains_box\\(" + wordPattern + ", " + wordPattern + "\\) is " + trueFalsePattern)
+	public void boxContainsBoxIsTrue(String boxName, String otherBoxName, String tf)
+	{
+		BoundingBox box = data.getBoundingBox(boxName);
+		BoundingBox otherBox = data.getBoundingBox(otherBoxName);
+		boolean expectedResult = "true".equals(tf);
+
+		Assert.assertEquals(expectedResult, box.containsBox(otherBox));
 	}
 }

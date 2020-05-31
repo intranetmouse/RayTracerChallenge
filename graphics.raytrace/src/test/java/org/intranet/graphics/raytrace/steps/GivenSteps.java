@@ -4,6 +4,7 @@ import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.shape.BoundingBox;
 import org.intranet.graphics.raytrace.shape.TubeLike;
 import org.intranet.graphics.raytrace.surface.CheckerPattern;
 import org.intranet.graphics.raytrace.surface.Color;
@@ -216,5 +217,31 @@ public class GivenSteps
 
 		Vector worldNormal = shape.normalToWorld(normal);
 		data.put(normalName, worldNormal);
+	}
+
+	@Given("^" + wordPattern + " ← bounding_box\\(empty\\)")
+	public void boxBounding_boxEmpty(String boxName)
+	{
+		BoundingBox box = new BoundingBox();
+		data.put(boxName, box);
+	}
+
+	@Given("^" + wordPattern + " ← bounding_box\\(min=point\\("+ threeDoublesPattern +"\\) max=point\\(" + threeDoublesPattern + "\\)\\)")
+	public void boxBounding_boxMinPointMaxPoint(String boxName, double minX,
+		double minY, double minZ, double maxX, double maxY, double maxZ)
+	{
+		Point minPoint = new Point(minX, minY, minZ);
+		Point maxPoint = new Point(maxX, maxY, maxZ);
+		BoundingBox box = new BoundingBox(minPoint, maxPoint);
+		data.put(boxName, box);
+
+	}
+
+	@When("^" + wordPattern + " ← bounds_of\\(" + wordPattern + "\\)")
+	public void boxBounds_ofShape(String boxName, String shapeName)
+	{
+		Shape s = data.getShape(shapeName);
+		BoundingBox box = s.getBoundingBox();
+		data.put(boxName, box);
 	}
 }

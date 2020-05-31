@@ -35,18 +35,25 @@
     add: group
     children:
       - add: leg
-        value:
-          transform:
-            - [ translate, 1, 0, 1 ]
+        transform:
+          - [ translate, 1.5, 1, 1 ]
       - add: leg
-        value:
-          transform:
-            - [ translate, -2, 0, 1 ]
+        transform:
+          - [ translate, -1.5, 1, 1 ]
       - add: leg
-        value:
-          transform:
-            - [ translate, 1, 0, 3 ]
+        transform:
+          - [ translate, 2, 1, -1 ]
 
 - add: legs
+#  transform:
+#    - [ scale, 1, 1, 1 ]
+
+
+
+- add: sphere
   transform:
-    - [ scale, 1, 1, 1 ]
+    - [ scale, 0.1, 0.1, 0.1 ]
+
+- add: plane
+  material:
+    color: [0.8, 0.6, 0.9 ]

@@ -62,6 +62,18 @@ public final class Cone
 		return y;
 	}
 
+	public BoundingBox getBoundingBox()
+	{
+		double a = Math.abs(minimum);
+		double b = Math.abs(maximum);
+		double limit = Math.max(a, b);
+
+		Point min = new Point(-limit, minimum, -limit);
+		Point max = new Point(limit, maximum, limit);
+
+		return new BoundingBox(min, max);
+	}
+
 	@Override
 	protected boolean shapeEquals(Object other)
 	{

@@ -4,6 +4,7 @@ import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.shape.BoundingBox;
 import org.junit.Assert;
 
 import io.cucumber.java.en.Then;
@@ -81,14 +82,26 @@ public class RaysSteps
 	}
 
 	@When(wordPattern + " ← transform\\(" + twoWordPattern + "\\)")
-	public void rTransformRM(String newRayName, String rayName,
+	public void rTransformRM(String newObjectName, String objToTransformName,
 		String translationName)
 	{
-		Ray ray = data.getRay(rayName);
-		Matrix t = data.getMatrix(translationName);
+		Ray ray = data.getRay(objToTransformName);
+		BoundingBox box = data.getBoundingBox(objToTransformName);
 
-		Ray newRay = ray.transform(t);
-		data.put(newRayName, newRay);
+		Matrix mtx = data.getMatrix(translationName);
+
+		if (ray != null)
+		{
+			Ray newRay = ray.transform(mtx);
+			data.put(newObjectName, newRay);
+		}
+		else if (box != null)
+		{
+			BoundingBox newBox = box.transform(mtx);
+			data.put(newObjectName, newBox);
+		}
+		else
+			Assert.fail("Unknown object type for parameter " + objToTransformName);
 	}
 
 

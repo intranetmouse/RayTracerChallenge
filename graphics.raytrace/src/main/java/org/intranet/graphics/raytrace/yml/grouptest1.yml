@@ -24,6 +24,7 @@
     add: cube
     transform:
       - [ scale, 0.25, 1, 0.25 ]
+      - [ translate, 0, 1, 0 ]
     material:
       color: [ 0.5529, 0.4235, 0.3255 ]
       ambient: 0.2
@@ -31,18 +32,28 @@
 
 
 - add: leg
-  value:
-    transform:
-      - [ translate, 1, 0, 1 ]
+  transform:
+    - [ translate, 1.5, 0, 1 ]
+  material:
+    color: [ 0.4235, 0.5529, 0.3255 ]  # Green-ish
 
 
 - add: leg
-  value:
-    transform:
-      - [ translate, -2, 0, 1 ]
+  transform:
+    - [ translate, -1.5, 0, 1 ]
+  material:
+    color: [ 0.3255, 0.4235, 0.5529 ]  # Blue-ish
 
 
 - add: leg
-  value:
-    transform:
-      - [ translate, 1, 0, 3 ]
+  transform:
+    - [ translate, 2, 0, -1 ]
+
+- add: sphere
+  transform:
+    - [ scale, 0.1, 0.1, 0.1 ]
+    - [ translate, 0.0, 0.05, 0.1 ]
+
+- add: plane
+  material:
+    color: [0.8, 0.6, 0.9 ]

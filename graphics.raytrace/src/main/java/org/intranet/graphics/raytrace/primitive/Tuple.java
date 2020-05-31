@@ -16,7 +16,7 @@ public class Tuple
 	public static final double EPSILON4 = 0.0001;
 	public static boolean dblEqual(double a, double b)
 	{
-		return Math.abs(a - b) <= EPSILON;
+		return a == b || Math.abs(a - b) <= EPSILON;
 	}
 	public static boolean isZero(double a)
 	{

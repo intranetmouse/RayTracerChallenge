@@ -5,6 +5,7 @@ import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Transformable;
 import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.shape.BoundingBox;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.intranet.graphics.raytrace.surface.Pattern;
@@ -95,6 +96,11 @@ public abstract class Shape
 			normal = parent.normalToWorld(normal);
 
 		return normal;
+	}
+
+	public BoundingBox getBoundingBox()
+	{
+		return new BoundingBox(new Point(-1, -1, -1), new Point(1, 1, 1));
 	}
 
 	protected void deepCopyFrom(Shape other)

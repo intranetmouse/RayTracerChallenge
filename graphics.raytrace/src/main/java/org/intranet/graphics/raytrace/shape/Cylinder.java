@@ -46,6 +46,15 @@ public final class Cylinder
 	protected double calcNormalY(double pointY, double dist)
 	{ return 0; }
 
+	public BoundingBox getBoundingBox()
+	{
+		double yMin = getMinimum();
+		double yMax = getMaximum();
+		return new BoundingBox(
+			new Point(-1, yMin, -1),
+			new Point(1, yMax, 1));
+	}
+
 	@Override
 	protected boolean shapeEquals(Object other)
 	{

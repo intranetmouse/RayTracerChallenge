@@ -12,6 +12,7 @@ import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
+import org.intranet.graphics.raytrace.shape.BoundingBox;
 import org.intranet.graphics.raytrace.shape.DefaultWorld;
 import org.intranet.graphics.raytrace.shape.Plane;
 import org.intranet.graphics.raytrace.shape.PointLight;
@@ -20,6 +21,7 @@ import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.junit.Assert;
 
+import cucumber.api.PendingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -79,7 +81,7 @@ public class WorldSteps
 							shape.setTransform(Matrix.newTranslation(xlateX, xlateY, xlateZ));
 							break;
 						default:
-							throw new cucumber.api.PendingException("Unknown sphere transform property " + args[0]);
+							throw new PendingException("Unknown sphere transform property " + args[0]);
 					}
 					break;
 				case "material.color":
@@ -120,7 +122,7 @@ public class WorldSteps
 					material.setPattern(new TestPattern());
 					break;
 				default:
-					throw new cucumber.api.PendingException("Unknown shape property " + property);
+					throw new PendingException("Unknown shape property " + property);
 			}
 		}
 	}
@@ -153,11 +155,34 @@ public class WorldSteps
 	}
 
 	@Given(wordPattern + " is added to " + wordPattern)
-	public void sIsAddedToW(String objName, String worldName)
+	public void sIsAddedToW(String childObjName, String parentObjName)
 	{
-		Shape obj = data.getShape(objName);
-		World world = data.getWorld(worldName);
-		world.getSceneObjects().add(obj);
+		World world = data.getWorld(parentObjName);
+		BoundingBox box = data.getBoundingBox(parentObjName);
+		if (world != null)
+		{
+			Shape child = data.getShape(childObjName);
+			world.getSceneObjects().add(child);
+		}
+		else if (box != null)
+		{
+			Point p = data.getPoint(childObjName);
+			BoundingBox otherBox = data.getBoundingBox(childObjName);
+			if (p != null)
+			{
+				BoundingBox newBox = box.add(p);
+				data.put(parentObjName, newBox);
+			}
+			else if (otherBox != null)
+			{
+				BoundingBox newBox = box.add(otherBox);
+				data.put(parentObjName, newBox);
+			}
+			else
+				Assert.fail("Unknown type of object for " + childObjName);
+		}
+		else
+			Assert.fail("Unknown type of object for " + parentObjName);
 	}
 
 

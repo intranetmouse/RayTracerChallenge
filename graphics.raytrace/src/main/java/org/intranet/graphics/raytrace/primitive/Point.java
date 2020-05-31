@@ -3,6 +3,11 @@ package org.intranet.graphics.raytrace.primitive;
 public class Point
 	extends Tuple
 {
+	public static final Point NEGATIVE_INFINITY = new Point(
+		Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY);
+	public static final Point POSITIVE_INFINITY = new Point(
+		Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+
 	public Point(double x, double y, double z)
 	{
 		super(x, y, z, 1.0);

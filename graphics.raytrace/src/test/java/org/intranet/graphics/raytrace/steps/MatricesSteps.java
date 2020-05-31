@@ -462,4 +462,10 @@ public class MatricesSteps
 		Assert.assertEquals(expected, m);
 	}
 
+	@Given("{word} ← rotation_x\\(π \\/ {int}) * rotation_y\\(π \\/ {int})")
+	public void matrixRotation_xΠRotation_yΠ(String matrixName, Integer int1, Integer int2)
+	{
+		Matrix m = Matrix.newRotationX(Math.PI / int1).multiply(Matrix.newRotationY(Math.PI / int2));
+		data.put(matrixName, m);
+	}
 }
