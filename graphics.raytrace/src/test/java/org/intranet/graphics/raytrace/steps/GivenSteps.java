@@ -4,7 +4,6 @@ import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
-import org.intranet.graphics.raytrace.shape.BoundingBox;
 import org.intranet.graphics.raytrace.shape.TubeLike;
 import org.intranet.graphics.raytrace.surface.CheckerPattern;
 import org.intranet.graphics.raytrace.surface.Color;
@@ -18,6 +17,7 @@ import org.junit.Assert;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
+import io.cucumber.java.en.When.Whens;
 
 public class GivenSteps
 	extends StepsParent
@@ -27,140 +27,97 @@ public class GivenSteps
 		super(data);
 	}
 
-	@Given(wordPattern + " ← " + intPattern)
+
+	@Given("{identifier} ← {int}")
 	public void hsize(String varName, int value)
 	{
 		data.put(varName, value);
 	}
 
-	@Given(wordPattern + " ← π\\/" + doublePattern)
+	@Given("{identifier} ← π\\/{dbl}")
 	public void fieldOfViewPi(String varName, double divisor)
 	{
 		double value = Math.PI / divisor;
 		data.put(varName, value);
 	}
 
-	@Given(wordPattern + " ← (true|false)")
-	public void in_shadowTrue(String booleanName, String booleanValueStr)
+	@Given("{identifier} ← {boolean}")
+	public void in_shadowTrue(String booleanName, Boolean booleanValue)
 	{
-		boolean booleanValue = "true".contentEquals(booleanValueStr);
 		data.put(booleanName, booleanValue);
 	}
 
-	@Given(wordPattern + "\\." + wordPattern + " ← (true|false)")
-	public void cylClosedTrue(String shapeName, String propertyName,
-		String booleanString)
-	{
-		Shape shape = data.getShape(shapeName);
-		Assert.assertNotNull(shape);
-		switch (propertyName)
-		{
-			case "closed":
-				if (shape instanceof TubeLike)
-				{
-					((TubeLike)shape).setClosed("true".equals(booleanString));
-					return;
-				}
-				else
-					Assert.fail("Shape " + shape.getClass().getSimpleName() +
-						" doesn't have property " + propertyName);
-			default:
-				Assert.fail("Unknown shape property " + propertyName);
-		}
-	}
-	@Given(wordPattern + " ← (stripe|gradient)_pattern\\(" + twoWordPattern + "\\)")
+//	@Given(wordPattern + "\\." + wordPattern + " ← (true|false)")
+//	public void cylClosedTrue(String shapeName, String propertyName,
+//		String booleanString)
+//	{
+//		Shape shape = data.getShape(shapeName);
+//		Assert.assertNotNull(shape);
+//		switch (propertyName)
+//		{
+//			case "closed":
+//				if (shape instanceof TubeLike)
+//				{
+//					((TubeLike)shape).setClosed("true".equals(booleanString));
+//					return;
+//				}
+//				else
+//					Assert.fail("Shape " + shape.getClass().getSimpleName() +
+//						" doesn't have property " + propertyName);
+//			default:
+//				Assert.fail("Unknown shape property " + propertyName);
+//		}
+//	}
+
+	@Given("{identifier} ← {identifier}_pattern\\({identifier}, {identifier})")
 	public void patternStripe_patternWhiteBlack(String patternName,
 		String patternType, String color1Name, String color2Name)
 	{
 		Color color1 = data.getColor(color1Name);
 		Color color2 = data.getColor(color2Name);
 
-		Pattern pattern = "stripe".equals(patternType) ?
-			new StripePattern(color1, color2) :
-			new GradientPattern(color1, color2);
+		Pattern pattern =
+			"stripe".equals(patternType) ? new StripePattern(color1, color2) :
+			"ring".equals(patternType) ? new RingPattern(color1, color2) :
+			"checkers".equals(patternType) ? new CheckerPattern(color1, color2) :
+			"gradient".equals(patternType) ? new GradientPattern(color1, color2) :
+			null;
+		Assert.assertNotNull("unrecognized pattern " + patternName, pattern);
 		data.put(patternName, pattern);
 	}
 
-	@Given(wordPattern + "\\." + wordPattern + " ← " + doublePattern)
-	public void objPropAssignDouble(String objectName, String propertyName,
-		double value)
-	{
-		Material material = data.getMaterial(objectName);
-
-		if (material != null)
-		{
-			switch (propertyName)
-			{
-				case "ambient":
-					material.setAmbient(value);
-					return;
-				case "diffuse":
-					material.setDiffuse(value);
-					return;
-				case "specular":
-					material.setSpecular(value);
-					return;
-				default:
-					Assert.fail("Unknown material property " + propertyName);
-			}
-		}
-
-		Shape shape = data.getShape(objectName);
-
-		if (shape != null)
-		{
-			switch (propertyName)
-			{
-				case "minimum":
-					if (shape instanceof TubeLike)
-						((TubeLike)shape).setMinimum(value);
-					else
-						Assert.fail("Shape property minimum not valid for object type " + shape.getClass().getName());
-					return;
-				case "maximum":
-					if (shape instanceof TubeLike)
-						((TubeLike)shape).setMaximum(value);
-					else
-						Assert.fail("Shape property maximum not valid for object type " + shape.getClass().getSimpleName());
-					return;
-				default:
-					Assert.fail("Unknown shape property " + propertyName);
-			}
-		}
-
-		Assert.fail("Unknown object name " + objectName);
-	}
-
-	@Given(wordPattern + ".pattern ← stripe_pattern\\(color\\(" +
-		threeDoublesPattern + "\\), color\\(" + threeDoublesPattern + "\\)\\)")
+	@Given("{identifier}.pattern ← stripe_pattern\\({color}, {color})")
 	public void mPatternStripe_patternColorColor(String materialName,
-		double red1, double green1, double blue1, double red2, double green2,
-		double blue2)
+		Color color1, Color color2)
 	{
 		Material material = data.getMaterial(materialName);
-		Color color1 = new Color(red1, green1, blue1);
-		Color color2 = new Color(red2, green2, blue2);
 		Pattern pattern = new StripePattern(color1, color2);
 		material.setPattern(pattern);
 	}
 
-	@Given("^set_pattern_transform\\(" + wordPattern + ", (scaling|translation)\\(" + threeDoublesPattern + "\\)\\)")
+	@Given("{identifier} ← stripe_pattern\\({color}, {color})")
+	public void pattern_setStripePatternColorColor(String patternName,
+		Color color1, Color color2)
+	{
+		Pattern pattern = new StripePattern(color1, color2);
+		data.put(patternName, pattern);
+	}
+
+	@Given("set_pattern_transform\\({identifier}, {matrix})")
 	public void set_pattern_transformPatternScaling(String patternName,
-		String operation, double xformX, double xformY, double xformZ)
+		Matrix mtx)
 	{
 		Pattern pattern = data.getPattern(patternName);
-		Matrix mtx = "scaling".equals(operation) ?
-			Matrix.newScaling(xformX, xformY, xformZ) :
-			Matrix.newTranslation(xformX, xformY, xformZ);
 		pattern.setTransform(mtx);
 	}
 
-	@When(wordPattern + " ← (?:stripe_at_object|pattern_at_shape)\\(" + twoWordPattern + ", point\\(" + threeDoublesPattern + "\\)\\)")
+	@Whens({
+		@When("{identifier} ← pattern_at_shape\\({identifier}, {identifier}, {point})"),
+		@When("{identifier} ← stripe_at_object\\({identifier}, {identifier}, {point})")
+	})
 	public void cStripe_at_objectPatternObjectPoint(String assignColorName,
-		String patternName, String shapeName, Double pointX, Double pointY,
-		Double pointZ)
+		String patternName, String shapeName, Point pt)
 	{
-		Point pt = new Point(pointX, pointY, pointZ);
 		Pattern pattern = data.getPattern(patternName);
 		Shape shape = data.getShape(shapeName);
 
@@ -168,26 +125,25 @@ public class GivenSteps
 		data.put(assignColorName, c);
 	}
 
-	@Given(wordPattern + " ← test_pattern\\(\\)")
-	public void patternTest_pattern(String patternName)
+	@Given("{identifier} ← {test_pattern}")
+	public void patternTest_pattern(String patternName, Pattern pattern)
 	{
-		Pattern pattern = new TestPattern();
 		data.put(patternName, pattern);
 	}
 
-	@Given(wordPattern + " ← (ring|checkers)_pattern\\(" + twoWordPattern + "\\)")
-	public void patternRing_patternWhiteBlack(String patternName,
-		String patternType, String color1, String color2)
-	{
-		Color c1 = data.getColor(color1);
-		Color c2 = data.getColor(color2);
+//	@Given(wordPattern + " ← (ring|checkers)_pattern\\(" + twoWordPattern + "\\)")
+//	public void patternRing_patternWhiteBlack(String patternName,
+//		String patternType, String color1, String color2)
+//	{
+//		Color c1 = data.getColor(color1);
+//		Color c2 = data.getColor(color2);
+//
+//		Pattern pattern = "ring".equals(patternType) ? new RingPattern(c1, c2) :
+//			new CheckerPattern(c1, c2);
+//		data.put(patternName, pattern);
+//	}
 
-		Pattern pattern = "ring".equals(patternType) ? new RingPattern(c1, c2) :
-			new CheckerPattern(c1, c2);
-		data.put(patternName, pattern);
-	}
-
-	@Given(wordPattern + " has:")
+	@Given("{identifier} has:")
 	public void shapeHas(String shapeName, DataTable dataTable)
 	{
 		Shape shape = data.getShape(shapeName);
@@ -195,53 +151,22 @@ public class GivenSteps
 		WorldSteps.setShapePropertiesFromDataTable(dataTable, shape);
 	}
 
-	@When(wordPattern + " ← world_to_object\\(" + wordPattern + ", point\\(" + threeDoublesPattern + "\\)\\)")
-	public void pWorld_to_objectSPoint(String pointName, String shapeName, double x, double y, double z)
+	@When("{identifier} ← world_to_object\\({identifier}, {point})")
+	public void pWorld_to_objectSPoint(String pointName, String shapeName, Point p)
 	{
-		Point p = new Point(x, y, z);
 		Shape shape = data.getShape(shapeName);
 		Point newPoint = shape.worldToObject(p);
 		data.put(pointName, newPoint);
 	}
 
-	@When(wordPattern + " ← normal_to_world\\(" + wordPattern + ", vector\\(√" + doublePattern + "/" + doublePattern + ", √" + doublePattern + "/" + doublePattern + ", √" + doublePattern + "/" + doublePattern + "\\)\\)")
+	@When("{identifier} ← normal_to_world\\({identifier}, {vectorSSS})")
 	public void nNormal_to_worldSVector(String normalName, String shapeName,
-		double vectorXnum, double vectorXdenom, double vectorYnum,
-		double vectorYdenom, double vectorZnum, double vectorZdenom)
+		Vector v)
 	{
-		Vector normal = new Vector(
-			Math.sqrt(vectorXnum) / vectorXdenom,
-			Math.sqrt(vectorYnum) / vectorYdenom,
-			Math.sqrt(vectorZnum) / vectorZdenom);
+		Vector normal = v.normalize();
 		Shape shape = data.getShape(shapeName);
 
 		Vector worldNormal = shape.normalToWorld(normal);
 		data.put(normalName, worldNormal);
-	}
-
-	@Given("^" + wordPattern + " ← bounding_box\\(empty\\)")
-	public void boxBounding_boxEmpty(String boxName)
-	{
-		BoundingBox box = new BoundingBox();
-		data.put(boxName, box);
-	}
-
-	@Given("^" + wordPattern + " ← bounding_box\\(min=point\\("+ threeDoublesPattern +"\\) max=point\\(" + threeDoublesPattern + "\\)\\)")
-	public void boxBounding_boxMinPointMaxPoint(String boxName, double minX,
-		double minY, double minZ, double maxX, double maxY, double maxZ)
-	{
-		Point minPoint = new Point(minX, minY, minZ);
-		Point maxPoint = new Point(maxX, maxY, maxZ);
-		BoundingBox box = new BoundingBox(minPoint, maxPoint);
-		data.put(boxName, box);
-
-	}
-
-	@When("^" + wordPattern + " ← bounds_of\\(" + wordPattern + "\\)")
-	public void boxBounds_ofShape(String boxName, String shapeName)
-	{
-		Shape s = data.getShape(shapeName);
-		BoundingBox box = s.getBoundingBox();
-		data.put(boxName, box);
 	}
 }

@@ -6,7 +6,7 @@ import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.junit.Assert;
 
-import cucumber.api.PendingException;
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -19,15 +19,21 @@ public class CanvasSteps
 		super(data);
 	}
 
-	@Given(wordPattern + " ← canvas\\(" + twoIntsPattern + "\\)")
-	public void cCanvas(String canvasName, int int1, int int2)
+	@Given("{identifier} ← {canvas}")
+	public void cCanvas(String canvasName, Canvas canvas)
 	{
-		data.put(canvasName, new Canvas(int1, int2));
+		data.put(canvasName, canvas);
+	}
+
+	@When("every pixel of {identifier} is (set to ){color}")
+	public void everyPixelOfCIsSetToColor(String canvasName, Color color)
+	{
+		Canvas c = data.getCanvas(canvasName);
+		c.writeAllPixels(color);
 	}
 
 
-	@When("^write_pixel\\(" + wordPattern + ", " + twoIntsPattern + ", "
-		+ wordPattern + "\\)$")
+	@When("write_pixel\\({identifier}, {int}, {int}, {identifier})")
 	public void write_pixelCRed(String canvasName, int x, int y,
 		String colorName)
 	{
@@ -36,36 +42,7 @@ public class CanvasSteps
 		c.writePixel(x, y, color);
 	}
 
-	@When(wordPattern + " ← canvas_to_ppm\\(" + wordPattern + "\\)")
-	public void ppmCanvas_to_ppmC(String ppmName, String canvasName)
-	{
-		Canvas canvas = data.getCanvas(canvasName);
-		data.put(ppmName, canvas.toPpm());
-	}
-
-	@When("every pixel of " + wordPattern + " is set to color\\(" +
-		threeDoublesPattern + "\\)")
-	public void everyPixelOfCIsSetToColor(String canvasName, double red,
-		double green, double blue)
-	{
-		Canvas c = data.getCanvas(canvasName);
-		c.writeAllPixels(new Color(red, green, blue));
-	}
-
-
-	@Then("every pixel of " + wordPattern + " is color\\(" + threeIntsPattern + "\\)")
-	public void everyPixelOfCIsColor(String canvasName, int red, int green, int blue)
-	{
-		Color color = new Color(red, green, blue);
-		Canvas c = data.getCanvas(canvasName);
-
-		for (int x = 0; x < c.getWidth(); x++)
-			for (int y = 0; y < c.getHeight(); y++)
-				Assert.assertEquals(color, c.getPixelColor(x, y));
-	}
-
-	@Then("^pixel_at\\(" + wordPattern + ", " + twoIntsPattern + "\\) = " +
-		wordPattern + "$")
+	@Then("pixel_at\\({identifier}, {int}, {int}) = {identifier}")
 	public void pixel_atCRed(String canvasName, int x, int y, String expectedColorName)
 	{
 		Color expectedColor = data.getColor(expectedColorName);
@@ -76,20 +53,35 @@ public class CanvasSteps
 		Assert.assertEquals(expectedColor, actualColor);
 	}
 
-	@Then("^pixel_at\\(" + wordPattern + ", " + twoIntsPattern + "\\) = color\\("
-		+ threeDoublesPattern + "\\)")
-	public void pixel_atImageColor(String canvasName, int x, int y, double red,
-		double green, double blue)
+	@When("{identifier} ← canvas_to_ppm\\({identifier})")
+	public void ppmCanvas_to_ppmC(String ppmName, String canvasName)
 	{
-		Color expectedColor = new Color(red, green, blue);
+		Canvas canvas = data.getCanvas(canvasName);
+		data.put(ppmName, canvas.toPpm());
+	}
 
+
+//	@Then("every pixel of " + wordPattern + " is color\\(" + threeIntsPattern + "\\)")
+//	public void everyPixelOfCIsColor(String canvasName, int red, int green, int blue)
+//	{
+//		Color color = new Color(red, green, blue);
+//		Canvas c = data.getCanvas(canvasName);
+//
+//		for (int x = 0; x < c.getWidth(); x++)
+//			for (int y = 0; y < c.getHeight(); y++)
+//				Assert.assertEquals(color, c.getPixelColor(x, y));
+//	}
+	@Then("pixel_at\\({identifier}, {int}, {int}) = {color}")
+	public void pixel_atImageColor(String canvasName, int x, int y,
+		Color expectedColor)
+	{
 		Canvas canvas = data.getCanvas(canvasName);
 		Color actualColor = canvas.getPixelColor(x, y);
 
 		Assert.assertEquals(expectedColor, actualColor);
 	}
 
-	@Then("^lines " + intPattern + "-" + intPattern + " of " + wordPattern + " are")
+	@Then("lines {int}-{int} of {identifier} are")
 	public void linesOfPpmAre(int firstLine1, int lastLine1, String ppmName,
 		String ppmString)
 	{
@@ -105,7 +97,7 @@ public class CanvasSteps
 		}
 	}
 
-	@Then("the last character of " + wordPattern + " is a newline")
+	@Then("the last character of {identifier} is a newline")
 	public void theLastCharacterOfPpmIsANewline(String ppmName)
 	{
 //		List<String> ppm = data.getPpm(ppmName);

@@ -20,9 +20,11 @@ import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.primitive.Vector;
 import org.intranet.graphics.raytrace.shape.BoundingBox;
 import org.intranet.graphics.raytrace.shape.PointLight;
+import org.intranet.graphics.raytrace.shape.TubeLike;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.intranet.graphics.raytrace.surface.Pattern;
+import org.junit.Assert;
 
 public final class RaytraceData
 {
@@ -97,6 +99,13 @@ public final class RaytraceData
 	{ shapeMap.put(shapeName, shape); }
 	public Shape getShape(String shapeName)
 	{ return shapeMap.get(shapeName); }
+	public TubeLike getTubelike(String shapeName)
+	{
+		Shape shape = shapeMap.get(shapeName);
+		if (!(shape instanceof TubeLike))
+			Assert.fail("Shape " + shapeName + " is not TubeLike");
+		return (TubeLike)shape;
+	}
 
 	private Map<String, Pattern> patternMap = new HashMap<>();
 	public void put(String patternName, Pattern pattern)

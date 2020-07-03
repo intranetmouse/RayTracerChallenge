@@ -15,7 +15,7 @@ public class GroupSteps
 		super(data);
 	}
 
-	@When("^add_child\\(" + wordPattern + ", " + wordPattern + "\\)$")
+	@When("add_child\\({identifier}, {identifier})")
 	public void add_childGS(String groupName, String childShapeName)
 	{
 		Group g = (Group)data.getShape(groupName);
@@ -24,7 +24,7 @@ public class GroupSteps
 		g.addChild(s);
 	}
 
-	@Then(wordPattern + " includes " + wordPattern)
+	@Then("{identifier} includes {identifier}")
 	public void gIncludesS(String groupName, String childShapeName)
 	{
 		Group g = (Group)data.getShape(groupName);

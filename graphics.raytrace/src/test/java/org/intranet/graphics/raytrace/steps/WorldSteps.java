@@ -21,10 +21,11 @@ import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.junit.Assert;
 
-import cucumber.api.PendingException;
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.java.en.When.Whens;
 import io.cucumber.datatable.DataTable;
 
 public class WorldSteps
@@ -35,21 +36,14 @@ public class WorldSteps
 		super(data);
 	}
 
-	@Given(wordPattern + " ← world\\(\\)")
-	public void wWorld(String worldName)
-	{
-		World w = new World();
-		data.put(worldName, w);
-	}
-
-	@Given(wordPattern + " ← (sphere|plane)\\(\\) with:")
-	public void sSphereWith(String sphereName, String shapeName,
-		DataTable dataTable)
-	{
-		Shape shape = "sphere".equals(shapeName) ? new Sphere() : new Plane();
-		setShapePropertiesFromDataTable(dataTable, shape);
-		data.put(sphereName, shape);
-	}
+//	@Given(wordPattern + " ← (sphere|plane)\\(\\) with:")
+//	public void sSphereWith(String sphereName, String shapeName,
+//		DataTable dataTable)
+//	{
+//		Shape shape = "sphere".equals(shapeName) ? new Sphere() : new Plane();
+//		setShapePropertiesFromDataTable(dataTable, shape);
+//		data.put(sphereName, shape);
+//	}
 
 	public static void setShapePropertiesFromDataTable(DataTable dataTable, Shape shape)
 	{
@@ -127,34 +121,39 @@ public class WorldSteps
 		}
 	}
 
-	@Given(wordPattern + " ← the (first|second) object in " + wordPattern)
-	public void assignNthObjectInWorldToObj(String objectName, String order,
+	@Given("{identifier} ← the first object in {identifier}")
+	public void assignFirstObjectInWorldToObj(String objectName,
+		String worldName)
+	{
+		assignNthObjectToObj(objectName, 0, worldName);
+	}
+
+	@Given("{identifier} ← the second object in {identifier}")
+	public void assignSecondObjectInWorldToObj(String objectName,
+		String worldName)
+	{
+		assignNthObjectToObj(objectName, 1, worldName);
+	}
+
+	private void assignNthObjectToObj(String objectName, int sceneObjIdx,
 		String worldName)
 	{
 		World world = data.getWorld(worldName);
-		int sceneObjIdx = "first".equals(order) ? 0 : 1;
 		Shape firstObject = world.getSceneObjects().get(sceneObjIdx);
 		data.put(objectName, firstObject);
 	}
 
-	@Given("^" + wordPattern + "\\." + wordPattern + " ← point_light\\(point\\(" +
-		threeDoublesPattern + "\\), color\\(" + threeDoublesPattern + "\\)\\)$")
-	public void worldSetLightToPointLight(String worldName, String propertyName,
-		double pointX, double pointY, double pointZ, double red, double green,
-		double blue)
+	@Given("{identifier}.light ← point_light\\({point}, {color})")
+	public void worldSetLightToPointLight(String worldName, Point position,
+		Color color)
 	{
-		Assert.assertEquals("Only light is supported property name", "light",
-			propertyName);
-
-		Point position = new Point(pointX, pointY, pointZ);
-		Color color = new Color(red, green, blue);
 		PointLight pointLight = new PointLight(position, color);
 		World world = data.getWorld(worldName);
 		world.getLightSources().clear();
 		world.getLightSources().add(pointLight);
 	}
 
-	@Given(wordPattern + " is added to " + wordPattern)
+	@Given("{identifier} is added to {identifier}")
 	public void sIsAddedToW(String childObjName, String parentObjName)
 	{
 		World world = data.getWorld(parentObjName);
@@ -186,14 +185,16 @@ public class WorldSteps
 	}
 
 
-	@When(wordPattern + " ← default_world\\(\\)")
-	public void wDefault_world(String worldName)
+	@Whens({
+		@When("{identifier} ← {default_world}"),
+		@When("{identifier} ← {world}")
+	})
+	public void wDefault_world(String worldName, World w)
 	{
-		World w = DefaultWorld.defaultWorld();
 		data.put(worldName, w);
 	}
 
-	@When(wordPattern + " ← intersect_world\\(" + twoWordPattern + "\\)")
+	@When("{identifier} ← intersect_world\\({identifier}, {identifier})")
 	public void xsIntersect_worldWR(String intersectionListName,
 		String worldName, String rayName)
 	{
@@ -205,7 +206,7 @@ public class WorldSteps
 		data.put(intersectionListName, il);
 	}
 
-	@When(wordPattern + " ← shade_hit\\(" + twoWordPattern + "\\)")
+	@When("{identifier} ← shade_hit\\({identifier}, {identifier})")
 	public void cShade_hitWComps(String colorName, String worldName,
 		String intersectionComputationsName)
 	{
@@ -213,7 +214,7 @@ public class WorldSteps
 			Camera.MAX_REFLECTION_RECURSION);
 	}
 
-	@When(wordPattern + " ← shade_hit\\(" + twoWordPattern + ", " + intPattern + "\\)")
+	@When("{identifier} ← shade_hit\\({identifier}, {identifier}, {int})")
 	public void cShade_hitWComps(String colorName, String worldName,
 		String intersectionComputationsName, Integer numRecursion)
 	{
@@ -226,7 +227,7 @@ public class WorldSteps
 		data.put(colorName, c);
 	}
 
-	@When(wordPattern + " ← reflected_color\\(" + twoWordPattern + "\\)")
+	@When("{identifier} ← reflected_color\\({identifier}, {identifier})")
 	public void colorReflected_colorWComps(String colorName, String worldName,
 		String compsName)
 	{
@@ -234,7 +235,7 @@ public class WorldSteps
 			Camera.MAX_REFLECTION_RECURSION);
 	}
 
-	@When(wordPattern + " ← reflected_color\\(" + twoWordPattern + ", " + intPattern + "\\)")
+	@When("{identifier} ← reflected_color\\({identifier}, {identifier}, {int})")
 	public void colorReflected_colorWComps(String colorName, String worldName,
 		String compsName, Integer remaining)
 	{
@@ -244,7 +245,7 @@ public class WorldSteps
 		data.put(colorName, color);
 	}
 
-	@When(wordPattern + " ← refracted_color\\(" + wordPattern + ", " + wordPattern + "\\)")
+	@When("{identifier} ← refracted_color\\({identifier}, {identifier})")
 	public void colorRefracted_colorWComps(String colorName, String worldName,
 		String intersectionComputationsName)
 	{
@@ -252,7 +253,7 @@ public class WorldSteps
 			intersectionComputationsName, Camera.MAX_REFLECTION_RECURSION);
 	}
 
-	@When(wordPattern + " ← refracted_color\\(" + twoWordPattern + ", " + intPattern + "\\)")
+	@When("{identifier} ← refracted_color\\({identifier}, {identifier}, {int})")
 	public void colorRefracted_colorWCompsInt(String colorName, String worldName,
 		String intersectionComputationsName, Integer remaining)
 	{
@@ -265,7 +266,7 @@ public class WorldSteps
 		data.put(colorName, c);
 	}
 
-	@When(wordPattern + " ← color_at\\(" + twoWordPattern + "\\)")
+	@When("{identifier} ← color_at\\({identifier}, {identifier})")
 	public void cColor_atWR(String colorName, String worldName, String rayName)
 	{
 		World world = data.getWorld(worldName);
@@ -275,16 +276,27 @@ public class WorldSteps
 		data.put(colorName, color);
 	}
 
+	@Then("color_at\\({identifier}, {identifier}) should terminate successfully")
+	public void color_atWRShouldTerminateSuccessfully(String worldName,
+		String rayName)
+	{
+		World world = data.getWorld(worldName);
+		Ray ray = data.getRay(rayName);
+		Color c = IntersectionComputations.colorAt(world, ray, 5);
+		// TODO: Figure out how to test for failure case (not terminated)
+		Assert.assertNotNull(c);
+	}
 
-	@Then(wordPattern + " contains no objects")
+
+	@Then("{identifier} contains no objects")
 	public void wContainsNoObjects(String worldName)
 	{
 		World w = data.getWorld(worldName);
-		List<Shape> lightSources = w.getSceneObjects();
-		Assert.assertEquals(0, lightSources.size());
+		List<Shape> sceneObjects = w.getSceneObjects();
+		Assert.assertEquals(0, sceneObjects.size());
 	}
 
-	@Then(wordPattern + " has no light source")
+	@Then("{identifier} has no light source")
 	public void wHasNoLightSource(String worldName)
 	{
 		World w = data.getWorld(worldName);
@@ -292,7 +304,20 @@ public class WorldSteps
 		Assert.assertEquals(0, lightSources.size());
 	}
 
-	@Then(wordPattern + " contains " + wordPattern)
+	@Then("{identifier}.light = {identifier}")
+	public void wContainsNoObjects(String worldName, String expectedLightName)
+	{
+		Light expectedLight = data.getPointLight(expectedLightName);
+
+		World w = data.getWorld(worldName);
+		List<Light> lightSources = w.getLightSources();
+		Assert.assertEquals(1, lightSources.size());
+		Light actualLight = lightSources.get(0);
+
+		Assert.assertEquals(expectedLight, actualLight);
+	}
+
+	@Then("{identifier} contains {identifier}")
 	public void wContainsS(String worldName, String objectName)
 	{
 		World world = data.getWorld(worldName);
@@ -302,16 +327,25 @@ public class WorldSteps
 		Assert.assertTrue(contains);
 	}
 
-	@Then("^is_shadowed\\(" + wordPattern + ", " + wordPattern
-		+ "\\) is (true|false)")
-	public void is_shadowedWPIsFalse(String worldName, String pointName,
-		String expectedResultStr)
+	@Then("is_shadowed\\({identifier}, {identifier}) is false")
+	public void is_shadowedWPIsFalse(String worldName, String pointName)
+	{
+		is_shadowedWPBoolean(worldName, pointName, false);
+	}
+
+	@Then("is_shadowed\\({identifier}, {identifier}) is true")
+	public void is_shadowedWPIsTrue(String worldName, String pointName)
+	{
+		is_shadowedWPBoolean(worldName, pointName, true);
+	}
+
+	private void is_shadowedWPBoolean(String worldName, String pointName,
+		boolean expectedResult)
 	{
 		World world = data.getWorld(worldName);
 		Point point = data.getPoint(pointName);
 		Light light = world.getLightSources().get(0);
 		boolean actualResult = Tracer.isShadowed(world, point, light);
-		boolean expectedResult = "true".equals(expectedResultStr);
 		Assert.assertEquals(expectedResult, actualResult);
 	}
 }

@@ -13,9 +13,10 @@ import org.intranet.graphics.raytrace.surface.Material;
 import org.junit.Assert;
 
 import io.cucumber.datatable.DataTable;
-import cucumber.api.PendingException;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Given.Givens;
 import io.cucumber.java.en.When;
+import io.cucumber.java.en.When.Whens;
 
 public class ShapeSteps extends StepsParent
 {
@@ -24,73 +25,56 @@ public class ShapeSteps extends StepsParent
 		super(data);
 	}
 
-	@Given(wordPattern + " ← glass_sphere\\(\\) with:")
-	public void sGlass_sphere(String sphereName, DataTable dataTable)
+	@When("{identifier}.material = {identifier}")
+	public void compareShapeSetMaterial(String shapeName, String expectedMaterialName)
 	{
-		Sphere sphere = createGlassSphere(sphereName);
-		WorldSteps.setShapePropertiesFromDataTable(dataTable, sphere);
+		Shape shape = data.getShape(shapeName);
+		Material expectedMaterial = data.getMaterial(expectedMaterialName);
+		Material actualMaterial = shape.getMaterial();
+		Assert.assertEquals(expectedMaterial, actualMaterial);
 	}
 
-	@Given(wordPattern + " ← (sphere|glass_sphere|plane|test_shape|group)\\(\\)")
-	public void pPlane(String shapeName, String shapeType)
+	@Given("{identifier} ← {shape} with:")
+	public void sGlass_sphere(String shapeName, Shape shape, DataTable dataTable)
 	{
-		switch (shapeType)
-		{
-			case "sphere":
-				data.put(shapeName, new Sphere());
-				break;
-			case "glass_sphere":
-				Sphere sphere = createGlassSphere(shapeName);
-				sphere.getSavedRay();
-				break;
-			case "plane":
-				data.put(shapeName, new Plane());
-				break;
-			case "test_shape":
-				data.put(shapeName, new TestShape());
-				break;
-			case "group":
-				data.put(shapeName, new Group());
-				break;
-			default:
-				Assert.fail("Unknown shape type " + shapeType);
-		}
+		WorldSteps.setShapePropertiesFromDataTable(dataTable, shape);
+		data.put(shapeName, shape);
 	}
 
-	private Sphere createGlassSphere(String sphereName)
+	@Given("{identifier} ← {shape}")
+	public void pPlane(String shapeName, Shape shape)
 	{
-		Sphere sphere = new Sphere();
-		Material material = sphere.getMaterial();
-		material.setTransparency(1.0);
-		material.setRefractive(1.5);
-		data.put(sphereName, sphere);
-		return sphere;
+		data.put(shapeName, shape);
 	}
 
-	@Given(wordPattern + ".material.(ambient|transparency|refractive_index) ← " + doublePattern)
-	public void outerMaterialAmbient(String objectName, String propertyName,
+	@Given("{identifier}.material.ambient ← {dbl}")
+	public void outerMaterialAmbient(String objectName, double doubleValue)
+	{
+		Shape obj = data.getShape(objectName);
+		Material material = obj.getMaterial();
+		material.setAmbient(doubleValue);
+	}
+
+	@Given("{identifier}.material.transparency ← {dbl}")
+	public void outerMaterialTransparency(String objectName, String propertyName,
 		double doubleValue)
 	{
 		Shape obj = data.getShape(objectName);
 		Material material = obj.getMaterial();
-		switch (propertyName)
-		{
-			case "ambient":
-				material.setAmbient(doubleValue);
-				break;
-			case "transparency":
-				material.setTransparency(doubleValue);
-				break;
-			case "refractive_index":
-				material.setRefractive(doubleValue);
-				break;
-			default:
-				Assert.fail("Illegal property name " + propertyName);
-		}
+		material.setTransparency(doubleValue);
+	}
+
+	@Given("{identifier}.material.refractive_index ← {dbl}")
+	public void outerMaterialRefractive(String objectName, String propertyName,
+		double doubleValue)
+	{
+		Shape obj = data.getShape(objectName);
+		Material material = obj.getMaterial();
+		material.setRefractive(doubleValue);
 	}
 
 
-	@When(wordPattern + " ← intersect\\(" + twoWordPattern + "\\)")
+	@When("{identifier} ← intersect\\({identifier}, {identifier})")
 	public void xsIntersectSR(String intersectionName, String sphereName,
 		String rayName)
 	{
@@ -100,7 +84,7 @@ public class ShapeSteps extends StepsParent
 		data.put(intersectionName, intersections);
 	}
 
-	@When("^set_transform\\(" + twoWordPattern + "\\)$")
+	@When("set_transform\\({identifier}, {identifier})")
 	public void set_transform_s_t(String sphereName, String matrixName)
 	{
 		Shape obj = data.getShape(sphereName);
@@ -108,75 +92,64 @@ public class ShapeSteps extends StepsParent
 		obj.setTransform(mtx);
 	}
 
-	@When("^set_transform\\(" + wordPattern +
-		", (scaling|translation)\\(" + threeDoublesPattern + "\\)\\)$")
-	public void set_transform_s_t(String sphereName, String operation, double x,
-		double y, double z)
+	@When("set_transform\\({identifier}, {matrix})")
+	public void set_transform_s_t(String shapeName, Matrix mtx)
 	{
-		Shape obj = data.getShape(sphereName);
-		Matrix mtx = "scaling".equals(operation) ? Matrix.newScaling(x, y, z) :
-			Matrix.newTranslation(x, y, z);
+		Shape obj = data.getShape(shapeName);
 		obj.setTransform(mtx);
 	}
 
-	@Given("set_transform\\(" + wordPattern + ", rotation_y\\(π\\/" + doublePattern + "\\)\\)")
-	public void set_transformGRotation_yΠ(String shapeName, Double divisor)
+	@Given("set_transform\\({identifier}, {matrixRotationPiDiv})")
+	public void set_transformGRotation_yΠ(String shapeName, Matrix mtx)
 	{
 		Shape s = data.getShape(shapeName);
-		Matrix mtx = Matrix.newRotationY(Math.PI / divisor);
 		s.setTransform(mtx);
 	}
 
-//	@Given("^set_transform\\(" + wordPattern + ", translation\\(" + threeDoublesPattern + "\\) * scaling\\(" + threeDoublesPattern + "\\)\\)")
-//	public void setTransformShapeTranslationScaling(//String shapeName,
-//		double translateX, double translateY, double translateZ,
-//		double scalingX, double scalingY, double scalingZ)
-//	{
-//		// Write code here that turns the phrase above into concrete actions
-//		throw new PendingException();
-//	}
+	@Given("set_transform\\({identifier}, {matrix} \\* {matrix})")
+	public void setTransformShapeTranslationScaling(String shapeName,
+		Matrix first, Matrix second)
+	{
+		Shape s = data.getShape(shapeName);
+		s.setTransform(first.multiply(second));
+	}
 
-	@When(wordPattern + " ← normal_at\\(" + wordPattern +
-		", point\\(" + threeDoublesPattern + "\\)\\)")
+	@Whens({
+		@When("{identifier} ← normal_at\\({identifier}, {point})"),
+		@When("{identifier} ← normal_at\\({identifier}, {pointNSS})")
+	})
 	public void n_normal_at_s_point(String normalVectorName, String sphereName,
-		double x, double y, double z)
+		Point point)
 	{
 		Shape obj = data.getShape(sphereName);
-		Point point = new Point(x, y, z);
 
 		Vector normalVector = obj.normalAt(point);
 
 		data.put(normalVectorName, normalVector);
 	}
 
-	@When(wordPattern + " ← normal_at\\(" + wordPattern +
-		", point\\(√" + doublePattern + "\\/" + doublePattern +
-		", √" + doublePattern + "\\/" + doublePattern +
-		", √" + doublePattern + "\\/" + doublePattern + "\\)\\)")
+	@When("{identifier} ← normal_at\\({identifier}, {pointSSS})")
 	public void nNormal_atSPoint(String normalVectorName, String sphereName,
-		double xNum, double xDenom, double yNum, double yDenom, double zNum,
-		double zDenom)
+		Point point)
 	{
 		Shape obj = data.getShape(sphereName);
-		Point point = new Point(Math.sqrt(xNum) / xDenom,
-			Math.sqrt(yNum) / yDenom, Math.sqrt(zNum) / zDenom);
 
 		Vector normalVector = obj.normalAt(point);
 
 		data.put(normalVectorName, normalVector);
 	}
 
-	@When(wordPattern + " ← normal_at\\(" + wordPattern +
-		", point\\(" + doublePattern +
-		", √" + doublePattern + "\\/" + doublePattern +
-		", -√" + doublePattern + "\\/" + doublePattern + "\\)\\)")
-	public void nNormal_atSPoint(String normalVectorName, String objectName,
-		double x, double yNum, double yDenom, double zNum, double zDenom)
-	{
-		Shape obj = data.getShape(objectName);
-		Point normalPoint = new Point(x, Math.sqrt(yNum)/yDenom,
-			-Math.sqrt(zNum)/zDenom);
-		Vector normalVector = obj.normalAt(normalPoint);
-		data.put(normalVectorName, normalVector);
-	}
+//	@When(wordPattern + " ← normal_at\\(" + wordPattern +
+//		", point\\(" + doublePattern +
+//		", √" + doublePattern + "\\/" + doublePattern +
+//		", -√" + doublePattern + "\\/" + doublePattern + "\\)\\)")
+//	public void nNormal_atSPoint(String normalVectorName, String objectName,
+//		double x, double yNum, double yDenom, double zNum, double zDenom)
+//	{
+//		Shape obj = data.getShape(objectName);
+//		Point normalPoint = new Point(x, Math.sqrt(yNum)/yDenom,
+//			-Math.sqrt(zNum)/zDenom);
+//		Vector normalVector = obj.normalAt(normalPoint);
+//		data.put(normalVectorName, normalVector);
+//	}
 }

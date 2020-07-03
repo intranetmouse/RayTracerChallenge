@@ -23,7 +23,7 @@ public class IntersectionsSteps
 		super(data);
 	}
 
-	@Given(wordPattern + " ← intersections\\(" + wordPattern + "\\)")
+	@Given("{identifier} ← intersections\\({identifier})")
 	public void xsIntersectionsI(String intersectionsName,
 		String intersectionName)
 	{
@@ -32,7 +32,7 @@ public class IntersectionsSteps
 		data.put(intersectionsName, ilist);
 	}
 
-	@Given(wordPattern + " ← intersections\\(" + fourWordPattern + "\\)")
+	@Given("{identifier} ← intersections\\({identifier}, {identifier}, {identifier}, {identifier})")
 	public void xsIntersectionsIIII(String intersectionListName, String int1,
 		String int2, String int3, String int4)
 	{
@@ -49,7 +49,8 @@ public class IntersectionsSteps
 	public static final String twoIndexShapePatterns = indexShapePattern + ", " + indexShapePattern;
 	public static final String fourIndexShapePatterns = twoIndexShapePatterns + ", " + twoIndexShapePatterns;
 	public static final String sixIndexShapePatterns = twoIndexShapePatterns + ", " + twoIndexShapePatterns + ", " + twoIndexShapePatterns;
-	@Given(wordPattern + " ← intersections\\(" + sixIndexShapePatterns + "\\)")
+
+	@Given("{identifier} ← intersections\\({dbl}:{identifier}, {dbl}:{identifier}, {dbl}:{identifier}, {dbl}:{identifier}, {dbl}:{identifier}, {dbl}:{identifier})")
 	public void xsIntersectionsABCBCA(String intersectionListName,
 		double shape1Dist, String shape1Name,
 		double shape2Dist, String shape2Name,
@@ -80,7 +81,24 @@ public class IntersectionsSteps
 		data.put(intersectionListName, ilist);
 	}
 
-	@Given(wordPattern + " ← intersections\\(" + fourIndexShapePatterns + "\\)")
+	// Kept as regex because / is not escapable in Cucumber expressions
+	// https://cucumber.io/docs/cucumber/cucumber-expressions/
+	@Given("^" + wordPattern + " ← intersections\\(" +
+		indexShapePattern + "\\)$")
+	public void xsIntersectionsABCB(String intersectionListName,
+		double shape1Dist, String shape1Name)
+	{
+		Shape shape1 = data.getShape(shape1Name);
+		Intersection i1 = new Intersection(shape1Dist, shape1);
+
+		IntersectionList ilist = new IntersectionList(i1);
+		data.put(intersectionListName, ilist);
+	}
+
+	// Kept as regex because / is not escapable in Cucumber expressions
+	// https://cucumber.io/docs/cucumber/cucumber-expressions/
+	@Given("^" + wordPattern + " ← intersections\\(" +
+		fourIndexShapePatterns + "\\)$")
 	public void xsIntersectionsABCB(String intersectionListName,
 		double shape1Dist, String shape1Name,
 		double shape2Dist, String shape2Name,
@@ -103,7 +121,10 @@ public class IntersectionsSteps
 		data.put(intersectionListName, ilist);
 	}
 
-	@Given(wordPattern + " ← intersections\\(-√2\\/2:" + wordPattern + ", √2\\/2:" + wordPattern + "\\)")
+	// Kept as regex because / is not escapable in Cucumber expressions
+	// https://cucumber.io/docs/cucumber/cucumber-expressions/
+	@Given("^" + wordPattern + " ← intersections\\(-√2\\/2:" + wordPattern
+		+ ", √2\\/2:" + wordPattern + "\\)$")
 	public void xsIntersectionsShapeShape(String intersectionListName,
 		String shape1Name, String shape2Name)
 	{
@@ -118,7 +139,7 @@ public class IntersectionsSteps
 		data.put(intersectionListName, ilist);
 	}
 
-	@Given(wordPattern + " ← intersections\\(√2:" + wordPattern + "\\)")
+	@Given("{identifier} ← intersections\\(√2:{identifier})")
 	public void xsIntersectionsShape(String intersectionListName,
 		String shape1Name)
 	{
@@ -130,7 +151,7 @@ public class IntersectionsSteps
 		data.put(intersectionListName, ilist);
 	}
 
-	@Given(wordPattern + " ← intersections\\(" + twoIndexShapePatterns + "\\)")
+	@Given("{identifier} ← intersections\\({dbl}:{identifier}, {dbl}:{identifier})")
 	public void xsIntersectionsShapeShape(String intersectionListName,
 		double shape1Dist, String shape1Name,
 		double shape2Dist, String shape2Name)
@@ -145,7 +166,7 @@ public class IntersectionsSteps
 		data.put(intersectionListName, ilist);
 	}
 
-	@Given(wordPattern + " ← intersections\\(" + indexShapePattern + "\\)")
+	@Given("{identifier} ← intersections\\({dbl}, {identifier})")
 	public void xsIntersectionsShape(String intersectionListName,
 		double shape1Dist, String shape1Name)
 	{
@@ -156,7 +177,7 @@ public class IntersectionsSteps
 		data.put(intersectionListName, ilist);
 	}
 
-	@When(wordPattern + " ← intersections\\(" + wordPattern + ", " + wordPattern + "\\)")
+	@When("{identifier} ← intersections\\({identifier}, {identifier})")
 	public void xsIntersectionsII(String intersectionsName,
 		String intersection1Name, String intersection2Name)
 	{
@@ -166,7 +187,7 @@ public class IntersectionsSteps
 		data.put(intersectionsName, ilist);
 	}
 
-	@When("^" + wordPattern + " ← intersection\\(" + doublePattern + ", " + wordPattern + "\\)$")
+	@When("{identifier} ← intersection\\({dbl}, {identifier})")
 	public void iIntersectionS(String intersectionName, double distance,
 		String sphereName)
 	{
@@ -175,7 +196,7 @@ public class IntersectionsSteps
 		data.put(intersectionName, intersection);
 	}
 
-	@When("^" + wordPattern + " ← intersection\\(√" + doublePattern + ", " + wordPattern + "\\)$")
+	@When("{identifier} ← intersection\\(√{dbl}, {identifier})")
 	public void iIntersectionSqrRt(String intersectionName, double distance,
 		String shapeName)
 	{
@@ -185,7 +206,7 @@ public class IntersectionsSteps
 		data.put(intersectionName, intersection);
 	}
 
-	@When(wordPattern + " ← hit\\(" + wordPattern + "\\)")
+	@When("{identifier} ← hit\\({identifier})")
 	public void iHitXs(String intersectionName, String intersectionListName)
 	{
 		IntersectionList ilist = data.getIntersectionList(intersectionListName);
@@ -193,8 +214,7 @@ public class IntersectionsSteps
 		data.put(intersectionName, hit);
 	}
 
-	@When(wordPattern + " ← prepare_computations\\(" + wordPattern + ", " +
-		wordPattern + "\\)")
+	@When("{identifier} ← prepare_computations\\({identifier}, {identifier})")
 	public void compsPrepare_computationsIR(String computationsName,
 		String intersectionName, String rayName)
 	{
@@ -216,7 +236,7 @@ public class IntersectionsSteps
 		data.put(computationsName, comps);
 	}
 
-	@When(wordPattern + " ← prepare_computations\\(" + wordPattern + "\\[" + intPattern + "\\], " + wordPattern + ", " + wordPattern + "\\)")
+	@When("{identifier} ← prepare_computations\\({identifier}\\[{int}], {identifier}, {identifier})")
 	public void compsPrepare_computationsXsRXs(String computationsName,
 		String intersectionListName, int intersectionIndex, String rayName,
 		String intersectionList2Name)
@@ -232,7 +252,7 @@ public class IntersectionsSteps
 			intersectionArray);
 	}
 
-	@When(wordPattern + " ← prepare_computations\\(" + threeWordPattern + "\\)")
+	@When("{identifier} ← prepare_computations\\({identifier}, {identifier}, {identifier})")
 	public void compsPrepare_computationsIRXs(String computationsName,
 		String intersectionName, String rayName, String intersectionListName)
 	{
@@ -245,7 +265,7 @@ public class IntersectionsSteps
 			intersectionArray);
 	}
 
-	@When(wordPattern + " ← schlick\\(" + wordPattern + "\\)")
+	@When("{identifier} ← schlick\\({identifier})")
 	public void reflectanceSchlickComps(String doubleName,
 		String computationsName)
 	{
@@ -256,7 +276,7 @@ public class IntersectionsSteps
 
 
 
-	@Then(wordPattern + "\\[" + intPattern + "\\].object = " + wordPattern)
+	@Then("{identifier}[{int}].object = {identifier}")
 	public void intersectionSetObject(String intersectionListName,
 		int intersectionIdx, String objectName)
 	{
@@ -268,7 +288,7 @@ public class IntersectionsSteps
 		Assert.assertEquals(t, expectedObject);
 	}
 
-	@Then(wordPattern + "\\[" + intPattern + "\\].t = " + doublePattern)
+	@Then("{identifier}[{int}].t = {dbl}")
 	public void xsT(String intersectionListName, int intersectionIdx,
 		double expectedValue)
 	{
@@ -278,7 +298,7 @@ public class IntersectionsSteps
 		Assert.assertEquals(expectedValue, t, Tuple.EPSILON);
 	}
 
-	@Then(wordPattern + ".under_point.z > EPSILON\\/" + intPattern)
+	@Then("{identifier}.under_point.z > EPSILON\\/{int}")
 	public void compsUnder_pointZEPSILON(String compsName, Integer divisor)
 	{
 		IntersectionComputations comps = data.getComputations(compsName);
@@ -286,7 +306,7 @@ public class IntersectionsSteps
 		Assert.assertTrue(comps.getUnderPoint().getZ() > Tuple.EPSILON / divisor);
 	}
 
-	@Then(wordPattern + ".point.z < " + wordPattern + ".under_point.z")
+	@Then("{identifier}.point.z < {identifier}.under_point.z")
 	public void compsPointZCompsUnder_pointZ(String compsName1, String compsName2)
 	{
 		IntersectionComputations comps1 = data.getComputations(compsName1);

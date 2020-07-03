@@ -11,9 +11,9 @@ public class CubeSteps extends StepsParent
 		super(data);
 	}
 
-	@Given(wordPattern + " ← cube\\(\\)")
-	public void cCube(String shapeName)
-	{
-		data.put(shapeName, new Cube());
-	}
+//	@Given(wordPattern + " ← cube\\(\\)")
+//	public void cCube(String shapeName)
+//	{
+//		data.put(shapeName, new Cube());
+//	}
 }

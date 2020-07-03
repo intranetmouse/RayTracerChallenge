@@ -9,9 +9,10 @@ import org.intranet.graphics.raytrace.primitive.Vector;
 import org.junit.Assert;
 
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Given.Givens;
 import io.cucumber.java.en.Then;
+import io.cucumber.java.en.Then.Thens;
 import io.cucumber.java.en.When;
-import io.cucumber.datatable.DataTable;
 
 public class MatricesSteps
 	extends StepsParent
@@ -22,32 +23,31 @@ public class MatricesSteps
 		super(data);
 	}
 
-	@Given("^the following " + intPattern + "x" + intPattern + " matrix " + wordPattern + ":$")
+	@Given("the following {int}x{int} matrix {identifier}:")
 	public void theFollowingRxCMatrixM(int numRows, int numCols, String matrixName,
-		DataTable dataTable)
+		List<List<Double>> doubles)
 	{
-		List<Double> doubles = dataTable.asList(Double.class);
-		Assert.assertEquals(numRows * numCols, doubles.size());
-		createMatrix(numRows, numCols, matrixName, doubles);
+		Matrix m = createMatrixFrom2dimList(numRows, numCols, doubles);
+		data.put(matrixName,  m);
 	}
 
-	@Given("^the following matrix " + wordPattern + ":$")
+	@Given("the following matrix {identifier}:")
 	public void theFollowingXMatrixM(String matrixName,
-		DataTable dataTable)
+		List<List<Double>> doubles)
 	{
-		List<Double> doubles = dataTable.asList(Double.class);
-		int size = (int)Math.sqrt(doubles.size());
-		createMatrix(size, size, matrixName, doubles);
+		int size = doubles.size();
+		Matrix m = createMatrixFrom2dimList(size, size, doubles);
+		data.put(matrixName, m);
 	}
 
-	@Given("^" + wordPattern + " ← transpose\\(identity_matrix\\)$")
+	@Given("{identifier} ← transpose\\(identity_matrix)")
 	public void theTransposeOfIdentity(String matrixName)
 	{
 		Matrix ident = Matrix.identity(4);
 		data.put(matrixName, ident);
 	}
 
-	@Given("^" + wordPattern + " ← submatrix\\(" + wordPattern + ", " + intPattern + ", " + intPattern + "\\)$")
+	@Given("{identifier} ← submatrix\\({identifier}, {int}, {int})")
 	public void theSubmatrixOf(String matrix1Name, String matrix2Name,
 		int dropRow, int dropCol)
 	{
@@ -56,7 +56,7 @@ public class MatricesSteps
 		data.put(matrix1Name, result);
 	}
 
-	@Given("^" + wordPattern + " ← inverse\\(" + wordPattern + "\\)$")
+	@Given("{identifier} ← inverse\\({identifier})")
 	public void theInverse(String matrix1Name, String matrix2Name)
 	{
 		Matrix matrix2 = data.getMatrix(matrix2Name);
@@ -65,7 +65,7 @@ public class MatricesSteps
 		data.put(matrix1Name, calc);
 	}
 
-	@Given("^" + wordPattern + " ← " + wordPattern + " \\* " + wordPattern + "$")
+	@Given("{identifier} ← {identifier} * {identifier}")
 	public void multiplyingMatrixBySomethingElse(String destObjectName,
 		String transformMatrixName, String object2Name)
 	{
@@ -97,7 +97,7 @@ public class MatricesSteps
 		throw new IllegalStateException();
 	}
 
-	@Given("^" + wordPattern + " ← " + wordPattern + " \\* " + wordPattern + " \\* " + wordPattern + "$")
+	@Given("{identifier} ← {identifier} * {identifier} * {identifier}")
 	public void multiplyingMatrixByMatrixByMatrix(String destObjectName,
 		String matrix1Name, String matrix2Name, String matrix3Name)
 	{
@@ -110,75 +110,72 @@ public class MatricesSteps
 		data.put(destObjectName, result);
 	}
 
-	@Given(wordPattern + " ← translation\\(" + threeDoublesPattern + "\\)")
-	public void transformTranslation(String matrixName, double x, double y,
-		double z)
+	@Givens({
+		@Given("{identifier} ← {matrix}"),
+		@Given("{identifier} ← {shearing}"),
+		@Given("{identifier} ← {matrixRotationPiDiv}")
+	})
+	public void transformTranslation(String matrixName, Matrix matrix)
 	{
-		Matrix matrix = Matrix.newTranslation(x, y, z);
 		data.put(matrixName, matrix);
 	}
 
-	@Given(wordPattern + " ← scaling\\(" + threeDoublesPattern + "\\)")
-	public void transformScaling(String matrixName, double x, double y,
-		double z)
+	@Thens({
+		@Then("{identifier} * {identifier} = {pointNSS}"),
+		@Then("{identifier} * {identifier} = {pointSNS}"),
+		@Then("{identifier} * {identifier} = {pointSSN}")
+	})
+	public void mtxTimesPointEqPoint(String matrixName, String pointName,
+		Point expectedPoint)
 	{
-		Matrix matrix = Matrix.newScaling(x, y, z);
-		data.put(matrixName, matrix);
+		Matrix mtx = data.getMatrix(matrixName);
+		Point p = data.getPoint(pointName);
+		Assert.assertEquals(expectedPoint, mtx.multiply(p));
 	}
 
-	@Given(wordPattern + " ← rotation_x\\(π \\/ " + doublePattern + "\\)")
-	public void half_quarterRotation_xPi(String matrixName, double xRotation)
-	{
-		Matrix matrix = Matrix.newRotationX(Math.PI / xRotation);
-		data.put(matrixName, matrix);
-	}
+//	@Given(wordPattern + " ← scaling\\(" + threeDoublesPattern + "\\)")
+//	public void transformScaling(String matrixName, double x, double y,
+//		double z)
+//	{
+//		Matrix matrix = Matrix.newScaling(x, y, z);
+//		data.put(matrixName, matrix);
+//	}
 
-	@Given(wordPattern + " ← rotation_y\\(π \\/ " + doublePattern + "\\)")
-	public void half_quarterRotation_yPi(String matrixName, double yRotation)
-	{
-		Matrix matrix = Matrix.newRotationY(Math.PI / yRotation);
-		data.put(matrixName, matrix);
-	}
 
-	@Given(wordPattern + " ← rotation_z\\(π \\/ " + doublePattern + "\\)")
-	public void half_quarterRotation_zPi(String matrixName, double yRotation)
-	{
-		Matrix matrix = Matrix.newRotationZ(Math.PI / yRotation);
-		data.put(matrixName, matrix);
-	}
+//	@Given(wordPattern + " ← rotation_y\\(π \\/ " + doublePattern + "\\)")
+//	public void half_quarterRotation_yPi(String matrixName, double yRotation)
+//	{
+//		Matrix matrix = Matrix.newRotationY(Math.PI / yRotation);
+//		data.put(matrixName, matrix);
+//	}
+//
+//	@Given(wordPattern + " ← rotation_z\\(π \\/ " + doublePattern + "\\)")
+//	public void half_quarterRotation_zPi(String matrixName, double yRotation)
+//	{
+//		Matrix matrix = Matrix.newRotationZ(Math.PI / yRotation);
+//		data.put(matrixName, matrix);
+//	}
 
-	@Given(wordPattern + " ← shearing\\(" + sixDoublesPattern + "\\)")
-	public void shearing(String matrixName, double xy, double xz, double yx, double yz, double zx, double zy)
+	private Matrix createMatrixFrom2dimList(int numRows, int numCols,
+		List<List<Double>> doubles)
 	{
-		Matrix matrix = Matrix.shearing(xy, xz, yx, yz, zx, zy);
-		data.put(matrixName, matrix);
-	}
-
-	private void createMatrix(int numRows, int numCols, String matrixName,
-		List<Double> doubles)
-	{
-		Matrix m = createMatrix(numRows, numCols, doubles);
-		data.put(matrixName,  m);
-	}
-
-	private Matrix createMatrix(int numRows, int numCols, List<Double> doubles)
-	{
+		Assert.assertEquals(numRows, doubles.size());
 		double[][] rows = new double[numRows][];
 		for (int rowNum = 0; rowNum < numRows; rowNum++)
 		{
+			List<Double> rowDoubles = doubles.get(rowNum);
+			Assert.assertEquals(numCols, rowDoubles.size());
 			rows[rowNum] = new double[numCols];
 			for (int colNum = 0; colNum < numCols; colNum++)
 			{
-				rows[rowNum][colNum] = doubles.get(rowNum * numCols + colNum);
+				rows[rowNum][colNum] = rowDoubles.get(colNum);
 			}
 		}
 		Matrix m = new Matrix(rows);
 		return m;
 	}
 
-
-	@When(wordPattern + " ← view_transform\\(" + wordPattern + ", "
-		+ wordPattern + ", " + wordPattern + "\\)")
+	@When("{identifier} ← view_transform\\({identifier}, {identifier}, {identifier})")
 	public void tView_transformFromToUp(String matrixName, String fromPointName,
 		String toPointName, String upVectorName)
 	{
@@ -190,7 +187,7 @@ public class MatricesSteps
 	}
 
 
-	@Then("^" + wordPattern + "\\[" + intPattern + "," + intPattern + "\\] = " + doublePattern + "$")
+	@Then("{identifier}[{int},{int}] = {dbl}")
 	public void matrixAssertEquals(String varName, int rowNum, int colNum,
 		double expected)
 	{
@@ -199,48 +196,52 @@ public class MatricesSteps
 		Assert.assertEquals(expected, actual, Tuple.EPSILON);
 	}
 
-	@Then("^" + wordPattern + " (=|!=) " + wordPattern + "$")
-	public void aB(String mtx1Name, String operation, String mtx2Name)
+	@Then("{identifier} = {identifier}")
+	public void mtxEq(String mtx1Name, String mtx2Name)
 	{
 		Matrix m1 = data.getMatrix(mtx1Name);
 		Matrix m2 = "identity_matrix".equals(mtx2Name) ?
 			Matrix.identity(m1.getNumCols()) : data.getMatrix(mtx2Name);
 
-		if ("=".equals(operation))
-			Assert.assertEquals(m1, m2);
-		else if ("!=".equals(operation))
-			Assert.assertNotEquals(m1, m2);
-		else
-			throw new IllegalArgumentException("Unknown operation " + operation);
+		Assert.assertEquals(m1, m2);
 	}
 
-	@Then("^" + wordPattern + " \\* " + wordPattern + " is the following " + intPattern + "x" + intPattern + " matrix:$")
+	@Then("{identifier} != {identifier}")
+	public void mtxNeq(String mtx1Name, String mtx2Name)
+	{
+		Matrix m1 = data.getMatrix(mtx1Name);
+		Matrix m2 = "identity_matrix".equals(mtx2Name) ?
+			Matrix.identity(m1.getNumCols()) : data.getMatrix(mtx2Name);
+
+		Assert.assertNotEquals(m1, m2);
+	}
+
+	@Then("{identifier} * {identifier} is the following {int}x{int} matrix:")
 	public void matrixATimesMatrixB(String mtx1Name, String mtx2Name,
-		int numRows, int numCols, List<Double> doubles)
+		int numRows, int numCols, List<List<Double>> doubles)
 	{
 		Matrix m1 = data.getMatrix(mtx1Name);
 		Matrix m2 = data.getMatrix(mtx2Name);
-		Matrix expected = createMatrix(numRows, numCols, doubles);
+		Matrix expected = createMatrixFrom2dimList(numRows, numCols, doubles);
 
 		Matrix result = m1.multiply(m2);
 
 		Assert.assertEquals(expected, result);
 	}
 
-	@Then("^" + wordPattern + " \\* " + wordPattern + " = tuple\\(" + threeDoublesPattern + ", 1\\)$")
+	@Then("{identifier} * {identifier} = {tuple}")
 	public void matrixATimesTupleB(String mtx1Name, String tupleBName,
-		double x, double y, double z)
+		Tuple expected)
 	{
 		Matrix m1 = data.getMatrix(mtx1Name);
 		Point tupleB = data.getPoint(tupleBName);
-		Point expected = new Point(x, y, z);
 
 		Point result = m1.multiply(tupleB);
 
 		Assert.assertEquals(expected, result);
 	}
 
-	@Then("^" + wordPattern + " \\* " + wordPattern + " = " + wordPattern + "$")
+	@Then("{identifier} * {identifier} = {identifier}")
 	public void matrixATimesVectorB(String arg1Name, String arg2Name,
 		String expectedName)
 	{
@@ -267,48 +268,49 @@ public class MatricesSteps
 		Assert.assertEquals(expected, result);
 	}
 
-	@Then("^transpose\\(" + wordPattern + "\\) is the following matrix:$")
-	public void transposeAIsTheFollowingMatrix(String mtxName, DataTable dataTable)
+	@Then("transpose\\({identifier}) is the following matrix:")
+	public void transposeAIsTheFollowingMatrix(String mtxName, List<List<Double>> doubles)
 	{
 		Matrix a = data.getMatrix(mtxName);
 
 		Matrix result = a.transpose();
 
-		List<Double> doubles = dataTable.asList(Double.class);
-		Matrix expected = createMatrix(dataTable.height(), dataTable.width(), doubles);
+		Matrix expected = createMatrixFrom2dimList(doubles.size(),
+			doubles.get(0).size(), doubles);
 
 		Assert.assertEquals(expected, result);
 	}
 
-	@Then("^" + wordPattern + " is the following " + intPattern + "x" + intPattern + " matrix:$")
-	public void aIsTheFollowingMatrix(String mtxName, int rows, int cols, DataTable dataTable)
+	@Then("{identifier} is the following {int}x{int} matrix:")
+	public void aIsTheFollowingMatrix(String mtxName, int rows, int cols,
+		List<List<Double>> doubles)
 	{
 		Matrix result = data.getMatrix(mtxName);
 
-		List<Double> doubles = dataTable.asList(Double.class);
-		Matrix expected = createMatrix(dataTable.height(), dataTable.width(), doubles);
+		Matrix expected = createMatrixFrom2dimList(doubles.size(),
+			doubles.get(0).size(), doubles);
 
 		Assert.assertEquals(rows, result.getNumRows());
 		Assert.assertEquals(cols, result.getNumCols());
 		Assert.assertEquals(expected, result);
 	}
 
-	@Then("^inverse\\(" + wordPattern + "\\) is the following " + intPattern + "x" + intPattern + " matrix:$")
+	@Then("inverse\\({identifier}) is the following {int}x{int} matrix:")
 	public void inverseAIsTheFollowingMatrix(String mtxName, int rows, int cols,
-		DataTable dataTable)
+		List<List<Double>> doubles)
 	{
 		Matrix matrix = data.getMatrix(mtxName);
 		Matrix result = matrix.inverse();
 
-		List<Double> doubles = dataTable.asList(Double.class);
-		Matrix expected = createMatrix(dataTable.height(), dataTable.width(), doubles);
+		Matrix expected = createMatrixFrom2dimList(doubles.size(),
+			doubles.get(0).size(), doubles);
 
 		Assert.assertEquals(rows, result.getNumRows());
 		Assert.assertEquals(cols, result.getNumCols());
 		Assert.assertEquals(expected, result);
 	}
 
-	@Then("^determinant\\(" + wordPattern + "\\) = " + doublePattern + "$")
+	@Then("determinant\\({identifier}) = {dbl}")
 	public void determinantA(String matrixName, double expectedValue)
 	{
 		Matrix a = data.getMatrix(matrixName);
@@ -318,48 +320,54 @@ public class MatricesSteps
 		Assert.assertEquals(expectedValue, result, Tuple.EPSILON);
 	}
 
-	@Then("^submatrix\\(" + wordPattern + ", " + intPattern + ", " + intPattern + "\\) is the following " + intPattern + "x" + intPattern + " matrix:$")
+	@Then("submatrix\\({identifier}, {int}, {int}) is the following {int}x{int} matrix:")
 	public void submatrixAIsTheFollowingXMatrix(String matrixName, int dropRow,
 		int dropCol, int subRows, int subCols,
-		DataTable dataTable)
+		List<List<Double>> doubles)
 	{
 		Matrix m = data.getMatrix(matrixName);
 
 		Matrix result = m.submatrix(dropRow, dropCol);
 
-		List<Double> doubles = dataTable.asList(Double.class);
-		Matrix expected = createMatrix(dataTable.height(), dataTable.width(), doubles);
+		Matrix expected = createMatrixFrom2dimList(doubles.size(),
+			doubles.get(0).size(), doubles);
 
 		Assert.assertEquals(expected, result);
 	}
 
-	@Then("^minor\\(" + wordPattern + ", " + intPattern + ", " + intPattern + "\\) = " + doublePattern + "$")
-	public void minorA(String matrixName, int dropRow, int dropCol, double expected)
+	@Then("minor\\({identifier}, {int}, {int}) = {dbl}")
+	public void minorA(String matrixName, int dropRow, int dropCol,
+		double expected)
 	{
 		Matrix m = data.getMatrix(matrixName);
 		double result = m.minor(dropRow, dropCol);
 		Assert.assertEquals(expected, result, Tuple.EPSILON);
 	}
 
-	@Then("^cofactor\\(" + wordPattern + ", " + intPattern + ", " + intPattern + "\\) = " + doublePattern + "$")
-	public void cofactorA(String matrixName, int dropRow, int dropCol, double expected)
+	@Then("cofactor\\({identifier}, {int}, {int}) = {dbl}")
+	public void cofactorA(String matrixName, int dropRow, int dropCol,
+		double expected)
 	{
 		Matrix m = data.getMatrix(matrixName);
 		double result = m.cofactor(dropRow, dropCol);
 		Assert.assertEquals(expected, result, Tuple.EPSILON);
 	}
 
-	@Then(wordPattern + " (is|is not) invertible")
-	public void aIsInvertible(String matrixName, String operation)
+	@Then("{identifier} is invertible")
+	public void aIsInvertible(String matrixName)
 	{
 		Matrix m = data.getMatrix(matrixName);
-		if ("is".equals(operation))
-			Assert.assertTrue(m.isInvertible());
-		else if ("is not".equals(operation))
-			Assert.assertFalse(m.isInvertible());
+		Assert.assertTrue(m.isInvertible());
 	}
 
-	@Then("^" + wordPattern + "\\[" + intPattern + "," + intPattern + "\\] = " + doublePattern + "\\/" + doublePattern + "$")
+	@Then("{identifier} is not invertible")
+	public void aIsNotInvertible(String matrixName)
+	{
+		Matrix m = data.getMatrix(matrixName);
+		Assert.assertFalse(m.isInvertible());
+	}
+
+	@Then("{identifier}[{int},{int}] = {dbl}\\/{dbl}")
 	public void testMatrixCellToFraction(String matrixName, int row, int col,
 		double numerator, double denominator)
 	{
@@ -372,7 +380,7 @@ public class MatricesSteps
 	}
 
 
-	@Then("^" + wordPattern + " \\* inverse\\(" + wordPattern + "\\) = " + wordPattern + "$")
+	@Then("{identifier} * inverse\\({identifier}) = {identifier}")
 	public void cInverseBA(String cName, String bName, String expectedMatrixName)
 	{
 		Matrix c = data.getMatrix(cName);
@@ -382,90 +390,88 @@ public class MatricesSteps
 		Assert.assertEquals(result, value);
 	}
 
-	@Then(wordPattern + " \\* " + wordPattern + " = point\\(" + threeDoublesPattern + "\\)")
-	public void transformPPoint(String matrixName, String pointName, double x,
-		double y, double z)
+	@Then("{identifier} * {identifier} = {point}")
+	public void transformPPoint(String matrixName, String pointName,
+		Point expectedPoint)
 	{
 		Matrix m = data.getMatrix(matrixName);
 		Point p = data.getPoint(pointName);
 		Point result = m.multiply(p);
-		Point expectedPoint = new Point(x, y, z);
 		Assert.assertEquals(expectedPoint, result);
 	}
 
-	@Then(wordPattern + " \\* " + wordPattern + " = point\\(" +
-		doublePattern +
-		", √" + doublePattern + "\\/" + doublePattern +
-		", √" + doublePattern + "\\/" + doublePattern + "\\)")
-	public void quarterPPointX(String matrixName, String pointName, double x,
-		double y1, double y2, double z1, double z2)
-	{
-		transformPPoint(matrixName, pointName, x, Math.sqrt(y1) / y2, Math.sqrt(z1) / z2);
-	}
+//	@Then(wordPattern + " \\* " + wordPattern + " = point\\(" +
+//		doublePattern +
+//		", √" + doublePattern + "\\/" + doublePattern +
+//		", √" + doublePattern + "\\/" + doublePattern + "\\)")
+//	public void quarterPPointX(String matrixName, String pointName, double x,
+//		double y1, double y2, double z1, double z2)
+//	{
+//		transformPPoint(matrixName, pointName, x, Math.sqrt(y1) / y2, Math.sqrt(z1) / z2);
+//	}
+//
+//	@Then(wordPattern + " \\* " + wordPattern + " = point\\(" +
+//		doublePattern +
+//		", √" + doublePattern + "\\/" + doublePattern +
+//		", -√" + doublePattern + "\\/" + doublePattern + "\\)")
+//	public void quarterPPointXNegZ(String matrixName, String pointName, double x,
+//		double y1, double y2, double z1, double z2)
+//	{
+//		transformPPoint(matrixName, pointName, x, Math.sqrt(y1) / y2, -Math.sqrt(z1) / z2);
+//	}
+//
+//	@Then(wordPattern + " \\* " + wordPattern + " = point\\(" +
+//		"√" + doublePattern + "\\/" + doublePattern +
+//		", " + doublePattern +
+//		", √" + doublePattern + "\\/" + doublePattern + "\\)")
+//	public void quarterPPointZ(String matrixName, String pointName, double x1,
+//		double x2, double y, double z1, double z2)
+//	{
+//		transformPPoint(matrixName, pointName, Math.sqrt(x1) / x2, y, Math.sqrt(z1) / z2);
+//	}
+//
+//	@Then(wordPattern + " \\* " + wordPattern + " = point\\(" +
+//		"-√" + doublePattern + "\\/" + doublePattern +
+//		", √" + doublePattern + "\\/" + doublePattern +
+//		", " + doublePattern + "\\)")
+//	public void quarterPPointNegZ(String matrixName, String pointName, double x1,
+//		double x2, double y1, double y2, double z)
+//	{
+//		transformPPoint(matrixName, pointName, -Math.sqrt(x1) / x2, Math.sqrt(y1) / y2, z);
+//	}
 
-	@Then(wordPattern + " \\* " + wordPattern + " = point\\(" +
-		doublePattern +
-		", √" + doublePattern + "\\/" + doublePattern +
-		", -√" + doublePattern + "\\/" + doublePattern + "\\)")
-	public void quarterPPointXNegZ(String matrixName, String pointName, double x,
-		double y1, double y2, double z1, double z2)
-	{
-		transformPPoint(matrixName, pointName, x, Math.sqrt(y1) / y2, -Math.sqrt(z1) / z2);
-	}
-
-	@Then(wordPattern + " \\* " + wordPattern + " = point\\(" +
-		"√" + doublePattern + "\\/" + doublePattern +
-		", " + doublePattern +
-		", √" + doublePattern + "\\/" + doublePattern + "\\)")
-	public void quarterPPointZ(String matrixName, String pointName, double x1,
-		double x2, double y, double z1, double z2)
-	{
-		transformPPoint(matrixName, pointName, Math.sqrt(x1) / x2, y, Math.sqrt(z1) / z2);
-	}
-
-	@Then(wordPattern + " \\* " + wordPattern + " = point\\(" +
-		"-√" + doublePattern + "\\/" + doublePattern +
-		", √" + doublePattern + "\\/" + doublePattern +
-		", " + doublePattern + "\\)")
-	public void quarterPPointNegZ(String matrixName, String pointName, double x1,
-		double x2, double y1, double y2, double z)
-	{
-		transformPPoint(matrixName, pointName, -Math.sqrt(x1) / x2, Math.sqrt(y1) / y2, z);
-	}
-
-	@Then(wordPattern + " \\* " + wordPattern + " = vector\\(" + threeDoublesPattern + "\\)")
-	public void transformPVector(String matrixName, String vectorName, double x,
-		double y, double z)
+	@Then("{identifier} * {identifier} = {vector}")
+	public void transformPVector(String matrixName, String vectorName, Vector expectedVector)
 	{
 		Matrix m = data.getMatrix(matrixName);
 		Vector p = data.getVector(vectorName);
 		Vector result = m.multiply(p);
-		Vector expectedVector = new Vector(x, y, z);
 		Assert.assertEquals(expectedVector, result);
 	}
 
-	@Then(wordPattern + " = scaling\\(" + threeDoublesPattern + "\\)")
-	public void compareToScalingMatrix(String matrixName, double x,
-		double y, double z)
+	@Thens({
+		@Then("{identifier} = {matrix}"),
+		@Then("{identifier} = {matrixRotationPiDiv}")
+	})
+	public void compareToScalingMatrix(String matrixName, Matrix expected)
 	{
 		Matrix m = data.getMatrix(matrixName);
-		Matrix expected = Matrix.newScaling(x, y, z);
 		Assert.assertEquals(expected, m);
 	}
 
-	@Then(wordPattern + " = translation\\(" + threeDoublesPattern + "\\)")
-	public void compareToTranslationMatrix(String matrixName, double x,
-		double y, double z)
-	{
-		Matrix m = data.getMatrix(matrixName);
-		Matrix expected = Matrix.newTranslation(x, y, z);
-		Assert.assertEquals(expected, m);
-	}
-
-	@Given("{word} ← rotation_x\\(π \\/ {int}) * rotation_y\\(π \\/ {int})")
-	public void matrixRotation_xΠRotation_yΠ(String matrixName, Integer int1, Integer int2)
-	{
-		Matrix m = Matrix.newRotationX(Math.PI / int1).multiply(Matrix.newRotationY(Math.PI / int2));
-		data.put(matrixName, m);
-	}
+//	@Then(wordPattern + " = translation\\(" + threeDoublesPattern + "\\)")
+//	public void compareToTranslationMatrix(String matrixName, double x,
+//		double y, double z)
+//	{
+//		Matrix m = data.getMatrix(matrixName);
+//		Matrix expected = Matrix.newTranslation(x, y, z);
+//		Assert.assertEquals(expected, m);
+//	}
+//
+//	@Given("{word} ← rotation_x\\(π \\/ {int}) * rotation_y\\(π \\/ {int})")
+//	public void matrixRotation_xΠRotation_yΠ(String matrixName, Integer int1, Integer int2)
+//	{
+//		Matrix m = Matrix.newRotationX(Math.PI / int1).multiply(Matrix.newRotationY(Math.PI / int2));
+//		data.put(matrixName, m);
+//	}
 }

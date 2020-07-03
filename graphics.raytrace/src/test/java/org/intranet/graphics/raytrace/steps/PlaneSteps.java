@@ -19,17 +19,14 @@ public final class PlaneSteps
 		super(data);
 	}
 
-	@When(wordPattern + " ← local_normal_at\\(" + wordPattern + ", point\\(" +
-		threeDoublesPattern + "\\)\\)")
+	@When("{identifier} ← local_normal_at\\({identifier}, {point})")
 	public void nLocal_normal_atPPoint(String normalVectorName, String shapeName,
-		double x, double y, double z)
+		Point normalLocation)
 	{
-		Point normalLocation = new Point(x, y, z);
-
 		localNormalAt(normalVectorName, shapeName, normalLocation);
 	}
 
-	@When(wordPattern + " ← local_normal_at\\(" + twoWordPattern + "\\)")
+	@When("{identifier} ← local_normal_at\\({identifier}, {identifier})")
 	public void normalLocal_normal_atCP(String normalVectorName,
 		String shapeName, String pointName)
 	{
@@ -48,7 +45,7 @@ public final class PlaneSteps
 	}
 
 
-	@When(wordPattern + " ← local_intersect\\(" + twoWordPattern + "\\)")
+	@When("{identifier} ← local_intersect\\({identifier}, {identifier})")
 	public void xsLocal_intersectPR(String intersectionsName, String shapeName,
 		String rayName)
 	{
@@ -58,27 +55,41 @@ public final class PlaneSteps
 		data.put(intersectionsName, ilist);
 	}
 
-	@Then(wordPattern + " is empty")
+	@Then("{identifier} is empty")
 	public void xsIsEmpty(String objectName)
 	{
 		IntersectionList intersections = data.getIntersectionList(
 			objectName);
+		if (intersections != null)
+		{
+			Assert.assertEquals(0, intersections.count());
+			return;
+		}
 		Shape shape = data.getShape(objectName);
 		if (shape != null)
+		{
 			Assert.assertTrue(((Group)shape).isEmpty());
-		if (intersections != null)
-			Assert.assertEquals(0, intersections.count());
+			return;
+		}
+		Assert.fail("unrecognized object name " + objectName);
 	}
 
-	@Then(wordPattern + " is not empty")
+	@Then("{identifier} is not empty")
 	public void xsIsNotEmpty(String objectName)
 	{
 		IntersectionList intersections = data.getIntersectionList(
 			objectName);
+		if (intersections != null)
+		{
+			Assert.assertTrue(intersections.count() > 0);
+			return;
+		}
 		Shape shape = data.getShape(objectName);
 		if (shape != null)
+		{
 			Assert.assertFalse(((Group)shape).isEmpty());
-		if (intersections != null)
-			Assert.assertTrue(intersections.count() > 0);
+			return;
+		}
+		Assert.fail("unrecognized object name " + objectName);
 	}
 }

@@ -16,19 +16,15 @@ public class LightsSteps
 		super(data);
 	}
 
-	@Given("^" + wordPattern + " ← point_light\\(point\\(" +
-		threeDoublesPattern + "\\), color\\(" + threeDoublesPattern + "\\)\\)$")
+	@Given("{identifier} ← point_light\\({point}, {color})")
 	public void lightPoint_lightPositionPointColor(String pointLightName,
-		double pointX, double pointY, double pointZ, double red, double green,
-		double blue)
+		Point position, Color color)
 	{
-		Point position = new Point(pointX, pointY, pointZ);
-		Color color = new Color(red, green, blue);
 		PointLight pointLight = new PointLight(position, color);
 		data.put(pointLightName, pointLight);
 	}
 
-	@When("^" + wordPattern + " ← point_light\\(" + wordPattern + ", " + wordPattern + "\\)$")
+	@When("{identifier} ← point_light\\({identifier}, {identifier})")
 	public void lightPoint_lightPositionIntensity(String pointLightName,
 		String positionPointName, String colorName)
 	{
@@ -37,5 +33,4 @@ public class LightsSteps
 		PointLight pointLight = new PointLight(position, color);
 		data.put(pointLightName, pointLight);
 	}
-
 }

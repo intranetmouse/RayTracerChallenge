@@ -1,4 +1,6 @@
-- Tree outline of objects
+- DONE group.yml not parsing
+- DONE AppView: Display document in the title bar
+- DONE Tree outline of objects
 - Property browser
 
 - Create a file to test patterns in groups
