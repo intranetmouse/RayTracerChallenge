@@ -6,15 +6,11 @@ import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Vector;
-import org.intranet.graphics.raytrace.shape.Group;
-import org.intranet.graphics.raytrace.shape.Plane;
-import org.intranet.graphics.raytrace.shape.Sphere;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.junit.Assert;
 
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Given.Givens;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.When.Whens;
 
@@ -138,18 +134,4 @@ public class ShapeSteps extends StepsParent
 
 		data.put(normalVectorName, normalVector);
 	}
-
-//	@When(wordPattern + " ← normal_at\\(" + wordPattern +
-//		", point\\(" + doublePattern +
-//		", √" + doublePattern + "\\/" + doublePattern +
-//		", -√" + doublePattern + "\\/" + doublePattern + "\\)\\)")
-//	public void nNormal_atSPoint(String normalVectorName, String objectName,
-//		double x, double yNum, double yDenom, double zNum, double zDenom)
-//	{
-//		Shape obj = data.getShape(objectName);
-//		Point normalPoint = new Point(x, Math.sqrt(yNum)/yDenom,
-//			-Math.sqrt(zNum)/zDenom);
-//		Vector normalVector = obj.normalAt(normalPoint);
-//		data.put(normalVectorName, normalVector);
-//	}
 }

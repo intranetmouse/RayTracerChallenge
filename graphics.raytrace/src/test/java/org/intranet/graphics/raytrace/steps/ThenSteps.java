@@ -8,10 +8,8 @@ import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.PixelCoordinate;
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.ShapeParent;
-import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
-import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.primitive.Vector;
 import org.intranet.graphics.raytrace.shape.BoundingBox;
@@ -20,7 +18,6 @@ import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.intranet.graphics.raytrace.surface.Pattern;
-import org.intranet.graphics.raytrace.surface.StripePattern;
 import org.junit.Assert;
 
 import io.cucumber.java.PendingException;
@@ -182,152 +179,6 @@ public class ThenSteps
 		Assert.assertEquals(expectedPoint, point);
 	}
 
-
-//	@Then(wordPattern + "\\." + wordPattern + " = " + wordPattern + "\\(√"
-//		+ doublePattern + "\\/" + doublePattern + ", " + doublePattern + ", -√"
-//		+ doublePattern + "\\/" + doublePattern + "\\)")
-//	public void objPropEqualsTupleSqrtX_negSqrtZ(String expectedObjName,
-//		String propertyName, String objType, double xNum, double xDenom,
-//		double y, double zNum, double zDenom)
-//	{
-//		objPropEqualsThreeDouble(expectedObjName, propertyName, objType,
-//			Math.sqrt(xNum) / xDenom, y, -Math.sqrt(zNum) / zDenom);
-//	}
-//
-//	@Then(wordPattern + "\\." + wordPattern + " = " + wordPattern + "\\("
-//		+ threeDoublesPattern + "\\)")
-//	public void objPropEqualsThreeDouble(String expectedObjName,
-//		String propertyName, String objType, double x, double y, double z)
-//	{
-//		Object expected = getObject(objType, x, y, z);
-//		Object value = getObjPropValue(expectedObjName, propertyName);
-//		if (expected != null)
-//		{
-//			Assert.assertEquals(expected, value);
-//			return;
-//		}
-//		Assert.fail("Unkonwn object type " + objType);
-//	}
-//
-//	@Then(wordPattern + "\\." + wordPattern + " = " + wordPattern + "\\("
-//		+ doublePattern + ", √" + doublePattern + "/" + doublePattern
-//		+ ", √" + doublePattern + "/" + doublePattern + "\\)")
-//	public void objPropEqualsThreeDoubleYZ(String expectedObjName,
-//		String propertyName, String objType, double x, double yNum,
-//		double yDenom, double zNum, double zDenom)
-//	{
-//		double y = Math.sqrt(yNum) / yDenom;
-//		double z = Math.sqrt(zNum) / zDenom;
-//		Object expected = getObject(objType, x, y, z);
-//		Object value = getObjPropValue(expectedObjName, propertyName);
-//		Assert.assertEquals(expected, value);
-//		return;
-//	}
-//
-//	private Object getObject(String objType, double x, double y, double z)
-//	{
-//		switch (objType)
-//		{
-//			case "point":
-//				return new Point(x, y, z);
-//			case "vector":
-//				return new Vector(x, y, z);
-//			case "color":
-//				return new Vector(x, y, z);
-//			case "translation":
-//				return Matrix.newTranslation(x, y, z);
-//			default:
-//				Assert.fail("Unrecognized object type " + objType);
-//				return null;
-//		}
-//	}
-//
-//	private Object getObjPropValue(String expectedObjName, String propertyName)
-//	{
-//		Object value = null;
-//		IntersectionComputations comps = data.getComputations(expectedObjName);
-//		Ray ray = data.getRay(expectedObjName);
-//		Material material = data.getMaterial(expectedObjName);
-//		Shape shape = data.getShape(expectedObjName);
-//		Pattern pattern = data.getPattern(expectedObjName);
-//		BoundingBox box = data.getBoundingBox(expectedObjName);
-//		String type = "unknown";
-//		if (comps != null)
-//		{
-//			type = "comps";
-//			value = "point".equals(propertyName) ? comps.getPoint() :
-//				"eyev".equals(propertyName) ? comps.getEyeVector() :
-//				"normalv".equals(propertyName) ? comps.getNormalVector() :
-//				"reflectv".equals(propertyName) ? comps.getReflectVector() :
-//				null;
-//		}
-//		else if (ray != null)
-//		{
-//			type = "ray";
-//			value = "origin".equals(propertyName) ? ray.getOrigin() :
-//				"direction".equals(propertyName) ? ray.getDirection() :
-//				null;
-//		}
-//		else if (material != null)
-//		{
-//			type = "material";
-//			value = "color".equals(propertyName) ? material.getColor() :
-//				null;
-//		}
-//		else if (shape != null)
-//		{
-//			type = "shape";
-//			value = "transform".equals(propertyName) ? shape.getTransform() :
-//				"saved_ray".equals(propertyName) ? shape.getSavedRay() :
-//				null;
-//		}
-//		else if (pattern != null)
-//		{
-//			type = "pattern";
-//			value = "transform".equals(propertyName) ? pattern.getTransform() :
-//				null;
-//		}
-//		else if (box != null)
-//		{
-//			value = "min".equals(propertyName) ? box.getMin() :
-//				"max".equals(propertyName) ? box.getMax() :
-//				null;
-//		}
-//		else
-//		{
-//			Assert.fail("object with name " + expectedObjName
-//				+ " not found. obj=" + comps);
-//		}
-//
-//		Assert.assertNotNull("On object name=" + expectedObjName + " of type " +
-//			type + ", property name " + propertyName + " does not match.",
-//			value);
-//		return value;
-//	}
-//
-//	@Then(wordPattern + "\\." + wordPattern + "\\." + wordPattern + " = "
-//		+ wordPattern + "\\(" + threeDoublesPattern + "\\)")
-//	public void objPropPropEqualsThreeDouble(String expectedObjName,
-//		String prop1Name, String prop2Name, String objType, double x,
-//		double y, double z)
-//	{
-//		Object expected = getObject(objType, x, y, z);
-//		Ray prop1Value = (Ray)getObjPropValue(expectedObjName, prop1Name);
-//		Object value = null;
-//		switch (prop2Name)
-//		{
-//			case "origin":
-//				Assert.assertEquals(expected, prop1Value.getOrigin());
-//				return;
-//			case "direction":
-//				Assert.assertEquals(expected, prop1Value.getDirection());
-//				return;
-//			default:
-//				Assert.fail("unknown property: " + prop2Name);
-//		}
-//		Assert.assertEquals(expected, value);
-//	}
-//
 
 	@Then("{identifier}.saved_ray.origin = {point}")
 	public void sSaved_rayOriginPoint(String shapeName, Point expectedOrigin)
@@ -604,137 +455,12 @@ public class ThenSteps
 		Assert.assertEquals(expectedShape, actualParent);
 	}
 
-//	Material material = data.getMaterial(objectName);
-//	if (material != null)
-//	{
-//		Double actualValue = "ambient".equals(propertyName) ? material.getAmbient() :
-//			"diffuse".equals(propertyName) ? material.getDiffuse() :
-//			"specular".equals(propertyName) ? material.getSpecular() :
-//			"shininess".equals(propertyName) ? material.getShininess() :
-//			"reflective".equals(propertyName) ? material.getReflective() :
-//			"transparency".equals(propertyName) ? material.getTransparency() :
-//			"refractive_index".equals(propertyName) ? material.getRefractive() :
-//			null;
-//		Assert.assertNotNull("Illegal property name " + propertyName, actualValue);
-//		Assert.assertEquals(expectedValue, actualValue, Tuple.EPSILON);
-//		return;
-//	}
-
 	@Then("{identifier} = {color}")
 	public void colorEqColor(String colorName, Color expectedColor)
 	{
 		Color actualColor = data.getColor(colorName);
 		Assert.assertEquals(expectedColor, actualColor);
 	}
-
-//	@Then(wordPattern + "\\." + wordPattern + " = (-|)" + wordPattern)
-//	public void testPropertyEqualsObject(String objectName, String propertyName,
-//		String signStr, String expectedObjectName)
-//	{
-//		boolean negative = "-".equals(signStr);
-//		if ("infinity".equals(expectedObjectName))
-//		{
-//			double value = negative ? Double.NEGATIVE_INFINITY :
-//				Double.POSITIVE_INFINITY;
-//			assertObjPropertyEqualsDouble(objectName, propertyName, value);
-//			return;
-//		}
-//
-//		Shape obj = data.getShape(objectName);
-//
-//		if (obj != null)
-//		{
-//			switch (propertyName)
-//			{
-//				case "material":
-//					Material actualMaterial = data.getMaterial(expectedObjectName);
-//					Assert.assertEquals(actualMaterial, obj.getMaterial());
-//					return;
-//				case "transform":
-//					Matrix expectedMatrix = getMatrix(expectedObjectName);
-//					Assert.assertEquals(expectedMatrix, obj.getTransform());
-//					return;
-//				case "closed":
-//					boolean closed = ((Cylinder)obj).isClosed();
-//					boolean expectedClosed = "true".equals(expectedObjectName);
-//					Assert.assertEquals(expectedClosed, closed);
-//					return;
-//				case "parent":
-//					Shape expectedObject = data.getShape(expectedObjectName);
-//					ShapeParent parent = obj.getParent();
-//					Assert.assertEquals(expectedObject, parent);
-//					break;
-//				default:
-//					unknownProperty("shape", propertyName);
-//			}
-//		}
-//
-//		World w = data.getWorld(objectName);
-//		if (w != null)
-//		{
-//			switch (propertyName)
-//			{
-//				case "light":
-//					PointLight light = data.getPointLight(expectedObjectName);
-//					Assert.assertEquals(light, w.getLightSources().get(0));
-//					return;
-//				default:
-//					unknownProperty("world", propertyName);
-//			}
-//		}
-//
-//		Ray ray = data.getRay(objectName);
-//		if (ray != null)
-//		{
-//			switch (propertyName)
-//			{
-//				case "origin":
-//					Point rayOriginPoint = ray.getOrigin();
-//					Point originPoint = data.getPoint(expectedObjectName);
-//					Assert.assertEquals(rayOriginPoint, originPoint);
-//					return;
-//				case "direction":
-//					Vector rayDirectionVector = ray.getDirection();
-//					Vector directionVector = data.getVector(expectedObjectName);
-//					Assert.assertEquals(rayDirectionVector, directionVector);
-//					return;
-//				default:
-//					unknownProperty("ray", propertyName);
-//			}
-//		}
-//
-//
-//		IntersectionComputations actualComps = data.getComputations(objectName);
-//		if (actualComps != null)
-//		{
-//			switch (propertyName)
-//			{
-//				case "inside":
-//					boolean isFalseExpected = !"false".equalsIgnoreCase(expectedObjectName);
-//					Assert.assertEquals(isFalseExpected, actualComps.isInside());
-//					return;
-//				default:
-//					unknownProperty("IntersectionComputations", propertyName);
-//			}
-//		}
-//
-//		Camera camera = data.getCamera(objectName);
-//		if (camera != null)
-//		{
-//			switch (propertyName)
-//			{
-//				case "transform":
-//					Matrix expectedMatrix = getMatrix(expectedObjectName);
-//					Assert.assertEquals(expectedMatrix, camera.getTransform());
-//					return;
-//				default:
-//					unknownProperty("camera", propertyName);
-//			}
-//			return;
-//		}
-//
-//		Assert.fail("Unknown object type for object name " + objectName);
-//	}
 
 	@Then("{identifier}.{identifier} is nothing")
 	public void sParentIsNothing(String objectName, String propertyName)
@@ -811,41 +537,4 @@ public class ThenSteps
 		Material material = s.getMaterial();
 		material.setRefractive(doubleValue);
 	}
-
-//	@Then(wordPattern + " = vector\\(" + doublePattern + ", -√" + doublePattern + ", " + doublePattern + "\\)")
-//	public void nVector(String vectorName, Double x, Double y, Double z)
-//	{
-//		Vector v = new Vector(x, -Math.sqrt(y), z);
-//		data.put(vectorName, v);
-//	}
-
-
-//	@Then("^" + wordPattern + "." + wordPattern + " = point\\(" +
-//		signPattern + "infinity, 0, " + signPattern + "infinity\\)")
-//	public void boxMinPointInfinityZeroInfinity(String objName,
-//		String varName, String xSign, String zSign)
-//	{
-//		BoundingBox box = data.getBoundingBox(objName);
-//		Point point = "min".equals(varName) ? box.getMin() : box.getMax();
-//		double x = infinityForSign(xSign);
-//		double z = infinityForSign(zSign);
-//		Point infinityPoint = new Point(x, 0, z);
-//		Assert.assertEquals(infinityPoint, point);
-//	}
-//
-//	private double infinityForSign(String xSign)
-//	{
-//		return "-".equals(xSign) ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY;
-//	}
-
-//	@Then("{identifier}.{identifier} = point\\(" + doublePattern + ", " + signPattern + "infinity, " + doublePattern + "\\)")
-//	public void boxMaxPointDoubleMinusInfinityDouble(String boxName,
-//		String varName, Double x, String ySign, Double z)
-//	{
-//		double y = infinityForSign(ySign);
-//		BoundingBox box = data.getBoundingBox(boxName);
-//		Point point = "min".equals(varName) ? box.getMin() : box.getMax();
-//		Point infinityPoint = new Point(x, y, z);
-//		Assert.assertEquals(infinityPoint, point);
-//	}
 }

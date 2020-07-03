@@ -4,7 +4,6 @@ import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
-import org.intranet.graphics.raytrace.shape.TubeLike;
 import org.intranet.graphics.raytrace.surface.CheckerPattern;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.GradientPattern;
@@ -46,28 +45,6 @@ public class GivenSteps
 	{
 		data.put(booleanName, booleanValue);
 	}
-
-//	@Given(wordPattern + "\\." + wordPattern + " ← (true|false)")
-//	public void cylClosedTrue(String shapeName, String propertyName,
-//		String booleanString)
-//	{
-//		Shape shape = data.getShape(shapeName);
-//		Assert.assertNotNull(shape);
-//		switch (propertyName)
-//		{
-//			case "closed":
-//				if (shape instanceof TubeLike)
-//				{
-//					((TubeLike)shape).setClosed("true".equals(booleanString));
-//					return;
-//				}
-//				else
-//					Assert.fail("Shape " + shape.getClass().getSimpleName() +
-//						" doesn't have property " + propertyName);
-//			default:
-//				Assert.fail("Unknown shape property " + propertyName);
-//		}
-//	}
 
 	@Given("{identifier} ← {identifier}_pattern\\({identifier}, {identifier})")
 	public void patternStripe_patternWhiteBlack(String patternName,
@@ -130,18 +107,6 @@ public class GivenSteps
 	{
 		data.put(patternName, pattern);
 	}
-
-//	@Given(wordPattern + " ← (ring|checkers)_pattern\\(" + twoWordPattern + "\\)")
-//	public void patternRing_patternWhiteBlack(String patternName,
-//		String patternType, String color1, String color2)
-//	{
-//		Color c1 = data.getColor(color1);
-//		Color c2 = data.getColor(color2);
-//
-//		Pattern pattern = "ring".equals(patternType) ? new RingPattern(c1, c2) :
-//			new CheckerPattern(c1, c2);
-//		data.put(patternName, pattern);
-//	}
 
 	@Given("{identifier} has:")
 	public void shapeHas(String shapeName, DataTable dataTable)

@@ -13,20 +13,17 @@ import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.shape.BoundingBox;
-import org.intranet.graphics.raytrace.shape.DefaultWorld;
-import org.intranet.graphics.raytrace.shape.Plane;
 import org.intranet.graphics.raytrace.shape.PointLight;
-import org.intranet.graphics.raytrace.shape.Sphere;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.junit.Assert;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.When.Whens;
-import io.cucumber.datatable.DataTable;
 
 public class WorldSteps
 	extends StepsParent
@@ -35,15 +32,6 @@ public class WorldSteps
 	{
 		super(data);
 	}
-
-//	@Given(wordPattern + " ← (sphere|plane)\\(\\) with:")
-//	public void sSphereWith(String sphereName, String shapeName,
-//		DataTable dataTable)
-//	{
-//		Shape shape = "sphere".equals(shapeName) ? new Sphere() : new Plane();
-//		setShapePropertiesFromDataTable(dataTable, shape);
-//		data.put(sphereName, shape);
-//	}
 
 	public static void setShapePropertiesFromDataTable(DataTable dataTable, Shape shape)
 	{

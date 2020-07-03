@@ -9,7 +9,6 @@ import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.shape.Sphere;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
-import org.intranet.graphics.raytrace.surface.Pattern;
 import org.junit.Assert;
 
 import io.cucumber.java.en.Given;
