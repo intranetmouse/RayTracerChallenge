@@ -26,6 +26,7 @@ public abstract class Shape
 	{
 		Ray localRay = ray.transform(transform.inverse());
 		savedRay = localRay;
+
 		return localIntersections(localRay);
 	}
 
@@ -36,6 +37,11 @@ public abstract class Shape
 	private ShapeParent parent;
 	public ShapeParent getParent() { return parent; }
 	public void setParent(ShapeParent value) { parent = value; }
+
+	public BoundingBox getParentSpaceBounds()
+	{
+		return getBoundingBox().transform(getTransform());
+	}
 
 	private Ray savedRay;
 	public Ray getSavedRay() { return savedRay; }
@@ -98,7 +104,15 @@ public abstract class Shape
 		return normal;
 	}
 
-	public BoundingBox getBoundingBox()
+	private BoundingBox boundingBox;
+	public final BoundingBox getBoundingBox()
+	{
+		if (boundingBox == null)
+			boundingBox = createBoundingBox();
+		return boundingBox;
+	}
+
+	protected BoundingBox createBoundingBox()
 	{
 		return new BoundingBox(new Point(-1, -1, -1), new Point(1, 1, 1));
 	}

@@ -87,44 +87,14 @@ public class RaysSteps
 		data.put(rayName, ray);
 	}
 
-//	@When("^" + wordPattern + " ← ray\\(point\\(" + threeDoublesPattern + "\\), vector\\(0, -√2/2, √2/2\\)\\)")
-//	public void rRayPointVector(String rayName, double pointx, double pointy,
-//		double pointz)
-//	{
-//		Point point = new Point(pointx, pointy, pointz);
-//		double vectorx = 0.0;
-//		double sqrt2div2 = Math.sqrt(2.0) / 2.0;
-//		double vectory = -sqrt2div2;
-//		double vectorz = sqrt2div2;
-//		Vector vector = new Vector(vectorx, vectory, vectorz);
-//
-//		Ray ray = new Ray(point, vector);
-//		data.put(rayName, ray);
-//	}
-//
-//	@When("^" + wordPattern + " ← ray\\(point\\(0, 0, √2/2\\), vector\\(" + threeDoublesPattern + "\\)\\)")
-//	public void rRayPointSqrtVector(String rayName, double vectorx, double vectory,
-//		double vectorz)
-//	{
-//		double pointx = 0.0;
-//		double sqrt2div2 = Math.sqrt(2.0) / 2.0;
-//		double pointy = 0;
-//		double pointz = sqrt2div2;
-//		Point point = new Point(pointx, pointy, pointz);
-//		Vector vector = new Vector(vectorx, vectory, vectorz);
-//
-//		Ray ray = new Ray(point, vector);
-//		data.put(rayName, ray);
-//	}
-
 	@When("{identifier} ← transform\\({identifier}, {identifier})")
 	public void rTransformRM(String newObjectName, String objToTransformName,
-		String translationName)
+		String mtxTranslationName)
 	{
 		Ray ray = data.getRay(objToTransformName);
 		BoundingBox box = data.getBoundingBox(objToTransformName);
 
-		Matrix mtx = data.getMatrix(translationName);
+		Matrix mtx = data.getMatrix(mtxTranslationName);
 
 		if (ray != null)
 		{

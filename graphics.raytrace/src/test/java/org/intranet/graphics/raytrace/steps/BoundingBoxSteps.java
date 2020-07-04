@@ -2,6 +2,7 @@ package org.intranet.graphics.raytrace.steps;
 
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.shape.BoundingBox;
 import org.junit.Assert;
 
@@ -59,5 +60,14 @@ public final class BoundingBoxSteps
 		BoundingBox otherBox = data.getBoundingBox(otherBoxName);
 
 		Assert.assertEquals(expectedResult, box.containsBox(otherBox));
+	}
+
+	@Then("intersects\\({identifier}, {identifier}) is {boolean}")
+	public void intersectsBoxRIsTrue(String boxName, String rayName, boolean expectedResult)
+	{
+		BoundingBox box = data.getBoundingBox(boxName);
+		Ray ray = data.getRay(rayName);
+
+		Assert.assertEquals(expectedResult, box.intersects(ray));
 	}
 }

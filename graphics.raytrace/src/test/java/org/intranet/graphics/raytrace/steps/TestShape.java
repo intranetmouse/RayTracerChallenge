@@ -12,7 +12,7 @@ public final class TestShape
 	@Override
 	public IntersectionList localIntersections(Ray ray)
 	{
-		return null;
+		return new IntersectionList();
 	}
 
 	@Override

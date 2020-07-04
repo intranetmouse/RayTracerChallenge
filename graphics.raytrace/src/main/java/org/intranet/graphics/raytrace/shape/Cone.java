@@ -62,7 +62,7 @@ public final class Cone
 		return y;
 	}
 
-	public BoundingBox getBoundingBox()
+	public BoundingBox createBoundingBox()
 	{
 		double a = Math.abs(minimum);
 		double b = Math.abs(maximum);

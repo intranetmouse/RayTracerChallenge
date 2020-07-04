@@ -40,7 +40,7 @@ public final class Cube
 		return new IntersectionList(i1, i2);
 	}
 
-	private Pair<Double> check_axis(double origin, double direction)
+	public static Pair<Double> check_axis(double origin, double direction)
 	{
 		double tmin_numerator = (-1 - origin);
 		double tmax_numerator = (1 - origin);

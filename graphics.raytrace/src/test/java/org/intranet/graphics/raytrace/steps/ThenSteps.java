@@ -10,6 +10,7 @@ import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.ShapeParent;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.primitive.Vector;
 import org.intranet.graphics.raytrace.shape.BoundingBox;
@@ -194,6 +195,22 @@ public class ThenSteps
 		Shape shape = data.getShape(shapeName);
 		Vector actualDirection = shape.getSavedRay().getDirection();
 		Assert.assertEquals(expectedDirection, actualDirection);
+	}
+
+	@Then("{identifier}.saved_ray is unset")
+	public void sSaved_rayUnset(String shapeName)
+	{
+		Shape shape = data.getShape(shapeName);
+		Ray savedRay = shape.getSavedRay();
+		Assert.assertNull(savedRay);
+	}
+
+	@Then("{identifier}.saved_ray is set")
+	public void sSaved_raySet(String shapeName)
+	{
+		Shape shape = data.getShape(shapeName);
+		Ray savedRay = shape.getSavedRay();
+		Assert.assertNotNull(savedRay);
 	}
 
 	@Then("{identifier}.count = {int}")

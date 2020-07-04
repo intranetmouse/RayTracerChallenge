@@ -23,6 +23,9 @@ public final class Group
 	@Override
 	public IntersectionList localIntersections(Ray ray)
 	{
+		if (!getBoundingBox().intersects(ray))
+			return new IntersectionList();
+
 		List<Intersection> intersections = children.parallelStream()
 			.map(e -> e.intersections(ray))
 			.map(IntersectionList::getIntersections)
@@ -58,6 +61,18 @@ public final class Group
 	public boolean contains(Shape s)
 	{
 		return children.contains(s);
+	}
+
+	@Override
+	public BoundingBox createBoundingBox()
+	{
+		BoundingBox box = new BoundingBox();
+		for (Shape child : children)
+		{
+			BoundingBox childBox = child.getParentSpaceBounds();
+			box = box.add(childBox);
+		}
+		return box;
 	}
 
 	@Override

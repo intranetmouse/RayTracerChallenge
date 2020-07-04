@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.primitive.Ray;
+import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.shape.Cube.Pair;
 
 public class BoundingBox
 {
@@ -95,5 +98,50 @@ public class BoundingBox
 			box = box.add(mtx.multiply(p));
 
 		return box;
+	}
+
+	public boolean intersects(Ray ray)
+	{
+		Point rayOrigin = ray.getOrigin();
+		Vector rayDirection = ray.getDirection();
+		Pair<Double> xtPair = check_axis(rayOrigin.getX(), rayDirection.getX(),
+			min.getX(), max.getX());
+		double xtmin = xtPair.getFirst();
+		double xtmax = xtPair.getSecond();
+
+		Pair<Double> ytPair = check_axis(rayOrigin.getY(), rayDirection.getY(),
+			min.getY(), max.getY());
+		double ytmin = ytPair.getFirst();
+		double ytmax = ytPair.getSecond();
+
+		Pair<Double> ztPair = check_axis(rayOrigin.getZ(), rayDirection.getZ(),
+			min.getZ(), max.getZ());
+		double ztmin = ztPair.getFirst();
+		double ztmax = ztPair.getSecond();
+
+		double tmin = Math.max(Math.max(xtmin, ytmin), ztmin);
+		double tmax = Math.min(Math.min(xtmax, ytmax), ztmax);
+
+		if (tmin > tmax)
+			return false;
+		return true;
+	}
+
+	private Pair<Double> check_axis(double origin, double direction, double min, double max)
+	{
+		double tmin_numerator = (min - origin);
+		double tmax_numerator = (max - origin);
+
+		double tmin = tmin_numerator / direction;
+		double tmax = tmax_numerator / direction;
+
+		if (tmin > tmax)
+		{
+			double temp = tmin;
+			tmin = tmax;
+			tmax = temp;
+		}
+
+		return new Pair<Double>(tmin, tmax);
 	}
 }

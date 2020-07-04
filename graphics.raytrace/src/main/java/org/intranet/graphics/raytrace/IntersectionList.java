@@ -20,6 +20,7 @@ public final class IntersectionList
 	}
 	public IntersectionList(List<Intersection> intersections)
 	{
+		intersections.size();
 		this.intersections = intersections;
 		intersections.sort((o1, o2) -> compareDouble(o1.getDistance() - o2.getDistance()));
 	}

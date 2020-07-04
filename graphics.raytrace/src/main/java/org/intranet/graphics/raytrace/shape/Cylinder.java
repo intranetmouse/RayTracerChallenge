@@ -46,7 +46,7 @@ public final class Cylinder
 	protected double calcNormalY(double pointY, double dist)
 	{ return 0; }
 
-	public BoundingBox getBoundingBox()
+	public BoundingBox createBoundingBox()
 	{
 		double yMin = getMinimum();
 		double yMax = getMaximum();
