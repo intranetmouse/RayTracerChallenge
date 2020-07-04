@@ -144,4 +144,10 @@ public class BoundingBox
 
 		return new Pair<Double>(tmin, tmax);
 	}
+
+	@Override
+	public String toString()
+	{
+		return "BoundingBox [min=" + min + ", max=" + max + "]";
+	}
 }

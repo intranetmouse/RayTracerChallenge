@@ -151,7 +151,7 @@ public class ThenSteps
 	}
 
 	@Then("{identifier}.point.z > {identifier}.over_point.z")
-	public void compsPointZCompsOver_pointZ(String object1Name,
+	public void assertCompsPointZGtCompsOverPointZ(String object1Name,
 		String object2Name)
 	{
 		IntersectionComputations comps1 = data.getComputations(object1Name);
@@ -160,7 +160,7 @@ public class ThenSteps
 	}
 
 	@Then("{identifier} is nothing")
-	public void iIsNothing(String intersectionName)
+	public void assertIsNothing(String intersectionName)
 	{
 		Intersection i = data.getIntersection(intersectionName);
 		Assert.assertNull(i);
@@ -172,8 +172,8 @@ public class ThenSteps
 		@Then("{identifier}.{minMax} = {pointYinfinity}"),
 		@Then("{identifier}.{minMax} = {pointXZinfinity}")
 	})
-	public void boxMinPointInfinityInfinityInfinity(String objName,
-		String varName, Point expectedPoint)
+	public void assertBoxMinMaxEqPoint(String objName, String varName,
+		Point expectedPoint)
 	{
 		BoundingBox box = data.getBoundingBox(objName);
 		Point point = "min".equals(varName) ? box.getMin() : box.getMax();
@@ -182,7 +182,7 @@ public class ThenSteps
 
 
 	@Then("{identifier}.saved_ray.origin = {point}")
-	public void sSaved_rayOriginPoint(String shapeName, Point expectedOrigin)
+	public void assertSavedRayOriginEqPoint(String shapeName, Point expectedOrigin)
 	{
 		Shape shape = data.getShape(shapeName);
 		Point actualOrigin = shape.getSavedRay().getOrigin();
@@ -190,7 +190,7 @@ public class ThenSteps
 	}
 
 	@Then("{identifier}.saved_ray.direction = {vector}")
-	public void sSaved_rayDirectionVector(String shapeName, Vector expectedDirection)
+	public void assertSavedRayDirectionEqVector(String shapeName, Vector expectedDirection)
 	{
 		Shape shape = data.getShape(shapeName);
 		Vector actualDirection = shape.getSavedRay().getDirection();
@@ -198,7 +198,7 @@ public class ThenSteps
 	}
 
 	@Then("{identifier}.saved_ray is unset")
-	public void sSaved_rayUnset(String shapeName)
+	public void assertSavedRayIsUnset(String shapeName)
 	{
 		Shape shape = data.getShape(shapeName);
 		Ray savedRay = shape.getSavedRay();
@@ -206,7 +206,7 @@ public class ThenSteps
 	}
 
 	@Then("{identifier}.saved_ray is set")
-	public void sSaved_raySet(String shapeName)
+	public void assertSavedRayIsSet(String shapeName)
 	{
 		Shape shape = data.getShape(shapeName);
 		Ray savedRay = shape.getSavedRay();

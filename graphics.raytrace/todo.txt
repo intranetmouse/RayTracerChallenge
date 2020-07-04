@@ -5,6 +5,7 @@
 
 - Create a file to test patterns in groups
 - Chapter 14 Groups - Using Bounding Boxes to Optimize Large Scenes
+- Bonus Bounding Boxes: Part 2 - BVH
 - Chapter 10 Patterns - Putting It Together : Nested Patterns (Convert Color to a pattern)
 - Chapter 10 Patterns - Putting It Together : Blended Patterns
 - Chapter 10 Patterns - Putting It Together : Radial Gradient Pattern,
