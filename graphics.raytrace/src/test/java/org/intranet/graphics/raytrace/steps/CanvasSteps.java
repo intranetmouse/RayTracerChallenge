@@ -60,17 +60,6 @@ public class CanvasSteps
 		data.put(ppmName, canvas.toPpm());
 	}
 
-
-//	@Then("every pixel of " + wordPattern + " is color\\(" + threeIntsPattern + "\\)")
-//	public void everyPixelOfCIsColor(String canvasName, int red, int green, int blue)
-//	{
-//		Color color = new Color(red, green, blue);
-//		Canvas c = data.getCanvas(canvasName);
-//
-//		for (int x = 0; x < c.getWidth(); x++)
-//			for (int y = 0; y < c.getHeight(); y++)
-//				Assert.assertEquals(color, c.getPixelColor(x, y));
-//	}
 	@Then("pixel_at\\({identifier}, {int}, {int}) = {color}")
 	public void pixel_atImageColor(String canvasName, int x, int y,
 		Color expectedColor)
@@ -85,7 +74,7 @@ public class CanvasSteps
 	public void linesOfPpmAre(int firstLine1, int lastLine1, String ppmName,
 		String ppmString)
 	{
-		List<String> ppm = data.getPpm(ppmName);
+		List<String> ppm = data.getStringList(ppmName);
 		String[] testLines = ppmString.split("[\n\r]");
 		int lastLine0 = lastLine1 - 1;
 		int testLineNum = 0;

@@ -13,6 +13,7 @@ import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.PixelCoordinate;
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.World;
+import org.intranet.graphics.raytrace.persistence.ObjFileParser;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
@@ -143,11 +144,11 @@ public final class RaytraceData
 	public Canvas getCanvas(String canvasName)
 	{ return canvasMap.get(canvasName); }
 
-	private Map<String, List<String>> ppmMap = new HashMap<>();
+	private Map<String, List<String>> stringMap = new HashMap<>();
 	public void put(String ppmName, List<String> ppm)
-	{ ppmMap.put(ppmName, ppm); }
-	public List<String> getPpm(String ppmName)
-	{ return ppmMap.get(ppmName); }
+	{ stringMap.put(ppmName, ppm); }
+	public List<String> getStringList(String stringName)
+	{ return stringMap.get(stringName); }
 
 	private Map<String, World> worldMap = new HashMap<>();
 	public void put(String worldName, World world)
@@ -178,4 +179,11 @@ public final class RaytraceData
 	{ pixelCoordinateMap.put(pixelCoordinateName, pixelCoordinate); }
 	public PixelCoordinate getPixelCoordinate(String pixelCoordinateName)
 	{ return pixelCoordinateMap.get(pixelCoordinateName); }
+
+	private Map<String, ObjFileParser> objFileParserMap = new HashMap<>();
+	public void put(String objFileParseName, ObjFileParser parser)
+	{ objFileParserMap.put(objFileParseName, parser); }
+	public ObjFileParser getObjParser(String objFileParserName)
+	{ return objFileParserMap.get(objFileParserName); }
+
 }
