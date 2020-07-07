@@ -1,5 +1,6 @@
 package org.intranet.graphics.raytrace.puttingItTogether.projectors;
 
+import java.io.File;
 import java.io.InputStream;
 
 import org.intranet.graphics.raytrace.persistence.YamlWorldParser;
@@ -15,9 +16,11 @@ public final class Yaml11RefractSphereProjector
 	@Override
 	protected void fillWorld()
 	{
+		String refractGlassSphereYml = "/org/intranet/graphics/raytrace/yml/11b-refract-glass-sphere.yml";
 		InputStream ymlStream = getClass().getResourceAsStream(
-			"/org/intranet/graphics/raytrace/yml/11b-refract-glass-sphere.yml");
+			refractGlassSphereYml);
 		YamlWorldParser parser = new YamlWorldParser();
-		world = parser.parse(ymlStream);
+		File parentFolder = new File(getClass().getResource(refractGlassSphereYml).getFile()).getParentFile();
+		world = parser.parse(ymlStream, parentFolder);
 	}
 }

@@ -1,5 +1,8 @@
 package org.intranet.graphics.raytrace.test;
 
+import java.io.File;
+import java.io.InputStream;
+
 import org.intranet.graphics.raytrace.Camera;
 import org.intranet.graphics.raytrace.Light;
 import org.intranet.graphics.raytrace.Shape;
@@ -16,8 +19,11 @@ public class YamlTest
 	{
 		YamlWorldParser parser = new YamlWorldParser();
 
-		World w = parser.parse(parser.getClass()
-			.getResourceAsStream(Yaml14BookGroupProjector.GROUP_YML));
+		InputStream ymlStream = parser.getClass()
+			.getResourceAsStream(Yaml14BookGroupProjector.GROUP_YML);
+		String fileName = parser.getClass().getResource(Yaml14BookGroupProjector.GROUP_YML).getFile();
+		File relativePath = new File(fileName).getParentFile();
+		World w = parser.parse(ymlStream, relativePath);
 
 		Assert.assertNotNull(w);
 

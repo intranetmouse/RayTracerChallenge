@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.persistence.ObjFileParser;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.shape.Group;
@@ -41,6 +42,7 @@ public class ObjFileSteps
 		List<String> stringList = data.getStringList(stringListName);
 
 		ObjFileParser parser = new ObjFileParser(stringList);
+System.out.println("creating parser named " + objFileParseName + " = " + parser);
 
 		data.put(objFileParseName, parser);
 	}
@@ -66,7 +68,9 @@ public class ObjFileSteps
 	public void setParserVertexNEqPoint(String groupName, String objParserName)
 	{
 		ObjFileParser parser = data.getObjParser(objParserName);
+System.out.println("getting parser " + objParserName+", result="+parser);
 		Group group = parser.getDefaultGroup();
+System.out.println("putting default group into " + groupName + ", default="+group);
 		data.put(groupName, group);
 	}
 
@@ -92,7 +96,10 @@ public class ObjFileSteps
 		int idx)
 	{
 		Group g = (Group)data.getShape(groupName);
-		Triangle t = (Triangle)g.getChildren().get(idx);
+System.out.println("getting groupName="+groupName);
+		List<Shape> groupChildren = g.getChildren();
+System.out.println("# group children="+groupChildren.size());
+		Triangle t = (Triangle)groupChildren.get(idx);
 		data.put(triangleName, t);
 	}
 
@@ -131,5 +138,25 @@ public class ObjFileSteps
 		ObjFileParser parser = data.getObjParser(parserName);
 		Group g = parser.getGroup(parserGroupName);
 		data.put(destGroupName, g);
+	}
+
+	@When("{identifier} ← obj_to_group\\({identifier})")
+	public void setGroupFromObjParser(String groupName, String objParserName)
+	{
+		ObjFileParser parser = data.getObjParser(objParserName);
+		Group group = parser.getGroup();
+		data.put(groupName, group);
+	}
+
+	@Then("{identifier} includes {string} from {identifier}")
+	public void assertGroupIncludesSubgroupFromParser(String groupVarName,
+		String groupName, String objParserName)
+	{
+		Group testGroup = (Group)data.getShape(groupVarName);
+
+		ObjFileParser parser = data.getObjParser(objParserName);
+		Group parserGroup = parser.getGroup(groupName);
+
+		Assert.assertEquals(testGroup, parserGroup);
 	}
 }

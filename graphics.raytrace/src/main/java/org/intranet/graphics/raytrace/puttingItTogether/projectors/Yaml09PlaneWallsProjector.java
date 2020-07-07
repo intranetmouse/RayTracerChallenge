@@ -1,5 +1,6 @@
 package org.intranet.graphics.raytrace.puttingItTogether.projectors;
 
+import java.io.File;
 import java.io.InputStream;
 
 import org.intranet.graphics.raytrace.persistence.YamlWorldParser;
@@ -15,9 +16,11 @@ public final class Yaml09PlaneWallsProjector
 	@Override
 	protected void fillWorld()
 	{
+		String ballsPlaneWallsYml = "/org/intranet/graphics/raytrace/yml/09-3_balls_plane_walls.yml";
 		InputStream ymlStream = getClass().getResourceAsStream(
-			"/org/intranet/graphics/raytrace/yml/09-3_balls_plane_walls.yml");
+			ballsPlaneWallsYml);
+		File parentFolder = new File(getClass().getResource(ballsPlaneWallsYml).getFile()).getParentFile();
 		YamlWorldParser parser = new YamlWorldParser();
-		world = parser.parse(ymlStream);
+		world = parser.parse(ymlStream, parentFolder);
 	}
 }

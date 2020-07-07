@@ -1,5 +1,6 @@
 package org.intranet.graphics.raytrace.puttingItTogether.projectors;
 
+import java.io.File;
 import java.io.InputStream;
 
 import org.intranet.graphics.raytrace.persistence.YamlWorldParser;
@@ -20,6 +21,7 @@ public final class Yaml14BookGroupProjector
 	{
 		InputStream ymlStream = getClass().getResourceAsStream(GROUP_YML);
 		YamlWorldParser parser = new YamlWorldParser();
-		world = parser.parse(ymlStream);
+		File parentFolder = new File(getClass().getResource(GROUP_YML).getFile()).getParentFile();
+		world = parser.parse(ymlStream, parentFolder);
 	}
 }

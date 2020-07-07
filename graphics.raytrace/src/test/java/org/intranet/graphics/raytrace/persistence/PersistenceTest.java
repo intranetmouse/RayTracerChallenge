@@ -186,7 +186,7 @@ public class PersistenceTest
 	{
 		File file = new File(defaultDirectory, yamlName);
 		FileInputStream ymlStream = new FileInputStream(file);
-		World world = parser.parse(ymlStream);
+		World world = parser.parse(ymlStream, defaultDirectory);
 		return world;
 	}
 }

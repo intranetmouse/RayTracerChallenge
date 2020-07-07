@@ -1,5 +1,6 @@
 package org.intranet.graphics.raytrace.puttingItTogether.projectors;
 
+import java.io.File;
 import java.io.InputStream;
 
 import org.intranet.graphics.raytrace.persistence.YamlWorldParser;
@@ -15,9 +16,11 @@ public final class Yaml10StripesProjector
 	@Override
 	protected void fillWorld()
 	{
+		String patternsStripedYml = "/org/intranet/graphics/raytrace/yml/10-patterns-striped.yml";
 		InputStream ymlStream = getClass().getResourceAsStream(
-			"/org/intranet/graphics/raytrace/yml/10-patterns-striped.yml");
+			patternsStripedYml);
+		File parentFolder = new File(getClass().getResource(patternsStripedYml).getFile()).getParentFile();
 		YamlWorldParser parser = new YamlWorldParser();
-		world = parser.parse(ymlStream);
+		world = parser.parse(ymlStream, parentFolder);
 	}
 }

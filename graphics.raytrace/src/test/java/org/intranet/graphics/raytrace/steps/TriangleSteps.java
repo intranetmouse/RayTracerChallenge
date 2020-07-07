@@ -1,7 +1,9 @@
 package org.intranet.graphics.raytrace.steps;
 
+import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.shape.SmoothTriangle;
 import org.intranet.graphics.raytrace.shape.Triangle;
 import org.junit.Assert;
 
@@ -31,27 +33,66 @@ public class TriangleSteps
 	public void testTriangleP1EqPoint(String triangleName, String expectedPointName)
 	{
 		Point expectedPoint = data.getPoint(expectedPointName);
-		Triangle triangle = (Triangle)data.getShape(triangleName);
-		Point actualPoint = triangle.getP1();
-		Assert.assertEquals(expectedPoint, actualPoint);
+		Shape shape = data.getShape(triangleName);
+		if (shape instanceof Triangle)
+		{
+			Triangle triangle = (Triangle)shape;
+			Point actualPoint = triangle.getP1();
+			Assert.assertEquals(expectedPoint, actualPoint);
+			return;
+		}
+		if (shape instanceof SmoothTriangle)
+		{
+			SmoothTriangle triangle = (SmoothTriangle)shape;
+			Point actualPoint = triangle.getP1();
+			Assert.assertEquals(expectedPoint, actualPoint);
+			return;
+		}
+		throw new IllegalArgumentException("unknown shape " + shape.getClass().getName());
 	}
 
 	@Then("{identifier}.p2 = {identifier}")
 	public void testTriangleP2EqPoint(String triangleName, String expectedPointName)
 	{
 		Point expectedPoint = data.getPoint(expectedPointName);
-		Triangle triangle = (Triangle)data.getShape(triangleName);
-		Point actualPoint = triangle.getP2();
-		Assert.assertEquals(expectedPoint, actualPoint);
+		Shape shape = data.getShape(triangleName);
+		if (shape instanceof Triangle)
+		{
+			Triangle triangle = (Triangle)shape;
+			Point actualPoint = triangle.getP2();
+			Assert.assertEquals(expectedPoint, actualPoint);
+			return;
+		}
+		if (shape instanceof SmoothTriangle)
+		{
+			SmoothTriangle triangle = (SmoothTriangle)shape;
+			Point actualPoint = triangle.getP2();
+			Assert.assertEquals(expectedPoint, actualPoint);
+			return;
+		}
+		throw new IllegalArgumentException("unknown shape " + shape.getClass().getName());
 	}
 
 	@Then("{identifier}.p3 = {identifier}")
 	public void testTriangleP3EqPoint(String triangleName, String expectedPointName)
 	{
 		Point expectedPoint = data.getPoint(expectedPointName);
-		Triangle triangle = (Triangle)data.getShape(triangleName);
-		Point actualPoint = triangle.getP3();
-		Assert.assertEquals(expectedPoint, actualPoint);
+		Shape shape = data.getShape(triangleName);
+		if (shape instanceof Triangle)
+		{
+			Triangle triangle = (Triangle)shape;
+			Point actualPoint = triangle.getP3();
+			Assert.assertEquals(expectedPoint, actualPoint);
+			return;
+		}
+		if (shape instanceof SmoothTriangle)
+		{
+			SmoothTriangle triangle = (SmoothTriangle)shape;
+			Point actualPoint = triangle.getP3();
+			Assert.assertEquals(expectedPoint, actualPoint);
+			return;
+		}
+		throw new IllegalArgumentException("unknown shape " + shape.getClass().getName());
 	}
 
 	@Then("{identifier}.e1 = {vector}")

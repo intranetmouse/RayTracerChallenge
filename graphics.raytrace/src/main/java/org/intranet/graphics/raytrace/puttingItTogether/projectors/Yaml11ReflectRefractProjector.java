@@ -1,5 +1,6 @@
 package org.intranet.graphics.raytrace.puttingItTogether.projectors;
 
+import java.io.File;
 import java.io.InputStream;
 
 import org.intranet.graphics.raytrace.persistence.YamlWorldParser;
@@ -15,9 +16,11 @@ public final class Yaml11ReflectRefractProjector
 	@Override
 	protected void fillWorld()
 	{
+		String reflectRefractYml = "/org/intranet/graphics/raytrace/yml/11a-reflect-refract.yml";
 		InputStream ymlStream = getClass().getResourceAsStream(
-			"/org/intranet/graphics/raytrace/yml/11a-reflect-refract.yml");
+			reflectRefractYml);
 		YamlWorldParser parser = new YamlWorldParser();
-		world = parser.parse(ymlStream);
+		File parentFolder = new File(getClass().getResource(reflectRefractYml).getFile()).getParentFile();
+		world = parser.parse(ymlStream, parentFolder);
 	}
 }

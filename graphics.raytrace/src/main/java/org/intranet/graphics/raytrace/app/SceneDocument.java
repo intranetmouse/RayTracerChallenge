@@ -46,7 +46,7 @@ public final class SceneDocument
 	private void loadWorld()
 		throws FileNotFoundException
 	{
-		world = parser.parse(new FileInputStream(this.file));
+		world = parser.parse(new FileInputStream(file), file.getParentFile());
 	}
 
 	@Override

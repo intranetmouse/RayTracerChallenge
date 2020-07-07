@@ -1,5 +1,9 @@
 package org.intranet.graphics.raytrace.persistence;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -7,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.intranet.graphics.raytrace.Camera;
 import org.intranet.graphics.raytrace.Shape;
@@ -38,7 +43,7 @@ public class YamlWorldParser
 	public YamlWorldParser()
 	{ }
 
-	public World parse(InputStream ymlStream)
+	public World parse(InputStream ymlStream, File relativeFolder)
 	{
 		World world = new World();
 
@@ -63,7 +68,8 @@ public class YamlWorldParser
 					}
 					else if (paramMap.containsKey("define"))
 					{
-						define(world, paramMap, materialDefines, shapeDefines);
+						define(world, paramMap, materialDefines, shapeDefines,
+							relativeFolder);
 					}
 					else
 					{
@@ -80,7 +86,9 @@ public class YamlWorldParser
 	}
 
 	private void define(World world, Map<String, Object> defineMap,
-		Map<String, Material> materialDefines, Map<String, Shape> shapeDefines)
+		Map<String, Material> materialDefines, Map<String, Shape> shapeDefines,
+		File relativeFolder)
+			throws FileNotFoundException, IOException
 	{
 		defineMap = new DestructiveHashMap<String, Object>(defineMap);
 		String defineName = (String)defineMap.get("define");
@@ -96,7 +104,21 @@ public class YamlWorldParser
 
 		String type = (String)valueMap.get("add");
 
-		if (type != null)
+		if ("obj".equals(type))
+		{
+			String file = (String)valueMap.get("file");
+			try (FileReader fr = new FileReader(new File(relativeFolder, file));
+				BufferedReader br = new BufferedReader(fr))
+			{
+				List<String> lines = br.lines().collect(Collectors.toList());
+				ObjFileParser parser = new ObjFileParser(lines);
+				Shape shape = parser.getGroup();
+				processShapeProperties(world, valueMap, materialDefines,
+					shapeDefines, shape);
+				shapeDefines.put(defineName, shape);
+			}
+		}
+		else if (type != null)
 		{
 			Shape s = createShape(type, extendName, world, valueMap,
 				materialDefines, shapeDefines);
@@ -215,6 +237,7 @@ public class YamlWorldParser
 
 	private static void addObject(World world, Map<String, Object> objMap,
 		Map<String, Material> materialDefines, Map<String, Shape> shapeDefines)
+			throws FileNotFoundException, IOException
 	{
 		objMap = new DestructiveHashMap<String, Object>(objMap);
 		String type = (String)objMap.get("add");
@@ -247,6 +270,21 @@ public class YamlWorldParser
 				PointLight pointLight = new PointLight(listToPoint(at),
 					listToColor(intensity));
 				world.addLight(pointLight);
+				break;
+			case "obj":
+				@SuppressWarnings("unchecked")
+				ArrayList<String> files = (ArrayList<String>)objMap.get("file");
+				String file = files.get(0);
+				try (FileReader fr = new FileReader(file);
+					BufferedReader br = new BufferedReader(fr);)
+				{
+					List<String> lines = br.lines().collect(Collectors.toList());
+					ObjFileParser parser = new ObjFileParser(lines);
+					Shape shape = parser.getGroup();
+					processShapeProperties(world, objMap, materialDefines,
+						shapeDefines, shape);
+					world.addSceneObjects(shape);
+				}
 				break;
 			default:
 				if (!addShape(type, world, objMap, materialDefines, shapeDefines))
