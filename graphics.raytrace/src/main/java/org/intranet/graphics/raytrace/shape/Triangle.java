@@ -9,15 +9,8 @@ import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.primitive.Vector;
 
 public class Triangle
-	extends Shape
+	extends ThreePoint
 {
-	private final Point p1;
-	public Point getP1() { return p1; }
-	private final Point p2;
-	public Point getP2() { return p2; }
-	private final Point p3;
-	public Point getP3() { return p3; }
-
 	private final Vector e1;
 	public Vector getE1() { return e1; }
 	private final Vector e2;
@@ -28,9 +21,7 @@ public class Triangle
 
 	public Triangle(Point p1, Point p2, Point p3)
 	{
-		this.p1 = p1;
-		this.p2 = p2;
-		this.p3 = p3;
+		super(p1, p2, p3);
 		e1 = p2.subtract(p1);
 		e2 = p3.subtract(p1);
 		normal = e2.cross(e1).normalize();
@@ -70,8 +61,9 @@ public class Triangle
 			return false;
 
 		Triangle otherTri = (Triangle)other;
-		return p1.equals(otherTri.p1) && p2.equals(otherTri.p2) &&
-			p3.equals(otherTri.p3);
+		return getP1().equals(otherTri.getP1()) &&
+			getP2().equals(otherTri.getP2()) &&
+			getP3().equals(otherTri.getP3());
 	}
 
 	@Override
@@ -79,9 +71,9 @@ public class Triangle
 	{
 		BoundingBox box = new BoundingBox();
 
-		box = box.add(p1);
-		box = box.add(p2);
-		box = box.add(p3);
+		box = box.add(getP1());
+		box = box.add(getP2());
+		box = box.add(getP3());
 
 		return box;
 	}
@@ -89,6 +81,6 @@ public class Triangle
 	@Override
 	public Shape deepCopy()
 	{
-		return new Triangle(p1, p2, p3);
+		return this;
 	}
 }

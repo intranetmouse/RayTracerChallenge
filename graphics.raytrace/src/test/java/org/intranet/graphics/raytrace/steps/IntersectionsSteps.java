@@ -187,25 +187,6 @@ public class IntersectionsSteps
 		data.put(intersectionsName, ilist);
 	}
 
-	@When("{identifier} ← intersection\\({dbl}, {identifier})")
-	public void iIntersectionS(String intersectionName, double distance,
-		String sphereName)
-	{
-		Shape sphere = data.getShape(sphereName);
-		Intersection intersection = new Intersection(distance, sphere);
-		data.put(intersectionName, intersection);
-	}
-
-	@When("{identifier} ← intersection\\(√{dbl}, {identifier})")
-	public void iIntersectionSqrRt(String intersectionName, double distance,
-		String shapeName)
-	{
-		distance = Math.sqrt(distance);
-		Shape sphere = data.getShape(shapeName);
-		Intersection intersection = new Intersection(distance, sphere);
-		data.put(intersectionName, intersection);
-	}
-
 	@When("{identifier} ← hit\\({identifier})")
 	public void iHitXs(String intersectionName, String intersectionListName)
 	{

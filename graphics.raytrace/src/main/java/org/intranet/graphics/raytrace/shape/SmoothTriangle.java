@@ -7,17 +7,8 @@ import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Vector;
 
 public class SmoothTriangle
-	extends Shape
+	extends ThreePoint
 {
-	private Point p1;
-	public Point getP1() { return p1; }
-
-	private Point p2;
-	public Point getP2() { return p2; }
-
-	private Point p3;
-	public Point getP3() { return p3; }
-
 	private Vector n1;
 	public Vector getN1() { return n1; }
 
@@ -31,9 +22,7 @@ public class SmoothTriangle
 	public SmoothTriangle(Point p1, Point p2, Point p3, Vector n1, Vector n2,
 		Vector n3)
 	{
-		this.p1 = p1;
-		this.p2 = p2;
-		this.p3 = p3;
+		super(p1, p2, p3);
 		this.n1 = n1;
 		this.n2 = n2;
 		this.n3 = n3;
