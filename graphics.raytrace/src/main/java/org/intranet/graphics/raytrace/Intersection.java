@@ -20,7 +20,7 @@ public class Intersection
 		this.object = shape;
 	}
 
-	public Intersection(Double distance, Shape shape, double u, double v)
+	public Intersection(double distance, Shape shape, double u, double v)
 	{
 		this(distance, shape);
 		this.u = u;

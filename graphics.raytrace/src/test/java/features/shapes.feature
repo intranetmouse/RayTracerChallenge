@@ -102,3 +102,8 @@ Scenario: Querying a shape's bounding box in its parent's space
   When box ← parent_space_bounds_of(shape)
   Then box.min = point(0.5, -5, 1)
     And box.max = point(1.5, -1, 9)
+
+Scenario: Subdividing a primitive does nothing
+  Given shape ← sphere()
+  When divide(shape, 1)
+  Then shape is a sphere

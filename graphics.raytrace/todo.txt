@@ -11,3 +11,9 @@
 - Chapter 10 Patterns - Putting It Together : Radial Gradient Pattern,
 
 - Cancellable : when switching to Java 9+, use takeWhile
+
+
+           Pixels  Percent  Time  Speed pix/ms
+Completed                         
+Remaining
+Total

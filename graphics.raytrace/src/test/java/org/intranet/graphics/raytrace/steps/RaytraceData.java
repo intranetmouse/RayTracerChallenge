@@ -108,6 +108,12 @@ public final class RaytraceData
 		return (TubeLike)shape;
 	}
 
+	private Map<String, List<Shape>> shapeListMap = new HashMap<>();
+	public void putShapeList(String shapeListName, List<Shape> shapes)
+	{ shapeListMap.put(shapeListName, shapes); }
+	public List<Shape> getShapeList(String shapeListName)
+	{ return shapeListMap.get(shapeListName); }
+
 	private Map<String, Pattern> patternMap = new HashMap<>();
 	public void put(String patternName, Pattern pattern)
 	{ patternMap.put(patternName, pattern); }
@@ -122,7 +128,7 @@ public final class RaytraceData
 
 	private Map<String, IntersectionList> intersectionListsMap = new HashMap<>();
 	public void put(String intersectionListName, IntersectionList ilist)
-	{ intersectionListsMap.put(intersectionListName, ilist); }
+	{ Assert.assertNotNull(ilist); intersectionListsMap.put(intersectionListName, ilist); }
 	public IntersectionList getIntersectionList(String intersectionListName)
 	{ return intersectionListsMap.get(intersectionListName); }
 

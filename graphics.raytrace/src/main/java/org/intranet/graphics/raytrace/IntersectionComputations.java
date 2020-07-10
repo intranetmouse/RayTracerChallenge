@@ -88,7 +88,7 @@ public final class IntersectionComputations
 		// precompute some useful values
 		this.point = ray.position(getDistance());
 		this.eyeVector = ray.getDirection().normalize().negate();
-		this.normalVector = getObject().normalAt(point);
+		this.normalVector = getObject().normalAt(point, hit);
 
 		if (normalVector.dot(eyeVector) < 0)
 		{

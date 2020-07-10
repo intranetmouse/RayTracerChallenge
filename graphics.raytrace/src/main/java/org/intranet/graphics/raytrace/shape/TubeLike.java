@@ -77,7 +77,7 @@ public abstract class TubeLike
 	}
 
 	@Override
-	protected final Vector localNormalAt(Point point)
+	protected final Vector localNormalAt(Point point, Intersection intersection)
 	{
 		// compute the square of the distance from the y axis
 		double pointX = point.getX();

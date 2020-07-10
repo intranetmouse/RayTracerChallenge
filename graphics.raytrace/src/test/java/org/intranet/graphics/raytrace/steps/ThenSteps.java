@@ -15,6 +15,7 @@ import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.primitive.Vector;
 import org.intranet.graphics.raytrace.shape.BoundingBox;
 import org.intranet.graphics.raytrace.shape.Cylinder;
+import org.intranet.graphics.raytrace.shape.Group;
 import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
@@ -216,6 +217,13 @@ public class ThenSteps
 	@Then("{identifier}.count = {int}")
 	public void assertCountEqualsInt(String objectName, int expectedValue)
 	{
+		Shape shape = data.getShape(objectName);
+		if (shape != null)
+		{
+			Group g = (Group)shape;
+			Assert.assertEquals((int)expectedValue, g.getChildren().size());
+			return;
+		}
 		IntersectionList intersectionList = data.getIntersectionList(objectName);
 		if (intersectionList == null)
 			Assert.fail("Unrecognized object Name " + objectName);

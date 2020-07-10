@@ -52,6 +52,7 @@ public final class PlaneSteps
 		Ray ray = data.getRay(rayName);
 		Shape shape = data.getShape(shapeName);
 		IntersectionList ilist = shape.intersections(ray);
+System.out.println("PlaneSteps local_intersect adding IntersectionList named " + intersectionsName);
 		data.put(intersectionsName, ilist);
 	}
 

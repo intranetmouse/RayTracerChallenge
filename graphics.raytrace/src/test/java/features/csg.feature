@@ -77,3 +77,50 @@ Scenario: A ray hits a CSG object
     And xs[0].object = s1
     And xs[1].t = 6.5
     And xs[1].object = s2
+
+# From bounding boxes bonus chapter, section 1.5
+Scenario: A CSG shape has a bounding box that contains its children
+  Given left ← sphere()
+    And right ← sphere() with:
+      | transform | translation(2, 3, 4) |
+    And shape ← csg("difference", left, right)
+  When box ← bounds_of(shape)
+  Then box.min = point(-1, -1, -1)
+    And box.max = point(3, 4, 5)
+
+# From bounding boxes bonus chapter, section 1.5
+Scenario: Intersecting ray+csg doesn't test children if box is missed
+  Given left ← test_shape()
+    And right ← test_shape()
+    And shape ← csg("difference", left, right)
+    And r ← ray(point(0, 0, -5), vector(0, 1, 0))
+  When xs ← intersect(shape, r)
+  Then left.saved_ray is unset
+    And right.saved_ray is unset
+
+Scenario: Intersecting ray+csg tests children if box is hit
+  Given left ← test_shape()
+    And right ← test_shape()
+    And shape ← csg("difference", left, right)
+    And r ← ray(point(0, 0, -5), vector(0, 0, 1))
+  When xs ← intersect(shape, r)
+  Then left.saved_ray is set
+    And right.saved_ray is set
+
+Scenario: Subdividing a CSG shape subdivides its children
+  Given s1 ← sphere() with:
+      | transform | translation(-1.5, 0, 0) |
+    And s2 ← sphere() with:
+      | transform | translation(1.5, 0, 0) |
+    And left ← group() of [s1, s2]
+    And s3 ← sphere() with:
+      | transform | translation(0, 0, -1.5) |
+    And s4 ← sphere() with:
+      | transform | translation(0, 0, 1.5) |
+    And right ← group() of [s3, s4]
+    And shape ← csg("difference", left, right)
+  When divide(shape, 1)
+  Then left[0] is a group of [s1]
+    And left[1] is a group of [s2]
+    And right[0] is a group of [s3]
+    And right[1] is a group of [s4]

@@ -86,7 +86,7 @@ public final class Cube
 	}
 
 	@Override
-	protected final Vector localNormalAt(Point point)
+	protected final Vector localNormalAt(Point point, Intersection intersection)
 	{
 		double maxc = Math.max(Math.max(Math.abs(point.getX()), Math.abs(point.getY())), Math.abs(point.getZ()));
 

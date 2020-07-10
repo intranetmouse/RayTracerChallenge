@@ -112,25 +112,15 @@ public class ShapeSteps extends StepsParent
 
 	@Whens({
 		@When("{identifier} ← normal_at\\({identifier}, {point})"),
-		@When("{identifier} ← normal_at\\({identifier}, {pointNSS})")
+		@When("{identifier} ← normal_at\\({identifier}, {pointNSS})"),
+		@When("{identifier} ← normal_at\\({identifier}, {pointSSS})")
 	})
-	public void n_normal_at_s_point(String normalVectorName, String sphereName,
+	public void setNormalAt_s_point(String normalVectorName, String sphereName,
 		Point point)
 	{
 		Shape obj = data.getShape(sphereName);
 
-		Vector normalVector = obj.normalAt(point);
-
-		data.put(normalVectorName, normalVector);
-	}
-
-	@When("{identifier} ← normal_at\\({identifier}, {pointSSS})")
-	public void nNormal_atSPoint(String normalVectorName, String sphereName,
-		Point point)
-	{
-		Shape obj = data.getShape(sphereName);
-
-		Vector normalVector = obj.normalAt(point);
+		Vector normalVector = obj.normalAt(point, null);
 
 		data.put(normalVectorName, normalVector);
 	}

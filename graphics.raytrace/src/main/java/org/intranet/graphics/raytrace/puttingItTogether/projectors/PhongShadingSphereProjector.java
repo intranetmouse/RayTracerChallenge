@@ -82,7 +82,7 @@ public class PhongShadingSphereProjector
 		Intersection hit = ilist.get(0);
 		Point point = ray.position(hit.getDistance());
 		Shape sceneObject = hit.getObject();
-		Vector normalV = sceneObject.normalAt(point);
+		Vector normalV = sceneObject.normalAt(point, hit);
 		Vector eyeV = ray.getDirection().negate();
 
 		Material material = sceneObject.getMaterial();

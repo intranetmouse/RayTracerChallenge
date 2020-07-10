@@ -3,8 +3,6 @@ package org.intranet.graphics.raytrace.steps;
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
-import org.intranet.graphics.raytrace.shape.SmoothTriangle;
-import org.intranet.graphics.raytrace.shape.ThreePoint;
 import org.intranet.graphics.raytrace.shape.Triangle;
 import org.junit.Assert;
 
@@ -35,9 +33,9 @@ public class TriangleSteps
 	{
 		Point expectedPoint = data.getPoint(expectedPointName);
 		Shape shape = data.getShape(triangleName);
-		if (shape instanceof ThreePoint)
+		if (shape instanceof Triangle)
 		{
-			ThreePoint triangle = (ThreePoint)shape;
+			Triangle triangle = (Triangle)shape;
 			Point actualPoint = triangle.getP1();
 			Assert.assertEquals(expectedPoint, actualPoint);
 			return;
@@ -50,9 +48,9 @@ public class TriangleSteps
 	{
 		Point expectedPoint = data.getPoint(expectedPointName);
 		Shape shape = data.getShape(triangleName);
-		if (shape instanceof ThreePoint)
+		if (shape instanceof Triangle)
 		{
-			ThreePoint triangle = (ThreePoint)shape;
+			Triangle triangle = (Triangle)shape;
 			Point actualPoint = triangle.getP2();
 			Assert.assertEquals(expectedPoint, actualPoint);
 			return;
@@ -65,9 +63,9 @@ public class TriangleSteps
 	{
 		Point expectedPoint = data.getPoint(expectedPointName);
 		Shape shape = data.getShape(triangleName);
-		if (shape instanceof ThreePoint)
+		if (shape instanceof Triangle)
 		{
-			ThreePoint triangle = (ThreePoint)shape;
+			Triangle triangle = (Triangle)shape;
 			Point actualPoint = triangle.getP3();
 			Assert.assertEquals(expectedPoint, actualPoint);
 			return;

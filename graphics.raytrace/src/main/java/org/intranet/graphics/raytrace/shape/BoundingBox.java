@@ -79,6 +79,14 @@ public class BoundingBox
 		return containsPoint(otherBox.getMin()) && containsPoint(otherBox.getMax());
 	}
 
+	public boolean overlapsBox(BoundingBox otherBox)
+	{
+		return
+			min.getX() < otherBox.max.getX() && otherBox.min.getX() < max.getX() &&
+			min.getY() < otherBox.max.getY() && otherBox.min.getY() < max.getY() &&
+			min.getZ() < otherBox.max.getZ() && otherBox.min.getZ() < max.getZ();
+	}
+
 	public BoundingBox transform(Matrix mtx)
 	{
 		List<Point> points = Arrays.asList(
@@ -143,6 +151,36 @@ public class BoundingBox
 		}
 
 		return new Pair<Double>(tmin, tmax);
+	}
+
+	public Pair<BoundingBox> split()
+	{
+		Vector diff = max.subtract(min);
+		Point midMin = min;
+		Point midMax = max;
+		double greatest = Math.max(diff.getX(), Math.max(diff.getY(), diff.getZ()));
+
+		if (greatest == diff.getX())
+		{
+			double midx = min.getX() + diff.getX() / 2;
+			midMin = new Point(midx, midMin.getY(), midMin.getZ());
+			midMax = new Point(midx, midMax.getY(), midMax.getZ());
+		}
+		else if (greatest == diff.getY())
+		{
+			double midy = min.getY() + diff.getY() / 2;
+			midMin = new Point(midMin.getX(), midy, midMin.getZ());
+			midMax = new Point(midMax.getX(), midy, midMax.getZ());
+		}
+		else if (greatest == diff.getZ())
+		{
+			double midz = min.getZ() + diff.getZ() / 2;
+			midMin = new Point(midMin.getX(), midMin.getY(), midz);
+			midMax = new Point(midMax.getX(), midMax.getY(), midz);
+		}
+		BoundingBox left = new BoundingBox(min, midMax);
+		BoundingBox right = new BoundingBox(midMin, max);
+		return new Pair<>(left, right);
 	}
 
 	@Override

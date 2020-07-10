@@ -4,6 +4,7 @@ import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.shape.BoundingBox;
+import org.intranet.graphics.raytrace.shape.Cube.Pair;
 import org.junit.Assert;
 
 import io.cucumber.java.en.Given;
@@ -69,5 +70,25 @@ public final class BoundingBoxSteps
 		Ray ray = data.getRay(rayName);
 
 		Assert.assertEquals(expectedResult, box.intersects(ray));
+	}
+
+	@When("{identifier} ← parent_space_bounds_of\\({identifier})")
+	public void boxParent_space_bounds_ofShape(String boundingBoxName, String shapeName)
+	{
+		Shape s = data.getShape(shapeName);
+
+		BoundingBox box = s.getParentSpaceBounds();
+
+		data.put(boundingBoxName, box);
+	}
+
+	@When("\\({identifier}, {identifier}) ← split_bounds\\({identifier})")
+	public void leftRightSplit_boundsBox(String firstBoxName, String secondBoxName, String originalBoxName)
+	{
+		BoundingBox originalBox = data.getBoundingBox(originalBoxName);
+
+		Pair<BoundingBox> split = originalBox.split();
+		data.put(firstBoxName, split.getFirst());
+		data.put(secondBoxName, split.getSecond());
 	}
 }

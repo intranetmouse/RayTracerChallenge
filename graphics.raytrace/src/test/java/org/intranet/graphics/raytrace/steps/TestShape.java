@@ -1,5 +1,6 @@
 package org.intranet.graphics.raytrace.steps;
 
+import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.primitive.Point;
@@ -16,7 +17,7 @@ public final class TestShape
 	}
 
 	@Override
-	protected Vector localNormalAt(Point point)
+	protected Vector localNormalAt(Point point, Intersection intersection)
 	{
 		return new Vector(point.getX(), point.getY(), point.getZ());
 	}

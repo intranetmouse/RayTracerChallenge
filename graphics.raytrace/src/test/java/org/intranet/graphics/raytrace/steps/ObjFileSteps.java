@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.persistence.ObjFileParser;
 import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.primitive.Vector;
 import org.intranet.graphics.raytrace.shape.Group;
 import org.intranet.graphics.raytrace.shape.Triangle;
 import org.junit.Assert;
@@ -42,7 +43,6 @@ public class ObjFileSteps
 		List<String> stringList = data.getStringList(stringListName);
 
 		ObjFileParser parser = new ObjFileParser(stringList);
-System.out.println("creating parser named " + objFileParseName + " = " + parser);
 
 		data.put(objFileParseName, parser);
 	}
@@ -68,9 +68,7 @@ System.out.println("creating parser named " + objFileParseName + " = " + parser)
 	public void setParserVertexNEqPoint(String groupName, String objParserName)
 	{
 		ObjFileParser parser = data.getObjParser(objParserName);
-System.out.println("getting parser " + objParserName+", result="+parser);
 		Group group = parser.getDefaultGroup();
-System.out.println("putting default group into " + groupName + ", default="+group);
 		data.put(groupName, group);
 	}
 
@@ -96,9 +94,7 @@ System.out.println("putting default group into " + groupName + ", default="+grou
 		int idx)
 	{
 		Group g = (Group)data.getShape(groupName);
-System.out.println("getting groupName="+groupName);
 		List<Shape> groupChildren = g.getChildren();
-System.out.println("# group children="+groupChildren.size());
 		Triangle t = (Triangle)groupChildren.get(idx);
 		data.put(triangleName, t);
 	}
@@ -158,5 +154,53 @@ System.out.println("# group children="+groupChildren.size());
 		Group parserGroup = parser.getGroup(groupName);
 
 		Assert.assertEquals(testGroup, parserGroup);
+	}
+
+	@Then("{identifier}.normals[{int}] = {vector}")
+	public void parserNormalsVector(String objParserName, int index,
+		Vector expectedValue)
+	{
+		ObjFileParser parser = data.getObjParser(objParserName);
+		Vector actualNormal = parser.getNormal1(index);
+		Assert.assertEquals(expectedValue, actualNormal);
+	}
+
+	@Then("{identifier}.n1 = {identifier}.normals[{int}]")
+	public void t1N1ParserNormals(String triangleName, String objParserName,
+		int index)
+	{
+		ObjFileParser parser = data.getObjParser(objParserName);
+		Vector expectedNormal = parser.getNormal1(index);
+
+		Triangle t = (Triangle)data.getShape(triangleName);
+		Vector actualNormal = t.getN1();
+
+		Assert.assertEquals(expectedNormal, actualNormal);
+	}
+
+	@Then("{identifier}.n2 = {identifier}.normals[{int}]")
+	public void t1N2ParserNormals(String triangleName, String objParserName,
+		int index)
+	{
+		ObjFileParser parser = data.getObjParser(objParserName);
+		Vector expectedNormal = parser.getNormal1(index);
+
+		Triangle t = (Triangle)data.getShape(triangleName);
+		Vector actualNormal = t.getN2();
+
+		Assert.assertEquals(expectedNormal, actualNormal);
+	}
+
+	@Then("{identifier}.n3 = {identifier}.normals[{int}]")
+	public void t1N3ParserNormals(String triangleName, String objParserName,
+		int index)
+	{
+		ObjFileParser parser = data.getObjParser(objParserName);
+		Vector expectedNormal = parser.getNormal1(index);
+
+		Triangle t = (Triangle)data.getShape(triangleName);
+		Vector actualNormal = t.getN3();
+
+		Assert.assertEquals(expectedNormal, actualNormal);
 	}
 }

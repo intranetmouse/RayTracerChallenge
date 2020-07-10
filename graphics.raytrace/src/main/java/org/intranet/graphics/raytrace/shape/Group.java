@@ -1,6 +1,7 @@
 package org.intranet.graphics.raytrace.shape;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ import org.intranet.graphics.raytrace.ShapeParent;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.shape.Cube.Pair;
 
 public final class Group
 	extends Shape
@@ -36,7 +38,7 @@ public final class Group
 	}
 
 	@Override
-	protected Vector localNormalAt(Point point)
+	protected Vector localNormalAt(Point point, Intersection intersection)
 	{
 		throw new IllegalStateException("See Ch. 14 p. 200.");
 	}
@@ -84,5 +86,63 @@ public final class Group
 		for (Shape child : children)
 			shape.addChild(child.deepCopy());
 		return shape;
+	}
+
+	public Pair<List<Shape>> partitionChildren()
+	{
+		List<Shape> leftList = new ArrayList<>();
+		List<Shape> rightList = new ArrayList<>();
+		List<Shape> newChildrenList = new ArrayList<>();
+
+		BoundingBox box = getBoundingBox();
+		Pair<BoundingBox> twoBoxes = box.split();
+		for (Shape child : children)
+		{
+			BoundingBox childBox = child.getParentSpaceBounds();
+			boolean left = twoBoxes.getFirst().containsBox(childBox);
+			boolean right = twoBoxes.getSecond().containsBox(childBox);
+			if (left && !right)
+				leftList.add(child);
+			else if (right && !left)
+				rightList.add(child);
+			else
+				newChildrenList.add(child);
+		}
+		children.clear();
+		children.addAll(newChildrenList);
+
+		return new Pair<>(leftList, rightList);
+	}
+
+	public void createSubgroup(Shape ... shapes)
+	{
+		createSubgroup(Arrays.asList(shapes));
+	}
+
+	public void createSubgroup(List<Shape> shapes)
+	{
+		Group sub = new Group();
+		for (Shape shape : shapes)
+			sub.addChild(shape);
+		addChild(sub);
+	}
+
+	@Override
+	public void divide(int threshold)
+	{
+		int numChildren = children.size();
+		if (numChildren >= threshold)
+		{
+			Pair<List<Shape>> branches = partitionChildren();
+			List<Shape> left = branches.getFirst();
+			List<Shape> right = branches.getSecond();
+			if (left != null && !left.isEmpty())
+				createSubgroup(left);
+			if (right != null && !right.isEmpty())
+				createSubgroup(right);
+		}
+
+		for (Shape child : children)
+			child.divide(threshold);
 	}
 }

@@ -76,3 +76,56 @@ Scenario: Intersecting ray+group tests children if box is hit
     And r ← ray(point(0, 0, -5), vector(0, 0, 1))
   When xs ← intersect(shape, r)
   Then child.saved_ray is set
+
+Scenario: Partitioning a group's children
+  Given s1 ← sphere() with:
+      | transform | translation(-2, 0, 0) |
+    And s2 ← sphere() with:
+      | transform | translation(2, 0, 0) |
+    And s3 ← sphere()
+    And g ← group() of [s1, s2, s3]
+  When (left, right) ← partition_children(g)
+  Then g is a group of [s3]
+    And left = [s1]
+    And right = [s2]
+
+Scenario: Creating a sub-group from a list of children
+  Given s1 ← sphere()
+    And s2 ← sphere()
+    And g ← group()
+  When make_subgroup(g, [s1, s2])
+  Then g.count = 1
+    And g[0] is a group of [s1, s2]
+
+Scenario: Subdividing a group partitions its children
+  Given s1 ← sphere() with:
+      | transform | translation(-2, -2, 0) |
+    And s2 ← sphere() with:
+      | transform | translation(-2, 2, 0) |
+    And s3 ← sphere() with:
+      | transform | scaling(4, 4, 4) |
+    And g ← group() of [s1, s2, s3]
+  When divide(g, 1)
+  Then g[0] = s3
+    And subgroup ← g[1]
+    And subgroup is a group
+    And subgroup.count = 2
+    And subgroup[0] is a group of [s1]
+    And subgroup[1] is a group of [s2]
+
+Scenario: Subdividing a group with too few children
+  Given s1 ← sphere() with:
+      | transform | translation(-2, 0, 0) |
+    And s2 ← sphere() with:
+      | transform | translation(2, 1, 0) |
+    And s3 ← sphere() with:
+      | transform | translation(2, -1, 0) |
+    And subgroup ← group() of [s1, s2, s3]
+    And s4 ← sphere()
+    And g ← group() of [subgroup, s4]
+  When divide(g, 3)
+  Then g[0] = subgroup
+    And g[1] = s4
+    And subgroup.count = 2
+    And subgroup[0] is a group of [s1]
+    And subgroup[1] is a group of [s2, s3]

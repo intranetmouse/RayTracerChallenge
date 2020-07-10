@@ -13,11 +13,11 @@ import org.intranet.graphics.raytrace.surface.Pattern;
 public abstract class Shape
 	implements Transformable
 {
-	public final Vector normalAt(Point worldPoint)
+	public final Vector normalAt(Point worldPoint, Intersection hit)
 	{
 		Point localPoint = worldToObject(worldPoint);
 
-		Vector localNormalVector = localNormalAt(localPoint);
+		Vector localNormalVector = localNormalAt(localPoint, hit);
 
 		return normalToWorld(localNormalVector);
 	}
@@ -47,11 +47,11 @@ public abstract class Shape
 	public Ray getSavedRay() { return savedRay; }
 
 	public abstract IntersectionList localIntersections(Ray ray);
-	protected abstract Vector localNormalAt(Point point);
+	protected abstract Vector localNormalAt(Point point, Intersection intersection);
 
 	public final Vector testLocalNormalAt(Point p)
 	{
-		return localNormalAt(p);
+		return localNormalAt(p, null);
 	}
 
 	private Material material = new Material();
@@ -123,6 +123,11 @@ public abstract class Shape
 		transform = other.transform.inverse().inverse();
 		// Rays are immutable
 		savedRay = other.savedRay;
+	}
+
+	public void divide(int subdivisions)
+	{
+		return;
 	}
 
 	public abstract Shape deepCopy();

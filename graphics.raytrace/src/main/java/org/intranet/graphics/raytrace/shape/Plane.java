@@ -26,7 +26,7 @@ public final class Plane
 
 	private static final Vector LOCAL_NORMAL = new Vector(0, 1, 0);
 	@Override
-	protected final Vector localNormalAt(Point point)
+	protected final Vector localNormalAt(Point point, Intersection intersection)
 	{
 		return LOCAL_NORMAL;
 	}

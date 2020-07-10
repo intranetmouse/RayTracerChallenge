@@ -45,7 +45,7 @@ public final class Sphere
 	}
 
 	@Override
-	protected Vector localNormalAt(Point point)
+	protected Vector localNormalAt(Point point, Intersection intersection)
 	{
 		return point.subtract(new Point(0, 0, 0));
 	}
