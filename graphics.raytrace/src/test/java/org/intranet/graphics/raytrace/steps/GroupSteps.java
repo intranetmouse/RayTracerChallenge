@@ -5,6 +5,7 @@ import java.util.List;
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.shape.Cube.Pair;
 import org.intranet.graphics.raytrace.shape.Group;
+import org.intranet.graphics.raytrace.shape.Sphere;
 import org.junit.Assert;
 
 import io.cucumber.java.en.Given;
@@ -116,7 +117,7 @@ public class GroupSteps
 	@When("divide\\({identifier}, {int})")
 	public void divideGroupNTimes(String groupName, Integer numDivisions)
 	{
-		Group g = (Group)data.getShape(groupName);
+		Shape g = data.getShape(groupName);
 
 		g.divide(numDivisions);
 	}
@@ -144,9 +145,15 @@ public class GroupSteps
 	}
 
 	@Then("{identifier} is a group")
-	public void subgroupIsAGroup(String shapeName)
+	public void shapeIsAGroup(String shapeName)
 	{
 		Group g = (Group)data.getShape(shapeName);
+	}
+
+	@Then("{identifier} is a sphere")
+	public void shapeIsASphere(String shapeName)
+	{
+		Sphere g = (Sphere)data.getShape(shapeName);
 	}
 
 	@Then("{identifier}[{int}] is a group of [{identifier}]")
