@@ -310,7 +310,7 @@ public class CustomParameters
 		return Matrix.shearing(xy, xz, yx, yz, zx, zy);
 	}
 
-	@ParameterType("(rotation_x|rotation_y|rotation_z)\\(π[\s ]*\\/[\s ]*" + doublePattern + "\\)")
+	@ParameterType("(rotation_x|rotation_y|rotation_z)\\(π[\\s ]*\\/[\\s ]*" + doublePattern + "\\)")
 	public Matrix matrixRotationPiDiv(String type, String denomAmt)
 	{
 		double denom = Double.valueOf(denomAmt);
