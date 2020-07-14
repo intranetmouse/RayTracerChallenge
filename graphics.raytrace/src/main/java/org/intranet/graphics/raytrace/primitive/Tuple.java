@@ -69,8 +69,16 @@ public class Tuple
 	}
 
 	private static final int DEC = 4;
+	String str;
 	@Override
 	public String toString()
+	{
+		if (str == null)
+			str = calcStr();
+		return str;
+	}
+
+	private String calcStr()
 	{
 		return String.format("%s(%." + DEC + "f,%." + DEC + "f,%." + DEC + "f[,%." + DEC + "f])",
 			getClass().getSimpleName(),

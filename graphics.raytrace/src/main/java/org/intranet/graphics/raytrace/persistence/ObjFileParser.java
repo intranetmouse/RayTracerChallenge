@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
@@ -68,6 +69,19 @@ public final class ObjFileParser
 	{
 		groups.put(DEFAULT_GROUP, currentGroup);
 	}
+	public ObjFileParser(Stream<String> stringList)
+	{
+		this();
+
+		Instant startInstant = Instant.now();
+
+		parserStringList(stringList);
+
+		Instant endInstant = Instant.now();
+
+		Duration d = Duration.between(startInstant, endInstant);
+		System.out.println("Parsing time="+d);
+	}
 	public ObjFileParser(List<String> stringList)
 	{
 		this();
@@ -84,8 +98,11 @@ public final class ObjFileParser
 
 	public void parserStringList(List<String> stringList)
 	{
-		for (String str : stringList)
-		{
+		parserStringList(stringList.stream());
+	}
+	public void parserStringList(Stream<String> stringList)
+	{
+		stringList.forEach(str -> {
 			String[] parts = str.split("[ ]+");
 			String command = parts[0];
 			switch (command)
@@ -150,7 +167,7 @@ public final class ObjFileParser
 				default:
 					ignoredLines++;
 			}
-		}
+		});
 	}
 
 	public static String removeTextureAndNormals(String s)

@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.intranet.graphics.raytrace.Camera;
 import org.intranet.graphics.raytrace.Shape;
@@ -278,7 +279,7 @@ public class YamlWorldParser
 				try (FileReader fr = new FileReader(file);
 					BufferedReader br = new BufferedReader(fr);)
 				{
-					List<String> lines = br.lines().collect(Collectors.toList());
+					Stream<String> lines = br.lines();
 					ObjFileParser parser = new ObjFileParser(lines);
 					Shape shape = parser.getGroup();
 					processShapeProperties(world, objMap, materialDefines,

@@ -55,7 +55,13 @@ public class SceneTree
 	public void setWorld(World world)
 	{
 		treeMdl.setWorld(world);
+		expandTreeToDepth(4);
+	}
+
+	private void expandTreeToDepth(int expandDepth)
+	{
 		for (int i = 0; i < jtree.getRowCount(); i++)
-			jtree.expandRow(i);
+			if (jtree.getPathForRow(i).getPath().length <= expandDepth)
+				jtree.expandRow(i);
 	}
 }
