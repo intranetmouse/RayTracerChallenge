@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -28,6 +29,7 @@ import org.intranet.graphics.raytrace.shape.Group;
 import org.intranet.graphics.raytrace.shape.Plane;
 import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.shape.Sphere;
+import org.intranet.graphics.raytrace.shape.Triangle;
 import org.intranet.graphics.raytrace.shape.TubeLike;
 import org.intranet.graphics.raytrace.surface.CheckerPattern;
 import org.intranet.graphics.raytrace.surface.Color;
@@ -50,7 +52,7 @@ public class YamlWorldParser
 
 	public YamlWorldParser(InputStream ymlStream, File relativeFolder)
 	{
-		World world = new World();
+		defineFir();
 
 		try (InputStreamReader ymlReader = new InputStreamReader(ymlStream))
 		{
@@ -84,6 +86,98 @@ public class YamlWorldParser
 		{
 			e.printStackTrace();
 		}
+	}
+
+	private void defineFir()
+	{
+		// the length of the branch
+		double length = 2.0;
+
+		// the radius of the branch
+		double radius = 0.025;
+
+		// how many groups of needles cover the branch
+		int segments = 20;
+
+		// how needles per group, or segment
+		int per_segment = 24;
+
+		// the branch itself, just a cylinder
+		Cylinder branch = new Cylinder();
+		branch.setMinimum(0);
+		branch.setMaximum(length);
+		branch.setClosed(true);
+		branch.setTransform(Matrix.newScaling(radius, 1, radius));
+		Material branchMaterial = new Material();
+		branchMaterial.setColor(new Color(0.5, 0.35, 0.26));
+		branchMaterial.setAmbient(0.2);
+		branchMaterial.setSpecular(0.0);
+		branchMaterial.setDiffuse(0.6);
+		branch.setMaterial(branchMaterial);
+
+		// how much branch each segment gets
+		double seg_size = 1.0 * length / (segments - 1);
+
+		// the radial distance, in radians, between adjacent needles
+		// in a group
+		double theta = 2.1 * Math.PI / per_segment;
+
+		// the maximum length of each needle
+		double max_length = 20.0 * radius;
+
+		// the group that will contain the branch and all needles
+		Group object = new Group();
+		object.addChild(branch);
+
+		for (int y = 0; y < segments; y++)
+		{
+			// create a subgroup for each segment of needles
+			Group subgroup = new Group();
+
+			for (int i = 0; i < per_segment; i++)
+			{
+				// each needle is a triangle.
+				// y_base y coordinate of the base of the triangle
+				double y_base = seg_size * y + rand() * seg_size;
+
+				// y_tip is the y coordinate of the tip of the triangle
+				double y_tip = y_base - rand() * seg_size;
+
+				// y_angle is angle (in radians) that the needle should be
+				// rotated around the branch.
+				double y_angle = i * theta + rand() * theta;
+
+				// how long is the needle?
+				double needle_length = max_length / 2 * (1 + rand());
+
+				// how much is the needle offset from the center of the branch?
+				double ofs = radius / 2;
+
+				// the three points of the triangle that form the needle
+				Point p1 = new Point(ofs, y_base, ofs);
+				Point p2 = new Point(-ofs, y_base, ofs);
+				Point p3 = new Point(0.0, y_tip, needle_length);
+
+				// create, transform, and texture the needle
+				Triangle tri = new Triangle(p1, p2, p3);
+				tri.setTransform(Matrix.newRotationY(y_angle));
+				Material triMaterial = new Material();
+				triMaterial.setColor(new Color(0.26, 0.36, 0.16));
+				triMaterial.setSpecular(0.1);
+
+				subgroup.addChild(tri);
+			}
+
+			object.addChild(subgroup);
+		}
+
+		shapeDefines.put("fir_branch", object);
+	}
+
+	private Random r = new Random(System.currentTimeMillis());
+	private double rand()
+	{
+		return r.nextDouble();
 	}
 
 	private void define(World world, Map<String, Object> defineMap,

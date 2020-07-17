@@ -1,5 +1,7 @@
 - On render, fill in blocks with center color
-- Implement the christmas.yml fir_branch object
+- Save as GIF/PNG/JPG
+- Resurrect render to GIF
+- Make group subdivision threshold a property
 
 - Property browser
 
@@ -24,4 +26,5 @@ Total
 - DONE Chapter 14 Groups - Using Bounding Boxes to Optimize Large Scenes
 - DONE Chapter 14 Groups / Bonus: Performance on load with bounding-boxes.yml
 - DONE Bonus Bounding Boxes: Part 2 - BVH
-- DONE Make Parser a stateful object
+- DONE 2020-07-17 Make Parser a stateful object
+- DONE 2020-07-17 Implement the christmas.yml fir_branch object
