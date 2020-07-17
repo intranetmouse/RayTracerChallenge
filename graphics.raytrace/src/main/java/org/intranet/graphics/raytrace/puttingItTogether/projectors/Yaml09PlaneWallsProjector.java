@@ -20,7 +20,7 @@ public final class Yaml09PlaneWallsProjector
 		InputStream ymlStream = getClass().getResourceAsStream(
 			ballsPlaneWallsYml);
 		File parentFolder = new File(getClass().getResource(ballsPlaneWallsYml).getFile()).getParentFile();
-		YamlWorldParser parser = new YamlWorldParser();
-		world = parser.parse(ymlStream, parentFolder);
+		YamlWorldParser parser = new YamlWorldParser(ymlStream, parentFolder);
+		world = parser.getWorld();
 	}
 }

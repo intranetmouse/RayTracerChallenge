@@ -20,7 +20,7 @@ public final class Yaml08PuppetProjector
 		InputStream ymlStream = getClass().getResourceAsStream(
 			puppetsYml);
 		File parentFolder = new File(getClass().getResource(puppetsYml).getFile()).getParentFile();
-		YamlWorldParser parser = new YamlWorldParser();
-		world = parser.parse(ymlStream, parentFolder);
+		YamlWorldParser parser = new YamlWorldParser(ymlStream, parentFolder);
+		world = parser.getWorld();
 	}
 }

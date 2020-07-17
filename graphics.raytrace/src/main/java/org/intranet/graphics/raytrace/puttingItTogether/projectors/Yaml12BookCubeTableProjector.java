@@ -19,8 +19,8 @@ public final class Yaml12BookCubeTableProjector
 		String tableYml = "/org/intranet/graphics/raytrace/yml/table.yml";
 		InputStream ymlStream = getClass().getResourceAsStream(
 			tableYml);
-		YamlWorldParser parser = new YamlWorldParser();
 		File parentFolder = new File(getClass().getResource(tableYml).getFile()).getParentFile();
-		world = parser.parse(ymlStream, parentFolder);
+		YamlWorldParser parser = new YamlWorldParser(ymlStream, parentFolder);
+		world = parser.getWorld();
 	}
 }

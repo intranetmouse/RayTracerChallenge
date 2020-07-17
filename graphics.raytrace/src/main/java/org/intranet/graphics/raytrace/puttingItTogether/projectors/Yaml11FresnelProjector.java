@@ -19,8 +19,8 @@ public final class Yaml11FresnelProjector
 		String refractFresnelYml = "/org/intranet/graphics/raytrace/yml/11c-refract-fresnel.yml";
 		InputStream ymlStream = getClass().getResourceAsStream(
 			refractFresnelYml);
-		YamlWorldParser parser = new YamlWorldParser();
 		File parentFolder = new File(getClass().getResource(refractFresnelYml).getFile()).getParentFile();
-		world = parser.parse(ymlStream, parentFolder);
+		YamlWorldParser parser = new YamlWorldParser(ymlStream, parentFolder);
+		world = parser.getWorld();
 	}
 }

@@ -17,13 +17,12 @@ public class YamlTest
 	@Test
 	public void testGroups()
 	{
-		YamlWorldParser parser = new YamlWorldParser();
-
-		InputStream ymlStream = parser.getClass()
+		InputStream ymlStream = YamlTest.class
 			.getResourceAsStream(Yaml14BookGroupProjector.GROUP_YML);
-		String fileName = parser.getClass().getResource(Yaml14BookGroupProjector.GROUP_YML).getFile();
+		String fileName = YamlTest.class.getResource(Yaml14BookGroupProjector.GROUP_YML).getFile();
 		File relativePath = new File(fileName).getParentFile();
-		World w = parser.parse(ymlStream, relativePath);
+		YamlWorldParser parser = new YamlWorldParser(ymlStream, relativePath);
+		World w = parser.getWorld();
 
 		Assert.assertNotNull(w);
 

@@ -16,7 +16,6 @@ import org.junit.Test;
 
 public class PersistenceTest
 {
-	private final YamlWorldParser parser = new YamlWorldParser();
 	private final File defaultDirectory = new File(getClass().getResource(
 		"/org/intranet/graphics/raytrace/yml/reflect-refract.yml").getFile()).getParentFile();
 
@@ -186,7 +185,7 @@ public class PersistenceTest
 	{
 		File file = new File(defaultDirectory, yamlName);
 		FileInputStream ymlStream = new FileInputStream(file);
-		World world = parser.parse(ymlStream, defaultDirectory);
-		return world;
+		YamlWorldParser parser = new YamlWorldParser(ymlStream, defaultDirectory);
+		return parser.getWorld();
 	}
 }

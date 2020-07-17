@@ -24,7 +24,6 @@ public final class SceneDocument
 	public World getWorld() { return world; }
 
 	private List<Action> docActions = new ArrayList<>();
-	private final YamlWorldParser parser = new YamlWorldParser();
 
 	private File file;
 
@@ -46,7 +45,8 @@ public final class SceneDocument
 	private void loadWorld()
 		throws FileNotFoundException
 	{
-		world = parser.parse(new FileInputStream(file), file.getParentFile());
+		YamlWorldParser parser = new YamlWorldParser(new FileInputStream(file), file.getParentFile());
+		world = parser.getWorld();
 	}
 
 	@Override

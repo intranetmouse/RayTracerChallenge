@@ -19,8 +19,8 @@ public final class Yaml11RefractSphereProjector
 		String refractGlassSphereYml = "/org/intranet/graphics/raytrace/yml/11b-refract-glass-sphere.yml";
 		InputStream ymlStream = getClass().getResourceAsStream(
 			refractGlassSphereYml);
-		YamlWorldParser parser = new YamlWorldParser();
 		File parentFolder = new File(getClass().getResource(refractGlassSphereYml).getFile()).getParentFile();
-		world = parser.parse(ymlStream, parentFolder);
+		YamlWorldParser parser = new YamlWorldParser(ymlStream, parentFolder);
+		world = parser.getWorld();
 	}
 }

@@ -1,10 +1,12 @@
+- On render, fill in blocks with center color
+- Implement the christmas.yml fir_branch object
+
 - Property browser
 
 - Create a file to test patterns in groups
 - Chapter 10 Patterns - Putting It Together : Nested Patterns (Convert Color to a pattern)
 - Chapter 10 Patterns - Putting It Together : Blended Patterns
 - Chapter 10 Patterns - Putting It Together : Radial Gradient Pattern,
-- Implement the christmas.yml fir_branch object
 
 - Cancellable : when switching to Java 9+, use takeWhile
 
@@ -22,3 +24,4 @@ Total
 - DONE Chapter 14 Groups - Using Bounding Boxes to Optimize Large Scenes
 - DONE Chapter 14 Groups / Bonus: Performance on load with bounding-boxes.yml
 - DONE Bonus Bounding Boxes: Part 2 - BVH
+- DONE Make Parser a stateful object

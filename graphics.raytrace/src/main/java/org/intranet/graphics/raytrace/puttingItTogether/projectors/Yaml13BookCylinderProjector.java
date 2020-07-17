@@ -19,8 +19,8 @@ public final class Yaml13BookCylinderProjector
 		String cylindersYml = "/org/intranet/graphics/raytrace/yml/cylinders.yml";
 		InputStream ymlStream = getClass().getResourceAsStream(
 			cylindersYml);
-		YamlWorldParser parser = new YamlWorldParser();
 		File parentFolder = new File(getClass().getResource(cylindersYml).getFile()).getParentFile();
-		world = parser.parse(ymlStream, parentFolder);
+		YamlWorldParser parser = new YamlWorldParser(ymlStream, parentFolder);
+		world = parser.getWorld();
 	}
 }

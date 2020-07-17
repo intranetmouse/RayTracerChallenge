@@ -41,10 +41,14 @@ import com.esotericsoftware.yamlbeans.YamlReader;
 
 public class YamlWorldParser
 {
-	public YamlWorldParser()
-	{ }
+	Map<String, Material> materialDefines = new HashMap<>();
+	Map<String, Shape> shapeDefines = new HashMap<>();
+	Map<String, Matrix> xformDefines = new HashMap<>();
 
-	public World parse(InputStream ymlStream, File relativeFolder)
+	private World world = new World();
+	public World getWorld() { return world; }
+
+	public YamlWorldParser(InputStream ymlStream, File relativeFolder)
 	{
 		World world = new World();
 
@@ -52,9 +56,6 @@ public class YamlWorldParser
 		{
 			YamlReader reader = new YamlReader(ymlReader);
 
-			Map<String, Material> materialDefines = new HashMap<>();
-			Map<String, Shape> shapeDefines = new HashMap<>();
-			Map<String, Matrix> transformDefines = new HashMap<>();
 			while (true)
 			{
 				@SuppressWarnings({ "unchecked" })
@@ -66,12 +67,11 @@ public class YamlWorldParser
 				{
 					if (paramMap.containsKey("add"))
 					{
-						addObject(world, paramMap, materialDefines, shapeDefines, transformDefines);
+						addObject(world, paramMap);
 					}
 					else if (paramMap.containsKey("define"))
 					{
-						define(world, paramMap, materialDefines, shapeDefines,
-							transformDefines, relativeFolder);
+						define(world, paramMap, relativeFolder);
 					}
 					else
 					{
@@ -84,12 +84,10 @@ public class YamlWorldParser
 		{
 			e.printStackTrace();
 		}
-		return world;
 	}
 
 	private void define(World world, Map<String, Object> defineMap,
-		Map<String, Material> materialDefines, Map<String, Shape> shapeDefines,
-		Map<String, Matrix> transformDefines, File relativeFolder)
+		File relativeFolder)
 			throws FileNotFoundException, IOException
 	{
 		defineMap = new DestructiveHashMap<String, Object>(defineMap);
@@ -98,81 +96,97 @@ public class YamlWorldParser
 		Object valueObj = defineMap.get("value");
 		if (valueObj instanceof List)
 		{
-			@SuppressWarnings("unchecked")
-			List<List<String>> transformList = (List<List<String>>)valueObj;
-			Matrix definedTransform = parseManyXforms(transformList, transformDefines);
-
-			Matrix extendedTransform = transformDefines.get(extendName);
-			if (extendedTransform != null)
-				definedTransform = definedTransform.multiply(extendedTransform);
-			transformDefines.put(defineName, definedTransform);
-			return;
-		}
-
-		@SuppressWarnings("unchecked")
-		Map<String, Object> valueMap = (Map<String, Object>)valueObj;
-		if (valueMap == null)
-		{
-			System.err.println("Missing value for define name=" + defineName);
-			return;
-		}
-		valueMap = new DestructiveHashMap<String, Object>(valueMap);
-
-		String type = (String)valueMap.get("add");
-
-		if ("obj".equals(type))
-		{
-			String file = (String)valueMap.get("file");
-			try (FileReader fr = new FileReader(new File(relativeFolder, file));
-				BufferedReader br = new BufferedReader(fr))
-			{
-				List<String> lines = br.lines().collect(Collectors.toList());
-				ObjFileParser parser = new ObjFileParser(lines);
-				Shape shape = parser.getGroup();
-				processShapeProperties(world, valueMap, materialDefines,
-					shapeDefines, shape, transformDefines);
-				shapeDefines.put(defineName, shape);
-			}
-		}
-		else if (type != null)
-		{
-			Shape s = createShape(type, extendName, world, valueMap,
-				materialDefines, shapeDefines, transformDefines);
-			shapeDefines.put(defineName, s);
-
-			if (valueMap.size() > 0)
-				System.err.printf("Leftovers for define %s, values = %s\n", defineName, valueMap);
+			defineTransform(defineName, extendName, valueObj);
 		}
 		else
 		{
-			Material mat = null;
-			if (extendName == null)
-				mat = new Material();
+			@SuppressWarnings("unchecked")
+			Map<String, Object> valueMap = (Map<String, Object>)valueObj;
+			if (valueMap == null)
+			{
+				System.err.println("Missing value for define name=" + defineName);
+				return;
+			}
+			valueMap = new DestructiveHashMap<String, Object>(valueMap);
+
+			String type = (String)valueMap.get("add");
+
+			if ("obj".equals(type))
+			{
+				defineObj(world, relativeFolder, defineName, valueMap);
+			}
+			else if (type != null)
+			{
+				defineShape(type, extendName, world, valueMap, defineName);
+			}
 			else
 			{
-				mat = materialDefines.get(extendName);
-				if (mat == null)
-				{
-					System.err.printf("Unknown material extend name %s\n", extendName);
-					return;
-				}
-				mat = mat.duplicate();
+				defineMaterial(defineName, extendName, valueMap);
 			}
 
-			if (valueMap != null)
-			{
-				parseRawMaterial(mat, valueMap, transformDefines);
-				// Note: parseRawMaterial does its own values.
-				materialDefines.put(defineName, mat);
-			}
+			if (valueMap.size() > 0)
+				System.err.printf("Leftovers for define %s, values = %s\n", defineName, valueMap);
 		}
 
 		if (defineMap.size() > 0)
 			System.err.printf("Leftovers for define %s = %s\n", defineName, defineMap);
 	}
 
-	private static void parseRawMaterial(Material mat,
-		Map<String, Object> materialMap, Map<String, Matrix> xformDefines)
+	private void defineTransform(String defineName, String extendName,
+		Object valueObj)
+	{
+		@SuppressWarnings("unchecked")
+		List<List<String>> transformList = (List<List<String>>)valueObj;
+		Matrix definedTransform = parseManyXforms(transformList);
+
+		Matrix extendedTransform = xformDefines.get(extendName);
+		if (extendedTransform != null)
+			definedTransform = definedTransform.multiply(extendedTransform);
+		xformDefines.put(defineName, definedTransform);
+	}
+
+	private void defineMaterial(String defineName, String extendName,
+		Map<String, Object> valueMap)
+	{
+		Material mat = null;
+		if (extendName == null)
+			mat = new Material();
+		else
+		{
+			mat = materialDefines.get(extendName);
+			if (mat == null)
+			{
+				System.err.printf("Unknown material extend name %s\n", extendName);
+//						return;
+			}
+			mat = mat.duplicate();
+		}
+
+		if (valueMap != null)
+		{
+			parseRawMaterial(mat, valueMap);
+			// Note: parseRawMaterial does its own values.
+			materialDefines.put(defineName, mat);
+		}
+	}
+
+	private void defineObj(World world, File relativeFolder, String defineName,
+		Map<String, Object> valueMap) throws IOException, FileNotFoundException
+	{
+		String file = (String)valueMap.get("file");
+		try (FileReader fr = new FileReader(new File(relativeFolder, file));
+			BufferedReader br = new BufferedReader(fr))
+		{
+			List<String> lines = br.lines().collect(Collectors.toList());
+			ObjFileParser parser = new ObjFileParser(lines);
+			Shape shape = parser.getGroup();
+			processShapeProperties(world, valueMap, shape);
+			shapeDefines.put(defineName, shape);
+		}
+	}
+
+	private void parseRawMaterial(Material mat,
+		Map<String, Object> materialMap)
 	{
 		materialMap = new DestructiveHashMap<>(materialMap);
 
@@ -251,7 +265,7 @@ public class YamlWorldParser
 				List<List<String>> patternTransform =
 					(List<List<String>>)patternMap.get("transform");
 				if (patternTransform != null)
-					parseTransform(pattern, patternTransform, xformDefines);
+					parseTransform(pattern, patternTransform);
 			}
 
 			if (patternMap.size() > 0)
@@ -262,10 +276,8 @@ public class YamlWorldParser
 			System.err.printf("Leftovers for material: %s\n", materialMap);
 	}
 
-	private static void addObject(World world, Map<String, Object> objMap,
-		Map<String, Material> materialDefines, Map<String, Shape> shapeDefines,
-		Map<String, Matrix> xformDefines)
-			throws FileNotFoundException, IOException
+	private void addObject(World world, Map<String, Object> objMap)
+		throws FileNotFoundException, IOException
 	{
 		objMap = new DestructiveHashMap<String, Object>(objMap);
 		String type = (String)objMap.get("add");
@@ -309,14 +321,12 @@ public class YamlWorldParser
 					Stream<String> lines = br.lines();
 					ObjFileParser parser = new ObjFileParser(lines);
 					Shape shape = parser.getGroup();
-					processShapeProperties(world, objMap, materialDefines,
-						shapeDefines, shape, xformDefines);
+					processShapeProperties(world, objMap, shape);
 					world.addSceneObjects(shape);
 				}
 				break;
 			default:
-				if (!addShape(type, world, objMap, materialDefines,
-					shapeDefines, xformDefines))
+				if (!addShape(type, world, objMap))
 				{
 					System.err.println("Unknown shape type to add: " + type +
 						": data=" + objMap);
@@ -326,11 +336,10 @@ public class YamlWorldParser
 			System.err.printf("Leftovers for type %s = %s\n", type, objMap);
 	}
 
-	public static boolean addShape(String shapeName, World world,
-		Map<String, Object> objMap, Map<String, Material> materialDefines,
-		Map<String, Shape> shapeDefines, Map<String, Matrix> xformDefines)
+	public boolean addShape(String shapeName, World world,
+		Map<String, Object> objMap)
 	{
-		Shape shape = createBasicShape(shapeName, null, shapeDefines);
+		Shape shape = createBasicShape(shapeName, null);
 		if (shape == null)
 		{
 			shape = shapeDefines.get(shapeName);
@@ -341,28 +350,24 @@ public class YamlWorldParser
 		if (shape == null)
 			return false;
 
-		processShapeProperties(world, objMap, materialDefines, shapeDefines,
-			shape, xformDefines);
+		processShapeProperties(world, objMap, shape);
 
 		world.addSceneObjects(shape);
 		return shape != null;
 	}
 
-	private static Shape createShape(String shapeName, String extendName,
-		World world, Map<String, Object> objMap,
-		Map<String, Material> materialDefines, Map<String, Shape> shapeDefines,
-		Map<String, Matrix> xformDefines)
+	private void defineShape(String shapeName, String extendName,
+		World world, Map<String, Object> objMap, String defineName)
 	{
-		Shape shape = createBasicShape(shapeName, extendName, shapeDefines);
+		Shape shape = createBasicShape(shapeName, extendName);
 
 		if (shape != null)
-			processShapeProperties(world, objMap, materialDefines, shapeDefines,
-				shape, xformDefines);
-		return shape;
+			processShapeProperties(world, objMap, shape);
+
+		shapeDefines.put(defineName, shape);
 	}
 
-	private static Shape createBasicShape(String shapeName, String extendName,
-		Map<String, Shape> shapeDefines)
+	private Shape createBasicShape(String shapeName, String extendName)
 	{
 		Shape shape =
 			extendName != null ? shapeDefines.get(extendName).deepCopy() :
@@ -376,9 +381,8 @@ public class YamlWorldParser
 		return shape;
 	}
 
-	private static Shape processShapeProperties(World world,
-		Map<String, Object> objMap, Map<String, Material> materialDefines,
-		Map<String, Shape> shapeDefines, Shape shape, Map<String, Matrix> xformDefines)
+	private Shape processShapeProperties(World world,
+		Map<String, Object> objMap, Shape shape)
 	{
 		if (objMap == null)
 			return shape;
@@ -386,11 +390,11 @@ public class YamlWorldParser
 		List<List<String>> shapeTransform =
 			(List<List<String>>)objMap.get("transform");
 		if (shapeTransform != null)
-			parseTransform(shape, shapeTransform, xformDefines);
+			parseTransform(shape, shapeTransform);
 
 		Object shapeMaterial = objMap.get("material");
 		if (shapeMaterial != null)
-			setMaterialForShape(shape, shapeMaterial, materialDefines, xformDefines);
+			setMaterialForShape(shape, shapeMaterial);
 
 		String shadow = (String)objMap.get("shadow");
 		if (shadow != null)
@@ -423,7 +427,7 @@ public class YamlWorldParser
 				for (Map<String, Object> childPropMap : childrenPropMapList)
 				{
 					String shapeName = (String)childPropMap.get("add");
-					Shape childShape = createBasicShape(shapeName, null, shapeDefines);
+					Shape childShape = createBasicShape(shapeName, null);
 					if (childShape == null)
 					{
 						childShape = shapeDefines.get(shapeName);
@@ -432,8 +436,7 @@ public class YamlWorldParser
 					}
 					if (childShape != null)
 					{
-						processShapeProperties(world, childPropMap,
-							materialDefines, shapeDefines, childShape, xformDefines);
+						processShapeProperties(world, childPropMap, childShape);
 						group.addChild(childShape.deepCopy());
 					}
 				}
@@ -443,8 +446,7 @@ public class YamlWorldParser
 		return shape;
 	}
 
-	private static void setMaterialForShape(Shape s, Object materialData,
-		Map<String, Material> materialDefines, Map<String, Matrix> xformDefines)
+	private void setMaterialForShape(Shape s, Object materialData)
 	{
 		if (materialData instanceof String)
 		{
@@ -460,21 +462,20 @@ public class YamlWorldParser
 			Map<String, Object> materialMap =
 				(Map<String, Object>)materialData;
 			Material mat = s.getMaterial().duplicate();
-			parseRawMaterial(mat, materialMap, xformDefines);
+			parseRawMaterial(mat, materialMap);
 			s.setMaterial(mat);
 		}
 	}
 
-	private static void parseTransform(Transformable xform,
-		List<List<String>> object, Map<String, Matrix> xformDefines)
+	private void parseTransform(Transformable xform,
+		List<List<String>> object)
 	{
 		Matrix originalTransform = xform.getTransform();
-		Matrix newXform = parseManyXforms(object, xformDefines);
+		Matrix newXform = parseManyXforms(object);
 		xform.setTransform(newXform.multiply(originalTransform));
 	}
 
-	private static Matrix parseManyXforms(List<?> object,
-		Map<String, Matrix> xformDefines)
+	private Matrix parseManyXforms(List<?> object)
 	{
 		Matrix newXform = null;
 		for (Object obj : object)

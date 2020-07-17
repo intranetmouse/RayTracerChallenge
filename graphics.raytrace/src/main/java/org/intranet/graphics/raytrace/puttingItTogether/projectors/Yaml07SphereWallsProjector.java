@@ -20,7 +20,7 @@ public final class Yaml07SphereWallsProjector
 		InputStream ymlStream = getClass().getResourceAsStream(
 			ballsSphereWalls);
 		File parentFolder = new File(getClass().getResource(ballsSphereWalls).getFile()).getParentFile();
-		YamlWorldParser parser = new YamlWorldParser();
-		world = parser.parse(ymlStream, parentFolder);
+		YamlWorldParser parser = new YamlWorldParser(ymlStream, parentFolder);
+		world = parser.getWorld();
 	}
 }

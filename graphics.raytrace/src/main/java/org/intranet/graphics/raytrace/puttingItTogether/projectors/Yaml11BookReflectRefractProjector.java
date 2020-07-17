@@ -20,7 +20,7 @@ public final class Yaml11BookReflectRefractProjector
 		InputStream ymlStream = getClass().getResourceAsStream(
 			reflectRefractYml);
 		File parentFolder = new File(getClass().getResource(reflectRefractYml).getFile()).getParentFile();
-		YamlWorldParser parser = new YamlWorldParser();
-		world = parser.parse(ymlStream, parentFolder);
+		YamlWorldParser parser = new YamlWorldParser(ymlStream, parentFolder);
+		world = parser.getWorld();
 	}
 }

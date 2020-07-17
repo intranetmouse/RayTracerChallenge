@@ -148,12 +148,14 @@ public class GroupSteps
 	public void shapeIsAGroup(String shapeName)
 	{
 		Group g = (Group)data.getShape(shapeName);
+		g.getClass();
 	}
 
 	@Then("{identifier} is a sphere")
 	public void shapeIsASphere(String shapeName)
 	{
-		Sphere g = (Sphere)data.getShape(shapeName);
+		Sphere s = (Sphere)data.getShape(shapeName);
+		s.getClass();
 	}
 
 	@Then("{identifier}[{int}] is a group of [{identifier}]")

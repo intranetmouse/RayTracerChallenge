@@ -19,8 +19,8 @@ public final class Yaml11ReflectRefractProjector
 		String reflectRefractYml = "/org/intranet/graphics/raytrace/yml/11a-reflect-refract.yml";
 		InputStream ymlStream = getClass().getResourceAsStream(
 			reflectRefractYml);
-		YamlWorldParser parser = new YamlWorldParser();
 		File parentFolder = new File(getClass().getResource(reflectRefractYml).getFile()).getParentFile();
-		world = parser.parse(ymlStream, parentFolder);
+		YamlWorldParser parser = new YamlWorldParser(ymlStream, parentFolder);
+		world = parser.getWorld();
 	}
 }

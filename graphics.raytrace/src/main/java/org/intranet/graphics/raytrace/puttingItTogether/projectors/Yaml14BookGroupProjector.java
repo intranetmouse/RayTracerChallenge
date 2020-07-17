@@ -20,8 +20,8 @@ public final class Yaml14BookGroupProjector
 	protected void fillWorld()
 	{
 		InputStream ymlStream = getClass().getResourceAsStream(GROUP_YML);
-		YamlWorldParser parser = new YamlWorldParser();
 		File parentFolder = new File(getClass().getResource(GROUP_YML).getFile()).getParentFile();
-		world = parser.parse(ymlStream, parentFolder);
+		YamlWorldParser parser = new YamlWorldParser(ymlStream, parentFolder);
+		world = parser.getWorld();
 	}
 }

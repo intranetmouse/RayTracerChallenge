@@ -20,7 +20,7 @@ public final class Yaml10StripesProjector
 		InputStream ymlStream = getClass().getResourceAsStream(
 			patternsStripedYml);
 		File parentFolder = new File(getClass().getResource(patternsStripedYml).getFile()).getParentFile();
-		YamlWorldParser parser = new YamlWorldParser();
-		world = parser.parse(ymlStream, parentFolder);
+		YamlWorldParser parser = new YamlWorldParser(ymlStream, parentFolder);
+		world = parser.getWorld();
 	}
 }
