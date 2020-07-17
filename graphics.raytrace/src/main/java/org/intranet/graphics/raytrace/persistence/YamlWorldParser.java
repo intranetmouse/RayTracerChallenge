@@ -54,6 +54,7 @@ public class YamlWorldParser
 
 			Map<String, Material> materialDefines = new HashMap<>();
 			Map<String, Shape> shapeDefines = new HashMap<>();
+			Map<String, Matrix> transformDefines = new HashMap<>();
 			while (true)
 			{
 				@SuppressWarnings({ "unchecked" })
@@ -65,12 +66,12 @@ public class YamlWorldParser
 				{
 					if (paramMap.containsKey("add"))
 					{
-						addObject(world, paramMap, materialDefines, shapeDefines);
+						addObject(world, paramMap, materialDefines, shapeDefines, transformDefines);
 					}
 					else if (paramMap.containsKey("define"))
 					{
 						define(world, paramMap, materialDefines, shapeDefines,
-							relativeFolder);
+							transformDefines, relativeFolder);
 					}
 					else
 					{
@@ -88,14 +89,28 @@ public class YamlWorldParser
 
 	private void define(World world, Map<String, Object> defineMap,
 		Map<String, Material> materialDefines, Map<String, Shape> shapeDefines,
-		File relativeFolder)
+		Map<String, Matrix> transformDefines, File relativeFolder)
 			throws FileNotFoundException, IOException
 	{
 		defineMap = new DestructiveHashMap<String, Object>(defineMap);
 		String defineName = (String)defineMap.get("define");
 		String extendName = (String)defineMap.get("extend");
+		Object valueObj = defineMap.get("value");
+		if (valueObj instanceof List)
+		{
+			@SuppressWarnings("unchecked")
+			List<List<String>> transformList = (List<List<String>>)valueObj;
+			Matrix definedTransform = parseManyXforms(transformList, transformDefines);
+
+			Matrix extendedTransform = transformDefines.get(extendName);
+			if (extendedTransform != null)
+				definedTransform = definedTransform.multiply(extendedTransform);
+			transformDefines.put(defineName, definedTransform);
+			return;
+		}
+
 		@SuppressWarnings("unchecked")
-		Map<String, Object> valueMap = (Map<String, Object>)defineMap.get("value");
+		Map<String, Object> valueMap = (Map<String, Object>)valueObj;
 		if (valueMap == null)
 		{
 			System.err.println("Missing value for define name=" + defineName);
@@ -115,14 +130,14 @@ public class YamlWorldParser
 				ObjFileParser parser = new ObjFileParser(lines);
 				Shape shape = parser.getGroup();
 				processShapeProperties(world, valueMap, materialDefines,
-					shapeDefines, shape);
+					shapeDefines, shape, transformDefines);
 				shapeDefines.put(defineName, shape);
 			}
 		}
 		else if (type != null)
 		{
 			Shape s = createShape(type, extendName, world, valueMap,
-				materialDefines, shapeDefines);
+				materialDefines, shapeDefines, transformDefines);
 			shapeDefines.put(defineName, s);
 
 			if (valueMap.size() > 0)
@@ -130,12 +145,23 @@ public class YamlWorldParser
 		}
 		else
 		{
-			Material mat = extendName == null ? new Material() :
-				materialDefines.get(extendName).duplicate();
+			Material mat = null;
+			if (extendName == null)
+				mat = new Material();
+			else
+			{
+				mat = materialDefines.get(extendName);
+				if (mat == null)
+				{
+					System.err.printf("Unknown material extend name %s\n", extendName);
+					return;
+				}
+				mat = mat.duplicate();
+			}
 
 			if (valueMap != null)
 			{
-				parseRawMaterial(mat, valueMap);
+				parseRawMaterial(mat, valueMap, transformDefines);
 				// Note: parseRawMaterial does its own values.
 				materialDefines.put(defineName, mat);
 			}
@@ -146,7 +172,7 @@ public class YamlWorldParser
 	}
 
 	private static void parseRawMaterial(Material mat,
-		Map<String, Object> materialMap)
+		Map<String, Object> materialMap, Map<String, Matrix> xformDefines)
 	{
 		materialMap = new DestructiveHashMap<>(materialMap);
 
@@ -225,7 +251,7 @@ public class YamlWorldParser
 				List<List<String>> patternTransform =
 					(List<List<String>>)patternMap.get("transform");
 				if (patternTransform != null)
-					parseTransform(pattern, patternTransform);
+					parseTransform(pattern, patternTransform, xformDefines);
 			}
 
 			if (patternMap.size() > 0)
@@ -237,7 +263,8 @@ public class YamlWorldParser
 	}
 
 	private static void addObject(World world, Map<String, Object> objMap,
-		Map<String, Material> materialDefines, Map<String, Shape> shapeDefines)
+		Map<String, Material> materialDefines, Map<String, Shape> shapeDefines,
+		Map<String, Matrix> xformDefines)
 			throws FileNotFoundException, IOException
 	{
 		objMap = new DestructiveHashMap<String, Object>(objMap);
@@ -283,14 +310,17 @@ public class YamlWorldParser
 					ObjFileParser parser = new ObjFileParser(lines);
 					Shape shape = parser.getGroup();
 					processShapeProperties(world, objMap, materialDefines,
-						shapeDefines, shape);
+						shapeDefines, shape, xformDefines);
 					world.addSceneObjects(shape);
 				}
 				break;
 			default:
-				if (!addShape(type, world, objMap, materialDefines, shapeDefines))
+				if (!addShape(type, world, objMap, materialDefines,
+					shapeDefines, xformDefines))
+				{
 					System.err.println("Unknown shape type to add: " + type +
 						": data=" + objMap);
+				}
 		}
 		if (objMap.size() > 0)
 			System.err.printf("Leftovers for type %s = %s\n", type, objMap);
@@ -298,7 +328,7 @@ public class YamlWorldParser
 
 	public static boolean addShape(String shapeName, World world,
 		Map<String, Object> objMap, Map<String, Material> materialDefines,
-		Map<String, Shape> shapeDefines)
+		Map<String, Shape> shapeDefines, Map<String, Matrix> xformDefines)
 	{
 		Shape shape = createBasicShape(shapeName, null, shapeDefines);
 		if (shape == null)
@@ -312,7 +342,7 @@ public class YamlWorldParser
 			return false;
 
 		processShapeProperties(world, objMap, materialDefines, shapeDefines,
-			shape);
+			shape, xformDefines);
 
 		world.addSceneObjects(shape);
 		return shape != null;
@@ -320,13 +350,14 @@ public class YamlWorldParser
 
 	private static Shape createShape(String shapeName, String extendName,
 		World world, Map<String, Object> objMap,
-		Map<String, Material> materialDefines, Map<String, Shape> shapeDefines)
+		Map<String, Material> materialDefines, Map<String, Shape> shapeDefines,
+		Map<String, Matrix> xformDefines)
 	{
 		Shape shape = createBasicShape(shapeName, extendName, shapeDefines);
 
 		if (shape != null)
 			processShapeProperties(world, objMap, materialDefines, shapeDefines,
-				shape);
+				shape, xformDefines);
 		return shape;
 	}
 
@@ -347,7 +378,7 @@ public class YamlWorldParser
 
 	private static Shape processShapeProperties(World world,
 		Map<String, Object> objMap, Map<String, Material> materialDefines,
-		Map<String, Shape> shapeDefines, Shape shape)
+		Map<String, Shape> shapeDefines, Shape shape, Map<String, Matrix> xformDefines)
 	{
 		if (objMap == null)
 			return shape;
@@ -355,11 +386,11 @@ public class YamlWorldParser
 		List<List<String>> shapeTransform =
 			(List<List<String>>)objMap.get("transform");
 		if (shapeTransform != null)
-			parseTransform(shape, shapeTransform);
+			parseTransform(shape, shapeTransform, xformDefines);
 
 		Object shapeMaterial = objMap.get("material");
 		if (shapeMaterial != null)
-			setMaterialForShape(shape, shapeMaterial, materialDefines);
+			setMaterialForShape(shape, shapeMaterial, materialDefines, xformDefines);
 
 		String shadow = (String)objMap.get("shadow");
 		if (shadow != null)
@@ -402,7 +433,7 @@ public class YamlWorldParser
 					if (childShape != null)
 					{
 						processShapeProperties(world, childPropMap,
-							materialDefines, shapeDefines, childShape);
+							materialDefines, shapeDefines, childShape, xformDefines);
 						group.addChild(childShape.deepCopy());
 					}
 				}
@@ -413,7 +444,7 @@ public class YamlWorldParser
 	}
 
 	private static void setMaterialForShape(Shape s, Object materialData,
-		Map<String, Material> materialDefines)
+		Map<String, Material> materialDefines, Map<String, Matrix> xformDefines)
 	{
 		if (materialData instanceof String)
 		{
@@ -429,62 +460,77 @@ public class YamlWorldParser
 			Map<String, Object> materialMap =
 				(Map<String, Object>)materialData;
 			Material mat = s.getMaterial().duplicate();
-			parseRawMaterial(mat, materialMap);
+			parseRawMaterial(mat, materialMap, xformDefines);
 			s.setMaterial(mat);
 		}
 	}
 
 	private static void parseTransform(Transformable xform,
-		List<List<String>> object)
+		List<List<String>> object, Map<String, Matrix> xformDefines)
 	{
-		for (List<String> obj : object)
+		Matrix originalTransform = xform.getTransform();
+		Matrix newXform = parseManyXforms(object, xformDefines);
+		xform.setTransform(newXform.multiply(originalTransform));
+	}
+
+	private static Matrix parseManyXforms(List<?> object,
+		Map<String, Matrix> xformDefines)
+	{
+		Matrix newXform = null;
+		for (Object obj : object)
 		{
-			String transformType = obj.get(0);
-			Matrix originalTransform = xform.getTransform();
-			switch (transformType)
+			Matrix mtxForRow = null;
+			if (obj instanceof List)
 			{
-				case "scale":
-					xform.setTransform(
-						Matrix.newScaling(
-							stringToDbl(obj.get(1)),
-							stringToDbl(obj.get(2)),
-							stringToDbl(obj.get(3))
-						).multiply(originalTransform)
-					);
-					break;
-				case "translate":
-					xform.setTransform(
-						Matrix.newTranslation(
-							stringToDbl(obj.get(1)),
-							stringToDbl(obj.get(2)),
-							stringToDbl(obj.get(3))
-						).multiply(originalTransform)
-					);
-					break;
-				case "rotate-z":
-					xform.setTransform(
-						Matrix.newRotationZ(
-							stringToDbl(obj.get(1))
-						).multiply(originalTransform)
-					);
-					break;
-				case "rotate-x":
-					xform.setTransform(
-						Matrix.newRotationX(
-							stringToDbl(obj.get(1))
-						).multiply(originalTransform)
-					);
-					break;
-				case "rotate-y":
-					xform.setTransform(
-						Matrix.newRotationY(
-							stringToDbl(obj.get(1))
-						).multiply(originalTransform)
-					);
-					break;
-				default:
-					System.err.println("Unknown transform property " + transformType);
+				@SuppressWarnings("unchecked")
+				List<String> stringList = (List<String>)obj;
+				mtxForRow = parseXform(stringList);
 			}
+			else
+			{
+				mtxForRow = xformDefines.get(obj);
+			}
+			if (newXform == null)
+				newXform = mtxForRow;
+			else
+				newXform = mtxForRow.multiply(newXform);
+		}
+		return newXform;
+	}
+
+	private static Matrix parseXform(List<String> obj)
+	{
+		String transformType = obj.get(0);
+		switch (transformType)
+		{
+			case "scale":
+				return
+					Matrix.newScaling(
+						stringToDbl(obj.get(1)),
+						stringToDbl(obj.get(2)),
+						stringToDbl(obj.get(3))
+					);
+			case "translate":
+				return Matrix.newTranslation(
+						stringToDbl(obj.get(1)),
+						stringToDbl(obj.get(2)),
+						stringToDbl(obj.get(3))
+					);
+			case "rotate-z":
+				return Matrix.newRotationZ(
+						stringToDbl(obj.get(1))
+					);
+			case "rotate-x":
+				return Matrix.newRotationX(
+						stringToDbl(obj.get(1))
+					);
+			case "rotate-y":
+				return Matrix.newRotationY(
+						stringToDbl(obj.get(1))
+					);
+			default:
+				System.err.println("Unknown transform property " + transformType);
+				return null;
 		}
 	}
 
