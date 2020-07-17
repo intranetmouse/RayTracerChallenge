@@ -1,5 +1,6 @@
 package org.intranet.graphics.raytrace;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -27,6 +28,13 @@ public final class IntersectionList
 	public IntersectionList()
 	{
 		intersections = Collections.emptyList();
+	}
+
+	public IntersectionList combineWith(IntersectionList other)
+	{
+		List<Intersection> all = new ArrayList<>(intersections);
+		all.addAll(other.getIntersections());
+		return new IntersectionList(all);
 	}
 
 	public static final int compareDouble(double x)

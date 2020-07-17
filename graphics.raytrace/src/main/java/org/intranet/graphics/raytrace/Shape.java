@@ -139,4 +139,9 @@ public abstract class Shape
 		return getClass().getSimpleName() + " [parent=" + parentName + ", savedRay=" + savedRay
 			+ ", material=" + material + ", transform=" + transform + "]";
 	}
+
+	public boolean includes(Shape s)
+	{
+		return s == this;
+	}
 }
