@@ -1,13 +1,7 @@
-package org.intranet.graphics.raytrace.shape;
+package org.intranet.graphics.raytrace.primitive;
 
 import java.util.Arrays;
 import java.util.List;
-
-import org.intranet.graphics.raytrace.primitive.Matrix;
-import org.intranet.graphics.raytrace.primitive.Point;
-import org.intranet.graphics.raytrace.primitive.Ray;
-import org.intranet.graphics.raytrace.primitive.Vector;
-import org.intranet.graphics.raytrace.shape.Cube.Pair;
 
 public class BoundingBox
 {

@@ -6,6 +6,7 @@
 # of chapter 12, "Cubes", in "The Ray Tracer Challenge"
 #
 # by Jamis Buck <jamis@jamisbuck.org>
+# Groups added by Chris Dailey to make rendering faster
 # ======================================================
 
 # ======================================================
@@ -49,7 +50,7 @@
     diffuse: 0.7
     specular: 0.9
     shininess: 300
-#    reflective: 0.1
+    reflective: 0.1
 
 # walls
 - add: cube

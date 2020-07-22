@@ -56,12 +56,23 @@ public final class Tracer
 
 	public static boolean isShadowed(World world, Point point, Light light)
 	{
-		Vector v = light.getPosition().subtract(point);
+		return isShadowed(world, light.getPosition(), point);
+	}
+
+	public static boolean isShadowed(World world, Point lightPosition,
+		Point otherPoint)
+	{
+		Vector v = lightPosition.subtract(otherPoint);
 		double distance = v.magnitude();
 		Vector direction = v.normalize();
-		Ray r = new Ray(point, direction);
+		Ray r = new Ray(otherPoint, direction);
 		IntersectionList intersections = world.intersect(r, true);
 		Intersection h = intersections.hit();
 		return h != null && h.getDistance() < distance;
+	}
+
+	public static double intensityAt(Light l, Point pt, World w)
+	{
+		return isShadowed(w, l.getPosition(), pt) ? 0.0 : 1.0;
 	}
 }

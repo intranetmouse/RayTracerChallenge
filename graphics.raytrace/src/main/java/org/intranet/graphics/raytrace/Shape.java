@@ -1,11 +1,11 @@
 package org.intranet.graphics.raytrace;
 
+import org.intranet.graphics.raytrace.primitive.BoundingBox;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Transformable;
 import org.intranet.graphics.raytrace.primitive.Vector;
-import org.intranet.graphics.raytrace.shape.BoundingBox;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.intranet.graphics.raytrace.surface.Pattern;
@@ -13,23 +13,6 @@ import org.intranet.graphics.raytrace.surface.Pattern;
 public abstract class Shape
 	implements Transformable
 {
-	public final Vector normalAt(Point worldPoint, Intersection hit)
-	{
-		Point localPoint = worldToObject(worldPoint);
-
-		Vector localNormalVector = localNormalAt(localPoint, hit);
-
-		return normalToWorld(localNormalVector);
-	}
-
-	public final IntersectionList intersections(Ray ray)
-	{
-		Ray localRay = ray.transform(transform.inverse());
-		savedRay = localRay;
-
-		return localIntersections(localRay);
-	}
-
 	private boolean castShadow = true;
 	public boolean isCastShadow() { return castShadow; }
 	public void setCastShadow(boolean value) { castShadow = value; }
@@ -45,18 +28,6 @@ public abstract class Shape
 
 	private Ray savedRay;
 	public Ray getSavedRay() { return savedRay; }
-
-	public abstract IntersectionList localIntersections(Ray ray);
-	protected abstract Vector localNormalAt(Point point, Intersection intersection);
-
-	public final Vector testLocalNormalAt(Point p)
-	{
-		return localNormalAt(p, null);
-	}
-
-	private Material material = new Material();
-	public final Material getMaterial() { return material; }
-	public final void setMaterial(Material value) { material = value; }
 
 	private Matrix transform = Matrix.identity(4);
 	@Override
@@ -78,11 +49,33 @@ public abstract class Shape
 	}
 	protected abstract boolean shapeEquals(Object other);
 
+	public boolean includes(Shape s)
+	{
+		return s == this;
+	}
+
+	// MATERIAL ----------------------------------------------------------------
+	private Material material = new Material();
+	public final Material getMaterial() { return material; }
+	public final void setMaterial(Material value) { material = value; }
+
 	public Color colorAt(Pattern pattern, Point pt)
 	{
 		Point objectPt = worldToObject(pt);
 		Point patternPt = pattern.getTransform().inverse().multiply(objectPt);
 		return pattern.colorAt(patternPt);
+	}
+
+	// NORMALS -----------------------------------------------------------------
+	protected abstract Vector localNormalAt(Point point, Intersection intersection);
+
+	public final Vector normalAt(Point worldPoint, Intersection hit)
+	{
+		Point localPoint = worldToObject(worldPoint);
+
+		Vector localNormalVector = localNormalAt(localPoint, hit);
+
+		return normalToWorld(localNormalVector);
 	}
 
 	public Point worldToObject(Point point)
@@ -93,7 +86,7 @@ public abstract class Shape
 		return transform.inverse().multiply(point);
 	}
 
-	public Vector normalToWorld(Vector normal)
+	public final Vector normalToWorld(Vector normal)
 	{
 		normal = transform.inverse().transpose().multiply(normal);
 		normal = normal.withW(0).normalize();
@@ -104,6 +97,23 @@ public abstract class Shape
 		return normal;
 	}
 
+	public final Vector testLocalNormalAt(Point p)
+	{
+		return localNormalAt(p, null);
+	}
+
+	// INTERSECTIONS -----------------------------------------------------------
+	public abstract IntersectionList localIntersections(Ray ray);
+
+	public final IntersectionList intersections(Ray ray)
+	{
+		Ray localRay = ray.transform(transform.inverse());
+		savedRay = localRay;
+
+		return localIntersections(localRay);
+	}
+
+	// BOUNDING BOX
 	private BoundingBox boundingBox;
 	public final BoundingBox getBoundingBox()
 	{
@@ -117,17 +127,18 @@ public abstract class Shape
 		return new BoundingBox(new Point(-1, -1, -1), new Point(1, 1, 1));
 	}
 
+
+	public void divide(int subdivisions)
+	{
+		return;
+	}
+
 	protected void deepCopyFrom(Shape other)
 	{
 		material = other.material.duplicate();
 		transform = other.transform.inverse().inverse();
 		// Rays are immutable
 		savedRay = other.savedRay;
-	}
-
-	public void divide(int subdivisions)
-	{
-		return;
 	}
 
 	public abstract Shape deepCopy();
@@ -138,10 +149,5 @@ public abstract class Shape
 		String parentName = parent == null ? "none" : parent.getClass().getName();
 		return getClass().getSimpleName() + " [parent=" + parentName + ", savedRay=" + savedRay
 			+ ", material=" + material + ", transform=" + transform + "]";
-	}
-
-	public boolean includes(Shape s)
-	{
-		return s == this;
 	}
 }

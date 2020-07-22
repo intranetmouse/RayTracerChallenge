@@ -3,7 +3,7 @@ package org.intranet.graphics.raytrace.steps;
 import java.util.List;
 
 import org.intranet.graphics.raytrace.Shape;
-import org.intranet.graphics.raytrace.shape.Cube.Pair;
+import org.intranet.graphics.raytrace.primitive.Pair;
 import org.intranet.graphics.raytrace.shape.Group;
 import org.intranet.graphics.raytrace.shape.Sphere;
 import org.junit.Assert;

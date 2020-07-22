@@ -1,10 +1,10 @@
 package org.intranet.graphics.raytrace.steps;
 
 import org.intranet.graphics.raytrace.Shape;
+import org.intranet.graphics.raytrace.primitive.BoundingBox;
+import org.intranet.graphics.raytrace.primitive.Pair;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
-import org.intranet.graphics.raytrace.shape.BoundingBox;
-import org.intranet.graphics.raytrace.shape.Cube.Pair;
 import org.junit.Assert;
 
 import io.cucumber.java.en.Given;

@@ -10,10 +10,11 @@ import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.ShapeParent;
+import org.intranet.graphics.raytrace.primitive.BoundingBox;
+import org.intranet.graphics.raytrace.primitive.Pair;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Vector;
-import org.intranet.graphics.raytrace.shape.Cube.Pair;
 
 public final class Group
 	extends Shape

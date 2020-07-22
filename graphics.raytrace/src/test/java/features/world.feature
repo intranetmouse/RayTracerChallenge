@@ -250,3 +250,19 @@ Scenario: shade_hit() with a reflective, transparent material
   When comps ← prepare_computations(xs[0], r, xs)
     And color ← shade_hit(w, comps, 5)
   Then color = color(0.93391, 0.69643, 0.69243)
+
+# From soft shadows / area light bonus chapter
+# http://www.raytracerchallenge.com/bonus/area-light.html
+
+Scenario Outline: is_shadow tests for occlusion between two points
+  Given w ← default_world()
+    And light_position ← point(-10, -10, -10)
+    And point ← <point>
+  Then is_shadowed(w, light_position, point) is <result>
+
+  Examples:
+    | point                | result |
+    | point(-10, -10, 10)  | false  |
+    | point(10, 10, 10)    | true   |
+    | point(-20, -20, -20) | false  |
+    | point(-5, -5, -5)    | false  |

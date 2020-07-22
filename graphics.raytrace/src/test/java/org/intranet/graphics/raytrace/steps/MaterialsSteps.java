@@ -1,11 +1,11 @@
 package org.intranet.graphics.raytrace.steps;
 
+import org.intranet.graphics.raytrace.Light;
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.Tracer;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.primitive.Vector;
-import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.shape.Sphere;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
@@ -143,7 +143,7 @@ public class MaterialsSteps
 	{
 		Material material = data.getMaterial(materialName);
 		Point position = data.getPoint(positionName);
-		PointLight pointLight = data.getPointLight(pointLightName);
+		Light pointLight = data.getLight(pointLightName);
 		Vector eyev = data.getVector(eyeVectorName);
 		Vector normalv = data.getVector(normalVectorName);
 		Color color = Tracer.lighting(material, new Sphere(), pointLight,
@@ -159,7 +159,7 @@ public class MaterialsSteps
 	{
 		Material material = data.getMaterial(materialName);
 		Point position = data.getPoint(positionName);
-		PointLight pointLight = data.getPointLight(pointLightName);
+		Light pointLight = data.getLight(pointLightName);
 		Vector eyev = data.getVector(eyeVectorName);
 		Vector normalv = data.getVector(normalVectorName);
 		boolean inShadow = data.getBoolean(inShadowName);
@@ -174,7 +174,7 @@ public class MaterialsSteps
 		String eyeVectorName, String normalVectorName, Boolean inShadow)
 	{
 		Material material = data.getMaterial(materialName);
-		PointLight pointLight = data.getPointLight(pointLightName);
+		Light pointLight = data.getLight(pointLightName);
 		Vector eyev = data.getVector(eyeVectorName);
 		Vector normalv = data.getVector(normalVectorName);
 		Color color = Tracer.lighting(material, new Sphere(), pointLight,

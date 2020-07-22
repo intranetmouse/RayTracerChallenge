@@ -3,6 +3,7 @@ package org.intranet.graphics.raytrace.shape;
 import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Shape;
+import org.intranet.graphics.raytrace.primitive.BoundingBox;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Tuple;

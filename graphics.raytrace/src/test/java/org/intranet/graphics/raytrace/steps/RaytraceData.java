@@ -10,17 +10,17 @@ import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionComputations;
 import org.intranet.graphics.raytrace.IntersectionList;
+import org.intranet.graphics.raytrace.Light;
 import org.intranet.graphics.raytrace.PixelCoordinate;
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.persistence.ObjFileParser;
+import org.intranet.graphics.raytrace.primitive.BoundingBox;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.primitive.Vector;
-import org.intranet.graphics.raytrace.shape.BoundingBox;
-import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.shape.TubeLike;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
@@ -132,11 +132,11 @@ public final class RaytraceData
 	public IntersectionList getIntersectionList(String intersectionListName)
 	{ return intersectionListsMap.get(intersectionListName); }
 
-	private Map<String, PointLight> pointLightMap = new HashMap<>();
-	public void put(String pointLightName, PointLight l)
-	{ pointLightMap.put(pointLightName, l); }
-	public PointLight getPointLight(String pointLightName)
-	{ return pointLightMap.get(pointLightName); }
+	private Map<String, Light> lightMap = new HashMap<>();
+	public void put(String lightName, Light l)
+	{ lightMap.put(lightName, l); }
+	public Light getLight(String lightName)
+	{ return lightMap.get(lightName); }
 
 	private Map<String, Material> materialsMap = new HashMap<>();
 	public void put(String materialName, Material material)

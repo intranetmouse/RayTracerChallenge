@@ -5,15 +5,16 @@ import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionComputations;
 import org.intranet.graphics.raytrace.IntersectionList;
+import org.intranet.graphics.raytrace.Light;
 import org.intranet.graphics.raytrace.PixelCoordinate;
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.ShapeParent;
+import org.intranet.graphics.raytrace.primitive.BoundingBox;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.primitive.Vector;
-import org.intranet.graphics.raytrace.shape.BoundingBox;
 import org.intranet.graphics.raytrace.shape.Cylinder;
 import org.intranet.graphics.raytrace.shape.Group;
 import org.intranet.graphics.raytrace.shape.PointLight;
@@ -431,22 +432,22 @@ public class ThenSteps
 	public void testLightPostionEqualsPosition(String objectName,
 		String expectedPositionName)
 	{
-		PointLight pointLight = data.getPointLight(objectName);
-		Assert.assertNotNull(pointLight);
+		Light light = data.getLight(objectName);
+		Assert.assertNotNull(light);
 
 		Point expectedPosition = data.getPoint(expectedPositionName);
-		Assert.assertEquals(expectedPosition, pointLight.getPosition());
+		Assert.assertEquals(expectedPosition, light.getPosition());
 	}
 
 	@Then("{identifier}.intensity = {identifier}")
 	public void testLightIntensityEqualsPosition(String objectName,
 		String expectedPositionName)
 	{
-		PointLight pointLight = data.getPointLight(objectName);
-		Assert.assertNotNull(pointLight);
+		Light light = data.getLight(objectName);
+		Assert.assertNotNull(light);
 
 		Color expectedIntensity = data.getColor(expectedPositionName);
-		Assert.assertEquals(expectedIntensity, pointLight.getIntensity());
+		Assert.assertEquals(expectedIntensity, light.getIntensity());
 	}
 
 	@Then("{identifier}.transform = {matrix}")

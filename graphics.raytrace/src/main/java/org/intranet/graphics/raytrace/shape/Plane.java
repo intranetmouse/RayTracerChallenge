@@ -3,6 +3,7 @@ package org.intranet.graphics.raytrace.shape;
 import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Shape;
+import org.intranet.graphics.raytrace.primitive.BoundingBox;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Tuple;
@@ -20,8 +21,8 @@ public final class Plane
 	{
 		if (Math.abs(ray.getDirection().getY()) < Tuple.EPSILON)
 			return new IntersectionList();
-		double dist = -ray.getOrigin().getY() / ray.getDirection().getY();
-		return new IntersectionList(new Intersection(dist, this));
+		double distance = -ray.getOrigin().getY() / ray.getDirection().getY();
+		return new IntersectionList(new Intersection(distance, this));
 	}
 
 	private static final Vector LOCAL_NORMAL = new Vector(0, 1, 0);

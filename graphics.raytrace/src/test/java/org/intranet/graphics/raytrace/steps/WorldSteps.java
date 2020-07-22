@@ -9,10 +9,10 @@ import org.intranet.graphics.raytrace.Light;
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.Tracer;
 import org.intranet.graphics.raytrace.World;
+import org.intranet.graphics.raytrace.primitive.BoundingBox;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
-import org.intranet.graphics.raytrace.shape.BoundingBox;
 import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
@@ -295,7 +295,7 @@ public class WorldSteps
 	@Then("{identifier}.light = {identifier}")
 	public void wContainsNoObjects(String worldName, String expectedLightName)
 	{
-		Light expectedLight = data.getPointLight(expectedLightName);
+		Light expectedLight = data.getLight(expectedLightName);
 
 		World w = data.getWorld(worldName);
 		List<Light> lightSources = w.getLightSources();
@@ -334,6 +334,18 @@ public class WorldSteps
 		Point point = data.getPoint(pointName);
 		Light light = world.getLightSources().get(0);
 		boolean actualResult = Tracer.isShadowed(world, point, light);
+		Assert.assertEquals(expectedResult, actualResult);
+	}
+
+	@Then("is_shadowed\\({identifier}, {identifier}, {identifier}) is {boolean}")
+	public void is_shadowedWLight_positionPointIsFalse(String worldName,
+		String lightPositionName, String otherPointName, Boolean expectedResult)
+	{
+		World world = data.getWorld(worldName);
+		Point lightPosition = data.getPoint(lightPositionName);
+		Point otherPoint = data.getPoint(otherPointName);
+
+		boolean actualResult = Tracer.isShadowed(world, lightPosition, otherPoint);
 		Assert.assertEquals(expectedResult, actualResult);
 	}
 }

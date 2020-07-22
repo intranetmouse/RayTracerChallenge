@@ -1,7 +1,14 @@
+- Group: children inherit material
+- Create test YML files for CSG
 - On render, fill in blocks with center color
 - Save as GIF/PNG/JPG
 - Resurrect render to GIF
 - Make group subdivision threshold a property
+
+- OPTIMIZE!
+
+- Bonus Chapter: Texture Mapping  http://raytracerchallenge.com/bonus/texture-mapping.html
+- Bonus Chapter: Soft Shadows/Area Lighting  http://www.raytracerchallenge.com/bonus/area-light.html
 
 - Property browser
 

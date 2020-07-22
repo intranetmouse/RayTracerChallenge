@@ -1,0 +1,93 @@
+
+
+- add: camera
+  width: 512
+  height: 512
+  # field-of-view: 2.0943951023931954923084289221863
+  field-of-view: 1.5707963267948966192313216916398
+  from: [-1, 1.5, -5]
+  to: [0, 1, 0]
+  up: [0, 1, 0]
+
+- add: light
+  at: [ -10, 10, -10 ]
+  intensity: [ 0.5, 0.5, 0.5 ]
+
+# p1
+- add: plane
+  material:
+    color: [1, 1, 1]
+    #specular: 0
+    # reflective: 1
+    pattern:
+      type: checker
+      colors:
+        - [ 1.0, 1.0, 1.0 ]
+        - [ 0.0, 0.0, 0.0 ]
+      transform:
+        - [ scale, 2, 2, 2 ]
+
+
+# p2
+- add: plane
+  transform:
+    - [ rotate-x, 1.5707963267948966192313216916398 ]
+    - [ rotate-y, 0.78539816339744830961566084581988 ]
+    - [ translate, 2, 0, 8 ]
+  material:
+    color: [0.75, 1, 0.75]
+    #specular: 0
+    reflective: 0.25
+    #ambient: 0
+    shininess: 0
+    #diffuse: 1
+    # pattern-exist = false
+
+# p3
+- add: plane
+  transform:
+    - [ rotate-x, 1.5707963267948966192313216916398 ]
+    - [ rotate-y, -0.78539816339744830961566084581988 ]
+    - [ translate, 2, 0, 8 ]
+  material:
+    color: [1, 0.75, 0.75]
+    #specular: 0
+    reflective: 0.25
+    # pattern-exist = false
+
+# s4
+- add: sphere
+  transform:
+    - [ rotate-z, 1.5707963267948966192313216916398 ]
+    - [ translate, -0.15, 1, 0.5 ]
+  material:
+    color: [0.1, 1, 0.5]
+    diffuse: 0.7
+    specular: 0.3
+    reflective: 0
+    # pattern-exist = false
+
+# s5
+- add: sphere
+  transform:
+    - [scale, 0.5, 0.5, 0.5]
+    - [translate, 1.5, 0.5, -0.5]
+  material:
+    color: [0.5, 1, 0.1]
+    diffuse: 0.7
+    specular: 0.3
+    reflective: 0
+    # pattern-exist = false
+
+
+# s6
+- add: sphere
+  transform:
+    - [scale, 0.33, 0.33, 0.33]
+    - [translate, -1.5, 0.33, -0.75]
+  material:
+    color: [1, 0.8, 0.1]
+    diffuse: 0.7
+    specular: 0.3
+    reflective: 0
+    # pattern-exist = false

@@ -51,7 +51,7 @@ public final class IntersectionComputations
 		Color surfaceColor = lightSources.stream()
 			.map(lightSource -> Tracer.lighting(material,
 				getObject(), lightSource, overPoint, eyeVector, normalVector,
-				Tracer.isShadowed(world, overPoint, lightSource)))
+				Tracer.isShadowed(world, lightSource.getPosition(), overPoint)))
 			.reduce(Color::add)
 			.orElse(Color.BLACK);
 //String indent = "       ".substring(remaining);
