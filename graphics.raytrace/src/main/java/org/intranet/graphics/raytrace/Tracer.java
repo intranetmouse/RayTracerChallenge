@@ -9,8 +9,16 @@ import org.intranet.graphics.raytrace.surface.Pattern;
 
 public final class Tracer
 {
+	// OLD method
 	public static Color lighting(Material m, Shape shape, Light light,
 		Point position, Vector eyeV, Vector normalV, boolean inShadow)
+	{
+		return lighting(m, shape, light, position, eyeV, normalV,
+			inShadow ? 0.0 : 1.0);
+	}
+
+	public static Color lighting(Material m, Shape shape, Light light,
+		Point position, Vector eyeV, Vector normalV, double intensity)
 	{
 		Pattern p = m.getPattern();
 		Color c = p != null ? shape.colorAt(p, position) : m.getColor();
@@ -28,11 +36,12 @@ public final class Tracer
 		// light is on the other side of the surface.
 		double lightDotNormal = lightV.dot(normalV);
 
+		boolean inShadow = intensity == 0.0;
 		if (lightDotNormal < 0 || inShadow)
 			return ambientColor;
 
 		// compute the diffuse contribution
-		Color diffuseColor = effectiveColor.multiply(m.getDiffuse())
+		Color diffuseColor = effectiveColor.multiply(m.getDiffuse() * intensity)
 			.multiply(lightDotNormal);
 		Color ambientDiffuseColor = ambientColor.add(diffuseColor);
 
@@ -47,7 +56,7 @@ public final class Tracer
 
 		// compute the specular contribution
 		double factor = Math.pow(reflectDotEye, m.getShininess());
-		Color specularColor = light.getIntensity().multiply(m.getSpecular())
+		Color specularColor = light.getIntensity().multiply(m.getSpecular() * intensity)
 			.multiply(factor);
 		//System.out.println("Material.lighting: position="+position+", factor="+factor+", specularColor="+specularColor+",reflectDotEye="+reflectDotEye);
 

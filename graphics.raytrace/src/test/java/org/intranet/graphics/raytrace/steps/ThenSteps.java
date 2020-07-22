@@ -17,7 +17,6 @@ import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.primitive.Vector;
 import org.intranet.graphics.raytrace.shape.Cylinder;
 import org.intranet.graphics.raytrace.shape.Group;
-import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.intranet.graphics.raytrace.surface.Pattern;

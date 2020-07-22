@@ -3,6 +3,7 @@ package org.intranet.graphics.raytrace.steps;
 import org.intranet.graphics.raytrace.Light;
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.Tracer;
+import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.primitive.Vector;
@@ -37,11 +38,35 @@ public class MaterialsSteps
 		m.setDiffuse(newDiffuse);
 	}
 
+	@When("{identifier}.material.diffuse ← {dbl}")
+	public void shapeMaterialSetDiffuse(String shapeName, double newDiffuse)
+	{
+		Shape s = data.getShape(shapeName);
+		Material m = s.getMaterial();
+		m.setDiffuse(newDiffuse);
+	}
+
 	@When("{identifier}.specular ← {dbl}")
 	public void materialSetSpecular(String materialName, double newSpecular)
 	{
 		Material m = data.getMaterial(materialName);
 		m.setSpecular(newSpecular);
+	}
+
+	@When("{identifier}.material.specular ← {dbl}")
+	public void shapeMaterialSetSpecular(String shapeName, double newSpecular)
+	{
+		Shape s = data.getShape(shapeName);
+		Material m = s.getMaterial();
+		m.setSpecular(newSpecular);
+	}
+
+	@When("{identifier}.material.color ← {color}")
+	public void shapeMaterialSetColor(String shapeName, Color colorToSet)
+	{
+		Shape s = data.getShape(shapeName);
+		Material m = s.getMaterial();
+		m.setColor(colorToSet);
 	}
 
 	@When("{identifier} ← {identifier}.material")
@@ -179,6 +204,26 @@ public class MaterialsSteps
 		Vector normalv = data.getVector(normalVectorName);
 		Color color = Tracer.lighting(material, new Sphere(), pointLight,
 			position, eyev, normalv, inShadow);
+		data.put(resultingColorName, color);
+	}
+
+	@When("{identifier} ← lighting\\({identifier}.material, {identifier}.light, {identifier}, {identifier}, {identifier}, {double})")
+	public void resultLightingShapeMaterialWLightPtEyevNormalv(
+		String resultingColorName, String shapeName, String worldName,
+		String positionName, String eyeVectorName, String normalVectorName,
+		Double intensity)
+	{
+		World w = data.getWorld(worldName);
+
+		Shape s = data.getShape(shapeName);
+		Material material = s.getMaterial();
+		Light pointLight = w.getLightSources().get(0);
+		Point position = data.getPoint(positionName);
+		Vector eyev = data.getVector(eyeVectorName);
+		Vector normalv = data.getVector(normalVectorName);
+		Color color = Tracer.lighting(material, s, pointLight,
+			position, eyev, normalv, intensity);
+
 		data.put(resultingColorName, color);
 	}
 }
