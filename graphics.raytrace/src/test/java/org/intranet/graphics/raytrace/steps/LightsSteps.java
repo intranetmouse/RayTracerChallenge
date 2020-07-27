@@ -4,10 +4,14 @@ import org.intranet.graphics.raytrace.Light;
 import org.intranet.graphics.raytrace.Tracer;
 import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.shape.AreaLight;
 import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.surface.Color;
+import org.junit.Assert;
 
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class LightsSteps
@@ -55,5 +59,97 @@ public class LightsSteps
 
 		double intensity = Tracer.intensityAt(light, point, w);
 		data.put(resultVarStr, intensity);
+	}
+
+	@When("{identifier} ← area_light\\({identifier}, {identifier}, {int}, {identifier}, {int}, {color})")
+	public void lightArea_lightCornerV1V2Color(String lightName,
+		String cornerPointName, String unscaledUvectorName,
+		int unscaledUvectorSteps, String unscaledVvectorName,
+		int unscaledVvectorSteps, Color color)
+	{
+		Point cornerPoint = data.getPoint(cornerPointName);
+		Vector unscaledUvector = data.getVector(unscaledUvectorName);
+		Vector unscaledVvector = data.getVector(unscaledVvectorName);
+
+		Light light = new AreaLight(cornerPoint, unscaledUvector,
+			unscaledUvectorSteps, unscaledVvector, unscaledVvectorSteps, color);
+		data.put(lightName, light);
+	}
+
+	@Then("{identifier}.corner = {identifier}")
+	public void lightCornerCorner(String areaLightName,
+		String expectedCornerPointName)
+	{
+		Point expectedCornerPoint = data.getPoint(expectedCornerPointName);
+		Assert.assertNotNull(expectedCornerPoint);
+
+		AreaLight light = (AreaLight)data.getLight(areaLightName);
+		Point actualCornerPoint = light.getCorner();
+
+		Assert.assertEquals(expectedCornerPoint, actualCornerPoint);
+	}
+
+	@Then("{identifier}.uvec = {vector}")
+	public void lightUvecVector(String areaLightName, Vector expectedVector)
+	{
+		AreaLight light = (AreaLight)data.getLight(areaLightName);
+		Vector actualUvec = light.getUvec();
+
+		Assert.assertEquals(expectedVector, actualUvec);
+	}
+
+	@Then("{identifier}.usteps = {int}")
+	public void lightUsteps(String areaLightName, int expectedUsteps)
+	{
+		AreaLight light = (AreaLight)data.getLight(areaLightName);
+		int actualUsteps = light.getUsteps();
+
+		Assert.assertEquals(expectedUsteps, actualUsteps);
+	}
+
+	@Then("{identifier}.vvec = {vector}")
+	public void lightVvecVector(String areaLightName, Vector expectedVvec)
+	{
+		AreaLight light = (AreaLight)data.getLight(areaLightName);
+		Vector actualVvec = light.getVvec();
+
+		Assert.assertEquals(expectedVvec, actualVvec);
+	}
+
+	@Then("{identifier}.vsteps = {int}")
+	public void lightVsteps(String areaLightName, int expectedNumVsteps)
+	{
+		AreaLight light = (AreaLight)data.getLight(areaLightName);
+		int actualNumVsteps = light.getVsteps();
+
+		Assert.assertEquals(expectedNumVsteps, actualNumVsteps);
+	}
+
+	@Then("{identifier}.samples = {int}")
+	public void lightSamples(String areaLightName, int int1)
+	{
+		AreaLight light = (AreaLight)data.getLight(areaLightName);
+		int actualNumSamples = light.getNumSamples();
+
+		Assert.assertEquals(int1, actualNumSamples);
+	}
+
+	@Then("{identifier}.position = {point}")
+	public void lightPositionPoint(String areaLightName, Point expectedPosition)
+	{
+		AreaLight light = (AreaLight)data.getLight(areaLightName);
+		Point actualPosition = light.getPosition();
+
+		Assert.assertEquals(expectedPosition, actualPosition);
+	}
+
+	@When("{identifier} ← point_on_light\\({identifier}, {int}, {int})")
+	public void ptPoint_on_lightLight(String pointName, String areaLightName,
+		int u, int v)
+	{
+		AreaLight light = (AreaLight)data.getLight(areaLightName);
+
+		Point point = light.pointOnLight(u, v);
+		data.put(pointName, point);
 	}
 }

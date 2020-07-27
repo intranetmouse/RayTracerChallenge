@@ -48,10 +48,17 @@ public final class IntersectionComputations
 	{
 		List<Light> lightSources = world.getLightSources();
 		Material material = getObject().getMaterial();
+
+//		Color surfaceColor = Tracer.lighting(getObject(), lightSources,
+//			overPoint, eyeVector, normalVector, world);
+
 		Color surfaceColor = lightSources.stream()
-			.map(lightSource -> Tracer.lighting(material,
-				getObject(), lightSource, overPoint, eyeVector, normalVector,
-				Tracer.isShadowed(world, lightSource.getPosition(), overPoint)))
+			.map(lightSource -> {
+				double intensity = Tracer.intensityAt(lightSource, overPoint,
+					world);
+				return Tracer.lighting(material, getObject(), lightSource,
+					overPoint, eyeVector, normalVector, intensity);
+			})
 			.reduce(Color::add)
 			.orElse(Color.BLACK);
 //String indent = "       ".substring(remaining);
