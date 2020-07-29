@@ -54,7 +54,7 @@ public final class IntersectionComputations
 
 		Color surfaceColor = lightSources.stream()
 			.map(lightSource -> {
-				double intensity = Tracer.intensityAt(lightSource, overPoint,
+				double intensity = lightSource.intensityAt(overPoint,
 					world);
 				return Tracer.lighting(material, getObject(), lightSource,
 					overPoint, eyeVector, normalVector, intensity);

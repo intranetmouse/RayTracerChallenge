@@ -22,6 +22,7 @@ import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Transformable;
 import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.shape.AreaLight;
 import org.intranet.graphics.raytrace.shape.Cone;
 import org.intranet.graphics.raytrace.shape.Cube;
 import org.intranet.graphics.raytrace.shape.Cylinder;
@@ -398,12 +399,33 @@ public class YamlWorldParser
 			case "light":
 				@SuppressWarnings("unchecked")
 				ArrayList<String> at = (ArrayList<String>)objMap.get("at");
-				@SuppressWarnings("unchecked")
-				ArrayList<String> intensity = (ArrayList<String>)objMap.get("intensity");
+				if (at != null)
+				{
+					@SuppressWarnings("unchecked")
+					ArrayList<String> intensity = (ArrayList<String>)objMap.get("intensity");
 
-				PointLight pointLight = new PointLight(listToPoint(at),
-					listToColor(intensity));
-				world.addLight(pointLight);
+					PointLight pointLight = new PointLight(listToPoint(at),
+						listToColor(intensity));
+					world.addLight(pointLight);
+				}
+				else
+				{
+					@SuppressWarnings("unchecked")
+					ArrayList<String> corner = (ArrayList<String>)objMap.get("corner");
+					@SuppressWarnings("unchecked")
+					ArrayList<String> uvec = (ArrayList<String>)objMap.get("uvec");
+					@SuppressWarnings("unchecked")
+					ArrayList<String> vvec = (ArrayList<String>)objMap.get("vvec");
+					int usteps = stringToInt((String)objMap.get("usteps"));
+					int vsteps = stringToInt((String)objMap.get("vsteps"));
+					@SuppressWarnings("unchecked")
+					ArrayList<String> intensity = (ArrayList<String>)objMap.get("intensity");
+					boolean jitter = "true".equals(objMap.get("jitter"));
+					AreaLight areaLight = new AreaLight(listToPoint(corner),
+						listToVector(uvec), usteps, listToVector(vvec), vsteps,
+						listToColor(intensity));
+					world.addLight(areaLight);
+				}
 				break;
 			case "obj":
 				@SuppressWarnings("unchecked")

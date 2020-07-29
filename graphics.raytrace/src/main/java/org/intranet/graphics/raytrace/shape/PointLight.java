@@ -1,6 +1,8 @@
 package org.intranet.graphics.raytrace.shape;
 
 import org.intranet.graphics.raytrace.Light;
+import org.intranet.graphics.raytrace.Tracer;
+import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.surface.Color;
 
@@ -37,5 +39,11 @@ public class PointLight
 	{
 		return String.format("[light:position=%s,intensity=%s]", position,
 			intensity);
+	}
+
+	@Override
+	public double intensityAt(Point pt, World world)
+	{
+		return Tracer.isShadowed(world, getPosition(), pt) ? 0.0 : 1.0;
 	}
 }

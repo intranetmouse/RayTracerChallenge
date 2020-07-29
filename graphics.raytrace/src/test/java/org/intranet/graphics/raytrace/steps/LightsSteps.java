@@ -1,7 +1,6 @@
 package org.intranet.graphics.raytrace.steps;
 
 import org.intranet.graphics.raytrace.Light;
-import org.intranet.graphics.raytrace.Tracer;
 import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
@@ -57,7 +56,7 @@ public class LightsSteps
 		Point point = data.getPoint(pointName);
 		World w = data.getWorld(worldName);
 
-		double intensity = Tracer.intensityAt(light, point, w);
+		double intensity = light.intensityAt(point, w);
 		data.put(resultVarStr, intensity);
 	}
 

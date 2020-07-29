@@ -1,11 +1,11 @@
 package org.intranet.graphics.raytrace.shape;
 
 import org.intranet.graphics.raytrace.Light;
+import org.intranet.graphics.raytrace.Tracer;
+import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
 import org.intranet.graphics.raytrace.surface.Color;
-
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class AreaLight
 	implements Light
@@ -32,6 +32,10 @@ public class AreaLight
 	@Override
 	public Point getPosition() { return position; }
 
+	private Color intensity;
+	@Override
+	public Color getIntensity() { return intensity; }
+
 	public AreaLight(Point cornerPoint, Vector unscaledUvector,
 		int unscaledUvectorSteps, Vector unscaledVvector,
 		int unscaledVvectorSteps, Color color)
@@ -48,16 +52,32 @@ public class AreaLight
 
 		Vector averageVector = unscaledUvector.add(unscaledVvector).divide(2);
 		position = new Point(averageVector.getX(), averageVector.getY(), averageVector.getZ());
-	}
 
-	@Override
-	public Color getIntensity()
-	{
-		throw new NotImplementedException();
+		this.intensity = color;
 	}
 
 	public Point pointOnLight(int u, int v)
 	{
 		return corner.add(uvec.multiply(u + 0.5)).add(vvec.multiply(v + 0.5));
+	}
+
+	@Override
+	public double intensityAt(Point pt, World world)
+	{
+		double total = 0.0;
+
+		for (int v = 0; v < vsteps; v++)
+		{
+			for (int u = 0; u < usteps; u++)
+			{
+				Point light_position = pointOnLight(u, v);
+				if (!Tracer.isShadowed(world, light_position, pt))
+					total += 1.0;
+			}
+		}
+
+		double intensityAt = total / numSamples;
+System.out.println("Intensity at " + pt + " = " + intensityAt);
+		return intensityAt;
 	}
 }

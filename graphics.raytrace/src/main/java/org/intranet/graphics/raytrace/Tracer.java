@@ -1,12 +1,8 @@
 package org.intranet.graphics.raytrace;
 
-import java.util.List;
-
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Vector;
-import org.intranet.graphics.raytrace.shape.AreaLight;
-import org.intranet.graphics.raytrace.shape.PointLight;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.intranet.graphics.raytrace.surface.Pattern;
@@ -140,30 +136,5 @@ public final class Tracer
 		IntersectionList intersections = world.intersect(r, true);
 		Intersection h = intersections.hit();
 		return h != null && h.getDistance() < distance;
-	}
-
-	public static double intensityAt(Light light, Point pt, World world)
-	{
-		// FIXME: Explicit case analysis on Light
-		if (light instanceof PointLight)
-			return isShadowed(world, light.getPosition(), pt) ? 0.0 : 1.0;
-		else if (light instanceof AreaLight)
-		{
-			double total = 0.0;
-			AreaLight areaLight = (AreaLight)light;
-
-			for (int v = 0; v < areaLight.getVsteps(); v++)
-			{
-				for (int u = 0; u < areaLight.getUsteps(); u++)
-				{
-					Point light_position = areaLight.pointOnLight(u, v);
-					if (!isShadowed(world, light_position, pt))
-						total += 1.0;
-				}
-			}
-
-			return total / areaLight.getNumSamples();
-		}
-		throw new UnsupportedOperationException();
 	}
 }

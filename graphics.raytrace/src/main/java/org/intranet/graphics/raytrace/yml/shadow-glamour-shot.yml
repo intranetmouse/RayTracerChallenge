@@ -25,6 +25,10 @@
   jitter: true
   intensity: [1.5, 1.5, 1.5]
 
+#- add: light
+#  at: [0, 3, 4]
+#  intensity: [1.5, 1.5, 1.5]
+
 # Put the light in the middle of a "shining" cube so that it can show
 # up in reflections as a physical thing. Naturally, the cube must
 # opt out of shadow tests...

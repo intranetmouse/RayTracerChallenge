@@ -7,4 +7,6 @@ public interface Light
 {
 	Point getPosition();
 	Color getIntensity();
+
+	double intensityAt(Point pt, World world);
 }
