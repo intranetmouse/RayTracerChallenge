@@ -9,6 +9,7 @@ import java.util.Spliterators.AbstractSpliterator;
 
 import javax.swing.Action;
 
+import org.intranet.app.Document;
 import org.intranet.graphics.raytrace.Camera;
 import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.PixelCoordinate;

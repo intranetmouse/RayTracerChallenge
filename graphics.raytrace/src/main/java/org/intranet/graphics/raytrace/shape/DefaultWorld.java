@@ -1,6 +1,7 @@
 package org.intranet.graphics.raytrace.shape;
 
 import org.intranet.graphics.raytrace.World;
+import org.intranet.graphics.raytrace.light.PointLight;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.surface.Color;

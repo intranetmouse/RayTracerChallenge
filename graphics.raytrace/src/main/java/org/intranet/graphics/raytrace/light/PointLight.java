@@ -1,4 +1,4 @@
-package org.intranet.graphics.raytrace.shape;
+package org.intranet.graphics.raytrace.light;
 
 import org.intranet.graphics.raytrace.Light;
 import org.intranet.graphics.raytrace.Tracer;

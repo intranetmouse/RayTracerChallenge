@@ -102,12 +102,17 @@ public class Camera
 		StreamSupport.stream(traversal, parallel)
 			.forEach(pixel -> {
 				stats.startPixel();
-				Color color = renderPixel(world, pixel);
-				image.writePixel(pixel.getX(), pixel.getY(), color);
+				renderPixel(world, image, pixel);
 				stats.finishPixel();
 			});
 		image.setDone(true);
 		stats.stop();
+	}
+
+	public void renderPixel(World world, Canvas image, PixelCoordinate pixel)
+	{
+		Color color = renderPixel(world, pixel);
+		image.writePixel(pixel.getX(), pixel.getY(), color);
 	}
 
 	public static int MAX_REFLECTION_RECURSION = 4;

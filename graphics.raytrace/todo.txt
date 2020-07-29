@@ -35,3 +35,4 @@ Total
 - DONE Bonus Bounding Boxes: Part 2 - BVH
 - DONE 2020-07-17 Make Parser a stateful object
 - DONE 2020-07-17 Implement the christmas.yml fir_branch object
+- DONE 2020-07-28 Add a menu to render a single pixel

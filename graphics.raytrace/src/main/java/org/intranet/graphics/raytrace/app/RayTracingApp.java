@@ -2,6 +2,8 @@ package org.intranet.graphics.raytrace.app;
 
 import java.io.File;
 
+import org.intranet.app.App;
+
 public final class RayTracingApp
 	extends App<SceneDocument>
 {

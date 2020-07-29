@@ -1,4 +1,4 @@
-package org.intranet.graphics.raytrace.app;
+package org.intranet.app;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;

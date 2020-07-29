@@ -1,4 +1,4 @@
-package org.intranet.graphics.raytrace.shape;
+package org.intranet.graphics.raytrace.light;
 
 import org.intranet.graphics.raytrace.Light;
 import org.intranet.graphics.raytrace.Tracer;
@@ -51,7 +51,7 @@ public class AreaLight
 		numSamples = usteps * vsteps;
 
 		Vector averageVector = unscaledUvector.add(unscaledVvector).divide(2);
-		position = new Point(averageVector.getX(), averageVector.getY(), averageVector.getZ());
+		position = corner.add(averageVector);
 
 		this.intensity = color;
 	}
@@ -76,8 +76,6 @@ public class AreaLight
 			}
 		}
 
-		double intensityAt = total / numSamples;
-System.out.println("Intensity at " + pt + " = " + intensityAt);
-		return intensityAt;
+		return total / numSamples;
 	}
 }
