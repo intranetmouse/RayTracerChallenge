@@ -21,6 +21,7 @@ import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.shape.Sequence;
 import org.intranet.graphics.raytrace.shape.TubeLike;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
@@ -82,6 +83,12 @@ public final class RaytraceData
 	{ colorMap.put(colorName, color); }
 	public Color getColor(String colorName)
 	{ return colorMap.get(colorName); }
+
+	private Map<String, Sequence> sequenceMap = new HashMap<>();
+	public void putSequence(String sequenceName, Sequence color)
+	{ sequenceMap.put(sequenceName, color); }
+	public Sequence getSequence(String sequenceName)
+	{ return sequenceMap.get(sequenceName); }
 
 	private Map<String, Matrix> matricesMap = new HashMap<>();
 	public void put(String matrixName, Matrix m)

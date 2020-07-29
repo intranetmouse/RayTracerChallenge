@@ -5,6 +5,8 @@ import org.intranet.graphics.raytrace.Tracer;
 import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.shape.FixedSequence;
+import org.intranet.graphics.raytrace.shape.Sequence;
 import org.intranet.graphics.raytrace.surface.Color;
 
 public class AreaLight
@@ -58,7 +60,7 @@ public class AreaLight
 
 	public Point pointOnLight(int u, int v)
 	{
-		return corner.add(uvec.multiply(u + 0.5)).add(vvec.multiply(v + 0.5));
+		return corner.add(uvec.multiply(u + sequence.next())).add(vvec.multiply(v + sequence.next()));
 	}
 
 	@Override
@@ -77,5 +79,11 @@ public class AreaLight
 		}
 
 		return total / numSamples;
+	}
+
+	private Sequence sequence = new FixedSequence(0.5);
+	public void setJitterBy(Sequence s)
+	{
+		this.sequence = s;
 	}
 }

@@ -29,6 +29,7 @@ import org.intranet.graphics.raytrace.shape.Cube;
 import org.intranet.graphics.raytrace.shape.Cylinder;
 import org.intranet.graphics.raytrace.shape.Group;
 import org.intranet.graphics.raytrace.shape.Plane;
+import org.intranet.graphics.raytrace.shape.RandomSequence;
 import org.intranet.graphics.raytrace.shape.Sphere;
 import org.intranet.graphics.raytrace.shape.Triangle;
 import org.intranet.graphics.raytrace.shape.TubeLike;
@@ -420,10 +421,12 @@ public class YamlWorldParser
 					int vsteps = stringToInt((String)objMap.get("vsteps"));
 					@SuppressWarnings("unchecked")
 					ArrayList<String> intensity = (ArrayList<String>)objMap.get("intensity");
-					boolean jitter = "true".equals(objMap.get("jitter"));
 					AreaLight areaLight = new AreaLight(listToPoint(corner),
 						listToVector(uvec), usteps, listToVector(vvec), vsteps,
 						listToColor(intensity));
+					boolean jitter = "true".equals(objMap.get("jitter"));
+					if (jitter)
+						areaLight.setJitterBy(new RandomSequence());
 					world.addLight(areaLight);
 				}
 				break;

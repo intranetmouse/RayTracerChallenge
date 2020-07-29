@@ -11,8 +11,10 @@ import org.intranet.graphics.raytrace.shape.Cone;
 import org.intranet.graphics.raytrace.shape.Cube;
 import org.intranet.graphics.raytrace.shape.Cylinder;
 import org.intranet.graphics.raytrace.shape.DefaultWorld;
+import org.intranet.graphics.raytrace.shape.FixedSequence;
 import org.intranet.graphics.raytrace.shape.Group;
 import org.intranet.graphics.raytrace.shape.Plane;
+import org.intranet.graphics.raytrace.shape.Sequence;
 import org.intranet.graphics.raytrace.shape.Sphere;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
@@ -422,6 +424,37 @@ public class CustomParameters
 	public String equalNotEqual(String eqNe)
 	{
 		return eqNe;
+	}
+
+	@ParameterType("sequence\\(" + threeDoublesPattern + "\\)")
+	public Sequence sequence3(String xStr, String yStr, String zStr)
+	{
+		double x = Double.valueOf(xStr);
+		double y = Double.valueOf(yStr);
+		double z = Double.valueOf(zStr);
+
+		return new FixedSequence(x, y, z);
+	}
+
+	@ParameterType("sequence\\(" + twoDoublesPattern + "\\)")
+	public Sequence sequence2(String xStr, String yStr)
+	{
+		double x = Double.valueOf(xStr);
+		double y = Double.valueOf(yStr);
+
+		return new FixedSequence(x, y);
+	}
+
+	@ParameterType("sequence\\(" + fiveDoublesPattern + "\\)")
+	public Sequence sequence5(String str1, String str2, String str3, String str4, String str5)
+	{
+		double d1 = Double.valueOf(str1);
+		double d2 = Double.valueOf(str2);
+		double d3 = Double.valueOf(str3);
+		double d4 = Double.valueOf(str4);
+		double d5 = Double.valueOf(str5);
+
+		return new FixedSequence(d1, d2, d3, d4, d5);
 	}
 
 //	@ParameterType("vector\\(" + threeDoublesPattern + ")")

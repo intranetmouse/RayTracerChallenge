@@ -14,7 +14,8 @@ public interface StepPatterns
 	public static final String twoDoublesPattern = doublePattern + ", " + doublePattern;
 	public static final String threeDoublesPattern = twoDoublesPattern + ", " + doublePattern;
 	public static final String fourDoublesPattern = threeDoublesPattern + ", " + doublePattern;
-	public static final String sixDoublesPattern = threeDoublesPattern + ", " + threeDoublesPattern;
+	public static final String fiveDoublesPattern = fourDoublesPattern + ", " + doublePattern;
+	public static final String sixDoublesPattern = fiveDoublesPattern + ", " + doublePattern;
 	public static final String signPattern = "([-]?)";
 	String TRUE_PATTERN = "[tT][rR][uU][eE]|1|[yY][eE][sS]";
 }

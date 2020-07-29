@@ -6,17 +6,18 @@ import org.intranet.graphics.raytrace.light.AreaLight;
 import org.intranet.graphics.raytrace.light.PointLight;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.shape.Sequence;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.junit.Assert;
 
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Given.Givens;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class LightsSteps
 	extends StepsParent
 {
-
 	public LightsSteps(RaytraceData data)
 	{
 		super(data);
@@ -150,5 +151,16 @@ public class LightsSteps
 
 		Point point = light.pointOnLight(u, v);
 		data.put(pointName, point);
+	}
+
+	@Givens({
+		@Given("{identifier}.jitter_by ← {sequence2}"),
+		@Given("{identifier}.jitter_by ← {sequence5}")
+	})
+	public void lightJitter_bySequence(String areaLightName, Sequence s)
+	{
+		AreaLight light = (AreaLight)data.getLight(areaLightName);
+
+		light.setJitterBy(s);
 	}
 }
