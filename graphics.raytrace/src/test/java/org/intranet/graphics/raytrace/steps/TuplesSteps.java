@@ -306,20 +306,6 @@ public class TuplesSteps
 		Vector actualVector = vector1.cross(vector2);
 		Assert.assertEquals(expectedVector, actualVector);
 	}
-//
-//
-////	@Then("^" + wordPattern + "\\.(red|green|blue) = " + doublePattern + "$")
-////	public void colorAssert(String colorVarName, String colorName,
-////		double expectedColor)
-////	{
-////		Color color = data.getColor(colorVarName);
-////		Double value = "red".equals(colorName) ? color.getRed() :
-////			"green".equals(colorName) ? color.getGreen() :
-////			"blue".equals(colorName) ? color.getBlue() :
-////			null;
-////		Assert.assertNotNull("Illegal color name " + colorName, value);
-////		Assert.assertEquals(expectedColor, value, Tuple.EPSILON);
-////	}
 
 	@Then("{identifier} * {dbl} = {color}")
 	public void colorOperationDouble_equals_Color(String color1Name,
@@ -330,13 +316,22 @@ public class TuplesSteps
 		Assert.assertEquals(expected, result);
 	}
 
-//	@Then("^" + wordPattern + " = color\\(" + threeDoublesPattern + "\\)$")
-//	public void color_equals_Color(String color1Name,
-//		double red, double green, double blue)
-//	{
-//		Color expected = new Color(red, green, blue);
-//		Color c1 = data.getColor(color1Name);
-//		Assert.assertEquals(expected, c1);
-//	}
+	@Given("{identifier} ← normalize\\({identifier} - {identifier})")
+	public void eyevNormalizeEyePt(String vectorName, String point1Name, String point2Name)
+	{
+		Point p1 = data.getPoint(point1Name);
+		Point p2 = data.getPoint(point2Name);
+		Vector v = p1.subtract(p2);
+		data.put(vectorName, v);
+	}
 
+	@Given("{identifier} ← vector\\({identifier}.x, {identifier}.y, {identifier}.z)")
+	public void normalvVectorPtXPtYPtZ(String vectorName, String pt1Name, String pt2Name, String pt3Name)
+	{
+		Point p1 = data.getPoint(pt1Name);
+		Point p2 = data.getPoint(pt2Name);
+		Point p3 = data.getPoint(pt3Name);
+		Vector v = new Vector(p1.getX(), p2.getY(), p3.getZ());
+		data.put(vectorName, v);
+	}
 }

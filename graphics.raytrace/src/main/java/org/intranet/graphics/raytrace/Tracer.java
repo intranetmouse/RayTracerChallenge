@@ -1,5 +1,7 @@
 package org.intranet.graphics.raytrace;
 
+import java.util.List;
+
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Vector;
@@ -86,55 +88,77 @@ public final class Tracer
 		// compute the ambient contribution
 		Color ambientColor = effectiveColor.multiply(m.getAmbient());
 
-		// find the direction to the light source
-		Vector lightV = light.getPosition().subtract(position).normalize();
+		Color sumDiffuseColor = Color.BLACK;
+		Color sumSpecularColor = Color.BLACK;
+		List<Point> samples = light.getSamples();
+		for (Point sample : samples)
+		{
+			// find the direction to the light source
+			Vector lightV = sample.subtract(position).normalize();
 
-		// lightDotNormal represents the cosine of the angle between the
-		// light vector and the normal vector. A negative number means the
-		// light is on the other side of the surface.
-		double lightDotNormal = lightV.dot(normalV);
-		boolean backOfObject = lightDotNormal < 0;
+			// lightDotNormal represents the cosine of the angle between the
+			// light vector and the normal vector. A negative number means the
+			// light is on the other side of the surface.
+			double lightDotNormal = lightV.dot(normalV);
+			boolean backOfObject = lightDotNormal < 0;
 
-		boolean inShadow = intensity == 0.0;
-		if (backOfObject || inShadow)
-			return ambientColor;
+			boolean inShadow = intensity == 0.0;
+			if (backOfObject || inShadow)
+				continue;
 
-		// compute the diffuse contribution
-		Color diffuseColor = effectiveColor.multiply(m.getDiffuse() * intensity)
-			.multiply(lightDotNormal);
+			// compute the diffuse contribution
+			Color diffuseContribution = effectiveColor
+				.multiply(m.getDiffuse() * intensity * lightDotNormal);
+			sumDiffuseColor = sumDiffuseColor.add(diffuseContribution);
 
-		// reflectDotEye represents the cosine of the angle between the
-		// reflection vector and the eye vector. A negative number means the
-		// light reflects away from the eye.
-		Vector reflectV = lightV.negate().reflect(normalV);
-		double reflectDotEye = reflectV.dot(eyeV);
+			// reflectDotEye represents the cosine of the angle between the
+			// reflection vector and the eye vector. A negative number means the
+			// light reflects away from the eye.
+			Vector reflectV = lightV.negate().reflect(normalV);
+			double reflectDotEye = reflectV.dot(eyeV);
 
-		if (reflectDotEye < 0)
-			return ambientColor.add(diffuseColor);
+			if (reflectDotEye < 0)
+				continue;
 
-		// compute the specular contribution
-		double factor = Math.pow(reflectDotEye, m.getShininess());
-		Color specularColor = light.getIntensity().multiply(m.getSpecular() * intensity)
-			.multiply(factor);
-		//System.out.println("Material.lighting: position="+position+", factor="+factor+", specularColor="+specularColor+",reflectDotEye="+reflectDotEye);
+			// compute the specular contribution
+			double factor = Math.pow(reflectDotEye, m.getShininess());
+			Color specularContribution = light.getIntensity()
+				.multiply(m.getSpecular() * intensity * factor);
+			sumSpecularColor = sumSpecularColor.add(specularContribution);
+			//System.out.println("Material.lighting: position="+position+", factor="+factor+", specularColor="+specularColor+",reflectDotEye="+reflectDotEye);
+		}
 
-		return ambientColor.add(diffuseColor).add(specularColor);
+		Color avgDiffuseColor = divide(sumDiffuseColor, samples.size());
+		Color avgSpecularColor = divide(sumSpecularColor, samples.size());
+
+		return ambientColor.add(avgDiffuseColor).add(avgSpecularColor);
 	}
 
-	public static boolean isShadowed(World world, Point point, Light light)
+	private static Color divide(Color color, int size)
 	{
-		return isShadowed(world, light.getPosition(), point);
+		return new Color(color.getRed() / size, color.getGreen() / size,
+			color.getBlue() / size);
 	}
 
-	public static boolean isShadowed(World world, Point lightPosition,
+	public static double isShadowed(World world, Point point, Light light)
+	{
+		return isShadowed(world, light.getSamples(), point);
+	}
+
+	public static double isShadowed(World world, List<Point> lightPositions,
 		Point otherPoint)
 	{
-		Vector v = lightPosition.subtract(otherPoint);
-		double distance = v.magnitude();
-		Vector direction = v.normalize();
-		Ray r = new Ray(otherPoint, direction);
-		IntersectionList intersections = world.intersect(r, true);
-		Intersection h = intersections.hit();
-		return h != null && h.getDistance() < distance;
+		return lightPositions.stream()
+			.mapToInt(lightPosition -> {
+				Vector v = lightPosition.subtract(otherPoint);
+				double distance = v.magnitude();
+				Vector direction = v.normalize();
+				Ray r = new Ray(otherPoint, direction);
+				IntersectionList intersections = world.intersect(r, true);
+				Intersection h = intersections.hit();
+				return (h != null && h.getDistance() < distance) ? 0 : 1;
+			})
+			.average()
+			.orElse(0.0);
 	}
 }

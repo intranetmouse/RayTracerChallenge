@@ -226,4 +226,22 @@ public class MaterialsSteps
 
 		data.put(resultingColorName, color);
 	}
+
+	@When("{identifier} ← lighting\\({identifier}.material, {identifier}, {identifier}, {identifier}, {identifier}, {identifier}, {double})")
+	public void resultLightingShapeMaterialShapeLightPtEyevNormalv(
+		String resultingColorName, String shape1Name, String shape2Name,
+		String lightName, String pointName, String eyeVectorName,
+		String normalVectorName, double intensity)
+	{
+		Shape shape1 = data.getShape(shape1Name);
+		Material m = shape1.getMaterial();
+		Shape shape2 = data.getShape(shape2Name);
+		Light light = data.getLight(lightName);
+		Point pt = data.getPoint(pointName);
+		Vector eyeV = data.getVector(eyeVectorName);
+		Vector normalV = data.getVector(normalVectorName);
+
+		Color color = Tracer.lighting(m, shape2, light, pt, eyeV, normalV, intensity);
+		data.put(resultingColorName, color);
+	}
 }

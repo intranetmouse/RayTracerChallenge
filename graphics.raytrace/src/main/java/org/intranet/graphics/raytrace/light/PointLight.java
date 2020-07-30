@@ -1,5 +1,8 @@
 package org.intranet.graphics.raytrace.light;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.intranet.graphics.raytrace.Light;
 import org.intranet.graphics.raytrace.Tracer;
 import org.intranet.graphics.raytrace.World;
@@ -9,15 +12,16 @@ import org.intranet.graphics.raytrace.surface.Color;
 public class PointLight
 	implements Light
 {
-	private Point position;
-	public Point getPosition() { return position; }
+	private List<Point> positions;
+	@Override
+	public List<Point> getSamples() { return positions; }
 
 	private Color intensity;
 	public Color getIntensity() { return intensity; }
 
 	public PointLight(Point position, Color intensity)
 	{
-		this.position = position;
+		this.positions = Arrays.asList(position);
 		this.intensity = intensity;
 	}
 
@@ -27,7 +31,7 @@ public class PointLight
 		if (obj == null || !(obj instanceof PointLight))
 			return false;
 		PointLight other = (PointLight) obj;
-		if (!position.equals(other.position))
+		if (!positions.equals(other.positions))
 			return false;
 		if (!intensity.equals(other.intensity))
 			return false;
@@ -37,13 +41,13 @@ public class PointLight
 	@Override
 	public String toString()
 	{
-		return String.format("[light:position=%s,intensity=%s]", position,
+		return String.format("[light:positions=%s,intensity=%s]", positions,
 			intensity);
 	}
 
 	@Override
 	public double intensityAt(Point pt, World world)
 	{
-		return Tracer.isShadowed(world, getPosition(), pt) ? 0.0 : 1.0;
+		return Tracer.isShadowed(world, positions, pt);
 	}
 }

@@ -1,5 +1,6 @@
 package org.intranet.graphics.raytrace.steps;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.intranet.graphics.raytrace.Camera;
@@ -14,6 +15,7 @@ import org.intranet.graphics.raytrace.primitive.BoundingBox;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
+import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.junit.Assert;
@@ -333,8 +335,8 @@ public class WorldSteps
 		World world = data.getWorld(worldName);
 		Point point = data.getPoint(pointName);
 		Light light = world.getLightSources().get(0);
-		boolean actualResult = Tracer.isShadowed(world, point, light);
-		Assert.assertEquals(expectedResult, actualResult);
+		double actualResult = Tracer.isShadowed(world, point, light);
+		Assert.assertEquals(expectedResult, Tuple.isZero(actualResult));
 	}
 
 	@Then("is_shadowed\\({identifier}, {identifier}, {identifier}) is {boolean}")
@@ -345,7 +347,8 @@ public class WorldSteps
 		Point lightPosition = data.getPoint(lightPositionName);
 		Point otherPoint = data.getPoint(otherPointName);
 
-		boolean actualResult = Tracer.isShadowed(world, lightPosition, otherPoint);
-		Assert.assertEquals(expectedResult, actualResult);
+		double actualResult = Tracer.isShadowed(world,
+			Arrays.asList(lightPosition), otherPoint);
+		Assert.assertEquals(expectedResult, Tuple.isZero(actualResult));
 	}
 }

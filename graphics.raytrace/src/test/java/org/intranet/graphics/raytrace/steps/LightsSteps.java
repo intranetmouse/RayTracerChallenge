@@ -138,7 +138,7 @@ public class LightsSteps
 	public void lightPositionPoint(String areaLightName, Point expectedPosition)
 	{
 		AreaLight light = (AreaLight)data.getLight(areaLightName);
-		Point actualPosition = light.getPosition();
+		Point actualPosition = light.getSamples().get(0);
 
 		Assert.assertEquals(expectedPosition, actualPosition);
 	}

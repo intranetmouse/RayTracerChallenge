@@ -1,5 +1,8 @@
 package org.intranet.graphics.raytrace.light;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.intranet.graphics.raytrace.Light;
 import org.intranet.graphics.raytrace.Tracer;
 import org.intranet.graphics.raytrace.World;
@@ -30,10 +33,6 @@ public class AreaLight
 	private int numSamples;
 	public int getNumSamples() { return numSamples; }
 
-	private Point position;
-	@Override
-	public Point getPosition() { return position; }
-
 	private Color intensity;
 	@Override
 	public Color getIntensity() { return intensity; }
@@ -52,10 +51,36 @@ public class AreaLight
 
 		numSamples = usteps * vsteps;
 
-		Vector averageVector = unscaledUvector.add(unscaledVvector).divide(2);
-		position = corner.add(averageVector);
-
 		this.intensity = color;
+
+		resetPositions();
+	}
+
+	private void resetPositions()
+	{
+		positions = calculatePositions();
+	}
+
+	private List<Point> calculatePositions()
+	{
+		List<Point> positions = new ArrayList<>();
+		positions.clear();
+		for (int v = 0; v < vsteps; v++)
+		{
+			for (int u = 0; u < usteps; u++)
+			{
+				Point light_position = pointOnLight(u, v);
+				positions.add(light_position);
+			}
+		}
+		return positions;
+	}
+
+	private List<Point> positions = new ArrayList<>();
+	@Override
+	public List<Point> getSamples()
+	{
+		return calculatePositions();
 	}
 
 	public Point pointOnLight(int u, int v)
@@ -66,24 +91,14 @@ public class AreaLight
 	@Override
 	public double intensityAt(Point pt, World world)
 	{
-		double total = 0.0;
-
-		for (int v = 0; v < vsteps; v++)
-		{
-			for (int u = 0; u < usteps; u++)
-			{
-				Point light_position = pointOnLight(u, v);
-				if (!Tracer.isShadowed(world, light_position, pt))
-					total += 1.0;
-			}
-		}
-
-		return total / numSamples;
+		resetPositions();
+		return Tracer.isShadowed(world, positions, pt);
 	}
 
 	private Sequence sequence = new FixedSequence(0.5);
 	public void setJitterBy(Sequence s)
 	{
 		this.sequence = s;
+		resetPositions();
 	}
 }

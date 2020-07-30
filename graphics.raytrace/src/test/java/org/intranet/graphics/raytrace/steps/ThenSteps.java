@@ -1,5 +1,7 @@
 package org.intranet.graphics.raytrace.steps;
 
+import java.util.List;
+
 import org.intranet.graphics.raytrace.Camera;
 import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.Intersection;
@@ -435,7 +437,9 @@ public class ThenSteps
 		Assert.assertNotNull(light);
 
 		Point expectedPosition = data.getPoint(expectedPositionName);
-		Assert.assertEquals(expectedPosition, light.getPosition());
+		List<Point> lightPositions = light.getSamples();
+		Assert.assertEquals(1, lightPositions.size());
+		Assert.assertEquals(expectedPosition, lightPositions.get(0));
 	}
 
 	@Then("{identifier}.intensity = {identifier}")
