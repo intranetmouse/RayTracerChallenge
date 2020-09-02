@@ -26,6 +26,7 @@ import org.intranet.graphics.raytrace.shape.TubeLike;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.intranet.graphics.raytrace.surface.Pattern;
+import org.intranet.graphics.raytrace.surface.UvPattern;
 import org.junit.Assert;
 
 public final class RaytraceData
@@ -199,4 +200,9 @@ public final class RaytraceData
 	public ObjFileParser getObjParser(String objFileParserName)
 	{ return objFileParserMap.get(objFileParserName); }
 
+	private Map<String, UvPattern> uvPattern = new HashMap<>();
+	public void put(String uvMapName, UvPattern value)
+	{ uvPattern.put(uvMapName, value); }
+	public UvPattern getUvPattern(String uvMapName)
+	{ return uvPattern.get(uvMapName); }
 }

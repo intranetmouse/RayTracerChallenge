@@ -20,6 +20,17 @@
 - Cancellable : when switching to Java 9+, use takeWhile
 
 
+OBJ files:
+https://www.prinmath.com/csci5229/OBJ/index.html
+https://web.archive.org/web/20190208033253/http://graphics.im.ntu.edu.tw/~robin/courses/gm05/model/
+elephav.obj.gz
+ateneav.obj.gz
+venusv.obj.gz
+Lucy:
+- https://free3d.com/3d-model/angel-lucy-sculpture-46454.html
+- https://www.thingiverse.com/thing:41939
+
+
 Change progress to show:
            Pixels  Percent  Time  Speed pix/ms
 Completed                         

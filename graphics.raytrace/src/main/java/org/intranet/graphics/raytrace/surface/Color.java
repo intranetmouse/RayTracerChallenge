@@ -8,6 +8,7 @@ public final class Color
 	boolean outOfBounds;
 
 	public static final Color BLACK = new Color(0, 0, 0);
+	public static final Color WHITE = new Color(1, 1, 1);
 
 	public Color(double x, double y, double z)
 	{

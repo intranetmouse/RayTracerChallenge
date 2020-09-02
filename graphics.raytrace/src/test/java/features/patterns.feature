@@ -115,3 +115,50 @@ Scenario: Checkers should repeat in z
   Then pattern_at(pattern, point(0, 0, 0)) = white
     And pattern_at(pattern, point(0, 0, 0.99)) = white
     And pattern_at(pattern, point(0, 0, 1.01)) = black
+
+Scenario Outline: Checker pattern in 2D
+  Given checkers ← uv_checkers(2, 2, black, white)
+  When color ← uv_pattern_at(checkers, <u>, <v>)
+  Then color = <expected>
+
+  Examples:
+    | u   | v   | expected |
+    | 0.0 | 0.0 | black    |
+    | 0.5 | 0.0 | white    |
+    | 0.0 | 0.5 | white    |
+    | 0.5 | 0.5 | black    |
+    | 1.0 | 1.0 | black    |
+
+Scenario Outline: Using a spherical mapping on a 3D point
+  Given p ← <point>
+  When (u, v) ← spherical_map(p)
+  Then u = <u>
+    And v = <v>
+
+  Examples:
+    | point                | u    | v    |
+    | point(0, 0, -1)      | 0.0  | 0.5  |
+    | point(1, 0, 0)       | 0.25 | 0.5  |
+    | point(0, 0, 1)       | 0.5  | 0.5  |
+    | point(-1, 0, 0)      | 0.75 | 0.5  |
+    | point(0, 1, 0)       | 0.5  | 1.0  |
+    | point(0, -1, 0)      | 0.5  | 0.0  |
+    | point(√2/2, √2/2, 0) | 0.25 | 0.75 |
+
+Scenario Outline: Using a texture map pattern with a spherical map
+  Given checkers ← uv_checkers(16, 8, black, white)
+    And pattern ← texture_map(checkers, spherical_map)
+  Then pattern_at(pattern, <point>) = <color>
+
+  Examples:
+    | point                            | color |
+    | point(0.4315, 0.4670, 0.7719)    | white |
+    | point(-0.9654, 0.2552, -0.0534)  | black |
+    | point(0.1039, 0.7090, 0.6975)    | white |
+    | point(-0.4986, -0.7856, -0.3663) | black |
+    | point(-0.0317, -0.9395, 0.3411)  | black |
+    | point(0.4809, -0.7721, 0.4154)   | black |
+    | point(0.0285, -0.9612, -0.2745)  | black |
+    | point(-0.5734, -0.2162, -0.7903) | white |
+    | point(0.7688, -0.1470, 0.6223)   | black |
+    | point(-0.7652, 0.2175, 0.6060)   | black |

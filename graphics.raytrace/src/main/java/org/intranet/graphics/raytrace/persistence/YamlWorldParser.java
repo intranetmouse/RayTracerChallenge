@@ -34,12 +34,17 @@ import org.intranet.graphics.raytrace.shape.Sphere;
 import org.intranet.graphics.raytrace.shape.Triangle;
 import org.intranet.graphics.raytrace.shape.TubeLike;
 import org.intranet.graphics.raytrace.surface.CheckerPattern;
+import org.intranet.graphics.raytrace.surface.CheckersUvPattern;
 import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.GradientPattern;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.intranet.graphics.raytrace.surface.Pattern;
 import org.intranet.graphics.raytrace.surface.RingPattern;
+import org.intranet.graphics.raytrace.surface.SphericalUvMap;
 import org.intranet.graphics.raytrace.surface.StripePattern;
+import org.intranet.graphics.raytrace.surface.TextureMapPattern;
+import org.intranet.graphics.raytrace.surface.UvMap;
+import org.intranet.graphics.raytrace.surface.UvPattern;
 
 import com.esotericsoftware.yamlbeans.YamlReader;
 
@@ -351,6 +356,40 @@ public class YamlWorldParser
 						new RingPattern(color1, color2) :
 						new CheckerPattern(color1, color2);
 					mat.setPattern(pattern);
+					break;
+				case "map":
+					String uvMappingType = (String)patternMap.get("mapping");
+					if (!"spherical".equals(uvMappingType))
+						System.err.println("Unknown uv mapping type " + uvMappingType);
+					UvMap uvMapping = new SphericalUvMap();
+
+					@SuppressWarnings("unchecked")
+					Map<String, Object> uvPatternAttribs = (Map<String, Object>)patternMap.get("uv_pattern");
+					String uvType = (String)uvPatternAttribs.get("type");
+					UvPattern uvPattern;
+					if (!"checkers".equals(uvType))
+					{
+						System.err.println("Unknown uv pattern type="+uvType);
+						uvPattern = new UvPattern() {
+							@Override
+							public Color colorAt(Double u, Double v)
+							{ return new Color(0, 1, 0); }
+						};
+					}
+					else
+					{
+						int uSquares = stringToInt((String) uvPatternAttribs.get("width"));
+						int vSquares = stringToInt((String) uvPatternAttribs.get("height"));
+						@SuppressWarnings("unchecked")
+						List<List<String>> uvColors = (List<List<String>>)uvPatternAttribs.get("colors");
+						Color uvColor1 = listToColor(uvColors.get(0));
+						Color uvColor2 = listToColor(uvColors.get(1));
+						uvPattern = new CheckersUvPattern(uSquares, vSquares, uvColor1, uvColor2);
+					}
+
+					pattern = new TextureMapPattern(uvPattern, uvMapping);
+					mat.setPattern(pattern);
+
 					break;
 				default:
 					System.err.println("Unknown pattern type " + patternType);

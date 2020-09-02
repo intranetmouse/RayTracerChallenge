@@ -6,6 +6,7 @@ import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.surface.Color;
 import org.junit.Assert;
 
 import io.cucumber.java.en.Given;
@@ -202,8 +203,23 @@ public class MatricesSteps
 		Matrix m1 = data.getMatrix(mtx1Name);
 		Matrix m2 = "identity_matrix".equals(mtx2Name) ?
 			Matrix.identity(m1.getNumCols()) : data.getMatrix(mtx2Name);
+		if (m2 != null)
+		{
+			Assert.assertEquals(m1, m2);
+			return;
+		}
 
-		Assert.assertEquals(m1, m2);
+		Color c1 = data.getColor(mtx1Name);
+		Color c2 = "black".equals(mtx2Name) ? Color.BLACK :
+			"white".equals(mtx2Name) ? Color.WHITE :
+			data.getColor(mtx2Name);
+		if (c1 != null || c2 != null)
+		{
+			Assert.assertEquals(c1, c2);
+			return;
+		}
+
+		Assert.fail("Unknown data for types " + mtx1Name + " and " + mtx2Name);
 	}
 
 	@Then("{identifier} != {identifier}")
