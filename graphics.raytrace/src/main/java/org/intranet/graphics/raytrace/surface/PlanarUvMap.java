@@ -1,19 +1,19 @@
 package org.intranet.graphics.raytrace.surface;
 
-import org.intranet.graphics.raytrace.primitive.Pair;
+import org.intranet.graphics.raytrace.primitive.DoublePair;
 import org.intranet.graphics.raytrace.primitive.Point;
 
 public final class PlanarUvMap
 	implements UvMap
 {
 	@Override
-	public Pair<Double> map(Point p)
+	public DoublePair map(Point p)
 	{
 		double u = mod(p.getX());
 
 		double v = mod(p.getZ());
 
-		return new Pair<>(u, v);
+		return new DoublePair(u, v);
 	}
 
 	static final double mod(double val)

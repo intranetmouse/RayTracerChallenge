@@ -3,7 +3,7 @@ package org.intranet.graphics.raytrace.shape;
 import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Shape;
-import org.intranet.graphics.raytrace.primitive.Pair;
+import org.intranet.graphics.raytrace.primitive.DoublePair;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Vector;
@@ -18,15 +18,15 @@ public final class Cube
 	@Override
 	public IntersectionList localIntersections(Ray ray)
 	{
-		Pair<Double> xtPair = check_axis(ray.getOrigin().getX(), ray.getDirection().getX());
+		DoublePair xtPair = check_axis(ray.getOrigin().getX(), ray.getDirection().getX());
 		double xtmin = xtPair.getFirst();
 		double xtmax = xtPair.getSecond();
 
-		Pair<Double> ytPair = check_axis(ray.getOrigin().getY(), ray.getDirection().getY());
+		DoublePair ytPair = check_axis(ray.getOrigin().getY(), ray.getDirection().getY());
 		double ytmin = ytPair.getFirst();
 		double ytmax = ytPair.getSecond();
 
-		Pair<Double> ztPair = check_axis(ray.getOrigin().getZ(), ray.getDirection().getZ());
+		DoublePair ztPair = check_axis(ray.getOrigin().getZ(), ray.getDirection().getZ());
 		double ztmin = ztPair.getFirst();
 		double ztmax = ztPair.getSecond();
 
@@ -41,7 +41,7 @@ public final class Cube
 		return new IntersectionList(i1, i2);
 	}
 
-	public static Pair<Double> check_axis(double origin, double direction)
+	public static DoublePair check_axis(double origin, double direction)
 	{
 		double tmin_numerator = (-1 - origin);
 		double tmax_numerator = (1 - origin);
@@ -68,7 +68,7 @@ public final class Cube
 			tmax = temp;
 		}
 
-		return new Pair<Double>(tmin, tmax);
+		return new DoublePair(tmin, tmax);
 	}
 
 	@Override

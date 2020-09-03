@@ -106,17 +106,17 @@ public class BoundingBox
 	{
 		Point rayOrigin = ray.getOrigin();
 		Vector rayDirection = ray.getDirection();
-		Pair<Double> xtPair = check_axis(rayOrigin.getX(), rayDirection.getX(),
+		DoublePair xtPair = check_axis(rayOrigin.getX(), rayDirection.getX(),
 			min.getX(), max.getX());
 		double xtmin = xtPair.getFirst();
 		double xtmax = xtPair.getSecond();
 
-		Pair<Double> ytPair = check_axis(rayOrigin.getY(), rayDirection.getY(),
+		DoublePair ytPair = check_axis(rayOrigin.getY(), rayDirection.getY(),
 			min.getY(), max.getY());
 		double ytmin = ytPair.getFirst();
 		double ytmax = ytPair.getSecond();
 
-		Pair<Double> ztPair = check_axis(rayOrigin.getZ(), rayDirection.getZ(),
+		DoublePair ztPair = check_axis(rayOrigin.getZ(), rayDirection.getZ(),
 			min.getZ(), max.getZ());
 		double ztmin = ztPair.getFirst();
 		double ztmax = ztPair.getSecond();
@@ -129,7 +129,7 @@ public class BoundingBox
 		return true;
 	}
 
-	private Pair<Double> check_axis(double origin, double direction, double min, double max)
+	private DoublePair check_axis(double origin, double direction, double min, double max)
 	{
 		double tmin_numerator = (min - origin);
 		double tmax_numerator = (max - origin);
@@ -144,7 +144,7 @@ public class BoundingBox
 			tmax = temp;
 		}
 
-		return new Pair<Double>(tmin, tmax);
+		return new DoublePair(tmin, tmax);
 	}
 
 	public Pair<BoundingBox> split()

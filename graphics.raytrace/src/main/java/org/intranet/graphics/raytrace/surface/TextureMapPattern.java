@@ -1,6 +1,6 @@
 package org.intranet.graphics.raytrace.surface;
 
-import org.intranet.graphics.raytrace.primitive.Pair;
+import org.intranet.graphics.raytrace.primitive.DoublePair;
 import org.intranet.graphics.raytrace.primitive.Point;
 
 public class TextureMapPattern
@@ -18,7 +18,7 @@ public class TextureMapPattern
 	@Override
 	public Color colorAt(Point point)
 	{
-		Pair<Double> uv = uvMap.map(point);
+		DoublePair uv = uvMap.map(point);
 		double u = uv.getFirst();
 		double v = uv.getSecond();
 		return uvPattern.colorAt(u, v);

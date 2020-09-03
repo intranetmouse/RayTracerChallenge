@@ -1,6 +1,6 @@
 package org.intranet.graphics.raytrace.surface;
 
-import org.intranet.graphics.raytrace.primitive.Pair;
+import org.intranet.graphics.raytrace.primitive.DoublePair;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
 
@@ -8,7 +8,7 @@ public final class SphericalUvMap
 	implements UvMap
 {
 	@Override
-	public Pair<Double> map(Point p)
+	public DoublePair map(Point p)
 	{
 		// compute the azimuthal angle
 		// -π < theta <= π
@@ -39,6 +39,6 @@ public final class SphericalUvMap
 		// by subtracting it from 1.
 		double v = 1 - phi / Math.PI;
 
-		return new Pair<>(u, v);
+		return new DoublePair(u, v);
 	}
 }

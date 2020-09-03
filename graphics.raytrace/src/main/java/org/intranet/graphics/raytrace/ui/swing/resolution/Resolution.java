@@ -33,6 +33,7 @@ public class Resolution
 		return String.format("%s (%dx%d)", name, width, height);
 	}
 
+	public static final Resolution SQUARE_400 = new Resolution("400x400", 400, 400, 1.0);
 	public static final Resolution SQUARE_500 = new Resolution("500x500", 500, 500, 1.0);
 	public static final Resolution VGA = new Resolution("VGA", 640, 480, 1.0);
 	public static final Resolution MINI = new Resolution("Mini", 80, 60, 1.0);
@@ -58,6 +59,7 @@ public class Resolution
 	public static final Resolution DCI_4K_NATIVE = new Resolution("DCI 4K native", 4096, 2160, 1.0);
 
 	public static final Resolution[] resolutions = new Resolution[] {
+		SQUARE_400,
 		SQUARE_500,
 		VGA,
 		MINI,
