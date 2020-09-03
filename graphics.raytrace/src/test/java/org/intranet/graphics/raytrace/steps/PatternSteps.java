@@ -1,6 +1,7 @@
 package org.intranet.graphics.raytrace.steps;
 
 import org.intranet.graphics.raytrace.surface.Color;
+import org.intranet.graphics.raytrace.surface.PlanarUvMap;
 import org.intranet.graphics.raytrace.surface.SphericalUvMap;
 import org.intranet.graphics.raytrace.surface.StripePattern;
 import org.intranet.graphics.raytrace.surface.TextureMapPattern;
@@ -68,6 +69,17 @@ public class PatternSteps
 	{
 		Point p = data.getPoint(pointName);
 		UvMap uvMap = new SphericalUvMap();
+		Pair<Double> uv = uvMap.map(p);
+		data.put(uVariable, uv.getFirst());
+		data.put(vVariable, uv.getSecond());
+	}
+
+	@When("\\({identifier}, {identifier}) ← planar_map\\({identifier})")
+	public void uVPlanar_mapP(String uVariable, String vVariable,
+		String pointName)
+	{
+		Point p = data.getPoint(pointName);
+		UvMap uvMap = new PlanarUvMap();
 		Pair<Double> uv = uvMap.map(p);
 		data.put(uVariable, uv.getFirst());
 		data.put(vVariable, uv.getSecond());

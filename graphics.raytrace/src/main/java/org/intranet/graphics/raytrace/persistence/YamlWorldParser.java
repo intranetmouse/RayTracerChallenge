@@ -39,6 +39,7 @@ import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.GradientPattern;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.intranet.graphics.raytrace.surface.Pattern;
+import org.intranet.graphics.raytrace.surface.PlanarUvMap;
 import org.intranet.graphics.raytrace.surface.RingPattern;
 import org.intranet.graphics.raytrace.surface.SphericalUvMap;
 import org.intranet.graphics.raytrace.surface.StripePattern;
@@ -359,9 +360,11 @@ public class YamlWorldParser
 					break;
 				case "map":
 					String uvMappingType = (String)patternMap.get("mapping");
-					if (!"spherical".equals(uvMappingType))
-						System.err.println("Unknown uv mapping type " + uvMappingType);
 					UvMap uvMapping = new SphericalUvMap();
+					if ("planar".equals(uvMappingType))
+						uvMapping = new PlanarUvMap();
+					else if (!"spherical".equals(uvMappingType))
+						System.err.println("Unknown uv mapping type " + uvMappingType);
 
 					@SuppressWarnings("unchecked")
 					Map<String, Object> uvPatternAttribs = (Map<String, Object>)patternMap.get("uv_pattern");

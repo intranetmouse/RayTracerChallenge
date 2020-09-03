@@ -162,3 +162,19 @@ Scenario Outline: Using a texture map pattern with a spherical map
     | point(-0.5734, -0.2162, -0.7903) | white |
     | point(0.7688, -0.1470, 0.6223)   | black |
     | point(-0.7652, 0.2175, 0.6060)   | black |
+
+Scenario Outline: Using a planar mapping on a 3D point
+  Given p ← <point>
+  When (u, v) ← planar_map(p)
+  Then u = <u>
+    And v = <v>
+
+  Examples:
+    | point                   | u    | v    |
+    | point(0.25, 0, 0.5)     | 0.25 | 0.5  |
+    | point(0.25, 0, -0.25)   | 0.25 | 0.75 |
+    | point(0.25, 0.5, -0.25) | 0.25 | 0.75 |
+    | point(1.25, 0, 0.5)     | 0.25 | 0.5  |
+    | point(0.25, 0, -1.75)   | 0.25 | 0.25 |
+    | point(1, 0, -1)         | 0.0  | 0.0  |
+    | point(0, 0, 0)          | 0.0  | 0.0  |
