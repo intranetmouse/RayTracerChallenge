@@ -16,13 +16,16 @@ public final class PlanarUvMap
 		return new Pair<>(u, v);
 	}
 
-	private static final double mod(double val)
+	static final double mod(double val)
 	{
-		val = val % 1.0;
-		if (val < -0.5)
-			val = -val + 0.5 - 1;
-		else if (val < 0.0)
-			val = -val + 0.5;
-		return val;
+		if (val < 0)
+			return Math.abs(Math.floor(val)) + val;
+		return val - Math.floor(val);
+//		val = val % 1.0;
+//		if (val < -0.5)
+//			val = -val + 0.5 - 1;
+//		else if (val < 0.0)
+//			val = -val + 0.5;
+//		return val;
 	}
 }

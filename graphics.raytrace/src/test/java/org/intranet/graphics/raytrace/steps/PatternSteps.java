@@ -1,6 +1,7 @@
 package org.intranet.graphics.raytrace.steps;
 
 import org.intranet.graphics.raytrace.surface.Color;
+import org.intranet.graphics.raytrace.surface.CylindricalUvMap;
 import org.intranet.graphics.raytrace.surface.PlanarUvMap;
 import org.intranet.graphics.raytrace.surface.SphericalUvMap;
 import org.intranet.graphics.raytrace.surface.StripePattern;
@@ -8,6 +9,7 @@ import org.intranet.graphics.raytrace.surface.TextureMapPattern;
 import org.intranet.graphics.raytrace.surface.UvMap;
 import org.intranet.graphics.raytrace.primitive.Pair;
 import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.surface.AlignCheckUvPattern;
 import org.intranet.graphics.raytrace.surface.CheckersUvPattern;
 import org.intranet.graphics.raytrace.surface.UvPattern;
 import org.junit.Assert;
@@ -85,6 +87,17 @@ public class PatternSteps
 		data.put(vVariable, uv.getSecond());
 	}
 
+	@When("\\({identifier}, {identifier}) ← cylindrical_map\\({identifier})")
+	public void uVCylindrical_mapP(String uVariable, String vVariable,
+		String pointName)
+	{
+		Point p = data.getPoint(pointName);
+		UvMap uvMap = new CylindricalUvMap();
+		Pair<Double> uv = uvMap.map(p);
+		data.put(uVariable, uv.getFirst());
+		data.put(vVariable, uv.getSecond());
+	}
+
 	@Given("{identifier} ← {pointSSN}")
 	public void pPoint22(String pointToAssign, Point p)
 	{
@@ -99,5 +112,20 @@ public class PatternSteps
 
 		UvMap uvMap = new SphericalUvMap();
 		data.put(patternName, new TextureMapPattern(uvPattern, uvMap));
+	}
+
+	@Given("{identifier} ← uv_align_check\\({identifier}, {identifier}, {identifier}, {identifier}, {identifier})")
+	public void patternUv_align_checkMainUlUrBlBr(String uvPatternName,
+		String color1name, String color2name, String color3name,
+		String color4name, String color5name)
+	{
+		Color main = data.getColor(color1name);
+		Color ul = data.getColor(color2name);
+		Color ur = data.getColor(color3name);
+		Color bl = data.getColor(color4name);
+		Color br = data.getColor(color5name);
+
+		UvPattern uvPattern = new AlignCheckUvPattern(main, ul, ur, bl, br);
+		data.put(uvPatternName, uvPattern);
 	}
 }

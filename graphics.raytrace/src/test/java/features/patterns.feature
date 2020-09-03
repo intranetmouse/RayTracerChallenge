@@ -178,3 +178,40 @@ Scenario Outline: Using a planar mapping on a 3D point
     | point(0.25, 0, -1.75)   | 0.25 | 0.25 |
     | point(1, 0, -1)         | 0.0  | 0.0  |
     | point(0, 0, 0)          | 0.0  | 0.0  |
+
+Scenario Outline: Using a cylindrical mapping on a 3D point
+  Given p ← <point>
+  When (u, v) ← cylindrical_map(p)
+  Then u = <u>
+    And v = <v>
+
+  Examples:
+    | point                          | u     | v    |
+    | point(0, 0, -1)                | 0.0   | 0.0  |
+    | point(0, 0.5, -1)              | 0.0   | 0.5  |
+    | point(0, 1, -1)                | 0.0   | 0.0  |
+    | point(0.70711, 0.5, -0.70711)  | 0.125 | 0.5  |
+    | point(1, 0.5, 0)               | 0.25  | 0.5  |
+    | point(0.70711, 0.5, 0.70711)   | 0.375 | 0.5  |
+    | point(0, -0.25, 1)             | 0.5   | 0.75 |
+    | point(-0.70711, 0.5, 0.70711)  | 0.625 | 0.5  |
+    | point(-1, 1.25, 0)             | 0.75  | 0.25 |
+    | point(-0.70711, 0.5, -0.70711) | 0.875 | 0.5  |
+
+Scenario Outline: Layout of the "align check" pattern
+  Given main ← color(1, 1, 1)
+    And ul ← color(1, 0, 0)
+    And ur ← color(1, 1, 0)
+    And bl ← color(0, 1, 0)
+    And br ← color(0, 1, 1)
+    And pattern ← uv_align_check(main, ul, ur, bl, br)
+  When c ← uv_pattern_at(pattern, <u>, <v>)
+  Then c = <expected>
+
+  Examples:
+    | u    | v    | expected |
+    | 0.5  | 0.5  | main     |
+    | 0.1  | 0.9  | ul       |
+    | 0.9  | 0.9  | ur       |
+    | 0.1  | 0.1  | bl       |
+    | 0.9  | 0.1  | br       |

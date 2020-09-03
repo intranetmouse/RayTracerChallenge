@@ -33,9 +33,11 @@ import org.intranet.graphics.raytrace.shape.RandomSequence;
 import org.intranet.graphics.raytrace.shape.Sphere;
 import org.intranet.graphics.raytrace.shape.Triangle;
 import org.intranet.graphics.raytrace.shape.TubeLike;
+import org.intranet.graphics.raytrace.surface.AlignCheckUvPattern;
 import org.intranet.graphics.raytrace.surface.CheckerPattern;
 import org.intranet.graphics.raytrace.surface.CheckersUvPattern;
 import org.intranet.graphics.raytrace.surface.Color;
+import org.intranet.graphics.raytrace.surface.CylindricalUvMap;
 import org.intranet.graphics.raytrace.surface.GradientPattern;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.intranet.graphics.raytrace.surface.Pattern;
@@ -363,31 +365,44 @@ public class YamlWorldParser
 					UvMap uvMapping = new SphericalUvMap();
 					if ("planar".equals(uvMappingType))
 						uvMapping = new PlanarUvMap();
+					else if ("cylindrical".equals(uvMappingType))
+						uvMapping = new CylindricalUvMap();
 					else if (!"spherical".equals(uvMappingType))
 						System.err.println("Unknown uv mapping type " + uvMappingType);
 
 					@SuppressWarnings("unchecked")
 					Map<String, Object> uvPatternAttribs = (Map<String, Object>)patternMap.get("uv_pattern");
-					String uvType = (String)uvPatternAttribs.get("type");
+					String uvPatternType = (String)uvPatternAttribs.get("type");
 					UvPattern uvPattern;
-					if (!"checkers".equals(uvType))
+					switch (uvPatternType)
 					{
-						System.err.println("Unknown uv pattern type="+uvType);
-						uvPattern = new UvPattern() {
-							@Override
-							public Color colorAt(Double u, Double v)
-							{ return new Color(0, 1, 0); }
-						};
-					}
-					else
-					{
-						int uSquares = stringToInt((String) uvPatternAttribs.get("width"));
-						int vSquares = stringToInt((String) uvPatternAttribs.get("height"));
-						@SuppressWarnings("unchecked")
-						List<List<String>> uvColors = (List<List<String>>)uvPatternAttribs.get("colors");
-						Color uvColor1 = listToColor(uvColors.get(0));
-						Color uvColor2 = listToColor(uvColors.get(1));
-						uvPattern = new CheckersUvPattern(uSquares, vSquares, uvColor1, uvColor2);
+						case "align_check":
+							@SuppressWarnings("unchecked") Map<String, List<String>> alignColors =
+								(Map<String, List<String>>)uvPatternAttribs.get("colors");
+							Color alignMain = listToColor(alignColors.get("main"));
+							Color alignUl = listToColor(alignColors.get("ul"));
+							Color alignUr = listToColor(alignColors.get("ur"));
+							Color alignBl = listToColor(alignColors.get("bl"));
+							Color alignBr = listToColor(alignColors.get("br"));
+							uvPattern = new AlignCheckUvPattern(alignMain,
+								alignUl, alignUr, alignBl, alignBr);
+							break;
+						case "checkers":
+							int uSquares = stringToInt((String) uvPatternAttribs.get("width"));
+							int vSquares = stringToInt((String) uvPatternAttribs.get("height"));
+							@SuppressWarnings("unchecked")
+							List<List<String>> uvColors = (List<List<String>>)uvPatternAttribs.get("colors");
+							Color uvColor1 = listToColor(uvColors.get(0));
+							Color uvColor2 = listToColor(uvColors.get(1));
+							uvPattern = new CheckersUvPattern(uSquares, vSquares, uvColor1, uvColor2);
+							break;
+						default:
+							System.err.println("Unknown uv pattern type="+uvPatternType);
+							uvPattern = new UvPattern() {
+								@Override
+								public Color colorAt(double u, double v)
+								{ return new Color(0, 1, 0); }
+							};
 					}
 
 					pattern = new TextureMapPattern(uvPattern, uvMapping);

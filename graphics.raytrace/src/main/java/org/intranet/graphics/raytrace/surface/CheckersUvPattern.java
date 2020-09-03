@@ -18,7 +18,7 @@ public class CheckersUvPattern
 	}
 
 	@Override
-	public Color colorAt(Double u, Double v)
+	public Color colorAt(double u, double v)
 	{
 		double u2 = Math.floor(u * uSquares);
 		double v2 = Math.floor(v * vSquares);
