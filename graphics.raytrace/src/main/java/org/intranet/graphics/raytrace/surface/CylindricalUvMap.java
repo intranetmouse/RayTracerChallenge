@@ -15,7 +15,7 @@ public final class CylindricalUvMap
 		double u = 1 - (raw_u + 0.5);
 
 		// let v go from 0 to 1 between whole units of y
-		double v = PlanarUvMap.mod(p.getY());
+		double v = MathFuncs.mod1(p.getY());
 
 		return new DoublePair(u, v);
 	}

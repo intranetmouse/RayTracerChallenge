@@ -533,17 +533,15 @@ public class ThenSteps
 	{
 		Color expectedColor = data.getColor(expectedColorName);
 
-		Pattern pattern = (Pattern)data.getPattern(patternName);
-
-		Color actualColor = pattern.colorAt(point);
-		Assert.assertEquals(expectedColor, actualColor);
+		stripe_atPatternPointColor(patternName, point, expectedColor);
 	}
 
 	@Thens({
 		@Then("stripe_at\\({identifier}, {point}) = {color}"),
 		@Then("pattern_at\\({identifier}, {point}) = {color}")
 	})
-	public void stripe_atPatternPointColor(String patternName, Point point, Color expectedColor)
+	public void stripe_atPatternPointColor(String patternName, Point point,
+		Color expectedColor)
 	{
 		Pattern pattern = (Pattern)data.getPattern(patternName);
 
