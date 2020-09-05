@@ -158,10 +158,16 @@ public final class RaytraceData
 	public Canvas getCanvas(String canvasName)
 	{ return canvasMap.get(canvasName); }
 
-	private Map<String, List<String>> stringMap = new HashMap<>();
-	public void put(String ppmName, List<String> ppm)
-	{ stringMap.put(ppmName, ppm); }
-	public List<String> getStringList(String stringName)
+	private Map<String, List<String>> stringListMap = new HashMap<>();
+	public void put(String stringListName, List<String> stringList)
+	{ stringListMap.put(stringListName, stringList); }
+	public List<String> getStringList(String stringListName)
+	{ return stringListMap.get(stringListName); }
+
+	private Map<String, String> stringMap = new HashMap<>();
+	public void put(String stringName, String string)
+	{ stringMap.put(stringName, string); }
+	public String getString(String stringName)
 	{ return stringMap.get(stringName); }
 
 	private Map<String, World> worldMap = new HashMap<>();

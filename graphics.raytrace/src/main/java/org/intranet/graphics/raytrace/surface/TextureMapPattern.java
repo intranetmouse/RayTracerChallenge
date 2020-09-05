@@ -23,5 +23,4 @@ public class TextureMapPattern
 		double v = uv.getSecond();
 		return uvPattern.colorAt(u, v);
 	}
-
 }

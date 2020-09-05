@@ -5,6 +5,7 @@ import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.surface.AlignCheckUvPattern;
 import org.intranet.graphics.raytrace.surface.CheckersUvPattern;
 import org.intranet.graphics.raytrace.surface.Color;
+import org.intranet.graphics.raytrace.surface.CubeSide;
 import org.intranet.graphics.raytrace.surface.CylindricalUvMap;
 import org.intranet.graphics.raytrace.surface.PlanarUvMap;
 import org.intranet.graphics.raytrace.surface.SphericalUvMap;
@@ -127,5 +128,36 @@ public class PatternSteps
 
 		UvPattern uvPattern = new AlignCheckUvPattern(main, ul, ur, bl, br);
 		data.put(uvPatternName, uvPattern);
+	}
+
+	@When("{identifier} ← face_from_point\\({point})")
+	public void faceFace_from_pointPoint(String stringName, Point p)
+	{
+		CubeSide faceFromPoint = CubeSide.faceFromPoint(p);
+		data.put(stringName, faceFromPoint.toString());
+	}
+
+	public static final class CubeMapPattern
+	{
+
+	}
+
+	@Then("{identifier} = {string}")
+	public void face(String stringName, String expectedString)
+	{
+		String actualString = data.getString(stringName);
+		Assert.assertEquals(expectedString.toUpperCase(), actualString);
+	}
+
+	@When("\\({identifier}, {identifier}) ← cube_uv_{identifier}\\({point})")
+	public void uVCube_uv_sidePoint(String uName, String vName, String side,
+		Point point)
+	{
+		UvMap map = CubeSide.valueOf(side.toUpperCase());
+System.out.println("side="+side+", map type="+map.toString());
+		DoublePair values = map.map(point);
+
+		data.put(uName, values.getFirst());
+		data.put(vName, values.getSecond());
 	}
 }

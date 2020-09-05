@@ -215,3 +215,76 @@ Scenario Outline: Layout of the "align check" pattern
     | 0.9  | 0.9  | ur       |
     | 0.1  | 0.1  | bl       |
     | 0.9  | 0.1  | br       |
+
+Scenario Outline: Identifying the face of a cube from a point
+  When face ← face_from_point(<point>)
+  Then face = <face>
+
+  Examples:
+    | point                  | face    |
+    | point(-1, 0.5, -0.25)  | "left"  |
+    | point(1.1, -0.75, 0.8) | "right" |
+    | point(0.1, 0.6, 0.9)   | "front" |
+    | point(-0.7, 0, -2)     | "back"  |
+    | point(0.5, 1, 0.9)     | "up"    |
+    | point(-0.2, -1.3, 1.1) | "down"  |
+
+Scenario Outline: UV mapping the front face of a cube
+  When (u, v) ← cube_uv_front(<point>)
+  Then u = <u>
+    And v = <v>
+
+  Examples:
+    | point                | u    | v    |
+    | point(-0.5, 0.5, 1)  | 0.25 | 0.75 |
+    | point(0.5, -0.5, 1)  | 0.75 | 0.25 |
+
+Scenario Outline: UV mapping the back face of a cube
+  When (u, v) ← cube_uv_back(<point>)
+  Then u = <u>
+    And v = <v>
+
+  Examples:
+    | point                 | u    | v    |
+    | point(0.5, 0.5, -1)   | 0.25 | 0.75 |
+    | point(-0.5, -0.5, -1) | 0.75 | 0.25 |
+
+Scenario Outline: UV mapping the left face of a cube
+  When (u, v) ← cube_uv_left(<point>)
+  Then u = <u>
+    And v = <v>
+
+  Examples:
+    | point                | u    | v    |
+    | point(-1, 0.5, -0.5) | 0.25 | 0.75 |
+    | point(-1, -0.5, 0.5) | 0.75 | 0.25 |
+
+Scenario Outline: UV mapping the right face of a cube
+  When (u, v) ← cube_uv_right(<point>)
+  Then u = <u>
+    And v = <v>
+
+  Examples:
+    | point                | u    | v    |
+    | point(1, 0.5, 0.5)   | 0.25 | 0.75 |
+    | point(1, -0.5, -0.5) | 0.75 | 0.25 |
+
+Scenario Outline: UV mapping the upper face of a cube
+  When (u, v) ← cube_uv_up(<point>)
+  Then u = <u>
+    And v = <v>
+
+  Examples:
+    | point               | u    | v    |
+    | point(-0.5, 1, -0.5) | 0.25 | 0.75 |
+    | point(0.5, 1, 0.5) | 0.75 | 0.25 |
+
+Scenario Outline: UV mapping the lower face of a cube
+  When (u, v) ← cube_uv_down(<point>)
+  Then u = <u>
+    And v = <v>
+
+  Examples:
+    | point                 | u    | v    |
+    | point(-0.5, -1, 0.5) | 0.25 | 0.75 |
+    | point(0.5, -1, -0.5)   | 0.75 | 0.25 |
