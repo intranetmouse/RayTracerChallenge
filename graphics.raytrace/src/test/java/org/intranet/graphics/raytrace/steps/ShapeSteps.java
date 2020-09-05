@@ -34,13 +34,13 @@ public class ShapeSteps extends StepsParent
 	public void sGlass_sphere(String shapeName, Shape shape, DataTable dataTable)
 	{
 		WorldSteps.setShapePropertiesFromDataTable(dataTable, shape);
-		data.put(shapeName, shape);
+		data.putShape(shapeName, shape);
 	}
 
 	@Given("{identifier} ← {shape}")
 	public void pPlane(String shapeName, Shape shape)
 	{
-		data.put(shapeName, shape);
+		data.putShape(shapeName, shape);
 	}
 
 	@Given("{identifier}.material.ambient ← {dbl}")
@@ -77,7 +77,7 @@ public class ShapeSteps extends StepsParent
 		Shape obj = data.getShape(sphereName);
 		Ray ray = data.getRay(rayName);
 		IntersectionList intersections = obj.intersections(ray);
-		data.put(intersectionName, intersections);
+		data.putIntersectionList(intersectionName, intersections);
 	}
 
 	@When("set_transform\\({identifier}, {identifier})")
@@ -122,6 +122,6 @@ public class ShapeSteps extends StepsParent
 
 		Vector normalVector = obj.normalAt(point, null);
 
-		data.put(normalVectorName, normalVector);
+		data.putVector(normalVectorName, normalVector);
 	}
 }

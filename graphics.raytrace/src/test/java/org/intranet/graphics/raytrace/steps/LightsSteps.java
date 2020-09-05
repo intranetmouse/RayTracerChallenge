@@ -28,7 +28,7 @@ public class LightsSteps
 		Point position, Color color)
 	{
 		PointLight pointLight = new PointLight(position, color);
-		data.put(pointLightName, pointLight);
+		data.putLight(pointLightName, pointLight);
 	}
 
 	@When("{identifier} ← point_light\\({identifier}, {identifier})")
@@ -38,7 +38,7 @@ public class LightsSteps
 		Point position = data.getPoint(positionPointName);
 		Color color = data.getColor(colorName);
 		PointLight pointLight = new PointLight(position, color);
-		data.put(pointLightName, pointLight);
+		data.putLight(pointLightName, pointLight);
 	}
 
 	@Given("{identifier} ← {identifier}.light")
@@ -46,7 +46,7 @@ public class LightsSteps
 	{
 		World w = data.getWorld(worldName);
 		Light light = w.getLightSources().get(0);
-		data.put(lightVarName, light);
+		data.putLight(lightVarName, light);
 	}
 
 	@When("{identifier} ← intensity_at\\({identifier}, {identifier}, {identifier})")
@@ -58,7 +58,7 @@ public class LightsSteps
 		World w = data.getWorld(worldName);
 
 		double intensity = light.intensityAt(point, w);
-		data.put(resultVarStr, intensity);
+		data.putDouble(resultVarStr, intensity);
 	}
 
 	@When("{identifier} ← area_light\\({identifier}, {identifier}, {int}, {identifier}, {int}, {color})")
@@ -73,7 +73,7 @@ public class LightsSteps
 
 		Light light = new AreaLight(cornerPoint, unscaledUvector,
 			unscaledUvectorSteps, unscaledVvector, unscaledVvectorSteps, color);
-		data.put(lightName, light);
+		data.putLight(lightName, light);
 	}
 
 	@Then("{identifier}.corner = {identifier}")
@@ -150,7 +150,7 @@ public class LightsSteps
 		AreaLight light = (AreaLight)data.getLight(areaLightName);
 
 		Point point = light.pointOnLight(u, v);
-		data.put(pointName, point);
+		data.putPoint(pointName, point);
 	}
 
 	@Givens({

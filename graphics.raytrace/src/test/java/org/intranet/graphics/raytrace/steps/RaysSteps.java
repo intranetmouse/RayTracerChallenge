@@ -28,7 +28,7 @@ public class RaysSteps
 		Vector vector = data.getVector(rayDirectionName);
 
 		Ray ray = new Ray(point, vector);
-		data.put(rayName, ray);
+		data.putRay(rayName, ray);
 	}
 
 	@Whens({@When("{identifier} ← ray\\({point}, {vector})"),
@@ -38,7 +38,7 @@ public class RaysSteps
 	public void rRayPointVector(String rayName, Point point, Vector vector)
 	{
 		Ray ray = new Ray(point, vector);
-		data.put(rayName, ray);
+		data.putRay(rayName, ray);
 	}
 
 	@Then("{identifier}.origin = {point}")
@@ -84,7 +84,7 @@ public class RaysSteps
 		Vector vector = data.getVector(vectorName);
 
 		Ray ray = new Ray(point, vector);
-		data.put(rayName, ray);
+		data.putRay(rayName, ray);
 	}
 
 	@When("{identifier} ← transform\\({identifier}, {identifier})")
@@ -99,12 +99,12 @@ public class RaysSteps
 		if (ray != null)
 		{
 			Ray newRay = ray.transform(mtx);
-			data.put(newObjectName, newRay);
+			data.putRay(newObjectName, newRay);
 		}
 		else if (box != null)
 		{
 			BoundingBox newBox = box.transform(mtx);
-			data.put(newObjectName, newBox);
+			data.putBoundingBox(newObjectName, newBox);
 		}
 		else
 			Assert.fail("Unknown object type for parameter " + objToTransformName);

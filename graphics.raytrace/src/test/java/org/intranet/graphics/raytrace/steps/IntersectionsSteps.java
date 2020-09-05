@@ -29,7 +29,7 @@ public class IntersectionsSteps
 	{
 		Intersection intersection = data.getIntersection(intersectionName);
 		IntersectionList ilist = new IntersectionList(intersection);
-		data.put(intersectionsName, ilist);
+		data.putIntersectionList(intersectionsName, ilist);
 	}
 
 	@Given("{identifier} ← intersections\\({identifier}, {identifier}, {identifier}, {identifier})")
@@ -42,7 +42,7 @@ public class IntersectionsSteps
 		Intersection i4 = data.getIntersection(int4);
 
 		IntersectionList ilist = new IntersectionList(i1, i2, i3, i4);
-		data.put(intersectionListName, ilist);
+		data.putIntersectionList(intersectionListName, ilist);
 	}
 
 	public static final String indexShapePattern = doublePattern + ":" + wordPattern;
@@ -78,7 +78,7 @@ public class IntersectionsSteps
 		Intersection i6 = new Intersection(shape6Dist, shape6);
 
 		IntersectionList ilist = new IntersectionList(i1, i2, i3, i4, i5, i6);
-		data.put(intersectionListName, ilist);
+		data.putIntersectionList(intersectionListName, ilist);
 	}
 
 	// Kept as regex because / is not escapable in Cucumber expressions
@@ -92,7 +92,7 @@ public class IntersectionsSteps
 		Intersection i1 = new Intersection(shape1Dist, shape1);
 
 		IntersectionList ilist = new IntersectionList(i1);
-		data.put(intersectionListName, ilist);
+		data.putIntersectionList(intersectionListName, ilist);
 	}
 
 	// Kept as regex because / is not escapable in Cucumber expressions
@@ -118,7 +118,7 @@ public class IntersectionsSteps
 		Intersection i4 = new Intersection(shape4Dist, shape4);
 
 		IntersectionList ilist = new IntersectionList(i1, i2, i3, i4);
-		data.put(intersectionListName, ilist);
+		data.putIntersectionList(intersectionListName, ilist);
 	}
 
 	// Kept as regex because / is not escapable in Cucumber expressions
@@ -136,7 +136,7 @@ public class IntersectionsSteps
 		Intersection i2 = new Intersection(sqrtTwoDivTwo, shape2);
 
 		IntersectionList ilist = new IntersectionList(i1, i2);
-		data.put(intersectionListName, ilist);
+		data.putIntersectionList(intersectionListName, ilist);
 	}
 
 	@Given("{identifier} ← intersections\\(√2:{identifier})")
@@ -148,7 +148,7 @@ public class IntersectionsSteps
 		Intersection i1 = new Intersection(sqrtTwo, shape1);
 
 		IntersectionList ilist = new IntersectionList(i1);
-		data.put(intersectionListName, ilist);
+		data.putIntersectionList(intersectionListName, ilist);
 	}
 
 	@Given("{identifier} ← intersections\\({dbl}:{identifier}, {dbl}:{identifier})")
@@ -163,7 +163,7 @@ public class IntersectionsSteps
 		Intersection i2 = new Intersection(shape2Dist, shape2);
 
 		IntersectionList ilist = new IntersectionList(i1, i2);
-		data.put(intersectionListName, ilist);
+		data.putIntersectionList(intersectionListName, ilist);
 	}
 
 	@Given("{identifier} ← intersections\\({dbl}, {identifier})")
@@ -174,7 +174,7 @@ public class IntersectionsSteps
 		Intersection i1 = new Intersection(shape1Dist, shape1);
 
 		IntersectionList ilist = new IntersectionList(i1);
-		data.put(intersectionListName, ilist);
+		data.putIntersectionList(intersectionListName, ilist);
 	}
 
 	@When("{identifier} ← intersections\\({identifier}, {identifier})")
@@ -184,7 +184,7 @@ public class IntersectionsSteps
 		Intersection intersection1 = data.getIntersection(intersection1Name);
 		Intersection intersection2 = data.getIntersection(intersection2Name);
 		IntersectionList ilist = new IntersectionList(intersection1, intersection2);
-		data.put(intersectionsName, ilist);
+		data.putIntersectionList(intersectionsName, ilist);
 	}
 
 	@When("{identifier} ← hit\\({identifier})")
@@ -192,7 +192,7 @@ public class IntersectionsSteps
 	{
 		IntersectionList ilist = data.getIntersectionList(intersectionListName);
 		Intersection hit = ilist.hit();
-		data.put(intersectionName, hit);
+		data.putIntersection(intersectionName, hit);
 	}
 
 	@When("{identifier} ← prepare_computations\\({identifier}, {identifier})")
@@ -214,7 +214,7 @@ public class IntersectionsSteps
 
 		IntersectionComputations comps = new IntersectionComputations(
 			intersection, ray, intersectionArray);
-		data.put(computationsName, comps);
+		data.putComputations(computationsName, comps);
 	}
 
 	@When("{identifier} ← prepare_computations\\({identifier}\\[{int}], {identifier}, {identifier})")
@@ -252,7 +252,7 @@ public class IntersectionsSteps
 	{
 		IntersectionComputations comps = data.getComputations(computationsName);
 
-		data.put(doubleName, comps.schlick());
+		data.putDouble(doubleName, comps.schlick());
 	}
 
 

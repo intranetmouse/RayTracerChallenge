@@ -73,7 +73,7 @@ public class MaterialsSteps
 	public void mSMaterial(String materialName, String shapeName)
 	{
 		Shape obj = data.getShape(shapeName);
-		data.put(materialName, obj.getMaterial());
+		data.putMaterial(materialName, obj.getMaterial());
 	}
 
 	@When("{identifier}.material ← {identifier}")
@@ -87,7 +87,7 @@ public class MaterialsSteps
 	@Given("{identifier} ← {emptyMaterial}")
 	public void mSetMaterial(String materialName, Material material)
 	{
-		data.put(materialName, material);
+		data.putMaterial(materialName, material);
 	}
 
 	@Then("{identifier} = {emptyMaterial}")
@@ -173,7 +173,7 @@ public class MaterialsSteps
 		Vector normalv = data.getVector(normalVectorName);
 		Color color = Tracer.lighting(material, new Sphere(), pointLight,
 			position, eyev, normalv, false);
-		data.put(resultingColorName, color);
+		data.putColor(resultingColorName, color);
 	}
 
 	@When("{identifier} ← lighting\\({identifier}, {identifier}, {identifier}, {identifier}, {identifier}, {identifier})")
@@ -190,7 +190,7 @@ public class MaterialsSteps
 		boolean inShadow = data.getBoolean(inShadowName);
 		Color color = Tracer.lighting(material, new Sphere(), pointLight,
 			position, eyev, normalv, inShadow);
-		data.put(resultingColorName, color);
+		data.putColor(resultingColorName, color);
 	}
 
 	@When("{identifier} ← lighting\\({identifier}, {identifier}, {point}, {identifier}, {identifier}, {boolean})")
@@ -204,7 +204,7 @@ public class MaterialsSteps
 		Vector normalv = data.getVector(normalVectorName);
 		Color color = Tracer.lighting(material, new Sphere(), pointLight,
 			position, eyev, normalv, inShadow);
-		data.put(resultingColorName, color);
+		data.putColor(resultingColorName, color);
 	}
 
 	@When("{identifier} ← lighting\\({identifier}.material, {identifier}.light, {identifier}, {identifier}, {identifier}, {double})")
@@ -224,7 +224,7 @@ public class MaterialsSteps
 		Color color = Tracer.lighting(material, s, pointLight,
 			position, eyev, normalv, intensity);
 
-		data.put(resultingColorName, color);
+		data.putColor(resultingColorName, color);
 	}
 
 	@When("{identifier} ← lighting\\({identifier}.material, {identifier}, {identifier}, {identifier}, {identifier}, {identifier}, {double})")
@@ -242,6 +242,6 @@ public class MaterialsSteps
 		Vector normalV = data.getVector(normalVectorName);
 
 		Color color = Tracer.lighting(m, shape2, light, pt, eyeV, normalV, intensity);
-		data.put(resultingColorName, color);
+		data.putColor(resultingColorName, color);
 	}
 }

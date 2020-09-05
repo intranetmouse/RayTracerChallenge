@@ -29,7 +29,7 @@ public class MatricesSteps
 		List<List<Double>> doubles)
 	{
 		Matrix m = createMatrixFrom2dimList(numRows, numCols, doubles);
-		data.put(matrixName,  m);
+		data.putMatrix(matrixName,  m);
 	}
 
 	@Given("the following matrix {identifier}:")
@@ -38,14 +38,14 @@ public class MatricesSteps
 	{
 		int size = doubles.size();
 		Matrix m = createMatrixFrom2dimList(size, size, doubles);
-		data.put(matrixName, m);
+		data.putMatrix(matrixName, m);
 	}
 
 	@Given("{identifier} ← transpose\\(identity_matrix)")
 	public void theTransposeOfIdentity(String matrixName)
 	{
 		Matrix ident = Matrix.identity(4);
-		data.put(matrixName, ident);
+		data.putMatrix(matrixName, ident);
 	}
 
 	@Given("{identifier} ← submatrix\\({identifier}, {int}, {int})")
@@ -54,7 +54,7 @@ public class MatricesSteps
 	{
 		Matrix m2 = data.getMatrix(matrix2Name);
 		Matrix result = m2.submatrix(dropRow, dropCol);
-		data.put(matrix1Name, result);
+		data.putMatrix(matrix1Name, result);
 	}
 
 	@Given("{identifier} ← inverse\\({identifier})")
@@ -63,7 +63,7 @@ public class MatricesSteps
 		Matrix matrix2 = data.getMatrix(matrix2Name);
 		Matrix calc = matrix2.inverse();
 
-		data.put(matrix1Name, calc);
+		data.putMatrix(matrix1Name, calc);
 	}
 
 	@Given("{identifier} ← {identifier} * {identifier}")
@@ -76,7 +76,7 @@ public class MatricesSteps
 		if (matrix != null)
 		{
 			Matrix resultMatrix = transformMatrix.multiply(matrix);
-			data.put(destObjectName, resultMatrix);
+			data.putMatrix(destObjectName, resultMatrix);
 			return;
 		}
 
@@ -84,7 +84,7 @@ public class MatricesSteps
 		if (point != null)
 		{
 			Point resultPoint = transformMatrix.multiply(point);
-			data.put(destObjectName, resultPoint);
+			data.putPoint(destObjectName, resultPoint);
 			return;
 		}
 
@@ -92,7 +92,7 @@ public class MatricesSteps
 		if (v2 != null)
 		{
 			Vector resultVector = transformMatrix.multiply(v2);
-			data.put(destObjectName, resultVector);
+			data.putVector(destObjectName, resultVector);
 			return;
 		}
 		throw new IllegalStateException();
@@ -108,7 +108,7 @@ public class MatricesSteps
 
 		Matrix result = matrix1.multiply(matrix2).multiply(matrix3);
 
-		data.put(destObjectName, result);
+		data.putMatrix(destObjectName, result);
 	}
 
 	@Givens({
@@ -118,7 +118,7 @@ public class MatricesSteps
 	})
 	public void transformTranslation(String matrixName, Matrix matrix)
 	{
-		data.put(matrixName, matrix);
+		data.putMatrix(matrixName, matrix);
 	}
 
 	@Thens({
@@ -184,7 +184,7 @@ public class MatricesSteps
 		Point toPoint = data.getPoint(toPointName);
 		Vector upVector = data.getVector(upVectorName);
 
-		data.put(matrixName, Matrix.newView(fromPoint, toPoint, upVector));
+		data.putMatrix(matrixName, Matrix.newView(fromPoint, toPoint, upVector));
 	}
 
 

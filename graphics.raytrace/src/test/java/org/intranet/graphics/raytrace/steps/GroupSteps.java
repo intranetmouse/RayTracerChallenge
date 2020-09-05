@@ -51,7 +51,7 @@ public class GroupSteps
 		g.addChild(s2);
 		g.addChild(s3);
 
-		data.put(destGroupName, g);
+		data.putShape(destGroupName, g);
 	}
 
 	@When("\\({identifier}, {identifier}) ← partition_children\\({identifier})")
@@ -141,7 +141,7 @@ public class GroupSteps
 		Group g = (Group)data.getShape(groupName);
 		Shape s = g.getChildren().get(index);
 
-		data.put(shapeName, s);
+		data.putShape(shapeName, s);
 	}
 
 	@Then("{identifier} is a group")
@@ -181,6 +181,6 @@ public class GroupSteps
 		Group group = (Group)shapeGroup;
 		group.addChild(child1);
 		group.addChild(child2);
-		data.put(groupName, group);
+		data.putShape(groupName, group);
 	}
 }

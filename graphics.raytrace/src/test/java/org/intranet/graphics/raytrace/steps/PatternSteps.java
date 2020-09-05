@@ -52,7 +52,7 @@ public class PatternSteps
 		UvPattern uv = new CheckersUvPattern(uSquares, vSquares, Color.BLACK,
 			Color.WHITE);
 
-		data.put(mapName, uv);
+		data.putUvPattern(mapName, uv);
 	}
 
 	@When("{identifier} ← uv_pattern_at\\({identifier}, {double}, {double})")
@@ -63,7 +63,7 @@ public class PatternSteps
 
 		Color color = uvPattern.colorAt(u, v);
 
-		data.put(colorName, color);
+		data.putColor(colorName, color);
 	}
 
 	@When("\\({identifier}, {identifier}) ← spherical_map\\({identifier})")
@@ -73,8 +73,8 @@ public class PatternSteps
 		Point p = data.getPoint(pointName);
 		UvMap uvMap = new SphericalUvMap();
 		DoublePair uv = uvMap.map(p);
-		data.put(uVariable, uv.getFirst());
-		data.put(vVariable, uv.getSecond());
+		data.putDouble(uVariable, uv.getFirst());
+		data.putDouble(vVariable, uv.getSecond());
 	}
 
 	@When("\\({identifier}, {identifier}) ← planar_map\\({identifier})")
@@ -84,8 +84,8 @@ public class PatternSteps
 		Point p = data.getPoint(pointName);
 		UvMap uvMap = new PlanarUvMap();
 		DoublePair uv = uvMap.map(p);
-		data.put(uVariable, uv.getFirst());
-		data.put(vVariable, uv.getSecond());
+		data.putDouble(uVariable, uv.getFirst());
+		data.putDouble(vVariable, uv.getSecond());
 	}
 
 	@When("\\({identifier}, {identifier}) ← cylindrical_map\\({identifier})")
@@ -95,14 +95,14 @@ public class PatternSteps
 		Point p = data.getPoint(pointName);
 		UvMap uvMap = new CylindricalUvMap();
 		DoublePair uv = uvMap.map(p);
-		data.put(uVariable, uv.getFirst());
-		data.put(vVariable, uv.getSecond());
+		data.putDouble(uVariable, uv.getFirst());
+		data.putDouble(vVariable, uv.getSecond());
 	}
 
 	@Given("{identifier} ← {pointSSN}")
 	public void pPoint22(String pointToAssign, Point p)
 	{
-		data.put(pointToAssign, p);
+		data.putPoint(pointToAssign, p);
 	}
 
 	@Given("{identifier} ← texture_map\\({identifier}, spherical_map)")
@@ -112,7 +112,7 @@ public class PatternSteps
 		UvPattern uvPattern = data.getUvPattern(uvPatternName);
 
 		UvMap uvMap = new SphericalUvMap();
-		data.put(patternName, new TextureMapPattern(uvPattern, uvMap));
+		data.putPattern(patternName, new TextureMapPattern(uvPattern, uvMap));
 	}
 
 	@Given("{identifier} ← uv_align_check\\({identifier}, {identifier}, {identifier}, {identifier}, {identifier})")
@@ -127,14 +127,14 @@ public class PatternSteps
 		Color br = data.getColor(color5name);
 
 		UvPattern uvPattern = new AlignCheckUvPattern(main, ul, ur, bl, br);
-		data.put(uvPatternName, uvPattern);
+		data.putUvPattern(uvPatternName, uvPattern);
 	}
 
 	@When("{identifier} ← face_from_point\\({point})")
 	public void faceFace_from_pointPoint(String stringName, Point p)
 	{
 		CubeSide faceFromPoint = CubeSide.faceFromPoint(p);
-		data.put(stringName, faceFromPoint.toString());
+		data.putString(stringName, faceFromPoint.toString());
 	}
 
 	public static final class CubeMapPattern
@@ -157,7 +157,7 @@ public class PatternSteps
 System.out.println("side="+side+", map type="+map.toString());
 		DoublePair values = map.map(point);
 
-		data.put(uName, values.getFirst());
-		data.put(vName, values.getSecond());
+		data.putDouble(uName, values.getFirst());
+		data.putDouble(vName, values.getSecond());
 	}
 }

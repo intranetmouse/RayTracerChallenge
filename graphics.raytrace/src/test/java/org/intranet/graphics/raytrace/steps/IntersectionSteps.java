@@ -22,7 +22,7 @@ public class IntersectionSteps
 	{
 		Shape sphere = data.getShape(sphereName);
 		Intersection intersection = new Intersection(distance, sphere);
-		data.put(intersectionName, intersection);
+		data.putIntersection(intersectionName, intersection);
 	}
 
 	@When("{identifier} ← intersection\\(√{dbl}, {identifier})")
@@ -32,7 +32,7 @@ public class IntersectionSteps
 		distance = Math.sqrt(distance);
 		Shape sphere = data.getShape(shapeName);
 		Intersection intersection = new Intersection(distance, sphere);
-		data.put(intersectionName, intersection);
+		data.putIntersection(intersectionName, intersection);
 	}
 
 	@When("{identifier} ← intersection_with_uv\\({dbl}, {identifier}, {dbl}, {dbl})")
@@ -41,7 +41,7 @@ public class IntersectionSteps
 	{
 		Shape s = data.getShape(shapeName);
 		Intersection intersection = new Intersection(distance, s, u, v);
-		data.put(intersectionName, intersection);
+		data.putIntersection(intersectionName, intersection);
 	}
 
 	@Then("{identifier}.u = {dbl}")

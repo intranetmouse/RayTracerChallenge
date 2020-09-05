@@ -23,7 +23,7 @@ public final class BoundingBoxSteps
 	public void boxBounding_boxEmpty(String boxName)
 	{
 		BoundingBox box = new BoundingBox();
-		data.put(boxName, box);
+		data.putBoundingBox(boxName, box);
 	}
 
 	@Given("{identifier} ← bounding_box\\(min={point} max={point})")
@@ -31,7 +31,7 @@ public final class BoundingBoxSteps
 		Point maxPoint)
 	{
 		BoundingBox box = new BoundingBox(minPoint, maxPoint);
-		data.put(boxName, box);
+		data.putBoundingBox(boxName, box);
 
 	}
 
@@ -40,7 +40,7 @@ public final class BoundingBoxSteps
 	{
 		Shape s = data.getShape(shapeName);
 		BoundingBox box = s.getBoundingBox();
-		data.put(boxName, box);
+		data.putBoundingBox(boxName, box);
 	}
 
 	@Then("box_contains_point\\({identifier}, {identifier}) is {boolean}")
@@ -79,7 +79,7 @@ public final class BoundingBoxSteps
 
 		BoundingBox box = s.getParentSpaceBounds();
 
-		data.put(boundingBoxName, box);
+		data.putBoundingBox(boundingBoxName, box);
 	}
 
 	@When("\\({identifier}, {identifier}) ← split_bounds\\({identifier})")
@@ -88,7 +88,7 @@ public final class BoundingBoxSteps
 		BoundingBox originalBox = data.getBoundingBox(originalBoxName);
 
 		Pair<BoundingBox> split = originalBox.split();
-		data.put(firstBoxName, split.getFirst());
-		data.put(secondBoxName, split.getSecond());
+		data.putBoundingBox(firstBoxName, split.getFirst());
+		data.putBoundingBox(secondBoxName, split.getSecond());
 	}
 }

@@ -32,9 +32,8 @@ import org.junit.Assert;
 public final class RaytraceData
 {
 	private Map<String, Tuple> tupleMap = new HashMap<>();
-	public void put(String tupleName, Tuple tuple)
+	public void putTuple(String tupleName, Tuple tuple)
 	{ tupleMap.put(tupleName, tuple); }
-
 	public Tuple getTuple(String tupleName)
 	{
 		Tuple a = tupleMap.get(tupleName);
@@ -44,43 +43,43 @@ public final class RaytraceData
 	}
 
 	private Map<String, Double> doubleMap = new HashMap<>();
-	public void put(String doubleName, double value)
+	public void putDouble(String doubleName, double value)
 	{ doubleMap.put(doubleName, value); }
 	public double getDouble(String doubleName)
 	{ return doubleMap.get(doubleName); }
 
 	private Map<String, Integer> intMap = new HashMap<>();
-	public void put(String intName, int value)
+	public void putInt(String intName, int value)
 	{ intMap.put(intName, value); }
 	public int getInt(String intName)
 	{ return intMap.get(intName); }
 
 	private Map<String, Boolean> booleanMap = new HashMap<>();
-	public void put(String intName, boolean value)
+	public void putBoolean(String intName, boolean value)
 	{ booleanMap.put(intName, value); }
 	public Boolean getBoolean(String intName)
 	{ return booleanMap.get(intName); }
 
 	private Map<String, Point> pointMap = new HashMap<>();
-	public void put(String pointName, Point point)
+	public void putPoint(String pointName, Point point)
 	{ pointMap.put(pointName, point); }
 	public Point getPoint(String pointName)
 	{ return pointMap.get(pointName); }
 
 	private Map<String, Vector> vectorMap = new HashMap<>();
-	public void put(String vectorName, Vector vector)
+	public void putVector(String vectorName, Vector vector)
 	{ vectorMap.put(vectorName, vector); }
 	public Vector getVector(String vectorName)
 	{ return vectorMap.get(vectorName); }
 
 	private Map<String, BoundingBox> boundingBoxMap = new HashMap<>();
-	public void put(String boundingBoxName, BoundingBox box)
+	public void putBoundingBox(String boundingBoxName, BoundingBox box)
 	{ boundingBoxMap.put(boundingBoxName, box); }
 	public BoundingBox getBoundingBox(String boundingBoxName)
 	{ return boundingBoxMap.get(boundingBoxName); }
 
 	private Map<String, Color> colorMap = new HashMap<>();
-	public void put(String colorName, Color color)
+	public void putColor(String colorName, Color color)
 	{ colorMap.put(colorName, color); }
 	public Color getColor(String colorName)
 	{ return colorMap.get(colorName); }
@@ -92,19 +91,19 @@ public final class RaytraceData
 	{ return sequenceMap.get(sequenceName); }
 
 	private Map<String, Matrix> matricesMap = new HashMap<>();
-	public void put(String matrixName, Matrix m)
+	public void putMatrix(String matrixName, Matrix m)
 	{ matricesMap.put(matrixName, m); }
 	public Matrix getMatrix(String matrixName)
 	{ return matricesMap.get(matrixName); }
 
 	private Map<String, Ray> raysMap = new HashMap<>();
-	public void put(String rayName, Ray r)
+	public void putRay(String rayName, Ray r)
 	{ raysMap.put(rayName, r); }
 	public Ray getRay(String rayName)
 	{ return raysMap.get(rayName); }
 
 	private Map<String, Shape> shapeMap = new HashMap<>();
-	public void put(String shapeName, Shape shape)
+	public void putShape(String shapeName, Shape shape)
 	{ shapeMap.put(shapeName, shape); }
 	public Shape getShape(String shapeName)
 	{ return shapeMap.get(shapeName); }
@@ -123,91 +122,91 @@ public final class RaytraceData
 	{ return shapeListMap.get(shapeListName); }
 
 	private Map<String, Pattern> patternMap = new HashMap<>();
-	public void put(String patternName, Pattern pattern)
+	public void putPattern(String patternName, Pattern pattern)
 	{ patternMap.put(patternName, pattern); }
 	public Pattern getPattern(String patternName)
 	{ return patternMap.get(patternName); }
 
 	private Map<String, Intersection> intersectionsMap = new HashMap<>();
-	public void put(String intersectionName, Intersection i)
+	public void putIntersection(String intersectionName, Intersection i)
 	{ intersectionsMap.put(intersectionName, i); }
 	public Intersection getIntersection(String intersectionName)
 	{ return intersectionsMap.get(intersectionName); }
 
 	private Map<String, IntersectionList> intersectionListsMap = new HashMap<>();
-	public void put(String intersectionListName, IntersectionList ilist)
+	public void putIntersectionList(String intersectionListName, IntersectionList ilist)
 	{ Assert.assertNotNull(ilist); intersectionListsMap.put(intersectionListName, ilist); }
 	public IntersectionList getIntersectionList(String intersectionListName)
 	{ return intersectionListsMap.get(intersectionListName); }
 
 	private Map<String, Light> lightMap = new HashMap<>();
-	public void put(String lightName, Light l)
+	public void putLight(String lightName, Light l)
 	{ lightMap.put(lightName, l); }
 	public Light getLight(String lightName)
 	{ return lightMap.get(lightName); }
 
 	private Map<String, Material> materialsMap = new HashMap<>();
-	public void put(String materialName, Material material)
+	public void putMaterial(String materialName, Material material)
 	{ materialsMap.put(materialName, material); }
 	public Material getMaterial(String materialName)
 	{ return materialsMap.get(materialName); }
 
 	private Map<String, Canvas> canvasMap = new HashMap<>();
-	public void put(String canvasName, Canvas canvas)
+	public void putCanvas(String canvasName, Canvas canvas)
 	{ canvasMap.put(canvasName, canvas); }
 	public Canvas getCanvas(String canvasName)
 	{ return canvasMap.get(canvasName); }
 
 	private Map<String, List<String>> stringListMap = new HashMap<>();
-	public void put(String stringListName, List<String> stringList)
+	public void putStringList(String stringListName, List<String> stringList)
 	{ stringListMap.put(stringListName, stringList); }
 	public List<String> getStringList(String stringListName)
 	{ return stringListMap.get(stringListName); }
 
 	private Map<String, String> stringMap = new HashMap<>();
-	public void put(String stringName, String string)
+	public void putString(String stringName, String string)
 	{ stringMap.put(stringName, string); }
 	public String getString(String stringName)
 	{ return stringMap.get(stringName); }
 
 	private Map<String, World> worldMap = new HashMap<>();
-	public void put(String worldName, World world)
+	public void putWorld(String worldName, World world)
 	{ worldMap.put(worldName, world); }
 	public World getWorld(String worldName)
 	{ return worldMap.get(worldName); }
 
 	private Map<String, IntersectionComputations> compsMap = new HashMap<>();
-	public void put(String compsName, IntersectionComputations comps)
+	public void putComputations(String compsName, IntersectionComputations comps)
 	{ compsMap.put(compsName, comps); }
 	public IntersectionComputations getComputations(String compsName)
 	{ return compsMap.get(compsName); }
 
 	private Map<String, Camera> cameraMap = new HashMap<>();
-	public void put(String cameraName, Camera camera)
+	public void putCamera(String cameraName, Camera camera)
 	{ cameraMap.put(cameraName, camera); }
 	public Camera getCamera(String cameraName)
 	{ return cameraMap.get(cameraName); }
 
 	private Map<String, Spliterator<PixelCoordinate>> pixelCoordinateSpliteratorMap = new HashMap<>();
-	public void put(String spliteratorName, Spliterator<PixelCoordinate> spliterator)
+	public void putPixelCoordinateSpliterator(String spliteratorName, Spliterator<PixelCoordinate> spliterator)
 	{ pixelCoordinateSpliteratorMap.put(spliteratorName, spliterator); }
 	public Spliterator<PixelCoordinate> getPixelCoordinateSpliterator(String spliteratorName)
 	{ return pixelCoordinateSpliteratorMap.get(spliteratorName); }
 
 	private Map<String, PixelCoordinate> pixelCoordinateMap = new HashMap<>();
-	public void put(String pixelCoordinateName, PixelCoordinate pixelCoordinate)
+	public void putPixelCoordinate(String pixelCoordinateName, PixelCoordinate pixelCoordinate)
 	{ pixelCoordinateMap.put(pixelCoordinateName, pixelCoordinate); }
 	public PixelCoordinate getPixelCoordinate(String pixelCoordinateName)
 	{ return pixelCoordinateMap.get(pixelCoordinateName); }
 
 	private Map<String, ObjFileParser> objFileParserMap = new HashMap<>();
-	public void put(String objFileParseName, ObjFileParser parser)
+	public void putObjParser(String objFileParseName, ObjFileParser parser)
 	{ objFileParserMap.put(objFileParseName, parser); }
 	public ObjFileParser getObjParser(String objFileParserName)
 	{ return objFileParserMap.get(objFileParserName); }
 
 	private Map<String, UvPattern> uvPattern = new HashMap<>();
-	public void put(String uvMapName, UvPattern value)
+	public void putUvPattern(String uvMapName, UvPattern value)
 	{ uvPattern.put(uvMapName, value); }
 	public UvPattern getUvPattern(String uvMapName)
 	{ return uvPattern.get(uvMapName); }

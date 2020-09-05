@@ -49,7 +49,7 @@ public class CameraSteps
 		double fieldOfView = data.getDouble(fieldOfViewName);
 
 		Camera c = new Camera(hsize, vsize, fieldOfView);
-		data.put(cameraName, c);
+		data.putCamera(cameraName, c);
 	}
 
 	@When("{identifier} ← camera\\({int}, {int}, π\\/{dbl}\\)")
@@ -59,7 +59,7 @@ public class CameraSteps
 		double fieldOfView = Math.PI / fieldOfViewDenominator;
 
 		Camera c = new Camera(hsize, vsize, fieldOfView);
-		data.put(cameraName, c);
+		data.putCamera(cameraName, c);
 	}
 
 	@When("{identifier} ← ray_for_pixel\\({identifier}, {int}, {int})")
@@ -68,7 +68,7 @@ public class CameraSteps
 		Camera camera = data.getCamera(cameraName);
 		PixelCoordinate coord = new PixelCoordinate(x, y);
 		Ray ray = camera.rayForPixel(coord);
-		data.put(rayName, ray);
+		data.putRay(rayName, ray);
 	}
 
 	@When("{identifier}.transform ← {matrixRotationPiDiv} * {matrix}")
@@ -86,7 +86,7 @@ public class CameraSteps
 		Matrix rotY, Matrix translation)
 	{
 		Matrix transform = rotY.multiply(translation);
-		data.put(matrixName, transform);
+		data.putMatrix(matrixName, transform);
 	}
 
 	@When("{identifier} ← render\\({identifier}, {identifier})")
@@ -99,7 +99,7 @@ public class CameraSteps
 		AbstractSpliterator<PixelCoordinate> traversal = CanvasTraversalType.AcrossDown.getTraversal(canvas);
 		RayTraceStatistics stats = new RayTraceStatistics();
 		camera.render(world, canvas, false, traversal, stats);
-		data.put(imageName, canvas);
+		data.putCanvas(imageName, canvas);
 	}
 
 

@@ -28,7 +28,7 @@ public class CsgSteps
 		CsgOperation csgType = CsgOperation.get(csgOperationStr);
 
 		Csg csgObj = new Csg(csgType, shape1, shape2);
-		data.put(objAssign, csgObj);
+		data.putShape(objAssign, csgObj);
 	}
 
 	@When("{identifier} ← csg\\({string}, {shape}, {shape})")
@@ -38,7 +38,7 @@ public class CsgSteps
 		CsgOperation csgType = CsgOperation.get(csgOperationStr);
 
 		Csg csgObj = new Csg(csgType, shape1, shape2);
-		data.put(objAssign, csgObj);
+		data.putShape(objAssign, csgObj);
 	}
 
 	@Then("{identifier}.operation = {string}")
@@ -78,7 +78,7 @@ public class CsgSteps
 		CsgOperation operation = CsgOperation.get(opName);
 
 		boolean allowed = operation.intersectionAllowed(lhit, inl, inr);
-		data.put(resultVarName, allowed);
+		data.putBoolean(resultVarName, allowed);
 	}
 
 	@When("{identifier} ← filter_intersections\\({identifier}, {identifier})")
@@ -87,7 +87,7 @@ public class CsgSteps
 		Csg csg = (Csg)data.getShape(csgName);
 		IntersectionList ilist = data.getIntersectionList(intersectionListName);
 		ilist = csg.filterIntersections(ilist);
-		data.put(resultVarName, ilist);
+		data.putIntersectionList(resultVarName, ilist);
 	}
 
 	@Then("{identifier}[{int}] = {identifier}[{int}]")

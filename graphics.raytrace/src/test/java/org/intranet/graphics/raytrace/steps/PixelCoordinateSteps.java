@@ -28,7 +28,7 @@ public class PixelCoordinateSteps
 	{
 		AbstractSpliterator<PixelCoordinate> traversal = new AcrossDownTraversal(
 			width, height);
-		data.put(traversalName, traversal);
+		data.putPixelCoordinateSpliterator(traversalName, traversal);
 	}
 	@Given("{identifier} ← scatteredTraversal\\({int}, {int})")
 	public void tScatteredTraversal(String traversalName,
@@ -36,7 +36,7 @@ public class PixelCoordinateSteps
 	{
 		AbstractSpliterator<PixelCoordinate> traversal = new ScatteredTraversal(
 			width, height, null);
-		data.put(traversalName, traversal);
+		data.putPixelCoordinateSpliterator(traversalName, traversal);
 	}
 
 	boolean found = false;
@@ -50,7 +50,7 @@ public class PixelCoordinateSteps
 			traversalName);
 		pixel = null;
 		if (traversal.tryAdvance(e -> pixel = e))
-			data.put(pixelCoordName, pixel);
+			data.putPixelCoordinate(pixelCoordName, pixel);
 	}
 
 	@Then("{identifier} is null")

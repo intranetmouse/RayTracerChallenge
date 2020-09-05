@@ -41,7 +41,7 @@ public final class PlaneSteps
 		Shape shape = data.getShape(shapeName);
 
 		Vector normalVector = shape.testLocalNormalAt(normalLocation);
-		data.put(normalVectorName, normalVector);
+		data.putVector(normalVectorName, normalVector);
 	}
 
 
@@ -53,7 +53,7 @@ public final class PlaneSteps
 		Shape shape = data.getShape(shapeName);
 		IntersectionList ilist = shape.intersections(ray);
 System.out.println("PlaneSteps local_intersect adding IntersectionList named " + intersectionsName);
-		data.put(intersectionsName, ilist);
+		data.putIntersectionList(intersectionsName, ilist);
 	}
 
 	@Then("{identifier} is empty")

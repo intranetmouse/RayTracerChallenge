@@ -24,9 +24,9 @@ public class TuplesSteps
 	@Given("{identifier} ← {tuple}")
 	public void aTuple(String tupleName, Tuple t)
 	{
-		if (t instanceof Point) data.put(tupleName, (Point)t);
-		else if (t instanceof Vector) data.put(tupleName, (Vector)t);
-		else data.put(tupleName, t);
+		if (t instanceof Point) data.putPoint(tupleName, (Point)t);
+		else if (t instanceof Vector) data.putVector(tupleName, (Vector)t);
+		else data.putTuple(tupleName, t);
 	}
 
 	@Then("{identifier} = {tuple}")
@@ -62,7 +62,7 @@ public class TuplesSteps
 	@Given("{identifier} ← {point}")
 	public void setIdentifierToPoint(String varName, Point p)
 	{
-		data.put(varName, p);
+		data.putPoint(varName, p);
 	}
 
 	@Then("{identifier} = {point}")
@@ -93,7 +93,7 @@ public class TuplesSteps
 		@Given("{identifier} ← {vectorSSN}")})
 	public void setIdentifierToVector(String varName, Vector v)
 	{
-		data.put(varName, v);
+		data.putVector(varName, v);
 	}
 
 	@Thens({@Then("{identifier} = {vector}"),
@@ -123,13 +123,13 @@ public class TuplesSteps
 	public void v2Vector(String varName, String vectorName)
 	{
 		Vector vector = data.getVector(vectorName);
-		data.put(varName, vector.normalize());
+		data.putVector(varName, vector.normalize());
 	}
 
 	@When("{identifier} ← normalize\\({vector})")
 	public void v2Vector(String varName, Vector vector)
 	{
-		data.put(varName, vector.normalize());
+		data.putVector(varName, vector.normalize());
 	}
 
 	@When("{identifier} ← reflect\\({identifier}, {identifier})")
@@ -140,7 +140,7 @@ public class TuplesSteps
 		Vector normalVector = data.getVector(normalVectorName);
 
 		Vector reflectedVector = bounceVector.reflect(normalVector);
-		data.put(reflectedVectorName, reflectedVector);
+		data.putVector(reflectedVectorName, reflectedVector);
 	}
 
 
@@ -148,7 +148,7 @@ public class TuplesSteps
 	@Given("{identifier} ← {color}")
 	public void setTupleType3(String varName, Color color)
 	{
-		data.put(varName, color);
+		data.putColor(varName, color);
 	}
 
 	@Then("{identifier} {plusMinusTimes} {identifier} = {color}")
@@ -322,7 +322,7 @@ public class TuplesSteps
 		Point p1 = data.getPoint(point1Name);
 		Point p2 = data.getPoint(point2Name);
 		Vector v = p1.subtract(p2);
-		data.put(vectorName, v);
+		data.putVector(vectorName, v);
 	}
 
 	@Given("{identifier} ← vector\\({identifier}.x, {identifier}.y, {identifier}.z)")
@@ -332,6 +332,6 @@ public class TuplesSteps
 		Point p2 = data.getPoint(pt2Name);
 		Point p3 = data.getPoint(pt3Name);
 		Vector v = new Vector(p1.getX(), p2.getY(), p3.getZ());
-		data.put(vectorName, v);
+		data.putVector(vectorName, v);
 	}
 }

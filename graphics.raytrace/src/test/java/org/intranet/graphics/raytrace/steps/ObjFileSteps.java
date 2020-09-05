@@ -33,7 +33,7 @@ public class ObjFileSteps
 	{
 		String[] testLinesArray = docString.split("[\n\r]");
 		List<String> testLinesList = Arrays.asList(testLinesArray);
-		data.put(variableName, testLinesList);
+		data.putStringList(variableName, testLinesList);
 	}
 
 	@When("{identifier} ← parse_obj_file\\({identifier})")
@@ -44,7 +44,7 @@ public class ObjFileSteps
 
 		ObjFileParser parser = new ObjFileParser(stringList);
 
-		data.put(objFileParseName, parser);
+		data.putObjParser(objFileParseName, parser);
 	}
 
 	@Then("{identifier} should have ignored {int} lines")
@@ -69,7 +69,7 @@ public class ObjFileSteps
 	{
 		ObjFileParser parser = data.getObjParser(objParserName);
 		Group group = parser.getDefaultGroup();
-		data.put(groupName, group);
+		data.putShape(groupName, group);
 	}
 
 	@When("{identifier} ← first child of {identifier}")
@@ -96,7 +96,7 @@ public class ObjFileSteps
 		Group g = (Group)data.getShape(groupName);
 		List<Shape> groupChildren = g.getChildren();
 		Triangle t = (Triangle)groupChildren.get(idx);
-		data.put(triangleName, t);
+		data.putShape(triangleName, t);
 	}
 
 	@Then("{identifier}.p{int} = {identifier}.vertices[{int}]")
@@ -124,7 +124,7 @@ public class ObjFileSteps
 			BufferedReader br = new BufferedReader(isr);)
 		{
 			List<String> lines = br.lines().collect(Collectors.toList());
-			data.put(fileStrVar, lines);
+			data.putStringList(fileStrVar, lines);
 		}
 	}
 
@@ -133,7 +133,7 @@ public class ObjFileSteps
 	{
 		ObjFileParser parser = data.getObjParser(parserName);
 		Group g = parser.getGroup(parserGroupName);
-		data.put(destGroupName, g);
+		data.putShape(destGroupName, g);
 	}
 
 	@When("{identifier} ← obj_to_group\\({identifier})")
@@ -141,7 +141,7 @@ public class ObjFileSteps
 	{
 		ObjFileParser parser = data.getObjParser(objParserName);
 		Group group = parser.getGroup();
-		data.put(groupName, group);
+		data.putShape(groupName, group);
 	}
 
 	@Then("{identifier} includes {string} from {identifier}")

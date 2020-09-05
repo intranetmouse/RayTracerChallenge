@@ -25,7 +25,7 @@ public class SpheresSteps
 		Matrix rotateZMtx)
 	{
 		Matrix product = scalingMtx.multiply(rotateZMtx);
-		data.put(matrixName, product);
+		data.putMatrix(matrixName, product);
 	}
 
 	@Then("{identifier}[{int}] = {dbl}")

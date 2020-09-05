@@ -21,7 +21,7 @@ public class CanvasSteps
 	@Given("{identifier} ← {canvas}")
 	public void cCanvas(String canvasName, Canvas canvas)
 	{
-		data.put(canvasName, canvas);
+		data.putCanvas(canvasName, canvas);
 	}
 
 	@When("every pixel of {identifier} is (set to ){color}")
@@ -56,7 +56,7 @@ public class CanvasSteps
 	public void ppmCanvas_to_ppmC(String ppmName, String canvasName)
 	{
 		Canvas canvas = data.getCanvas(canvasName);
-		data.put(ppmName, canvas.toPpm());
+		data.putStringList(ppmName, canvas.toPpm());
 	}
 
 	@Then("pixel_at\\({identifier}, {int}, {int}) = {color}")

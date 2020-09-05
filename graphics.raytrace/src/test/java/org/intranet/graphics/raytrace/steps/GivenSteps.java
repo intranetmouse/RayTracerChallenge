@@ -30,20 +30,20 @@ public class GivenSteps
 	@Given("{identifier} ← {int}")
 	public void hsize(String varName, int value)
 	{
-		data.put(varName, value);
+		data.putInt(varName, value);
 	}
 
 	@Given("{identifier} ← π\\/{dbl}")
 	public void fieldOfViewPi(String varName, double divisor)
 	{
 		double value = Math.PI / divisor;
-		data.put(varName, value);
+		data.putDouble(varName, value);
 	}
 
 	@Given("{identifier} ← {boolean}")
 	public void in_shadowTrue(String booleanName, Boolean booleanValue)
 	{
-		data.put(booleanName, booleanValue);
+		data.putBoolean(booleanName, booleanValue);
 	}
 
 	@Given("{identifier} ← {identifier}_pattern\\({identifier}, {identifier})")
@@ -60,7 +60,7 @@ public class GivenSteps
 			"gradient".equals(patternType) ? new GradientPattern(color1, color2) :
 			null;
 		Assert.assertNotNull("unrecognized pattern " + patternName, pattern);
-		data.put(patternName, pattern);
+		data.putPattern(patternName, pattern);
 	}
 
 	@Given("{identifier}.pattern ← stripe_pattern\\({color}, {color})")
@@ -77,7 +77,7 @@ public class GivenSteps
 		Color color1, Color color2)
 	{
 		Pattern pattern = new StripePattern(color1, color2);
-		data.put(patternName, pattern);
+		data.putPattern(patternName, pattern);
 	}
 
 	@Given("set_pattern_transform\\({identifier}, {matrix})")
@@ -99,13 +99,13 @@ public class GivenSteps
 		Shape shape = data.getShape(shapeName);
 
 		Color c = shape.colorAt(pattern, pt);
-		data.put(assignColorName, c);
+		data.putColor(assignColorName, c);
 	}
 
 	@Given("{identifier} ← {test_pattern}")
 	public void patternTest_pattern(String patternName, Pattern pattern)
 	{
-		data.put(patternName, pattern);
+		data.putPattern(patternName, pattern);
 	}
 
 	@Given("{identifier} has:")
@@ -121,7 +121,7 @@ public class GivenSteps
 	{
 		Shape shape = data.getShape(shapeName);
 		Point newPoint = shape.worldToObject(p);
-		data.put(pointName, newPoint);
+		data.putPoint(pointName, newPoint);
 	}
 
 	@When("{identifier} ← normal_to_world\\({identifier}, {vectorSSS})")
@@ -132,6 +132,6 @@ public class GivenSteps
 		Shape shape = data.getShape(shapeName);
 
 		Vector worldNormal = shape.normalToWorld(normal);
-		data.put(normalName, worldNormal);
+		data.putVector(normalName, worldNormal);
 	}
 }

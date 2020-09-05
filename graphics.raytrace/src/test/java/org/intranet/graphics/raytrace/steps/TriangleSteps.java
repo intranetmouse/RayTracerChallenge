@@ -25,7 +25,7 @@ public class TriangleSteps
 		Point p2 = data.getPoint(p2Name);
 		Point p3 = data.getPoint(p3Name);
 		Triangle triangle = new Triangle(p1, p2, p3);
-		data.put(triangleName, triangle);
+		data.putShape(triangleName, triangle);
 	}
 
 	@Then("{identifier}.p1 = {identifier}")
@@ -102,7 +102,7 @@ public class TriangleSteps
 		Point p2, Point p3)
 	{
 		Triangle t = new Triangle(p1, p2, p3);
-		data.put(triangleName, t);
+		data.putShape(triangleName, t);
 	}
 
 	@Then("{identifier} = {identifier}.normal")

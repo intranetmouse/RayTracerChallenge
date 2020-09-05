@@ -35,7 +35,7 @@ public class SmoothTriangleSteps
 
 		Triangle smoothTriangle = new Triangle(p1, p2, p3, v1, v2, v3);
 
-		data.put(triangleName, smoothTriangle);
+		data.putShape(triangleName, smoothTriangle);
 	}
 
 	@Then("{identifier}.n1 = {identifier}")
@@ -95,6 +95,6 @@ public class SmoothTriangleSteps
 		Intersection intersection = data.getIntersection(intersectionName);
 
 		Vector normal = s.normalAt(pt, intersection);
-		data.put(normalName, normal);
+		data.putVector(normalName, normal);
 	}
 }

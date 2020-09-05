@@ -130,7 +130,7 @@ public class WorldSteps
 	{
 		World world = data.getWorld(worldName);
 		Shape firstObject = world.getSceneObjects().get(sceneObjIdx);
-		data.put(objectName, firstObject);
+		data.putShape(objectName, firstObject);
 	}
 
 	@Given("{identifier}.light ← point_light\\({point}, {color})")
@@ -160,12 +160,12 @@ public class WorldSteps
 			if (p != null)
 			{
 				BoundingBox newBox = box.add(p);
-				data.put(parentObjName, newBox);
+				data.putBoundingBox(parentObjName, newBox);
 			}
 			else if (otherBox != null)
 			{
 				BoundingBox newBox = box.add(otherBox);
-				data.put(parentObjName, newBox);
+				data.putBoundingBox(parentObjName, newBox);
 			}
 			else
 				Assert.fail("Unknown type of object for " + childObjName);
@@ -181,7 +181,7 @@ public class WorldSteps
 	})
 	public void wDefault_world(String worldName, World w)
 	{
-		data.put(worldName, w);
+		data.putWorld(worldName, w);
 	}
 
 	@When("{identifier} ← intersect_world\\({identifier}, {identifier})")
@@ -193,7 +193,7 @@ public class WorldSteps
 
 		IntersectionList il = w.intersect(r, false);
 
-		data.put(intersectionListName, il);
+		data.putIntersectionList(intersectionListName, il);
 	}
 
 	@When("{identifier} ← shade_hit\\({identifier}, {identifier})")
@@ -214,7 +214,7 @@ public class WorldSteps
 
 		Color c = comps.shadeHit(world, numRecursion);
 
-		data.put(colorName, c);
+		data.putColor(colorName, c);
 	}
 
 	@When("{identifier} ← reflected_color\\({identifier}, {identifier})")
@@ -232,7 +232,7 @@ public class WorldSteps
 		World world = data.getWorld(worldName);
 		IntersectionComputations comps = data.getComputations(compsName);
 		Color color = comps.reflectedColor(world, remaining);
-		data.put(colorName, color);
+		data.putColor(colorName, color);
 	}
 
 	@When("{identifier} ← refracted_color\\({identifier}, {identifier})")
@@ -253,7 +253,7 @@ public class WorldSteps
 
 		Color c = comps.refractedColor(world, remaining);
 
-		data.put(colorName, c);
+		data.putColor(colorName, c);
 	}
 
 	@When("{identifier} ← color_at\\({identifier}, {identifier})")
@@ -263,7 +263,7 @@ public class WorldSteps
 		Ray ray = data.getRay(rayName);
 
 		Color color = IntersectionComputations.colorAt(world, ray, Camera.MAX_REFLECTION_RECURSION);
-		data.put(colorName, color);
+		data.putColor(colorName, color);
 	}
 
 	@Then("color_at\\({identifier}, {identifier}) should terminate successfully")
