@@ -1,12 +1,12 @@
 package org.intranet.graphics.raytrace;
 
 import org.intranet.graphics.raytrace.primitive.BoundingBox;
+import org.intranet.graphics.raytrace.primitive.Color;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Transformable;
 import org.intranet.graphics.raytrace.primitive.Vector;
-import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.intranet.graphics.raytrace.surface.Pattern;
 

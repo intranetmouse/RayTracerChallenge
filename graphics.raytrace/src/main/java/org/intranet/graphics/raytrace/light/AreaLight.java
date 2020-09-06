@@ -6,11 +6,11 @@ import java.util.List;
 import org.intranet.graphics.raytrace.Light;
 import org.intranet.graphics.raytrace.Tracer;
 import org.intranet.graphics.raytrace.World;
+import org.intranet.graphics.raytrace.primitive.Color;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
 import org.intranet.graphics.raytrace.shape.FixedSequence;
 import org.intranet.graphics.raytrace.shape.Sequence;
-import org.intranet.graphics.raytrace.surface.Color;
 
 public class AreaLight
 	implements Light

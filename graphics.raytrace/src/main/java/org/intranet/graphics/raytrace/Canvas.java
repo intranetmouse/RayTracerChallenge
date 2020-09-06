@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.intranet.graphics.raytrace.surface.Color;
+import org.intranet.graphics.raytrace.primitive.Color;
 
 public class Canvas
 {

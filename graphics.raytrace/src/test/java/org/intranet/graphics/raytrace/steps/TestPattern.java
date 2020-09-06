@@ -1,7 +1,7 @@
 package org.intranet.graphics.raytrace.steps;
 
+import org.intranet.graphics.raytrace.primitive.Color;
 import org.intranet.graphics.raytrace.primitive.Point;
-import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Pattern;
 
 public final class TestPattern

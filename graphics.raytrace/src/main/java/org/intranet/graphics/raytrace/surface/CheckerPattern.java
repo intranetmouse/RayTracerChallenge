@@ -1,5 +1,6 @@
 package org.intranet.graphics.raytrace.surface;
 
+import org.intranet.graphics.raytrace.primitive.Color;
 import org.intranet.graphics.raytrace.primitive.Point;
 
 public class CheckerPattern

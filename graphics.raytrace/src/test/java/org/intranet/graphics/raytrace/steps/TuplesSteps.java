@@ -1,9 +1,9 @@
 package org.intranet.graphics.raytrace.steps;
 
+import org.intranet.graphics.raytrace.primitive.Color;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.primitive.Vector;
-import org.intranet.graphics.raytrace.surface.Color;
 import org.junit.Assert;
 
 import io.cucumber.java.en.Given;

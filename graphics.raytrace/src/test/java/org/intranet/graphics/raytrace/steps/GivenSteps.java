@@ -1,11 +1,11 @@
 package org.intranet.graphics.raytrace.steps;
 
 import org.intranet.graphics.raytrace.Shape;
+import org.intranet.graphics.raytrace.primitive.Color;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
 import org.intranet.graphics.raytrace.surface.CheckerPattern;
-import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.GradientPattern;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.intranet.graphics.raytrace.surface.Pattern;

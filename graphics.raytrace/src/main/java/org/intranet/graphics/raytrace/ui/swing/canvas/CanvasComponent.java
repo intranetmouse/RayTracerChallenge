@@ -8,7 +8,7 @@ import javax.swing.JComponent;
 
 import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.Canvas.CanvasListener;
-import org.intranet.graphics.raytrace.surface.Color;
+import org.intranet.graphics.raytrace.primitive.Color;
 
 public final class CanvasComponent
 	extends JComponent

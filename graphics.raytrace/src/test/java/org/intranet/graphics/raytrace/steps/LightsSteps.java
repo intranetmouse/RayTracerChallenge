@@ -4,10 +4,10 @@ import org.intranet.graphics.raytrace.Light;
 import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.light.AreaLight;
 import org.intranet.graphics.raytrace.light.PointLight;
+import org.intranet.graphics.raytrace.primitive.Color;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Vector;
 import org.intranet.graphics.raytrace.shape.Sequence;
-import org.intranet.graphics.raytrace.surface.Color;
 import org.junit.Assert;
 
 import io.cucumber.java.en.Given;

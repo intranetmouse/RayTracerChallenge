@@ -1,18 +1,18 @@
 package org.intranet.graphics.raytrace.steps;
 
+import org.intranet.graphics.raytrace.primitive.Color;
 import org.intranet.graphics.raytrace.primitive.DoublePair;
 import org.intranet.graphics.raytrace.primitive.Point;
-import org.intranet.graphics.raytrace.surface.AlignCheckUvPattern;
-import org.intranet.graphics.raytrace.surface.CheckersUvPattern;
-import org.intranet.graphics.raytrace.surface.Color;
-import org.intranet.graphics.raytrace.surface.CubeSide;
-import org.intranet.graphics.raytrace.surface.CylindricalUvMap;
-import org.intranet.graphics.raytrace.surface.PlanarUvMap;
-import org.intranet.graphics.raytrace.surface.SphericalUvMap;
 import org.intranet.graphics.raytrace.surface.StripePattern;
 import org.intranet.graphics.raytrace.surface.TextureMapPattern;
-import org.intranet.graphics.raytrace.surface.UvMap;
-import org.intranet.graphics.raytrace.surface.UvPattern;
+import org.intranet.graphics.raytrace.surface.map.CubeSide;
+import org.intranet.graphics.raytrace.surface.map.CylindricalUvMap;
+import org.intranet.graphics.raytrace.surface.map.PlanarUvMap;
+import org.intranet.graphics.raytrace.surface.map.SphericalUvMap;
+import org.intranet.graphics.raytrace.surface.map.UvMap;
+import org.intranet.graphics.raytrace.surface.pattern2d.AlignCheckUvPattern;
+import org.intranet.graphics.raytrace.surface.pattern2d.CheckersUvPattern;
+import org.intranet.graphics.raytrace.surface.pattern2d.UvPattern;
 import org.junit.Assert;
 
 import io.cucumber.java.en.Given;

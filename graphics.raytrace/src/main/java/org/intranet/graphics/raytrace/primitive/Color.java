@@ -1,6 +1,4 @@
-package org.intranet.graphics.raytrace.surface;
-
-import org.intranet.graphics.raytrace.primitive.Tuple;
+package org.intranet.graphics.raytrace.primitive;
 
 public final class Color
 	extends Tuple

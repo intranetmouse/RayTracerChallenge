@@ -1,4 +1,6 @@
-package org.intranet.graphics.raytrace.surface;
+package org.intranet.graphics.raytrace.surface.pattern2d;
+
+import org.intranet.graphics.raytrace.primitive.Color;
 
 public class CheckersUvPattern
 	implements UvPattern

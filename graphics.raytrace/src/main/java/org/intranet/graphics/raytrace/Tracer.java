@@ -2,10 +2,10 @@ package org.intranet.graphics.raytrace;
 
 import java.util.List;
 
+import org.intranet.graphics.raytrace.primitive.Color;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Vector;
-import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.intranet.graphics.raytrace.surface.Pattern;
 

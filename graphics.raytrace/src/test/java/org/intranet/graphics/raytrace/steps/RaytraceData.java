@@ -16,6 +16,7 @@ import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.persistence.ObjFileParser;
 import org.intranet.graphics.raytrace.primitive.BoundingBox;
+import org.intranet.graphics.raytrace.primitive.Color;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
@@ -23,10 +24,9 @@ import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.primitive.Vector;
 import org.intranet.graphics.raytrace.shape.Sequence;
 import org.intranet.graphics.raytrace.shape.TubeLike;
-import org.intranet.graphics.raytrace.surface.Color;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.intranet.graphics.raytrace.surface.Pattern;
-import org.intranet.graphics.raytrace.surface.UvPattern;
+import org.intranet.graphics.raytrace.surface.pattern2d.UvPattern;
 import org.junit.Assert;
 
 public final class RaytraceData

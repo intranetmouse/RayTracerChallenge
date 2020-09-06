@@ -3,11 +3,11 @@ package org.intranet.graphics.raytrace;
 import java.util.Spliterators.AbstractSpliterator;
 import java.util.stream.StreamSupport;
 
+import org.intranet.graphics.raytrace.primitive.Color;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Vector;
-import org.intranet.graphics.raytrace.surface.Color;
 
 public class Camera
 {

@@ -1,7 +1,10 @@
 package org.intranet.graphics.raytrace.surface;
 
+import org.intranet.graphics.raytrace.primitive.Color;
 import org.intranet.graphics.raytrace.primitive.DoublePair;
 import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.surface.map.UvMap;
+import org.intranet.graphics.raytrace.surface.pattern2d.UvPattern;
 
 public class TextureMapPattern
 	extends Pattern
