@@ -83,6 +83,13 @@ public class PersistenceTest
 	}
 
 	@Test
+	public void loadCheckeredCube()
+		throws FileNotFoundException
+	{
+		testFile("checkered-cube.yml");
+	}
+
+	@Test
 	public void loadGroupOneLevel()
 		throws FileNotFoundException
 	{
@@ -102,7 +109,7 @@ public class PersistenceTest
 		World world = testFile("grouptest2.yml");
 		List<Shape> objs = world.getSceneObjects();
 
-		Assert.assertEquals(1, objs.size());
+		Assert.assertEquals(3, objs.size());
 
 		Shape s1 = objs.get(0);
 		Assert.assertEquals(Group.class, s1.getClass());
@@ -121,7 +128,7 @@ public class PersistenceTest
 		World world = testFile("group.yml");
 		List<Shape> objs = world.getSceneObjects();
 
-		Assert.assertEquals(2, objs.size());
+		Assert.assertEquals(4, objs.size());
 
 		Shape plane = objs.get(0);
 		Assert.assertTrue(Plane.class.isInstance(plane));

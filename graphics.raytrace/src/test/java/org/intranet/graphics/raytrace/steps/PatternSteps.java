@@ -3,6 +3,8 @@ package org.intranet.graphics.raytrace.steps;
 import org.intranet.graphics.raytrace.primitive.Color;
 import org.intranet.graphics.raytrace.primitive.DoublePair;
 import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.surface.CubeMapPattern;
+import org.intranet.graphics.raytrace.surface.Pattern;
 import org.intranet.graphics.raytrace.surface.StripePattern;
 import org.intranet.graphics.raytrace.surface.TextureMapPattern;
 import org.intranet.graphics.raytrace.surface.map.CubeSide;
@@ -137,11 +139,6 @@ public class PatternSteps
 		data.putString(stringName, faceFromPoint.toString());
 	}
 
-	public static final class CubeMapPattern
-	{
-
-	}
-
 	@Then("{identifier} = {string}")
 	public void face(String stringName, String expectedString)
 	{
@@ -154,10 +151,25 @@ public class PatternSteps
 		Point point)
 	{
 		UvMap map = CubeSide.valueOf(side.toUpperCase());
-System.out.println("side="+side+", map type="+map.toString());
 		DoublePair values = map.map(point);
 
 		data.putDouble(uName, values.getFirst());
 		data.putDouble(vName, values.getSecond());
+	}
+
+	@When("{identifier} ← cube_map\\({identifier}, {identifier}, {identifier}, {identifier}, {identifier}, {identifier})")
+	public void patternCube_mapLeftFrontRightBackUpDown(String patternName,
+		String leftName, String frontName, String rightName, String backName,
+		String upName, String downName)
+	{
+		UvPattern left = data.getUvPattern(leftName);
+		UvPattern front = data.getUvPattern(frontName);
+		UvPattern right = data.getUvPattern(rightName);
+		UvPattern back = data.getUvPattern(backName);
+		UvPattern up = data.getUvPattern(upName);
+		UvPattern down = data.getUvPattern(downName);
+		Pattern pattern = new CubeMapPattern(left, front, right, back, up, down);
+		// Write code here that turns the phrase above into concrete actions
+		data.putPattern(patternName, pattern);
 	}
 }

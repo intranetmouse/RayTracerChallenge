@@ -35,6 +35,7 @@ import org.intranet.graphics.raytrace.shape.Sphere;
 import org.intranet.graphics.raytrace.shape.Triangle;
 import org.intranet.graphics.raytrace.shape.TubeLike;
 import org.intranet.graphics.raytrace.surface.CheckerPattern;
+import org.intranet.graphics.raytrace.surface.CubeMapPattern;
 import org.intranet.graphics.raytrace.surface.GradientPattern;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.intranet.graphics.raytrace.surface.Pattern;
@@ -229,11 +230,11 @@ public class YamlWorldParser
 			}
 
 			if (valueMap.size() > 0)
-				System.err.printf("Leftovers for define %s, values = %s\n", defineName, valueMap);
+				throw new IllegalStateException(String.format("Leftovers for define valueMap %s, values = %s\n", defineName, valueMap));
 		}
 
 		if (defineMap.size() > 0)
-			System.err.printf("Leftovers for define %s = %s\n", defineName, defineMap);
+			System.err.printf("Leftovers for define defineMap %s = %s\n", defineName, defineMap);
 	}
 
 	private void defineTransform(String defineName, String extendName,
@@ -268,7 +269,7 @@ public class YamlWorldParser
 
 		if (valueMap != null)
 		{
-			parseRawMaterial(mat, valueMap);
+			parseMaterialAttributes(mat, valueMap);
 			// Note: parseRawMaterial does its own values.
 			materialDefines.put(defineName, mat);
 		}
@@ -289,11 +290,9 @@ public class YamlWorldParser
 		}
 	}
 
-	private void parseRawMaterial(Material mat,
+	private void parseMaterialAttributes(Material mat,
 		Map<String, Object> materialMap)
 	{
-		materialMap = new DestructiveHashMap<>(materialMap);
-
 		String ambient = (String)materialMap.get("ambient");
 		if (ambient != null)
 			mat.setAmbient(stringToDbl(ambient));
@@ -334,99 +333,141 @@ public class YamlWorldParser
 		Map<Object, Object> patternMap = (Map<Object, Object>)materialMap.get("pattern");
 		if (patternMap != null)
 		{
-			patternMap = new DestructiveHashMap<>(patternMap);
+			parsePatternMap(mat, patternMap);
+		}
+	}
+
+	private void parsePatternMap(Material mat, Map<Object, Object> patternMap)
+	{
+		patternMap = new DestructiveHashMap<>(patternMap);
 //System.out.println("YamlWorldParser.parseRawMaterial: Got pattern="+patternMap);
-			String patternType = (String)patternMap.get("type");
-			Pattern pattern = null;
-			switch (patternType)
-			{
-				case "stripes":
-				case "checker":
-				case "checkers":
-				case "gradient":
-				case "ring":
-					@SuppressWarnings("unchecked")
-					List<List<String>> colors = (List<List<String>>)patternMap.get("colors");
+		String patternType = (String)patternMap.get("type");
+		Pattern pattern = null;
+		switch (patternType)
+		{
+			case "stripes":
+			case "checker":
+			case "checkers":
+			case "gradient":
+			case "ring":
+				@SuppressWarnings("unchecked")
+				List<List<String>> colors = (List<List<String>>)patternMap.get("colors");
 //System.out.println("YamlWorldParser.parseRawMaterial: Got colors="+colors);
 
-					Color color1 = listToColor(colors.get(0));
-					Color color2 = listToColor(colors.get(1));
-					pattern = "stripes".equals(patternType) ?
-						new StripePattern(color1, color2) :
-						"gradient".equals(patternType) ?
-						new GradientPattern(color1, color2) :
-						"ring".equals(patternType) ?
-						new RingPattern(color1, color2) :
-						new CheckerPattern(color1, color2);
-					mat.setPattern(pattern);
-					break;
-				case "map":
-					String uvMappingType = (String)patternMap.get("mapping");
-					UvMap uvMapping = new SphericalUvMap();
-					if ("planar".equals(uvMappingType))
-						uvMapping = new PlanarUvMap();
-					else if ("cylindrical".equals(uvMappingType))
-						uvMapping = new CylindricalUvMap();
-					else if (!"spherical".equals(uvMappingType))
-						System.err.println("Unknown uv mapping type " + uvMappingType);
+				Color color1 = listToColor(colors.get(0));
+				Color color2 = listToColor(colors.get(1));
+				pattern = "stripes".equals(patternType) ?
+					new StripePattern(color1, color2) :
+					"gradient".equals(patternType) ?
+					new GradientPattern(color1, color2) :
+					"ring".equals(patternType) ?
+					new RingPattern(color1, color2) :
+					new CheckerPattern(color1, color2);
+				mat.setPattern(pattern);
+				break;
+			case "map":
+				String uvMappingType = (String)patternMap.get("mapping");
+				pattern = getUvMappingTexture(patternMap, uvMappingType);
+				mat.setPattern(pattern);
 
-					@SuppressWarnings("unchecked")
-					Map<String, Object> uvPatternAttribs = (Map<String, Object>)patternMap.get("uv_pattern");
-					String uvPatternType = (String)uvPatternAttribs.get("type");
-					UvPattern uvPattern;
-					switch (uvPatternType)
-					{
-						case "align_check":
-							@SuppressWarnings("unchecked") Map<String, List<String>> alignColors =
-								(Map<String, List<String>>)uvPatternAttribs.get("colors");
-							Color alignMain = listToColor(alignColors.get("main"));
-							Color alignUl = listToColor(alignColors.get("ul"));
-							Color alignUr = listToColor(alignColors.get("ur"));
-							Color alignBl = listToColor(alignColors.get("bl"));
-							Color alignBr = listToColor(alignColors.get("br"));
-							uvPattern = new AlignCheckUvPattern(alignMain,
-								alignUl, alignUr, alignBl, alignBr);
-							break;
-						case "checkers":
-							int uSquares = stringToInt((String) uvPatternAttribs.get("width"));
-							int vSquares = stringToInt((String) uvPatternAttribs.get("height"));
-							@SuppressWarnings("unchecked")
-							List<List<String>> uvColors = (List<List<String>>)uvPatternAttribs.get("colors");
-							Color uvColor1 = listToColor(uvColors.get(0));
-							Color uvColor2 = listToColor(uvColors.get(1));
-							uvPattern = new CheckersUvPattern(uSquares, vSquares, uvColor1, uvColor2);
-							break;
-						default:
-							System.err.println("Unknown uv pattern type="+uvPatternType);
-							uvPattern = new UvPattern() {
-								@Override
-								public Color colorAt(double u, double v)
-								{ return new Color(0, 1, 0); }
-							};
-					}
-
-					pattern = new TextureMapPattern(uvPattern, uvMapping);
-					mat.setPattern(pattern);
-
-					break;
-				default:
-					System.err.println("Unknown pattern type " + patternType);
-			}
-			if (pattern != null)
-			{
-				@SuppressWarnings("unchecked")
-				List<List<String>> patternTransform =
-					(List<List<String>>)patternMap.get("transform");
-				if (patternTransform != null)
-					parseTransform(pattern, patternTransform);
-			}
-
-			if (patternMap.size() > 0)
-				System.err.println("YamlWorldParser.parseRawMaterial: pattern leftovers="+patternMap);
+				break;
+			default:
+				System.err.println("Unknown pattern type " + patternType);
+		}
+		if (pattern != null)
+		{
+			@SuppressWarnings("unchecked")
+			List<List<String>> patternTransform =
+				(List<List<String>>)patternMap.get("transform");
+			if (patternTransform != null)
+				parseTransform(pattern, patternTransform);
 		}
 
-		if (materialMap.size() > 0)
-			System.err.printf("Leftovers for material: %s\n", materialMap);
+		if (patternMap.size() > 0)
+			System.err.println("YamlWorldParser.parseRawMaterial: pattern leftovers="+patternMap);
+	}
+
+	private Pattern getUvMappingTexture(Map<Object, Object> patternMap,
+		String uvMappingType)
+	{
+		Pattern pattern;
+		if ("cube".equals(uvMappingType))
+		{
+			@SuppressWarnings("unchecked")
+			Map<String, Object> leftAttrs = (Map<String, Object>)patternMap.get("left");
+			UvPattern left = uvPatternFromAttributes(leftAttrs);
+			@SuppressWarnings("unchecked")
+			Map<String, Object> rightAttrs = (Map<String, Object>)patternMap.get("right");
+			UvPattern right = uvPatternFromAttributes(rightAttrs);
+			@SuppressWarnings("unchecked")
+			Map<String, Object> frontAttrs = (Map<String, Object>)patternMap.get("front");
+			UvPattern front = uvPatternFromAttributes(frontAttrs);
+			@SuppressWarnings("unchecked")
+			Map<String, Object> backAttrs = (Map<String, Object>)patternMap.get("back");
+			UvPattern back = uvPatternFromAttributes(backAttrs);
+			@SuppressWarnings("unchecked")
+			Map<String, Object> upAttrs = (Map<String, Object>)patternMap.get("up");
+			UvPattern up = uvPatternFromAttributes(upAttrs);
+			@SuppressWarnings("unchecked")
+			Map<String, Object> downAttrs = (Map<String, Object>)patternMap.get("down");
+			UvPattern down = uvPatternFromAttributes(downAttrs);
+			pattern = new CubeMapPattern(left, front, right, back, up, down);
+		}
+		else
+		{
+			UvMap uvMapping = new SphericalUvMap();
+			if ("planar".equals(uvMappingType))
+				uvMapping = new PlanarUvMap();
+			else if ("cylindrical".equals(uvMappingType))
+				uvMapping = new CylindricalUvMap();
+			else if (!"spherical".equals(uvMappingType))
+				System.err.println("Unknown uv mapping type " + uvMappingType);
+
+			@SuppressWarnings("unchecked")
+			Map<String, Object> uvPatternAttribs = (Map<String, Object>)patternMap.get("uv_pattern");
+			UvPattern uvPattern = uvPatternFromAttributes(uvPatternAttribs);
+
+			pattern = new TextureMapPattern(uvPattern, uvMapping);
+		}
+		return pattern;
+	}
+
+	private UvPattern uvPatternFromAttributes(
+		Map<String, Object> uvPatternAttribs)
+	{
+		String uvPatternType = (String)uvPatternAttribs.get("type");
+		UvPattern uvPattern;
+		switch (uvPatternType)
+		{
+			case "align_check":
+				@SuppressWarnings("unchecked") Map<String, List<String>> alignColors =
+					(Map<String, List<String>>)uvPatternAttribs.get("colors");
+				Color alignMain = listToColor(alignColors.get("main"));
+				Color alignUl = listToColor(alignColors.get("ul"));
+				Color alignUr = listToColor(alignColors.get("ur"));
+				Color alignBl = listToColor(alignColors.get("bl"));
+				Color alignBr = listToColor(alignColors.get("br"));
+				uvPattern = new AlignCheckUvPattern(alignMain,
+					alignUl, alignUr, alignBl, alignBr);
+				break;
+			case "checkers":
+				int uSquares = stringToInt((String) uvPatternAttribs.get("width"));
+				int vSquares = stringToInt((String) uvPatternAttribs.get("height"));
+				@SuppressWarnings("unchecked")
+				List<List<String>> uvColors = (List<List<String>>)uvPatternAttribs.get("colors");
+				Color uvColor1 = listToColor(uvColors.get(0));
+				Color uvColor2 = listToColor(uvColors.get(1));
+				uvPattern = new CheckersUvPattern(uSquares, vSquares, uvColor1, uvColor2);
+				break;
+			default:
+				System.err.println("Unknown uv pattern type="+uvPatternType);
+				uvPattern = new UvPattern() {
+					@Override
+					public Color colorAt(double u, double v)
+					{ return new Color(0, 1, 0); }
+				};
+		}
+		return uvPattern;
 	}
 
 	private void addObject(World world, Map<String, Object> objMap)
@@ -638,7 +679,7 @@ public class YamlWorldParser
 			Map<String, Object> materialMap =
 				(Map<String, Object>)materialData;
 			Material mat = s.getMaterial().duplicate();
-			parseRawMaterial(mat, materialMap);
+			parseMaterialAttributes(mat, materialMap);
 			s.setMaterial(mat);
 		}
 	}
