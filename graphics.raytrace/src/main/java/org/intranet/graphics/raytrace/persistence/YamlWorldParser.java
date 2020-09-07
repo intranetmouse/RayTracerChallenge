@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.intranet.graphics.raytrace.Camera;
+import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.light.AreaLight;
@@ -48,6 +49,7 @@ import org.intranet.graphics.raytrace.surface.map.SphericalUvMap;
 import org.intranet.graphics.raytrace.surface.map.UvMap;
 import org.intranet.graphics.raytrace.surface.pattern2d.AlignCheckUvPattern;
 import org.intranet.graphics.raytrace.surface.pattern2d.CheckersUvPattern;
+import org.intranet.graphics.raytrace.surface.pattern2d.ImageUvPattern;
 import org.intranet.graphics.raytrace.surface.pattern2d.UvPattern;
 
 import com.esotericsoftware.yamlbeans.YamlReader;
@@ -80,7 +82,7 @@ public class YamlWorldParser
 				{
 					if (paramMap.containsKey("add"))
 					{
-						addObject(world, paramMap);
+						addObject(world, paramMap, relativeFolder);
 					}
 					else if (paramMap.containsKey("define"))
 					{
@@ -222,11 +224,12 @@ public class YamlWorldParser
 			}
 			else if (type != null)
 			{
-				defineShape(type, extendName, world, valueMap, defineName);
+				defineShape(type, extendName, world, valueMap, defineName,
+					relativeFolder);
 			}
 			else
 			{
-				defineMaterial(defineName, extendName, valueMap);
+				defineMaterial(defineName, extendName, valueMap, relativeFolder);
 			}
 
 			if (valueMap.size() > 0)
@@ -251,7 +254,7 @@ public class YamlWorldParser
 	}
 
 	private void defineMaterial(String defineName, String extendName,
-		Map<String, Object> valueMap)
+		Map<String, Object> valueMap, File relativeFolder)
 	{
 		Material mat = null;
 		if (extendName == null)
@@ -269,7 +272,7 @@ public class YamlWorldParser
 
 		if (valueMap != null)
 		{
-			parseMaterialAttributes(mat, valueMap);
+			parseMaterialAttributes(mat, valueMap, relativeFolder);
 			// Note: parseRawMaterial does its own values.
 			materialDefines.put(defineName, mat);
 		}
@@ -285,13 +288,13 @@ public class YamlWorldParser
 			List<String> lines = br.lines().collect(Collectors.toList());
 			ObjFileParser parser = new ObjFileParser(lines);
 			Shape shape = parser.getGroup();
-			processShapeProperties(world, valueMap, shape);
+			processShapeProperties(world, valueMap, shape, relativeFolder);
 			shapeDefines.put(defineName, shape);
 		}
 	}
 
 	private void parseMaterialAttributes(Material mat,
-		Map<String, Object> materialMap)
+		Map<String, Object> materialMap, File relativeFolder)
 	{
 		String ambient = (String)materialMap.get("ambient");
 		if (ambient != null)
@@ -333,11 +336,12 @@ public class YamlWorldParser
 		Map<Object, Object> patternMap = (Map<Object, Object>)materialMap.get("pattern");
 		if (patternMap != null)
 		{
-			parsePatternMap(mat, patternMap);
+			parsePatternMap(mat, patternMap, relativeFolder);
 		}
 	}
 
-	private void parsePatternMap(Material mat, Map<Object, Object> patternMap)
+	private void parsePatternMap(Material mat, Map<Object, Object> patternMap,
+		File relativeFolder)
 	{
 		patternMap = new DestructiveHashMap<>(patternMap);
 //System.out.println("YamlWorldParser.parseRawMaterial: Got pattern="+patternMap);
@@ -365,7 +369,8 @@ public class YamlWorldParser
 				break;
 			case "map":
 				String uvMappingType = (String)patternMap.get("mapping");
-				pattern = getUvMappingTexture(patternMap, uvMappingType);
+				pattern = getUvMappingTexture(patternMap, uvMappingType,
+					relativeFolder);
 				mat.setPattern(pattern);
 				break;
 			default:
@@ -385,29 +390,29 @@ public class YamlWorldParser
 	}
 
 	private Pattern getUvMappingTexture(Map<Object, Object> patternMap,
-		String uvMappingType)
+		String uvMappingType, File relativeFolder)
 	{
 		Pattern pattern;
 		if ("cube".equals(uvMappingType))
 		{
 			@SuppressWarnings("unchecked")
 			Map<String, Object> leftAttrs = (Map<String, Object>)patternMap.get("left");
-			UvPattern left = uvPatternFromAttributes(leftAttrs);
+			UvPattern left = uvPatternFromAttributes(leftAttrs, relativeFolder);
 			@SuppressWarnings("unchecked")
 			Map<String, Object> rightAttrs = (Map<String, Object>)patternMap.get("right");
-			UvPattern right = uvPatternFromAttributes(rightAttrs);
+			UvPattern right = uvPatternFromAttributes(rightAttrs, relativeFolder);
 			@SuppressWarnings("unchecked")
 			Map<String, Object> frontAttrs = (Map<String, Object>)patternMap.get("front");
-			UvPattern front = uvPatternFromAttributes(frontAttrs);
+			UvPattern front = uvPatternFromAttributes(frontAttrs, relativeFolder);
 			@SuppressWarnings("unchecked")
 			Map<String, Object> backAttrs = (Map<String, Object>)patternMap.get("back");
-			UvPattern back = uvPatternFromAttributes(backAttrs);
+			UvPattern back = uvPatternFromAttributes(backAttrs, relativeFolder);
 			@SuppressWarnings("unchecked")
 			Map<String, Object> upAttrs = (Map<String, Object>)patternMap.get("up");
-			UvPattern up = uvPatternFromAttributes(upAttrs);
+			UvPattern up = uvPatternFromAttributes(upAttrs, relativeFolder);
 			@SuppressWarnings("unchecked")
 			Map<String, Object> downAttrs = (Map<String, Object>)patternMap.get("down");
-			UvPattern down = uvPatternFromAttributes(downAttrs);
+			UvPattern down = uvPatternFromAttributes(downAttrs, relativeFolder);
 			pattern = new CubeMapPattern(left, front, right, back, up, down);
 		}
 		else
@@ -422,7 +427,7 @@ public class YamlWorldParser
 
 			@SuppressWarnings("unchecked")
 			Map<String, Object> uvPatternAttribs = (Map<String, Object>)patternMap.get("uv_pattern");
-			UvPattern uvPattern = uvPatternFromAttributes(uvPatternAttribs);
+			UvPattern uvPattern = uvPatternFromAttributes(uvPatternAttribs, relativeFolder);
 
 			pattern = new TextureMapPattern(uvPattern, uvMapping);
 		}
@@ -430,7 +435,7 @@ public class YamlWorldParser
 	}
 
 	private UvPattern uvPatternFromAttributes(
-		Map<String, Object> uvPatternAttribs)
+		Map<String, Object> uvPatternAttribs, File relativeFolder)
 	{
 		String uvPatternType = (String)uvPatternAttribs.get("type");
 		UvPattern uvPattern;
@@ -448,13 +453,39 @@ public class YamlWorldParser
 					alignUl, alignUr, alignBl, alignBr);
 				break;
 			case "checkers":
-				int uSquares = stringToInt((String) uvPatternAttribs.get("width"));
-				int vSquares = stringToInt((String) uvPatternAttribs.get("height"));
+				int uSquares = stringToInt((String)uvPatternAttribs.get("width"));
+				int vSquares = stringToInt((String)uvPatternAttribs.get("height"));
 				@SuppressWarnings("unchecked")
 				List<List<String>> uvColors = (List<List<String>>)uvPatternAttribs.get("colors");
 				Color uvColor1 = listToColor(uvColors.get(0));
 				Color uvColor2 = listToColor(uvColors.get(1));
 				uvPattern = new CheckersUvPattern(uSquares, vSquares, uvColor1, uvColor2);
+				break;
+			case "image":
+				String fileName = (String)uvPatternAttribs.get("file");
+
+				File f = new File(relativeFolder, fileName);
+				try (FileReader fr = new FileReader(f);
+					BufferedReader br = new BufferedReader(fr);)
+				{
+					List<String> lines = br.lines().collect(Collectors.toList());
+					Canvas canvas = Canvas.loadFromPpmString(lines);
+					uvPattern = new ImageUvPattern(canvas);
+				}
+				catch (FileNotFoundException e)
+				{
+					new Exception("Image File not found: " + fileName).printStackTrace();;
+					Canvas canvas = new Canvas(1, 1);
+					canvas.writePixel(0, 0, Color.BLACK);
+					uvPattern = new ImageUvPattern(canvas);
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+					Canvas canvas = new Canvas(1, 1);
+					canvas.writePixel(0, 0, Color.BLACK);
+					uvPattern = new ImageUvPattern(canvas);
+				}
 				break;
 			default:
 				System.err.println("Unknown uv pattern type="+uvPatternType);
@@ -467,7 +498,8 @@ public class YamlWorldParser
 		return uvPattern;
 	}
 
-	private void addObject(World world, Map<String, Object> objMap)
+	private void addObject(World world, Map<String, Object> objMap,
+		File relativeFolder)
 		throws FileNotFoundException, IOException
 	{
 		objMap = new DestructiveHashMap<String, Object>(objMap);
@@ -535,12 +567,12 @@ public class YamlWorldParser
 					Stream<String> lines = br.lines();
 					ObjFileParser parser = new ObjFileParser(lines);
 					Shape shape = parser.getGroup();
-					processShapeProperties(world, objMap, shape);
+					processShapeProperties(world, objMap, shape, relativeFolder);
 					world.addSceneObjects(shape);
 				}
 				break;
 			default:
-				if (!addShape(type, world, objMap))
+				if (!addShape(type, world, objMap, relativeFolder))
 				{
 					System.err.println("Unknown shape type to add: " + type +
 						": data=" + objMap);
@@ -551,7 +583,7 @@ public class YamlWorldParser
 	}
 
 	public boolean addShape(String shapeName, World world,
-		Map<String, Object> objMap)
+		Map<String, Object> objMap, File relativeFolder)
 	{
 		Shape shape = createBasicShape(shapeName, null);
 		if (shape == null)
@@ -564,19 +596,20 @@ public class YamlWorldParser
 		if (shape == null)
 			return false;
 
-		processShapeProperties(world, objMap, shape);
+		processShapeProperties(world, objMap, shape, relativeFolder);
 
 		world.addSceneObjects(shape);
 		return shape != null;
 	}
 
 	private void defineShape(String shapeName, String extendName,
-		World world, Map<String, Object> objMap, String defineName)
+		World world, Map<String, Object> objMap, String defineName,
+		File relativeFolder)
 	{
 		Shape shape = createBasicShape(shapeName, extendName);
 
 		if (shape != null)
-			processShapeProperties(world, objMap, shape);
+			processShapeProperties(world, objMap, shape, relativeFolder);
 
 		shapeDefines.put(defineName, shape);
 	}
@@ -596,7 +629,7 @@ public class YamlWorldParser
 	}
 
 	private Shape processShapeProperties(World world,
-		Map<String, Object> objMap, Shape shape)
+		Map<String, Object> objMap, Shape shape, File relativeFolder)
 	{
 		if (objMap == null)
 			return shape;
@@ -608,7 +641,7 @@ public class YamlWorldParser
 
 		Object shapeMaterial = objMap.get("material");
 		if (shapeMaterial != null)
-			setMaterialForShape(shape, shapeMaterial);
+			setMaterialForShape(shape, shapeMaterial, relativeFolder);
 
 		String shadow = (String)objMap.get("shadow");
 		if (shadow != null)
@@ -650,7 +683,8 @@ public class YamlWorldParser
 					}
 					if (childShape != null)
 					{
-						processShapeProperties(world, childPropMap, childShape);
+						processShapeProperties(world, childPropMap, childShape,
+							relativeFolder);
 						group.addChild(childShape.deepCopy());
 					}
 				}
@@ -660,7 +694,8 @@ public class YamlWorldParser
 		return shape;
 	}
 
-	private void setMaterialForShape(Shape s, Object materialData)
+	private void setMaterialForShape(Shape s, Object materialData,
+		File relativeFolder)
 	{
 		if (materialData instanceof String)
 		{
@@ -676,7 +711,7 @@ public class YamlWorldParser
 			Map<String, Object> materialMap =
 				(Map<String, Object>)materialData;
 			Material mat = s.getMaterial().duplicate();
-			parseMaterialAttributes(mat, materialMap);
+			parseMaterialAttributes(mat, materialMap, relativeFolder);
 			s.setMaterial(mat);
 		}
 	}

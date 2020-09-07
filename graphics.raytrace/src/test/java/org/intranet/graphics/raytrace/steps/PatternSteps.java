@@ -1,5 +1,6 @@
 package org.intranet.graphics.raytrace.steps;
 
+import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.primitive.Color;
 import org.intranet.graphics.raytrace.primitive.DoublePair;
 import org.intranet.graphics.raytrace.primitive.Point;
@@ -14,6 +15,7 @@ import org.intranet.graphics.raytrace.surface.map.SphericalUvMap;
 import org.intranet.graphics.raytrace.surface.map.UvMap;
 import org.intranet.graphics.raytrace.surface.pattern2d.AlignCheckUvPattern;
 import org.intranet.graphics.raytrace.surface.pattern2d.CheckersUvPattern;
+import org.intranet.graphics.raytrace.surface.pattern2d.ImageUvPattern;
 import org.intranet.graphics.raytrace.surface.pattern2d.UvPattern;
 import org.junit.Assert;
 
@@ -171,5 +173,15 @@ public class PatternSteps
 		Pattern pattern = new CubeMapPattern(left, front, right, back, up, down);
 		// Write code here that turns the phrase above into concrete actions
 		data.putPattern(patternName, pattern);
+	}
+
+	@Given("{identifier} ← uv_image\\({identifier})")
+	public void patternUv_imageCanvas(String uvMapName, String canvasName)
+	{
+		Canvas canvas = data.getCanvas(canvasName);
+
+		UvPattern uvMap = new ImageUvPattern(canvas);
+
+		data.putUvPattern(uvMapName, uvMap);
 	}
 }

@@ -94,4 +94,29 @@ public class CanvasSteps
 //		throw new PendingException("This test doesn't really apply, because the"
 //			+ " process that writes the file is what puts the newline on it.");
 	}
+
+	@Then("canvas_from_ppm\\({identifier}) should fail")
+	public void canvas_from_ppmPpmShouldFail(String ppmName)
+	{
+		List<String> ppmLines = data.getStringList(ppmName);
+		try
+		{
+			Canvas.loadFromPpmString(ppmLines);
+			Assert.fail();
+		}
+		catch (Exception e)
+		{
+			// Pass!
+		}
+	}
+
+	@When("{identifier} ← canvas_from_ppm\\({identifier})")
+	public void canvasCanvas_from_ppmPpm(String canvasName, String ppmName)
+	{
+		List<String> ppmLines = data.getStringList(ppmName);
+
+		Canvas canvas = Canvas.loadFromPpmString(ppmLines);
+
+		data.putCanvas(canvasName, canvas);
+	}
 }

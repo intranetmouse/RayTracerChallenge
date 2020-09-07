@@ -110,6 +110,118 @@ public class Canvas
 		return lines;
 	}
 
+	public static final class LinesReader
+	{
+		private final List<String> lines;
+		private int currentLine;
+
+		public LinesReader(List<String> lines)
+		{
+			this.lines = lines;
+			skipCommentLines();
+		}
+
+		public String nextLine()
+		{
+			if (hasMoreLines())
+			{
+				String line = lines.get(currentLine++);
+				skipCommentLines();
+				return line;
+			}
+			return null;
+		}
+
+		private void skipCommentLines()
+		{
+			while (currentLine < lines.size() && lines.get(currentLine).startsWith("#"))
+				currentLine++;
+		}
+
+		public boolean hasMoreLines()
+		{
+			return currentLine < lines.size();
+		}
+	}
+
+	public static final class DoublesReader
+	{
+		private final LinesReader rdr;
+		private String[] values;
+		private int idx;
+
+		public DoublesReader(LinesReader rdr)
+		{
+			this.rdr = rdr;
+		}
+
+		public Double nextDouble()
+		{
+			if (values != null && idx < values.length)
+			{
+				String value = values[idx++];
+				if ("".equals(value))
+					return nextDouble();
+				return Double.valueOf(value);
+			}
+
+			String colorLine = rdr.nextLine();
+
+			if (colorLine == null)
+				return null;
+
+			values = colorLine.replaceAll(" [ ]+", " ").split(" ");
+			idx = 0;
+
+			String value = values[idx++];
+			if ("".equals(value))
+				return nextDouble();
+			return Double.valueOf(value);
+		}
+	}
+
+	public static Canvas loadFromPpmString(List<String> ppmLines)
+	{
+		LinesReader rdr = new LinesReader(ppmLines);
+		String header = rdr.nextLine();
+		if (!"P3".equals(header))
+			throw new RuntimeException("Illegal header, does not match P3: " + header);
+
+		String dimensionLine = rdr.nextLine();
+		String[] dimensionStrings = dimensionLine.split(" ");
+		int width = Integer.parseInt(dimensionStrings[0]);
+		int height = Integer.parseInt(dimensionStrings[1]);
+		Canvas canvas = new Canvas(width, height);
+
+		String scaleLine = rdr.nextLine();
+		int scale = Integer.parseInt(scaleLine);
+
+		int x = 0; int y = 0;
+		DoublesReader drdr = new DoublesReader(rdr);
+
+		infiniteLoop:
+		while (true)
+		{
+			Double red = drdr.nextDouble();
+			if (red == null)
+				break infiniteLoop;
+
+			red = red / scale;
+			double green = drdr.nextDouble() / scale;
+			double blue = drdr.nextDouble() / scale;
+
+			Color color = new Color(red, green, blue);
+			canvas.writePixel(x++, y, color);
+
+			if (x >= width)
+			{
+				x = 0;
+				y++;
+			}
+		}
+		return canvas;
+	}
+
 	private void appendColor(List<String> lines, StringBuilder sb, double color)
 	{
 		String colorStr = Integer.toString(scaleColor(color));

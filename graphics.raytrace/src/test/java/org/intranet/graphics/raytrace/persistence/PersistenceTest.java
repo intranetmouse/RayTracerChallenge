@@ -90,6 +90,13 @@ public class PersistenceTest
 	}
 
 	@Test
+	public void loadEarth()
+		throws FileNotFoundException
+	{
+		testFile("earth.yml");
+	}
+
+	@Test
 	public void loadGroupOneLevel()
 		throws FileNotFoundException
 	{
