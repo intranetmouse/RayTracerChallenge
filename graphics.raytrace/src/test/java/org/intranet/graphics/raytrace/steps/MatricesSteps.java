@@ -2,6 +2,8 @@ package org.intranet.graphics.raytrace.steps;
 
 import java.util.List;
 
+import org.intranet.graphics.raytrace.Intersection;
+import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.primitive.Color;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
@@ -198,28 +200,54 @@ public class MatricesSteps
 	}
 
 	@Then("{identifier} = {identifier}")
-	public void mtxEq(String mtx1Name, String mtx2Name)
+	public void mtxEq(String actualVarName, String expectedVarName)
 	{
-		Matrix m1 = data.getMatrix(mtx1Name);
-		Matrix m2 = "identity_matrix".equals(mtx2Name) ?
-			Matrix.identity(m1.getNumCols()) : data.getMatrix(mtx2Name);
+		Matrix m1 = data.getMatrix(actualVarName);
+		Matrix m2 = "identity_matrix".equals(expectedVarName) ?
+			Matrix.identity(m1.getNumCols()) : data.getMatrix(expectedVarName);
 		if (m2 != null)
 		{
 			Assert.assertEquals(m1, m2);
 			return;
 		}
 
-		Color c1 = data.getColor(mtx1Name);
-		Color c2 = "black".equals(mtx2Name) ? Color.BLACK :
-			"white".equals(mtx2Name) ? Color.WHITE :
-			data.getColor(mtx2Name);
+		Color c1 = data.getColor(actualVarName);
+		Color c2 = "black".equals(expectedVarName) ? Color.BLACK :
+			"white".equals(expectedVarName) ? Color.WHITE :
+			data.getColor(expectedVarName);
 		if (c1 != null || c2 != null)
 		{
 			Assert.assertEquals(c1, c2);
 			return;
 		}
 
-		Assert.fail("Unknown data for types " + mtx1Name + " and " + mtx2Name);
+		Boolean actualBoolean = data.getBoolean(actualVarName);
+		if (actualBoolean != null)
+		{
+			Boolean expectedBoolean = data.getBoolean(expectedVarName);
+			if (expectedBoolean == null)
+				expectedBoolean = "true".equals(expectedVarName);
+			Assert.assertEquals(expectedBoolean, actualBoolean);
+			return;
+		}
+
+		Intersection actualIntersection = data.getIntersection(actualVarName);
+		if (actualIntersection != null)
+		{
+			Intersection expectedIntersection = data.getIntersection(expectedVarName);
+			Assert.assertEquals(expectedIntersection, actualIntersection);
+			return;
+		}
+
+		Shape actualShape = data.getShape(actualVarName);
+		if (actualShape != null)
+		{
+			Shape expectedShape = data.getShape(expectedVarName);
+			Assert.assertEquals(expectedShape, actualShape);
+			return;
+		}
+
+		Assert.fail("Unknown data for types " + actualVarName + " and " + expectedVarName);
 	}
 
 	@Then("{identifier} != {identifier}")

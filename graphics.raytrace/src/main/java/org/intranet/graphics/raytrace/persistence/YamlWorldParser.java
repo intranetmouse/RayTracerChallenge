@@ -356,12 +356,10 @@ public class YamlWorldParser
 
 				Color color1 = listToColor(colors.get(0));
 				Color color2 = listToColor(colors.get(1));
-				pattern = "stripes".equals(patternType) ?
-					new StripePattern(color1, color2) :
-					"gradient".equals(patternType) ?
-					new GradientPattern(color1, color2) :
-					"ring".equals(patternType) ?
-					new RingPattern(color1, color2) :
+				pattern =
+					"stripes".equals(patternType) ? new StripePattern(color1, color2) :
+					"gradient".equals(patternType) ? new GradientPattern(color1, color2) :
+					"ring".equals(patternType) ? new RingPattern(color1, color2) :
 					new CheckerPattern(color1, color2);
 				mat.setPattern(pattern);
 				break;
@@ -369,7 +367,6 @@ public class YamlWorldParser
 				String uvMappingType = (String)patternMap.get("mapping");
 				pattern = getUvMappingTexture(patternMap, uvMappingType);
 				mat.setPattern(pattern);
-
 				break;
 			default:
 				System.err.println("Unknown pattern type " + patternType);

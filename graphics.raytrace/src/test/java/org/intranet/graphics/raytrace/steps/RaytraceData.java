@@ -55,10 +55,10 @@ public final class RaytraceData
 	{ return intMap.get(intName); }
 
 	private Map<String, Boolean> booleanMap = new HashMap<>();
-	public void putBoolean(String intName, boolean value)
-	{ booleanMap.put(intName, value); }
-	public Boolean getBoolean(String intName)
-	{ return booleanMap.get(intName); }
+	public void putBoolean(String booleanName, boolean value)
+	{ booleanMap.put(booleanName, value); }
+	public Boolean getBoolean(String booleanName)
+	{ return booleanMap.get(booleanName); }
 
 	private Map<String, Point> pointMap = new HashMap<>();
 	public void putPoint(String pointName, Point point)

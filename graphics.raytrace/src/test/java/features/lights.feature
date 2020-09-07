@@ -40,7 +40,8 @@ Scenario: Creating an area light
     And light.vvec = vector(0, 0, 0.5)
     And light.vsteps = 2
     And light.samples = 8
-    And light.position = point(1, 0, 0.5)
+# Light position is no longer valid for area lights
+#    And light.position = point(1, 0, 0.5)
 
 Scenario Outline: Finding a single point on an area light
   Given corner ← point(0, 0, 0)
