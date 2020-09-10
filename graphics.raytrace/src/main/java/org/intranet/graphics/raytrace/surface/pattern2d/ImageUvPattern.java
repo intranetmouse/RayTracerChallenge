@@ -1,7 +1,7 @@
 package org.intranet.graphics.raytrace.surface.pattern2d;
 
-import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.primitive.Color;
+import org.intranet.graphics.raytrace.surface.map.Canvas;
 
 public final class ImageUvPattern
 	implements UvPattern

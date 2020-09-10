@@ -4,10 +4,10 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-import org.intranet.graphics.raytrace.Canvas;
-import org.intranet.graphics.raytrace.Canvas.CanvasListener;
 import org.intranet.graphics.raytrace.persistence.canvas.gif.AnimatedGifEncoder;
 import org.intranet.graphics.raytrace.primitive.Color;
+import org.intranet.graphics.raytrace.surface.map.Canvas;
+import org.intranet.graphics.raytrace.surface.map.Canvas.CanvasListener;
 
 public final class CanvasToGifWriter
 	implements CanvasListener

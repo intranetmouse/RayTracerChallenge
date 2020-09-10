@@ -3,8 +3,8 @@ package org.intranet.graphics.raytrace.steps;
 import java.util.Spliterator;
 import java.util.Spliterators.AbstractSpliterator;
 
-import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.PixelCoordinate;
+import org.intranet.graphics.raytrace.surface.map.Canvas;
 import org.intranet.graphics.raytrace.traversal.AcrossDownTraversal;
 import org.intranet.graphics.raytrace.traversal.ScatteredTraversal;
 import org.junit.Assert;

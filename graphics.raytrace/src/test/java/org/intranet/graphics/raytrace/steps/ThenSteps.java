@@ -3,7 +3,6 @@ package org.intranet.graphics.raytrace.steps;
 import java.util.List;
 
 import org.intranet.graphics.raytrace.Camera;
-import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionComputations;
 import org.intranet.graphics.raytrace.IntersectionList;
@@ -22,6 +21,7 @@ import org.intranet.graphics.raytrace.shape.Cylinder;
 import org.intranet.graphics.raytrace.shape.Group;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.intranet.graphics.raytrace.surface.Pattern;
+import org.intranet.graphics.raytrace.surface.map.Canvas;
 import org.junit.Assert;
 
 import io.cucumber.java.PendingException;

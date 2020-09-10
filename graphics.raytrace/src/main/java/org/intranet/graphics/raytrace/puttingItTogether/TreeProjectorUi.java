@@ -7,10 +7,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
-import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.puttingItTogether.projectorGroup.ProjectorGroup;
 import org.intranet.graphics.raytrace.puttingItTogether.projectorSelector.ProjectorGroupTree;
 import org.intranet.graphics.raytrace.puttingItTogether.toolbar.ProjectorToolbar;
+import org.intranet.graphics.raytrace.surface.map.Canvas;
 import org.intranet.graphics.raytrace.ui.swing.canvas.CanvasComponent;
 import org.intranet.graphics.raytrace.ui.swing.resolution.Resolution;
 

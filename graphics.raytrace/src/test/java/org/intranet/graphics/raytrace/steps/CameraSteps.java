@@ -3,7 +3,6 @@ package org.intranet.graphics.raytrace.steps;
 import java.util.Spliterators.AbstractSpliterator;
 
 import org.intranet.graphics.raytrace.Camera;
-import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.PixelCoordinate;
 import org.intranet.graphics.raytrace.RayTraceStatistics;
 import org.intranet.graphics.raytrace.World;
@@ -12,6 +11,7 @@ import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Tuple;
 import org.intranet.graphics.raytrace.primitive.Vector;
+import org.intranet.graphics.raytrace.surface.map.Canvas;
 import org.intranet.graphics.raytrace.traversal.CanvasTraversalType;
 import org.junit.Assert;
 

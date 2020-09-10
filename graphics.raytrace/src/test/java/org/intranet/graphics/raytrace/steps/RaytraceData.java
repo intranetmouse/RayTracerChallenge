@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Spliterator;
 
 import org.intranet.graphics.raytrace.Camera;
-import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionComputations;
 import org.intranet.graphics.raytrace.IntersectionList;
@@ -26,6 +25,7 @@ import org.intranet.graphics.raytrace.shape.Sequence;
 import org.intranet.graphics.raytrace.shape.TubeLike;
 import org.intranet.graphics.raytrace.surface.Material;
 import org.intranet.graphics.raytrace.surface.Pattern;
+import org.intranet.graphics.raytrace.surface.map.Canvas;
 import org.intranet.graphics.raytrace.surface.pattern2d.UvPattern;
 import org.junit.Assert;
 

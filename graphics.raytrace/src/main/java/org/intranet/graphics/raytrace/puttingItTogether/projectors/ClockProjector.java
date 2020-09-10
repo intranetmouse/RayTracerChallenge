@@ -3,11 +3,11 @@ package org.intranet.graphics.raytrace.puttingItTogether.projectors;
 import java.io.IOException;
 import java.util.stream.IntStream;
 
-import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.primitive.Color;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.puttingItTogether.projector.Projector;
+import org.intranet.graphics.raytrace.surface.map.Canvas;
 import org.junit.Test;
 
 public class ClockProjector

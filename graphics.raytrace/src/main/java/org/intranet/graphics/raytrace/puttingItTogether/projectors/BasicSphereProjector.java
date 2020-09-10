@@ -2,7 +2,6 @@ package org.intranet.graphics.raytrace.puttingItTogether.projectors;
 
 import java.util.stream.StreamSupport;
 
-import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.primitive.Color;
@@ -11,6 +10,7 @@ import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Vector;
 import org.intranet.graphics.raytrace.puttingItTogether.projector.Projector;
 import org.intranet.graphics.raytrace.shape.Sphere;
+import org.intranet.graphics.raytrace.surface.map.Canvas;
 import org.intranet.graphics.raytrace.traversal.AcrossDownTraversal;
 
 public class BasicSphereProjector

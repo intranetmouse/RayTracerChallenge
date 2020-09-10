@@ -6,9 +6,9 @@ import java.awt.Rectangle;
 
 import javax.swing.JComponent;
 
-import org.intranet.graphics.raytrace.Canvas;
-import org.intranet.graphics.raytrace.Canvas.CanvasListener;
 import org.intranet.graphics.raytrace.primitive.Color;
+import org.intranet.graphics.raytrace.surface.map.Canvas;
+import org.intranet.graphics.raytrace.surface.map.Canvas.CanvasListener;
 
 public final class CanvasComponent
 	extends JComponent

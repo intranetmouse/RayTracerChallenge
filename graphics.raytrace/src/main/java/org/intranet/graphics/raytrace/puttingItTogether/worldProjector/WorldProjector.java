@@ -3,11 +3,11 @@ package org.intranet.graphics.raytrace.puttingItTogether.worldProjector;
 import java.util.Spliterators.AbstractSpliterator;
 
 import org.intranet.graphics.raytrace.Camera;
-import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.PixelCoordinate;
 import org.intranet.graphics.raytrace.RayTraceStatistics;
 import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.puttingItTogether.projector.Projector;
+import org.intranet.graphics.raytrace.surface.map.Canvas;
 import org.intranet.graphics.raytrace.traversal.CanvasTraversalType;
 
 public abstract class WorldProjector

@@ -1,6 +1,6 @@
 package org.intranet.graphics.raytrace.puttingItTogether.projector;
 
-import org.intranet.graphics.raytrace.Canvas;
+import org.intranet.graphics.raytrace.surface.map.Canvas;
 
 public interface Projector
 {

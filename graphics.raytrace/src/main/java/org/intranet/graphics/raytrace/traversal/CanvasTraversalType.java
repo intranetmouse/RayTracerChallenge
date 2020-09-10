@@ -4,8 +4,8 @@ import java.util.Spliterators.AbstractSpliterator;
 
 import javax.swing.ImageIcon;
 
-import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.PixelCoordinate;
+import org.intranet.graphics.raytrace.surface.map.Canvas;
 
 public enum CanvasTraversalType
 {

@@ -7,7 +7,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import org.intranet.graphics.raytrace.Canvas;
+import org.intranet.graphics.raytrace.surface.map.Canvas;
 
 public class CanvasGifWriterTool
 	extends JPanel

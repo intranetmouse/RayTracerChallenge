@@ -1,4 +1,4 @@
-package org.intranet.graphics.raytrace;
+package org.intranet.graphics.raytrace.surface.map;
 
 import java.io.File;
 import java.io.FileWriter;

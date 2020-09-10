@@ -1,10 +1,11 @@
-package org.intranet.graphics.raytrace.shape;
+package org.intranet.graphics.raytrace.steps;
 
 import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.light.PointLight;
 import org.intranet.graphics.raytrace.primitive.Color;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
+import org.intranet.graphics.raytrace.shape.Sphere;
 import org.intranet.graphics.raytrace.surface.Material;
 
 public final class DefaultWorld

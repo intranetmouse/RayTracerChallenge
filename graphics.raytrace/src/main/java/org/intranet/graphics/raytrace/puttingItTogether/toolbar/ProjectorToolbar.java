@@ -11,10 +11,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
-import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.persistence.canvas.CanvasGifWriterTool;
 import org.intranet.graphics.raytrace.puttingItTogether.projector.Projector;
 import org.intranet.graphics.raytrace.puttingItTogether.worldProjector.WorldProjector;
+import org.intranet.graphics.raytrace.surface.map.Canvas;
 import org.intranet.graphics.raytrace.traversal.CanvasTraversalType;
 import org.intranet.graphics.raytrace.ui.swing.canvas.CanvasComponent;
 import org.intranet.graphics.raytrace.ui.swing.repaintMode.RepaintModeCombo;

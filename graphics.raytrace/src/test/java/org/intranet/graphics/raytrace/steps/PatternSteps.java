@@ -1,6 +1,5 @@
 package org.intranet.graphics.raytrace.steps;
 
-import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.primitive.Color;
 import org.intranet.graphics.raytrace.primitive.DoublePair;
 import org.intranet.graphics.raytrace.primitive.Point;
@@ -8,6 +7,7 @@ import org.intranet.graphics.raytrace.surface.CubeMapPattern;
 import org.intranet.graphics.raytrace.surface.Pattern;
 import org.intranet.graphics.raytrace.surface.StripePattern;
 import org.intranet.graphics.raytrace.surface.TextureMapPattern;
+import org.intranet.graphics.raytrace.surface.map.Canvas;
 import org.intranet.graphics.raytrace.surface.map.CubeSide;
 import org.intranet.graphics.raytrace.surface.map.CylindricalUvMap;
 import org.intranet.graphics.raytrace.surface.map.PlanarUvMap;

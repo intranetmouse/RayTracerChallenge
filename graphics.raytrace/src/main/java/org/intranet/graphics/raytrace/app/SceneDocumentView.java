@@ -16,9 +16,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
 import org.intranet.app.DocumentView;
-import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.PixelCoordinate;
 import org.intranet.graphics.raytrace.RayTraceStatistics;
+import org.intranet.graphics.raytrace.surface.map.Canvas;
 import org.intranet.graphics.raytrace.ui.swing.canvas.CanvasComponent;
 import org.intranet.graphics.raytrace.ui.swing.repaintMode.RepaintModeCombo;
 import org.intranet.graphics.raytrace.ui.swing.resolution.CanvasResolutionCombo;

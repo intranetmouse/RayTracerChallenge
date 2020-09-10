@@ -1,6 +1,5 @@
 package org.intranet.graphics.raytrace.steps;
 
-import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Color;
@@ -11,13 +10,13 @@ import org.intranet.graphics.raytrace.primitive.Vector;
 import org.intranet.graphics.raytrace.shape.Cone;
 import org.intranet.graphics.raytrace.shape.Cube;
 import org.intranet.graphics.raytrace.shape.Cylinder;
-import org.intranet.graphics.raytrace.shape.DefaultWorld;
 import org.intranet.graphics.raytrace.shape.FixedSequence;
 import org.intranet.graphics.raytrace.shape.Group;
 import org.intranet.graphics.raytrace.shape.Plane;
 import org.intranet.graphics.raytrace.shape.Sequence;
 import org.intranet.graphics.raytrace.shape.Sphere;
 import org.intranet.graphics.raytrace.surface.Material;
+import org.intranet.graphics.raytrace.surface.map.Canvas;
 import org.junit.Assert;
 
 import io.cucumber.java.ParameterType;

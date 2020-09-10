@@ -2,8 +2,8 @@ package org.intranet.graphics.raytrace.steps;
 
 import java.util.List;
 
-import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.primitive.Color;
+import org.intranet.graphics.raytrace.surface.map.Canvas;
 import org.junit.Assert;
 
 import io.cucumber.java.en.Given;

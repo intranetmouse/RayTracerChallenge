@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.intranet.graphics.raytrace.Camera;
-import org.intranet.graphics.raytrace.Canvas;
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.light.AreaLight;
@@ -45,6 +44,7 @@ import org.intranet.graphics.raytrace.surface.Pattern;
 import org.intranet.graphics.raytrace.surface.RingPattern;
 import org.intranet.graphics.raytrace.surface.StripePattern;
 import org.intranet.graphics.raytrace.surface.TextureMapPattern;
+import org.intranet.graphics.raytrace.surface.map.Canvas;
 import org.intranet.graphics.raytrace.surface.map.CylindricalUvMap;
 import org.intranet.graphics.raytrace.surface.map.PlanarUvMap;
 import org.intranet.graphics.raytrace.surface.map.SphericalUvMap;
