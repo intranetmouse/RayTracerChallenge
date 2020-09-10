@@ -26,7 +26,7 @@ Scenario Outline: A ray strikes a cylinder
     | origin            | direction         | t0      | t1      |
     | point(1, 0, -5)   | vector(0, 0, 1)   | 5       | 5       |
     | point(0, 0, -5)   | vector(0, 0, 1)   | 4       | 6       |
-    | point(0.5, 0, -5) | vector(0.1, 1, 1) | 6.80798 | 7.08872 |
+    | point(0.5, 0, -5) | vector(0.1, 1, 1) | 6.80798191702732 | 7.088723439378861 |
 
 Scenario Outline: Normal vector on a cylinder
   Given cyl ← cylinder()

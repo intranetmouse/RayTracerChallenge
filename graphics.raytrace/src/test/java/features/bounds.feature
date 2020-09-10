@@ -61,8 +61,8 @@ Scenario: Transforming a bounding box
   Given box ← bounding_box(min=point(-1, -1, -1) max=point(1, 1, 1))
     And matrix ← rotation_x(π / 4) * rotation_y(π / 4)
   When box2 ← transform(box, matrix)
-  Then box2.min = point(-1.4142, -1.7071, -1.7071)
-    And box2.max = point(1.4142, 1.7071, 1.7071)
+  Then box2.min = point(-1.4142135624, -1.7071067812, -1.7071067812)
+    And box2.max = point(1.4142135624, 1.7071067812, 1.7071067812)
 
 Scenario Outline: Intersecting a ray with a bounding box at the origin
   Given box ← bounding_box(min=point(-1, -1, -1) max=point(1, 1, 1))

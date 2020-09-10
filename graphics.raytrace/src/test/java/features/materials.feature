@@ -40,14 +40,14 @@ Scenario: Lighting with eye opposite surface, light offset 45°
     And normalv ← vector(0, 0, -1)
     And light ← point_light(point(0, 10, -10), color(1, 1, 1))
   When result ← lighting(m, light, position, eyev, normalv)
-  Then result = color(0.7364, 0.7364, 0.7364)
+  Then result = color(0.7363961031, 0.7363961031, 0.7363961031)
 
 Scenario: Lighting with eye in the path of the reflection vector
   Given eyev ← vector(0, -√2/2, -√2/2)
     And normalv ← vector(0, 0, -1)
     And light ← point_light(point(0, 10, -10), color(1, 1, 1))
   When result ← lighting(m, light, position, eyev, normalv)
-  Then result = color(1.6364, 1.6364, 1.6364)
+  Then result = color(1.6363961031, 1.6363961031, 1.6363961031)
 
 Scenario: Lighting with the light behind the surface
   Given eyev ← vector(0, 0, -1)
@@ -118,5 +118,5 @@ Scenario Outline: lighting() samples the area light
 
   Examples:
     | point                      | result                        |
-    | point(0, 0, -1)            | color(0.9965, 0.9965, 0.9965) |
-    | point(0, 0.7071, -0.7071)  | color(0.6232, 0.6232, 0.6232) |
+    | point(0, 0, -1)            | color(0.9965048412, 0.9965048412, 0.9965048412) |
+    | point(0, 0.7071, -0.7071)  | color(0.6231828237, 0.6231828237, 0.6231828237) |

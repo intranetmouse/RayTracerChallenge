@@ -94,7 +94,7 @@ Scenario: Normalizing vector(4, 0, 0) gives (1, 0, 0)
 Scenario: Normalizing vector(1, 2, 3)
   Given v ← vector(1, 2, 3)
                                   # vector(1/√14,   2/√14,   3/√14)
-  Then normalize(v) = approximately vector(0.26726, 0.53452, 0.80178)
+  Then normalize(v) = approximately vector(0.2672612419, 0.5345224838, 0.8017837257)
 
 Scenario: The magnitude of a normalized vector
   Given v ← vector(1, 2, 3)

@@ -35,7 +35,7 @@ Scenario: Shading an intersection
     And i ← intersection(4, shape)
   When comps ← prepare_computations(i, r)
     And c ← shade_hit(w, comps)
-  Then c = color(0.38066, 0.47583, 0.2855)
+  Then c = color(0.3806611907, 0.4758264884, 0.2854958930)
 
 Scenario: Shading an intersection from the inside
   Given w ← default_world()
@@ -45,7 +45,7 @@ Scenario: Shading an intersection from the inside
     And i ← intersection(0.5, shape)
   When comps ← prepare_computations(i, r)
     And c ← shade_hit(w, comps)
-  Then c = color(0.90498, 0.90498, 0.90498)
+  Then c = color(0.9049844399, 0.9049844399, 0.9049844399)
 
 Scenario: The color when a ray misses
   Given w ← default_world()
@@ -57,7 +57,7 @@ Scenario: The color when a ray hits
   Given w ← default_world()
     And r ← ray(point(0, 0, -5), vector(0, 0, 1))
   When c ← color_at(w, r)
-  Then c = color(0.38066, 0.47583, 0.2855)
+  Then c = color(0.3806611907, 0.4758264884, 0.2854958930)
 
 Scenario: The color with an intersection behind the ray
   Given w ← default_world()
@@ -123,7 +123,7 @@ Scenario: The reflected color for a reflective material
     And i ← intersection(√2, shape)
   When comps ← prepare_computations(i, r)
     And color ← reflected_color(w, comps)
-  Then color = color(0.19032, 0.2379, 0.14274)
+  Then color = color(0.1903306126, 0.2379132657, 0.1427479594)
 
 Scenario: shade_hit() with a reflective material
   Given w ← default_world()
@@ -135,7 +135,7 @@ Scenario: shade_hit() with a reflective material
     And i ← intersection(√2, shape)
   When comps ← prepare_computations(i, r)
     And color ← shade_hit(w, comps)
-  Then color = color(0.87677, 0.92436, 0.82918)
+  Then color = color(0.8767559985, 0.9243386517, 0.8291733454)
 
 Scenario: color_at() with mutually reflective surfaces
   Given w ← world()
@@ -212,7 +212,7 @@ Scenario: The refracted color with a refracted ray
     And xs ← intersections(-0.9899:A, -0.4899:B, 0.4899:B, 0.9899:A)
   When comps ← prepare_computations(xs[2], r, xs)
     And c ← refracted_color(w, comps, 5)
-  Then c = color(0, 0.99888, 0.04725)
+  Then c = color(0, 0.9988845815, 0.0472164472)
 
 Scenario: shade_hit() with a transparent material
   Given w ← default_world()
@@ -230,7 +230,7 @@ Scenario: shade_hit() with a transparent material
     And xs ← intersections(√2:floor)
   When comps ← prepare_computations(xs[0], r, xs)
     And color ← shade_hit(w, comps, 5)
-  Then color = color(0.93642, 0.68642, 0.68642)
+  Then color = color(0.9364253859, 0.6864253859, 0.6864253859)
 
 Scenario: shade_hit() with a reflective, transparent material
   Given w ← default_world()
@@ -249,7 +249,7 @@ Scenario: shade_hit() with a reflective, transparent material
     And xs ← intersections(√2:floor)
   When comps ← prepare_computations(xs[0], r, xs)
     And color ← shade_hit(w, comps, 5)
-  Then color = color(0.93391, 0.69643, 0.69243)
+  Then color = color(0.9339151382, 0.6964342241, 0.6924306888)
 
 # From soft shadows / area light bonus chapter
 # http://www.raytracerchallenge.com/bonus/area-light.html

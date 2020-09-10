@@ -40,15 +40,15 @@ Scenario: Intersecting a translated shape with a ray
 Scenario: Computing the normal on a translated shape
   Given s ← test_shape()
   When set_transform(s, translation(0, 1, 0))
-    And n ← normal_at(s, point(0, 1.70711, -0.70711))
-  Then n = vector(0, 0.70711, -0.70711)
+    And n ← normal_at(s, point(0, 1.7071067812, -0.7071067812))
+  Then n = vector(0, 0.7071067812, -0.7071067812)
 
 Scenario: Computing the normal on a transformed shape
   Given s ← test_shape()
     And m ← scaling(1, 0.5, 1) * rotation_z(π/5)
   When set_transform(s, m)
     And n ← normal_at(s, point(0, √2/2, -√2/2))
-  Then n = vector(0, 0.97014, -0.24254)
+  Then n = vector(0, 0.9701425001, -0.2425356250)
 
 Scenario: A shape has a parent attribute
   Given s ← test_shape()
@@ -76,7 +76,7 @@ Scenario: Converting a normal from object to world space
     And set_transform(s, translation(5, 0, 0))
     And add_child(g2, s)
   When n ← normal_to_world(s, vector(√3/3, √3/3, √3/3))
-  Then n = vector(0.2857, 0.4286, -0.8571)
+  Then n = vector(0.2857142857, 0.4285714286, -0.8571428571)
 
 Scenario: Finding the normal on a child object
   Given g1 ← group()
@@ -88,7 +88,7 @@ Scenario: Finding the normal on a child object
     And set_transform(s, translation(5, 0, 0))
     And add_child(g2, s)
   When n ← normal_at(s, point(1.7321, 1.1547, -5.5774))
-  Then n = vector(0.2857, 0.4286, -0.8571)
+  Then n = vector(0.2857036818, 0.4285431518, -0.8571605294)
 
 Scenario: Test shape has (arbitrary) bounds
   Given shape ← test_shape()

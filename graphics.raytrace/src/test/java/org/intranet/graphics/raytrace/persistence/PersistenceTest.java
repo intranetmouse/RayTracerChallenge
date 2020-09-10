@@ -97,6 +97,20 @@ public class PersistenceTest
 	}
 
 	@Test
+	public void loadSkybox()
+		throws FileNotFoundException
+	{
+		testFile("lancellotti_chapel/skybox.yml");
+	}
+
+	@Test
+	public void loadOrrery()
+		throws FileNotFoundException
+	{
+		testFile("orrery/orrery.yml");
+	}
+
+	@Test
 	public void loadGroupOneLevel()
 		throws FileNotFoundException
 	{
@@ -199,7 +213,7 @@ public class PersistenceTest
 	{
 		File file = new File(defaultDirectory, yamlName);
 		FileInputStream ymlStream = new FileInputStream(file);
-		YamlWorldParser parser = new YamlWorldParser(ymlStream, defaultDirectory);
+		YamlWorldParser parser = new YamlWorldParser(ymlStream, file.getParentFile());
 		return parser.getWorld();
 	}
 }

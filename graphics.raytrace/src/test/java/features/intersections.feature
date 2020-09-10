@@ -151,7 +151,7 @@ Scenario: The Schlick approximation with small angle and n2 > n1
     And xs ← intersections(1.8589:shape)
   When comps ← prepare_computations(xs[0], r, xs)
     And reflectance ← schlick(comps)
-  Then reflectance = 0.48873
+  Then reflectance = 0.48873081012212183
 
 Scenario: An intersection can encapsulate `u` and `v`
   Given s ← triangle(point(0, 1, 0), point(-1, 0, 0), point(1, 0, 0))

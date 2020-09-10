@@ -12,7 +12,7 @@ public class Tuple
 			this.values[i] = values[i];
 	}
 
-	public static final double EPSILON = 0.0001;
+	public static final double EPSILON = 0.0000001;
 	public static final double EPSILON4 = 0.0001;
 	public static boolean dblEqual(double a, double b)
 	{
@@ -68,7 +68,7 @@ public class Tuple
 		return new Tuple(doubles[0], doubles[1], doubles[2], doubles[3]);
 	}
 
-	private static final int DEC = 4;
+	private static final int DEC = 10;
 	String str;
 	@Override
 	public String toString()

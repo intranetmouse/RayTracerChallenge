@@ -12,8 +12,8 @@ Scenario Outline: Intersecting a cone with a ray
   Examples:
     | origin          | direction           | t0      | t1       |
     | point(0, 0, -5) | vector(0, 0, 1)     | 5       |  5       |
-    | point(0, 0, -5) | vector(1, 1, 1)     | 8.66025 |  8.66025 |
-    | point(1, 1, -5) | vector(-0.5, -1, 1) | 4.55006 | 49.44994 |
+    | point(0, 0, -5) | vector(1, 1, 1)     | 8.660254037844386 |  8.660254037844386 |
+    | point(1, 1, -5) | vector(-0.5, -1, 1) | 4.550055679356349 | 49.449944320643645 |
 
 Scenario: Intersecting a cone with a ray parallel to one of its halves
   Given shape ← cone()
@@ -21,7 +21,7 @@ Scenario: Intersecting a cone with a ray parallel to one of its halves
     And r ← ray(point(0, 0, -1), direction)
   When xs ← local_intersect(shape, r)
   Then xs.count = 1
-    And xs[0].t = 0.35355
+    And xs[0].t = 0.3535533905932738
 
 Scenario Outline: Intersecting a cone's end caps
   Given shape ← cone()

@@ -101,14 +101,14 @@ Scenario: Computing the normal on a translated sphere
   Given s ← sphere()
     And set_transform(s, translation(0, 1, 0))
   When n ← normal_at(s, point(0, 1.70711, -0.70711))
-  Then n = vector(0, 0.70711, -0.70711)
+  Then n = vector(0, 0.7071067812, -0.7071067812)
 
 Scenario: Computing the normal on a transformed sphere
   Given s ← sphere()
     And m ← scaling(1, 0.5, 1) * rotation_z(π/5)
     And set_transform(s, m)
   When n ← normal_at(s, point(0, √2/2, -√2/2))
-  Then n = vector(0, 0.97014, -0.24254)
+  Then n = vector(0, 0.9701425001, -0.2425356250)
 
 Scenario: A sphere has a default material
   Given s ← sphere()

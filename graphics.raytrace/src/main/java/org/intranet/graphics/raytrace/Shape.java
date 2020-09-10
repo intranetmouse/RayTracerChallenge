@@ -107,7 +107,8 @@ public abstract class Shape
 
 	public final IntersectionList intersections(Ray ray)
 	{
-		Ray localRay = ray.transform(transform.inverse());
+		Matrix inverse = transform.inverse();
+		Ray localRay = ray.transform(inverse);
 		savedRay = localRay;
 
 		return localIntersections(localRay);
@@ -136,7 +137,7 @@ public abstract class Shape
 	protected void deepCopyFrom(Shape other)
 	{
 		material = other.material.duplicate();
-		transform = other.transform.inverse().inverse();
+		transform = other.getTransform();
 		// Rays are immutable
 		savedRay = other.savedRay;
 	}

@@ -210,11 +210,11 @@ public final class Matrix
 	private Matrix inverse;
 	public Matrix inverse()
 	{
-		if (!isInvertible())
-			return null;
-
 		if (inverse != null)
 			return inverse;
+
+		if (!isInvertible())
+			return null;
 
 		double determinant = determinant();
 		double[][] other = allocateArray(matrix.length, matrix[0].length);

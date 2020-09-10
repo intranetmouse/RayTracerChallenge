@@ -95,9 +95,9 @@ Scenario Outline: Reading pixel data from a PPM file
 
   Examples:
     | x | y | color                      |
-    | 0 | 0 | color(1, 0.498, 0)         |
-    | 1 | 0 | color(0, 0.498, 1)         |
-    | 2 | 0 | color(0.498, 1, 0)         |
+    | 0 | 0 | color(1, 0.4980392157, 0)         |
+    | 1 | 0 | color(0, 0.4980392157, 1)         |
+    | 2 | 0 | color(0.4980392157, 1, 0)         |
     | 3 | 0 | color(1, 1, 1)             |
     | 0 | 1 | color(0, 0, 0)             |
     | 1 | 1 | color(1, 0, 0)             |
@@ -106,7 +106,7 @@ Scenario Outline: Reading pixel data from a PPM file
     | 0 | 2 | color(1, 1, 0)             |
     | 1 | 2 | color(0, 1, 1)             |
     | 2 | 2 | color(1, 0, 1)             |
-    | 3 | 2 | color(0.498, 0.498, 0.498) |
+    | 3 | 2 | color(0.4980392157, 0.4980392157, 0.4980392157) |
 
 Scenario: PPM parsing ignores comment lines
   Given ppm ← a file containing:

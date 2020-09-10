@@ -18,20 +18,25 @@ public class Csg
 {
 	private Shape left;
 	public Shape getLeft() { return left; }
+	public void setLeft(Shape value) { left = value; left.setParent(this); }
 
 	private Shape right;
 	public Shape getRight() { return right; }
+	public void setRight(Shape value) { right = value; right.setParent(this); }
 
 	private CsgOperation operation;
 	public CsgOperation getCsgOperation() { return operation; }
+	public void setCsgOperation(CsgOperation value) { operation = value; }
+
+	public Csg()
+	{
+	}
 
 	public Csg(CsgOperation operation, Shape left, Shape right)
 	{
-		this.left = left;
-		this.right = right;
 		this.operation = operation;
-		left.setParent(this);
-		right.setParent(this);
+		setLeft(left);
+		setRight(right);
 	}
 
 	@Override
