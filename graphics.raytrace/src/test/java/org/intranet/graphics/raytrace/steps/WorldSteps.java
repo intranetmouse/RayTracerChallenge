@@ -3,10 +3,10 @@ package org.intranet.graphics.raytrace.steps;
 import java.util.Arrays;
 import java.util.List;
 
-import org.intranet.graphics.raytrace.Camera;
 import org.intranet.graphics.raytrace.IntersectionComputations;
 import org.intranet.graphics.raytrace.IntersectionList;
 import org.intranet.graphics.raytrace.Light;
+import org.intranet.graphics.raytrace.Lighting;
 import org.intranet.graphics.raytrace.Shape;
 import org.intranet.graphics.raytrace.Tracer;
 import org.intranet.graphics.raytrace.World;
@@ -191,7 +191,8 @@ public class WorldSteps
 		World w = data.getWorld(worldName);
 		Ray r = data.getRay(rayName);
 
-		IntersectionList il = w.intersect(r, false);
+		IntersectionList il = new IntersectionList(w.getSceneObjects(), r,
+			false);
 
 		data.putIntersectionList(intersectionListName, il);
 	}
@@ -201,7 +202,7 @@ public class WorldSteps
 		String intersectionComputationsName)
 	{
 		cShade_hitWComps(colorName, worldName, intersectionComputationsName,
-			Camera.MAX_REFLECTION_RECURSION);
+			Tracer.MAX_REFLECTION_RECURSION);
 	}
 
 	@When("{identifier} ← shade_hit\\({identifier}, {identifier}, {int})")
@@ -222,7 +223,7 @@ public class WorldSteps
 		String compsName)
 	{
 		colorReflected_colorWComps(colorName, worldName, compsName,
-			Camera.MAX_REFLECTION_RECURSION);
+			Tracer.MAX_REFLECTION_RECURSION);
 	}
 
 	@When("{identifier} ← reflected_color\\({identifier}, {identifier}, {int})")
@@ -240,7 +241,7 @@ public class WorldSteps
 		String intersectionComputationsName)
 	{
 		colorRefracted_colorWCompsInt(colorName, worldName,
-			intersectionComputationsName, Camera.MAX_REFLECTION_RECURSION);
+			intersectionComputationsName, Tracer.MAX_REFLECTION_RECURSION);
 	}
 
 	@When("{identifier} ← refracted_color\\({identifier}, {identifier}, {int})")
@@ -262,7 +263,7 @@ public class WorldSteps
 		World world = data.getWorld(worldName);
 		Ray ray = data.getRay(rayName);
 
-		Color color = IntersectionComputations.colorAt(world, ray, Camera.MAX_REFLECTION_RECURSION);
+		Color color = IntersectionComputations.colorAt(world, ray, Tracer.MAX_REFLECTION_RECURSION);
 		data.putColor(colorName, color);
 	}
 
@@ -335,7 +336,7 @@ public class WorldSteps
 		World world = data.getWorld(worldName);
 		Point point = data.getPoint(pointName);
 		Light light = world.getLightSources().get(0);
-		double actualResult = Tracer.isShadowed(world, point, light);
+		double actualResult = Lighting.isShadowed(world, point, light);
 		Assert.assertEquals(expectedResult, Tuple.isZero(actualResult));
 	}
 
@@ -347,7 +348,7 @@ public class WorldSteps
 		Point lightPosition = data.getPoint(lightPositionName);
 		Point otherPoint = data.getPoint(otherPointName);
 
-		double actualResult = Tracer.isShadowed(world,
+		double actualResult = Lighting.isShadowed(world,
 			Arrays.asList(lightPosition), otherPoint);
 		Assert.assertEquals(expectedResult, Tuple.isZero(actualResult));
 	}

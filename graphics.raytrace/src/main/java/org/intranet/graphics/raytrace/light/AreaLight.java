@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.intranet.graphics.raytrace.Light;
-import org.intranet.graphics.raytrace.Tracer;
+import org.intranet.graphics.raytrace.Lighting;
 import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Color;
 import org.intranet.graphics.raytrace.primitive.Point;
@@ -92,7 +92,7 @@ public class AreaLight
 	public double intensityAt(Point pt, World world)
 	{
 		resetPositions();
-		return Tracer.isShadowed(world, positions, pt);
+		return Lighting.isShadowed(world, positions, pt);
 	}
 
 	private Sequence sequence = new FixedSequence(0.5);

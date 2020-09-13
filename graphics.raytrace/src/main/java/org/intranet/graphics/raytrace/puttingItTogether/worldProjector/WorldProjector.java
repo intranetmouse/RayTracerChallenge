@@ -3,8 +3,10 @@ package org.intranet.graphics.raytrace.puttingItTogether.worldProjector;
 import java.util.Spliterators.AbstractSpliterator;
 
 import org.intranet.graphics.raytrace.Camera;
+import org.intranet.graphics.raytrace.CameraViewPort;
 import org.intranet.graphics.raytrace.PixelCoordinate;
 import org.intranet.graphics.raytrace.RayTraceStatistics;
+import org.intranet.graphics.raytrace.Tracer;
 import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.puttingItTogether.projector.Projector;
 import org.intranet.graphics.raytrace.surface.map.Canvas;
@@ -33,13 +35,15 @@ public abstract class WorldProjector
 		if (camera == null)
 			throw new RuntimeException(
 				"Projector " + name + " failed to make a camera.");
-		camera.setHsize(canvas.getWidth());
-		camera.setVsize(canvas.getHeight());
-		camera.updatePixelSize();
+		CameraViewPort viewPort = camera.getViewPort();
+		viewPort.setHsize(canvas.getWidth());
+		camera.getViewPort().setVsize(canvas.getHeight());
+		camera.getViewPort().updatePixelSize();
 		RayTraceStatistics stats = new RayTraceStatistics();
 		AbstractSpliterator<PixelCoordinate> traversal =
 			traversalType.getTraversal(canvas);
-		camera.render(world, canvas, parallel, traversal, stats);
+		Tracer.render(camera, camera.getViewPort(), world, canvas, parallel,
+			traversal, stats);
 	}
 
 	private String name;

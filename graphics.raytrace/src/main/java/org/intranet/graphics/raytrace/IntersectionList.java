@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.intranet.graphics.raytrace.primitive.Ray;
+
 public final class IntersectionList
 {
 	public static IntersectionList emptyList = new IntersectionList();
@@ -28,6 +30,20 @@ public final class IntersectionList
 	public IntersectionList()
 	{
 		intersections = Collections.emptyList();
+	}
+
+	public IntersectionList(List<Shape> sceneObjects, Ray ray, boolean omitShadowless)
+	{
+		intersections = new ArrayList<>();
+		for (Shape sceneObject : sceneObjects)
+		{
+			if (!omitShadowless || sceneObject.isCastShadow())
+			{
+				IntersectionList il = sceneObject.intersections(ray);
+				intersections.addAll(il.getIntersections());
+			}
+		}
+		intersections.sort((o1, o2) -> compareDouble(o1.getDistance() - o2.getDistance()));
 	}
 
 	public IntersectionList combineWith(IntersectionList other)

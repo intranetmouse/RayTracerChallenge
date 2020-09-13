@@ -56,7 +56,7 @@ public final class IntersectionComputations
 			.map(lightSource -> {
 				double intensity = lightSource.intensityAt(overPoint,
 					world);
-				return Tracer.lighting(material, getObject(), lightSource,
+				return Lighting.lighting(material, getObject(), lightSource,
 					overPoint, eyeVector, normalVector, intensity);
 			})
 			.reduce(Color::add)
@@ -160,7 +160,8 @@ public final class IntersectionComputations
 
 	public static Color colorAt(World world, Ray ray, int remaining)
 	{
-		IntersectionList intersectionList = world.intersect(ray, false);
+		IntersectionList intersectionList = new IntersectionList(
+			world.getSceneObjects(), ray, false);
 		Intersection hit = intersectionList.hit();
 		if (hit == null)
 			return Color.BLACK;

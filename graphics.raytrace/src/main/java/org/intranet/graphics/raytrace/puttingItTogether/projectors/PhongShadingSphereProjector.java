@@ -4,8 +4,8 @@ import java.util.stream.StreamSupport;
 
 import org.intranet.graphics.raytrace.Intersection;
 import org.intranet.graphics.raytrace.IntersectionList;
+import org.intranet.graphics.raytrace.Lighting;
 import org.intranet.graphics.raytrace.Shape;
-import org.intranet.graphics.raytrace.Tracer;
 import org.intranet.graphics.raytrace.light.PointLight;
 import org.intranet.graphics.raytrace.primitive.Color;
 import org.intranet.graphics.raytrace.primitive.Point;
@@ -86,7 +86,7 @@ public class PhongShadingSphereProjector
 		Vector eyeV = ray.getDirection().negate();
 
 		Material material = sceneObject.getMaterial();
-		return Tracer.lighting(material, sceneObject, light, point, eyeV,
+		return Lighting.lighting(material, sceneObject, light, point, eyeV,
 			normalV, false);
 	}
 }

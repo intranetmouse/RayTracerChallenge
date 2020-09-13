@@ -1,164 +1,79 @@
 package org.intranet.graphics.raytrace;
 
-import java.util.List;
+import java.util.Spliterators.AbstractSpliterator;
+import java.util.stream.StreamSupport;
 
 import org.intranet.graphics.raytrace.primitive.Color;
+import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
 import org.intranet.graphics.raytrace.primitive.Ray;
 import org.intranet.graphics.raytrace.primitive.Vector;
-import org.intranet.graphics.raytrace.surface.Material;
-import org.intranet.graphics.raytrace.surface.Pattern;
+import org.intranet.graphics.raytrace.surface.map.Canvas;
 
 public final class Tracer
 {
-//	public static Color lighting(Shape shape, List<Light> lightSources,
-//		Point position, Vector eyeVector, Vector normalVector, World world)
-//	{
-//		Material m = shape.getMaterial();
-//		Pattern p = m.getPattern();
-//		Color c = p != null ? shape.colorAt(p, position) : m.getColor();
-//
-//		// compute the ambient contribution
-//		Color ambientColor = c.multiply(m.getAmbient());
-//
-//		Color totalColor = ambientColor;
-//
-//		for (Light light : lightSources)
-//		{
-//			// Previously isShadowed
-//			double intensity = Tracer.intensityAt(light, position, world);
-//
-//			// combine the surface color with the light's color/intensity
-//			Color effectiveColor = c.multiply(intensity);
-//
-//			// find the direction to the light source
-//			Vector lightV = light.getPosition().subtract(position).normalize();
-//
-//			// lightDotNormal represents the cosine of the angle between the
-//			// light vector and the normal vector. A negative number means the
-//			// light is on the other side of the surface.
-//			double lightDotNormal = lightV.dot(normalVector);
-//			boolean backOfObject = lightDotNormal < 0;
-//
-//			boolean inShadow = intensity == 0.0;
-//			if (backOfObject || inShadow)
-//				continue;
-//
-//			// compute the diffuse contribution
-//			Color diffuseColor = effectiveColor.multiply(m.getDiffuse() * intensity)
-//				.multiply(lightDotNormal);
-//			totalColor = totalColor.add(diffuseColor);
-//
-//			// reflectDotEye represents the cosine of the angle between the
-//			// reflection vector and the eye vector. A negative number means the
-//			// light reflects away from the eye.
-//			Vector reflectV = lightV.negate().reflect(normalVector);
-//			double reflectDotEye = reflectV.dot(eyeVector);
-//
-//			if (reflectDotEye < 0)
-//				return ambientColor.add(diffuseColor);
-//
-//			// compute the specular contribution
-//			double factor = Math.pow(reflectDotEye, m.getShininess());
-//			Color specularColor = light.getIntensity()
-//				.multiply(m.getSpecular() * intensity * factor);
-//			totalColor = totalColor.add(specularColor);
-//			//System.out.println("Material.lighting: position="+position+", factor="+factor+", specularColor="+specularColor+",reflectDotEye="+reflectDotEye);
-//		}
-//
-//		return totalColor;
-//	}
-
-	// OLD method
-	public static Color lighting(Material m, Shape shape, Light light,
-		Point position, Vector eyeV, Vector normalV, boolean inShadow)
+	public static Ray rayForPixel(Camera camera, PixelCoordinate coord)
 	{
-		return lighting(m, shape, light, position, eyeV, normalV,
-			inShadow ? 0.0 : 1.0);
+		CameraViewPort viewPort = camera.getViewPort();
+		// the offset from the edge of the canvas to the pixel's center
+		double xOffset = (coord.getX() + 0.5) * viewPort.getPixelSize();
+		double yOffset = (coord.getY() + 0.5) * viewPort.getPixelSize();
+
+		// the untransformed coordinates of the pixel in world space.
+		// (remember that the camera looks toward -z, so +x is to the *left*.)
+		double world_x = viewPort.getHalfWidth() - xOffset;
+		double world_y = viewPort.getHalfHeight() - yOffset;
+
+		// using the camera matrix, transform the canvas point and the origin,
+		// and then compute the ray's direction vector.
+		// (remember that the canvas is at z=-1)
+		Matrix cameraTransform = camera.getTransform();
+		Matrix inverse = cameraTransform.inverse();
+		if (inverse == null)
+			throw new NullPointerException(
+				"null inverse from camera transform " + cameraTransform);
+
+		Point pixel = inverse.multiply(new Point(world_x, world_y, -1));
+		Point origin = inverse.multiply(new Point(0, 0, 0));
+		Vector direction = pixel.subtract(origin).normalize();
+		return new Ray(origin, direction);
 	}
 
-	public static Color lighting(Material m, Shape shape, Light light,
-		Point position, Vector eyeV, Vector normalV, double intensity)
+	public static void render(Camera camera, CameraViewPort viewPort,
+		World world, Canvas image, boolean parallel,
+		AbstractSpliterator<PixelCoordinate> traversal,
+		RayTraceStatistics stats)
 	{
-		Pattern p = m.getPattern();
-		Color c = p != null ? shape.colorAt(p, position) : m.getColor();
-		// combine the surface color with the light's color/intensity
-		Color effectiveColor = c.multiply(light.getIntensity());
+		int hsize = image.getWidth();
+		int vsize = image.getHeight();
 
-		// compute the ambient contribution
-		Color ambientColor = effectiveColor.multiply(m.getAmbient());
+		viewPort.setHsize(hsize);
+		viewPort.setVsize(vsize);
 
-		Color sumDiffuseColor = Color.BLACK;
-		Color sumSpecularColor = Color.BLACK;
-		List<Point> samples = light.getSamples();
-		for (Point sample : samples)
-		{
-			// find the direction to the light source
-			Vector lightV = sample.subtract(position).normalize();
-
-			// lightDotNormal represents the cosine of the angle between the
-			// light vector and the normal vector. A negative number means the
-			// light is on the other side of the surface.
-			double lightDotNormal = lightV.dot(normalV);
-			boolean backOfObject = lightDotNormal < 0;
-
-			boolean inShadow = intensity == 0.0;
-			if (backOfObject || inShadow)
-				continue;
-
-			// compute the diffuse contribution
-			Color diffuseContribution = effectiveColor
-				.multiply(m.getDiffuse() * intensity * lightDotNormal);
-			sumDiffuseColor = sumDiffuseColor.add(diffuseContribution);
-
-			// reflectDotEye represents the cosine of the angle between the
-			// reflection vector and the eye vector. A negative number means the
-			// light reflects away from the eye.
-			Vector reflectV = lightV.negate().reflect(normalV);
-			double reflectDotEye = reflectV.dot(eyeV);
-
-			if (reflectDotEye < 0)
-				continue;
-
-			// compute the specular contribution
-			double factor = Math.pow(reflectDotEye, m.getShininess());
-			Color specularContribution = light.getIntensity()
-				.multiply(m.getSpecular() * intensity * factor);
-			sumSpecularColor = sumSpecularColor.add(specularContribution);
-			//System.out.println("Material.lighting: position="+position+", factor="+factor+", specularColor="+specularColor+",reflectDotEye="+reflectDotEye);
-		}
-
-		Color avgDiffuseColor = divide(sumDiffuseColor, samples.size());
-		Color avgSpecularColor = divide(sumSpecularColor, samples.size());
-
-		return ambientColor.add(avgDiffuseColor).add(avgSpecularColor);
+		stats.start(hsize * vsize);
+		StreamSupport.stream(traversal, parallel)
+			.forEach(pixel -> {
+				stats.startPixel();
+				renderPixel(camera, world, image, pixel);
+				stats.finishPixel();
+			});
+		image.setDone(true);
+		stats.stop();
 	}
 
-	private static Color divide(Color color, int size)
+	public static void renderPixel(Camera camera, World world, Canvas image,
+		PixelCoordinate pixel)
 	{
-		return new Color(color.getRed() / size, color.getGreen() / size,
-			color.getBlue() / size);
+		Color color = renderPixel(camera, world, pixel);
+		image.writePixel(pixel.getX(), pixel.getY(), color);
 	}
 
-	public static double isShadowed(World world, Point point, Light light)
-	{
-		return isShadowed(world, light.getSamples(), point);
-	}
+	public static int MAX_REFLECTION_RECURSION = 4;
 
-	public static double isShadowed(World world, List<Point> lightPositions,
-		Point otherPoint)
+	static Color renderPixel(Camera camera, World world, PixelCoordinate pixel)
 	{
-		return lightPositions.stream()
-			.mapToInt(lightPosition -> {
-				Vector v = lightPosition.subtract(otherPoint);
-				double distance = v.magnitude();
-				Vector direction = v.normalize();
-				Ray r = new Ray(otherPoint, direction);
-				IntersectionList intersections = world.intersect(r, true);
-				Intersection h = intersections.hit();
-				return (h != null && h.getDistance() < distance) ? 0 : 1;
-			})
-			.average()
-			.orElse(0.0);
+		Ray ray = rayForPixel(camera, pixel);
+		return IntersectionComputations.colorAt(world, ray,
+			MAX_REFLECTION_RECURSION);
 	}
 }

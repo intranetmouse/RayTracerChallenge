@@ -3,8 +3,10 @@ package org.intranet.graphics.raytrace.steps;
 import java.util.Spliterators.AbstractSpliterator;
 
 import org.intranet.graphics.raytrace.Camera;
+import org.intranet.graphics.raytrace.CameraViewPort;
 import org.intranet.graphics.raytrace.PixelCoordinate;
 import org.intranet.graphics.raytrace.RayTraceStatistics;
+import org.intranet.graphics.raytrace.Tracer;
 import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Matrix;
 import org.intranet.graphics.raytrace.primitive.Point;
@@ -67,7 +69,7 @@ public class CameraSteps
 	{
 		Camera camera = data.getCamera(cameraName);
 		PixelCoordinate coord = new PixelCoordinate(x, y);
-		Ray ray = camera.rayForPixel(coord);
+		Ray ray = Tracer.rayForPixel(camera, coord);
 		data.putRay(rayName, ray);
 	}
 
@@ -95,10 +97,11 @@ public class CameraSteps
 	{
 		Camera camera = data.getCamera(cameraName);
 		World world = data.getWorld(worldName);
-		Canvas canvas = new Canvas(camera.getHsize(), camera.getVsize());
+		CameraViewPort viewPort = camera.getViewPort();
+		Canvas canvas = new Canvas(viewPort.getHsize(), viewPort.getVsize());
 		AbstractSpliterator<PixelCoordinate> traversal = CanvasTraversalType.AcrossDown.getTraversal(canvas);
 		RayTraceStatistics stats = new RayTraceStatistics();
-		camera.render(world, canvas, false, traversal, stats);
+		Tracer.render(camera, viewPort, world, canvas, false, traversal, stats);
 		data.putCanvas(imageName, canvas);
 	}
 
@@ -109,7 +112,7 @@ public class CameraSteps
 		Camera camera = data.getCamera(objectName);
 		if (camera == null)
 			Assert.fail("Unrecognized object name " + objectName);
-		Assert.assertEquals(expectedValue, camera.getHsize());
+		Assert.assertEquals(expectedValue, camera.getViewPort().getHsize());
 	}
 
 	@Then("{identifier}.vsize = {int}")
@@ -118,7 +121,7 @@ public class CameraSteps
 		Camera camera = data.getCamera(objectName);
 		if (camera == null)
 			Assert.fail("Unrecognized object name " + objectName);
-		Assert.assertEquals(expectedValue, camera.getVsize());
+		Assert.assertEquals(expectedValue, camera.getViewPort().getVsize());
 	}
 
 	@Then("{identifier}.pixel_size = {dbl}")
@@ -127,6 +130,18 @@ public class CameraSteps
 		Camera camera = data.getCamera(objectName);
 		if (camera == null)
 			Assert.fail("Unrecognized object name " + objectName);
-		Assert.assertEquals(expectedValue, camera.getPixelSize(), Tuple.EPSILON);
+		Assert.assertEquals(expectedValue, camera.getViewPort().getPixelSize(),
+			Tuple.EPSILON);
+	}
+
+
+	@Then("{identifier}.field_of_view = π\\/{dbl}")
+	public void cFieldOfViewPi(String cameraName, double divisor)
+	{
+		Camera camera = data.getCamera(cameraName);
+
+		double value = Math.PI / divisor;
+
+		Assert.assertEquals(value, camera.getViewPort().getFieldOfView(), Tuple.EPSILON);
 	}
 }

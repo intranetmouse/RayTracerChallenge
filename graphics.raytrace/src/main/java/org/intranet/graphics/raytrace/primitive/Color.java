@@ -48,6 +48,11 @@ public final class Color
 		return new Color(values[0]*d, values[1]*d, values[2]*d);
 	}
 
+	public Color divide(double d)
+	{
+		return multiply(1 / d);
+	}
+
 	private static double clip(double value, double min, double max)
 	{
 		if (value < min) return min;

@@ -92,8 +92,7 @@ public class Tuple
 
 	public Tuple divide(double d)
 	{
-		d = 1 / d;
-		return new Tuple(values[0]*d, values[1]*d, values[2]*d, values[3]*d);
+		return multiply(1 / d);
 	}
 
 	public double magnitude()

@@ -1,8 +1,8 @@
 package org.intranet.graphics.raytrace.steps;
 
 import org.intranet.graphics.raytrace.Light;
+import org.intranet.graphics.raytrace.Lighting;
 import org.intranet.graphics.raytrace.Shape;
-import org.intranet.graphics.raytrace.Tracer;
 import org.intranet.graphics.raytrace.World;
 import org.intranet.graphics.raytrace.primitive.Color;
 import org.intranet.graphics.raytrace.primitive.Point;
@@ -171,7 +171,7 @@ public class MaterialsSteps
 		Light pointLight = data.getLight(pointLightName);
 		Vector eyev = data.getVector(eyeVectorName);
 		Vector normalv = data.getVector(normalVectorName);
-		Color color = Tracer.lighting(material, new Sphere(), pointLight,
+		Color color = Lighting.lighting(material, new Sphere(), pointLight,
 			position, eyev, normalv, false);
 		data.putColor(resultingColorName, color);
 	}
@@ -188,7 +188,7 @@ public class MaterialsSteps
 		Vector eyev = data.getVector(eyeVectorName);
 		Vector normalv = data.getVector(normalVectorName);
 		boolean inShadow = data.getBoolean(inShadowName);
-		Color color = Tracer.lighting(material, new Sphere(), pointLight,
+		Color color = Lighting.lighting(material, new Sphere(), pointLight,
 			position, eyev, normalv, inShadow);
 		data.putColor(resultingColorName, color);
 	}
@@ -202,7 +202,7 @@ public class MaterialsSteps
 		Light pointLight = data.getLight(pointLightName);
 		Vector eyev = data.getVector(eyeVectorName);
 		Vector normalv = data.getVector(normalVectorName);
-		Color color = Tracer.lighting(material, new Sphere(), pointLight,
+		Color color = Lighting.lighting(material, new Sphere(), pointLight,
 			position, eyev, normalv, inShadow);
 		data.putColor(resultingColorName, color);
 	}
@@ -221,7 +221,7 @@ public class MaterialsSteps
 		Point position = data.getPoint(positionName);
 		Vector eyev = data.getVector(eyeVectorName);
 		Vector normalv = data.getVector(normalVectorName);
-		Color color = Tracer.lighting(material, s, pointLight,
+		Color color = Lighting.lighting(material, s, pointLight,
 			position, eyev, normalv, intensity);
 
 		data.putColor(resultingColorName, color);
@@ -241,7 +241,7 @@ public class MaterialsSteps
 		Vector eyeV = data.getVector(eyeVectorName);
 		Vector normalV = data.getVector(normalVectorName);
 
-		Color color = Tracer.lighting(m, shape2, light, pt, eyeV, normalV, intensity);
+		Color color = Lighting.lighting(m, shape2, light, pt, eyeV, normalV, intensity);
 		data.putColor(resultingColorName, color);
 	}
 }

@@ -369,16 +369,6 @@ public class ThenSteps
 		Assert.assertEquals(expectedValue, actualValue, Tuple.EPSILON);
 	}
 
-	@Then("{identifier}.field_of_view = π\\/{dbl}")
-	public void cFieldOfViewPi(String cameraName, double divisor)
-	{
-		Camera camera = data.getCamera(cameraName);
-
-		double value = Math.PI / divisor;
-
-		Assert.assertEquals(value, camera.getFieldOfView(), Tuple.EPSILON);
-	}
-
 
 	private void unknownProperty(String objName, String propertyName)
 	{

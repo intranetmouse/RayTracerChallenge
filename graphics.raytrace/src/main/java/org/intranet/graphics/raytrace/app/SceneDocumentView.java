@@ -18,6 +18,7 @@ import javax.swing.JSplitPane;
 import org.intranet.app.DocumentView;
 import org.intranet.graphics.raytrace.PixelCoordinate;
 import org.intranet.graphics.raytrace.RayTraceStatistics;
+import org.intranet.graphics.raytrace.Tracer;
 import org.intranet.graphics.raytrace.surface.map.Canvas;
 import org.intranet.graphics.raytrace.ui.swing.canvas.CanvasComponent;
 import org.intranet.graphics.raytrace.ui.swing.repaintMode.RepaintModeCombo;
@@ -99,7 +100,8 @@ public final class SceneDocumentView
 
 				JMenuItem renderPixelMenuItem = new JMenuItem("Render Pixel");
 				renderPixelMenuItem.addActionListener(evt -> {
-					doc.getWorld().getCamera().renderPixel(doc.getWorld(), canvas, clickPoint);
+					Tracer.renderPixel(doc.getWorld().getCamera(),
+						doc.getWorld(), canvas, clickPoint);
 				});
 				menu.add(renderPixelMenuItem);
 				menu.show(canvasComp, clickX, clickY);
