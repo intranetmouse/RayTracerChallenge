@@ -347,9 +347,7 @@ public class CustomParameters
 			case "sphere":
 				return new Sphere();
 			case "glass_sphere":
-				Sphere sphere = createGlassSphere();
-				sphere.getSavedRay();
-				return sphere;
+				return createGlassSphere();
 			case "plane":
 				return new Plane();
 			case "cube":

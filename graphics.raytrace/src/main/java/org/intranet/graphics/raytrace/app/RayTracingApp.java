@@ -10,6 +10,9 @@ public final class RayTracingApp
 	@Override
 	public String getDocType() { return "Scene"; }
 	@Override
+	public char getDocTypeMnemonic()
+	{ return 's'; }
+	@Override
 	public String getTitle() { return "Tracing Rays"; }
 
 	@Override
