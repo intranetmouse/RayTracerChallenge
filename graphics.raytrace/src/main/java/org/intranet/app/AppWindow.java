@@ -13,8 +13,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JToolBar;
 
-import org.intranet.app.App.IconUtils;
-
 public abstract class AppWindow<DOC extends Document>
 	extends JFrame
 {
