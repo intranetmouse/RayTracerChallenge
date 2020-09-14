@@ -2,6 +2,9 @@ package org.intranet.graphics.raytrace.app;
 
 import java.io.File;
 
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import org.intranet.app.App;
 
 public final class RayTracingApp
@@ -20,4 +23,7 @@ public final class RayTracingApp
 	{
 		return new SceneDocument(file);
 	}
+	@Override
+	protected FileFilter getFileFilter()
+	{ return new FileNameExtensionFilter("3d YML", "yml", "yaml"); }
 }

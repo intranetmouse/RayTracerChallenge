@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.Action;
+import javax.swing.filechooser.FileFilter;
 
 public abstract class App<DOC extends Document>
 {
@@ -23,4 +24,6 @@ public abstract class App<DOC extends Document>
 	public App()
 	{
 	}
+
+	protected abstract FileFilter getFileFilter();
 }

@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JToolBar;
+import javax.swing.filechooser.FileFilter;
 
 public abstract class AppWindow<DOC extends Document>
 	extends JFrame
@@ -96,6 +97,9 @@ public abstract class AppWindow<DOC extends Document>
 			appMenu.add(appAction);
 		menuBar.add(appMenu);
 
+		FileFilter ymlFilter = app.getFileFilter();
+		fc.addChoosableFileFilter(ymlFilter);
+		fc.setFileFilter(ymlFilter);
 		fc.setCurrentDirectory(app.getDefaultDirectory());
 
 		view = createView();
