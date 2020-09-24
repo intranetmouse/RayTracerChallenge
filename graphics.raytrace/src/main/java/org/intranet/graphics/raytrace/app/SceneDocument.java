@@ -48,7 +48,9 @@ public final class SceneDocument
 	private void loadWorld()
 		throws FileNotFoundException
 	{
-		YamlWorldParser parser = new YamlWorldParser(new FileInputStream(file), file.getParentFile());
+		FileInputStream ymlStream = new FileInputStream(file);
+		File relativePath = file.getParentFile();
+		YamlWorldParser parser = new YamlWorldParser(ymlStream, relativePath);
 		world = parser.getWorld();
 	}
 

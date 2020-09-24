@@ -1,6 +1,7 @@
 package org.intranet.graphics.raytrace.app;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
 import org.intranet.app.DocumentView;
+import org.intranet.app.ExtendedAbstractAction;
 import org.intranet.graphics.raytrace.PixelCoordinate;
 import org.intranet.graphics.raytrace.RayTraceStatistics;
 import org.intranet.graphics.raytrace.Tracer;
@@ -29,6 +31,30 @@ import org.intranet.graphics.raytrace.ui.swing.traversalType.TraversalTypeSelect
 public final class SceneDocumentView
 	extends DocumentView<SceneDocument>
 {
+	private final class RenderAction
+		extends ExtendedAbstractAction
+	{
+		private static final long serialVersionUID = 1L;
+
+		private RenderAction()
+		{
+			super("Render");
+			setEnabled(false);
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			canvasResolutionCombo.setEnabled(false);
+			setEnabled(false);
+			doc.render(renderSettings, canvas, stats);
+
+			// FIXME: Move to listener for when doc render is done
+			canvasResolutionCombo.setEnabled(true);
+			setEnabled(true);
+		}
+	}
+
 	private static final long serialVersionUID = 1L;
 	private SceneDocument doc;
 
@@ -126,17 +152,8 @@ public final class SceneDocumentView
 			resizeDocCanvas();
 		});
 
-		renderButton = new JButton("Render");
-		renderButton.addActionListener(e -> {
-			canvasResolutionCombo.setEnabled(false);
-			renderButton.setEnabled(false);
-			doc.render(renderSettings, canvas, stats);
-
-			// FIXME: Move to listener for when doc render is done
-			canvasResolutionCombo.setEnabled(true);
-			renderButton.setEnabled(true);
-		});
-		renderButton.setEnabled(false);
+		ExtendedAbstractAction renderAction = new RenderAction();
+		renderButton = new JButton(renderAction);
 
 		RepaintModeCombo repaintCombo = new RepaintModeCombo(
 			canvasComp.getRepaintMode(),
