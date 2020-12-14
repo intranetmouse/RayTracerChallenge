@@ -13,7 +13,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <cucumber.version>6.1.1</cucumber.version>
-    <junit.version>4.12</junit.version>
+    <junit.version>4.13.1</junit.version>
     <yamlbeans.version>1.13</yamlbeans.version>
   </properties>
 
