@@ -20,11 +20,19 @@ public class Resolution
 
 	public Resolution(String name, int width, int height, double aspect)
 	{
-		super();
 		this.name = name;
 		this.width = width;
 		this.height = height;
 		this.aspect = aspect;
+	}
+
+	/**
+	* Subclasses can override name, width, and height, and aspect.
+	* @param aspect
+	*/
+	protected Resolution()
+	{
+		super();
 	}
 
 	@Override
@@ -57,31 +65,4 @@ public class Resolution
 	public static final Resolution DCI_2K_NATIVE = new Resolution("DCI 2K native", 2048, 1080, 1.0);
 	public static final Resolution DCI_4K_CROPPED = new Resolution("DCI 4K cropped", 4096, 1716, 1.0);
 	public static final Resolution DCI_4K_NATIVE = new Resolution("DCI 4K native", 4096, 2160, 1.0);
-
-	public static final Resolution[] resolutions = new Resolution[] {
-		SQUARE_400,
-		SQUARE_500,
-		VGA,
-		MINI,
-		LOW,
-		TGA,
-		PAR,
-		DV,
-		D1_NTSC,
-		D1_PAL,
-		HDTV_90p,
-		HDTV_180p,
-		HDTV_360p,
-		HDTV_720p,
-		HDTV_1080p,
-		UHD_4K,
-		UHD_8K,
-		PANAVISION,
-		VISTAVISION,
-		SUPER35,
-		DCI_2K_CROPPED,
-		DCI_2K_NATIVE,
-		DCI_4K_CROPPED,
-		DCI_4K_NATIVE
-	};
 }

@@ -157,26 +157,35 @@ public class Canvas
 
 		public Double nextDouble()
 		{
-			if (values != null && idx < values.length)
-			{
-				String value = values[idx++];
-				if ("".equals(value))
-					return nextDouble();
-				return Double.valueOf(value);
-			}
+			if (needMoreValues() && !tryReadMoreValues())
+					return null;
 
+			return retrieveNextValue();
+		}
+
+		private Double retrieveNextValue()
+		{
+			String value = values[idx++];
+			Double nextValue = "".equals(value) ? nextDouble() :
+				Double.valueOf(value);
+			return nextValue;
+		}
+
+		private boolean tryReadMoreValues()
+		{
 			String colorLine = rdr.nextLine();
 
 			if (colorLine == null)
-				return null;
+				return false;
 
 			values = colorLine.replaceAll(" [ ]+", " ").split(" ");
 			idx = 0;
+			return true;
+		}
 
-			String value = values[idx++];
-			if ("".equals(value))
-				return nextDouble();
-			return Double.valueOf(value);
+		private boolean needMoreValues()
+		{
+			return values == null || idx >= values.length;
 		}
 	}
 

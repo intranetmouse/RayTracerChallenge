@@ -26,6 +26,7 @@ import org.intranet.graphics.raytrace.ui.swing.canvas.CanvasComponent;
 import org.intranet.graphics.raytrace.ui.swing.repaintMode.RepaintModeCombo;
 import org.intranet.graphics.raytrace.ui.swing.resolution.CanvasResolutionCombo;
 import org.intranet.graphics.raytrace.ui.swing.resolution.Resolution;
+import org.intranet.graphics.raytrace.ui.swing.resolution.Resolutions;
 import org.intranet.graphics.raytrace.ui.swing.traversalType.TraversalTypeSelection;
 
 public final class SceneDocumentView
@@ -145,12 +146,11 @@ public final class SceneDocumentView
 
 		// Toolbar Items
 
+		Resolution[] comboResolutions = getResolutions();
 		canvasResolutionCombo = new CanvasResolutionCombo(
-			renderSettings.getResolution(),
-			renderSettings::setResolution);
-		canvasResolutionCombo.addActionListener(e -> {
-			resizeDocCanvas();
-		});
+			comboResolutions,
+			renderSettings.getResolution(), renderSettings::setResolution,
+			itemEvent -> resizeDocCanvas());
 
 		ExtendedAbstractAction renderAction = new RenderAction();
 		renderButton = new JButton(renderAction);
@@ -175,6 +175,11 @@ public final class SceneDocumentView
 		toolbarItems.add(renderButton);
 
 		setDocument(null);
+	}
+
+	private Resolution[] getResolutions()
+	{
+		return Resolutions.standardResolutions;
 	}
 
 	private void resizeDocCanvas()

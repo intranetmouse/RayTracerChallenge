@@ -20,6 +20,7 @@ import org.intranet.graphics.raytrace.ui.swing.canvas.CanvasComponent;
 import org.intranet.graphics.raytrace.ui.swing.repaintMode.RepaintModeCombo;
 import org.intranet.graphics.raytrace.ui.swing.resolution.CanvasResolutionCombo;
 import org.intranet.graphics.raytrace.ui.swing.resolution.Resolution;
+import org.intranet.graphics.raytrace.ui.swing.resolution.Resolutions;
 import org.intranet.graphics.raytrace.ui.swing.traversalType.ToggleButtons;
 import org.intranet.graphics.raytrace.ui.swing.traversalType.TraversalTypeSelection;
 
@@ -46,6 +47,7 @@ public class ProjectorToolbar
 		add(eastPanel, BorderLayout.EAST);
 
 		CanvasResolutionCombo resolutionCombo = new CanvasResolutionCombo(
+			Resolutions.standardResolutions,
 			Resolution.HDTV_720p,
 			res -> canvas.resize(res.getWidth(), res.getHeight()));
 

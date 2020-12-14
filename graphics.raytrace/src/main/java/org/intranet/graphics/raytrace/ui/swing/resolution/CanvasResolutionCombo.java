@@ -1,6 +1,7 @@
 package org.intranet.graphics.raytrace.ui.swing.resolution;
 
 import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.function.Consumer;
 
 import javax.swing.JComboBox;
@@ -10,12 +11,15 @@ public final class CanvasResolutionCombo
 {
 	private static final long serialVersionUID = 1L;
 
-	public CanvasResolutionCombo(Resolution defaultResolution,
-		Consumer<Resolution> updateResolutionAction)
+	public CanvasResolutionCombo(Resolution[] resolutions,
+		Resolution defaultResolution,
+		Consumer<Resolution> updateResolutionAction,
+		ItemListener ...itemListeners)
 	{
-		super(Resolution.resolutions);
+		super(resolutions);
 		// Force not null
-		updateResolutionAction.hashCode();
+		if (updateResolutionAction == null)
+			throw new IllegalArgumentException("updateResolutionAction");
 
 		setSelectedItem(defaultResolution);
 
@@ -25,6 +29,8 @@ public final class CanvasResolutionCombo
 			Resolution res = (Resolution)itemEvent.getItem();
 			if (res != null)
 				updateResolutionAction.accept(res);
+			for (ItemListener itemListener : itemListeners)
+				itemListener.itemStateChanged(itemEvent);
 		});
 	}
 }
