@@ -51,23 +51,32 @@ public final class StatisticsView
 		stats.addStatsListener(this);
 	}
 
+	private Instant nextUpdate;
 	@Override
 	public void statisticsUpdated(RayTraceStatistics stats)
 	{
 		Instant stopTime = stats.getStopTime();
 		Instant startTime = stats.getStartTime();
-		String status = stopTime != null ? "Done" :
-			startTime == null ? "Not started" :
+
+		boolean inProgress = stopTime == null;
+		boolean done = stopTime != null;
+		boolean started = startTime != null;
+
+		String status = done ? "Done" :
+			!started ? "Not started" :
 			"In Progress";
-		statusLabel.setText(status);
+		if (!status.equals(statusLabel.getText()))
+			statusLabel.setText(status);
+
+		Instant now = Instant.now();
 
 		String timeUsedStr = "";
 		String progressPctStr = "";
 		String timeRemainingStr = "";
 		String ppsStr = "";
-		if (startTime != null)
+		if (started)
 		{
-			Instant endUsedTime = stopTime != null ? stopTime : Instant.now();
+			Instant endUsedTime = inProgress ? now : stopTime;
 			Duration timeUsed = Duration.between(startTime, endUsedTime);
 			timeUsedStr = formatDuration(timeUsed);
 
@@ -78,7 +87,6 @@ public final class StatisticsView
 			double pixelsPerMs = 1.0 * numPixelsCompleted / millisUsed;
 			ppsStr = String.format("%.3f", pixelsPerMs);
 
-			boolean inProgress = stopTime == null;
 			if (inProgress)
 			{
 				progressPctStr = String.format("%.2f%%",
@@ -89,13 +97,18 @@ public final class StatisticsView
 				timeRemainingStr = formatDuration(Duration.ofMillis(msRemaining));
 			}
 		}
-		pctCompleteLabel.setText(progressPctStr);
-		timeUsedTxt.setText(timeUsedStr);
-		timeRemainingTxt.setText(timeRemainingStr);
-		speedTxt.setText(ppsStr);
+		if (done || nextUpdate == null || nextUpdate.isBefore(now))
+		{
+			pctCompleteLabel.setText(progressPctStr);
+			timeUsedTxt.setText(timeUsedStr);
+			timeRemainingTxt.setText(timeRemainingStr);
+			speedTxt.setText(ppsStr);
 
-		revalidate();
-		repaint();
+			revalidate();
+			repaint();
+
+			nextUpdate = now.plusSeconds(1);
+		}
 	}
 
 	private String formatDuration(Duration timeUsed)

@@ -9,6 +9,7 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 import org.intranet.graphics.raytrace.World;
+import org.intranet.graphics.raytrace.shape.Csg;
 import org.intranet.graphics.raytrace.shape.Group;
 
 public final class SceneTreeModel
@@ -47,13 +48,19 @@ public final class SceneTreeModel
 
 		if (parent instanceof Group)
 			return ((Group)parent).getChildren().size();
+		if (parent instanceof Csg)
+		{
+			List<Object> objs = getCsgChildren(parent);
+			return objs.size();
+		}
+
 		return 0;
 	}
 
 	@Override
 	public boolean isLeaf(Object node)
 	{
-		if (node == ROOT_NODE || node == LIGHTS || node == SCENE_OBJECTS || node instanceof Group)
+		if (node == ROOT_NODE || node == LIGHTS || node == SCENE_OBJECTS || node instanceof Group || node instanceof Csg)
 			return false;
 		return true;
 	}
@@ -72,6 +79,12 @@ public final class SceneTreeModel
 		if (parent instanceof Group)
 			return ((Group)parent).getChildren().get(index);
 
+		if (parent instanceof Csg)
+		{
+			List<Object> objs = getCsgChildren(parent);
+			return objs.get(index);
+		}
+
 		if (parent == LIGHTS)
 			return world.getLightSources().get(index);
 
@@ -79,6 +92,16 @@ public final class SceneTreeModel
 			return world.getSceneObjects().get(index);
 
 		return null;
+	}
+	private List<Object> getCsgChildren(Object parent)
+	{
+		List<Object> objs = new ArrayList<>(2);
+		Csg csg = (Csg)parent;
+		if (csg.getLeft() != null)
+			objs.add(csg.getLeft());
+		if (csg.getRight() != null)
+			objs.add(csg.getRight());
+		return objs;
 	}
 
 	@Override
@@ -96,6 +119,11 @@ public final class SceneTreeModel
 		}
 		if (parent instanceof Group)
 			return ((Group)parent).getChildren().indexOf(child);
+		if (parent instanceof Csg)
+		{
+			List<Object> objs = getCsgChildren(parent);
+			return objs.indexOf(child);
+		}
 
 		if (parent == LIGHTS)
 			return world.getLightSources().indexOf(child);

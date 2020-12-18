@@ -54,14 +54,6 @@ public class Canvas
 		firePixelUpdated(col, row, clipped);
 	}
 
-	public interface CanvasListener
-	{
-		void resized(int x, int y);
-		void initialized();
-		void pixelUpdated(int x, int y, Color color);
-		void completed();
-	}
-
 	private final List<CanvasListener> canvasListeners = new ArrayList<>();
 	public void addCanvasListener(CanvasListener l)
 	{ canvasListeners.add(l); }
@@ -110,88 +102,14 @@ public class Canvas
 		return lines;
 	}
 
-	public static final class LinesReader
-	{
-		private final List<String> lines;
-		private int currentLine;
-
-		public LinesReader(List<String> lines)
-		{
-			this.lines = lines;
-			skipCommentLines();
-		}
-
-		public String nextLine()
-		{
-			if (hasMoreLines())
-			{
-				String line = lines.get(currentLine++);
-				skipCommentLines();
-				return line;
-			}
-			return null;
-		}
-
-		private void skipCommentLines()
-		{
-			while (currentLine < lines.size() && lines.get(currentLine).startsWith("#"))
-				currentLine++;
-		}
-
-		public boolean hasMoreLines()
-		{
-			return currentLine < lines.size();
-		}
-	}
-
-	public static final class DoublesReader
-	{
-		private final LinesReader rdr;
-		private String[] values;
-		private int idx;
-
-		public DoublesReader(LinesReader rdr)
-		{
-			this.rdr = rdr;
-		}
-
-		public Double nextDouble()
-		{
-			if (needMoreValues() && !tryReadMoreValues())
-					return null;
-
-			return retrieveNextValue();
-		}
-
-		private Double retrieveNextValue()
-		{
-			String value = values[idx++];
-			Double nextValue = "".equals(value) ? nextDouble() :
-				Double.valueOf(value);
-			return nextValue;
-		}
-
-		private boolean tryReadMoreValues()
-		{
-			String colorLine = rdr.nextLine();
-
-			if (colorLine == null)
-				return false;
-
-			values = colorLine.replaceAll(" [ ]+", " ").split(" ");
-			idx = 0;
-			return true;
-		}
-
-		private boolean needMoreValues()
-		{
-			return values == null || idx >= values.length;
-		}
-	}
-
 	public static Canvas loadFromPpmString(List<String> ppmLines)
 	{
-		LinesReader rdr = new LinesReader(ppmLines);
+		LinesReader rdr = new LinesReader.StringLinesReader(ppmLines);
+		return loadFromPpmString(rdr);
+	}
+
+	public static Canvas loadFromPpmString(LinesReader rdr)
+	{
 		String header = rdr.nextLine();
 		if (!"P3".equals(header))
 			throw new RuntimeException("Illegal header, does not match P3: " + header);

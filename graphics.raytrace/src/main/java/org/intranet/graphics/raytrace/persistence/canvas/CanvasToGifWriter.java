@@ -7,7 +7,7 @@ import java.io.File;
 import org.intranet.graphics.raytrace.persistence.canvas.gif.AnimatedGifEncoder;
 import org.intranet.graphics.raytrace.primitive.Color;
 import org.intranet.graphics.raytrace.surface.map.Canvas;
-import org.intranet.graphics.raytrace.surface.map.Canvas.CanvasListener;
+import org.intranet.graphics.raytrace.surface.map.CanvasListener;
 
 public final class CanvasToGifWriter
 	implements CanvasListener

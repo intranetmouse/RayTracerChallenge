@@ -3,12 +3,13 @@ package org.intranet.graphics.raytrace.ui.swing.canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.time.Instant;
 
 import javax.swing.JComponent;
 
 import org.intranet.graphics.raytrace.primitive.Color;
 import org.intranet.graphics.raytrace.surface.map.Canvas;
-import org.intranet.graphics.raytrace.surface.map.Canvas.CanvasListener;
+import org.intranet.graphics.raytrace.surface.map.CanvasListener;
 
 public final class CanvasComponent
 	extends JComponent
@@ -26,6 +27,7 @@ public final class CanvasComponent
 		setCanvas(c);
 	}
 
+	private Instant nextRepaint;
 	private final CanvasListener listener = new CanvasListener() {
 		@Override
 		public void resized(int x, int y)
@@ -37,11 +39,14 @@ public final class CanvasComponent
 		public void initialized()
 		{
 			repaint();
+			nextRepaint = Instant.now().plusSeconds(1);
 		}
 
 		@Override
 		public void pixelUpdated(int x, int y, Color color)
 		{
+//			Instant now = Instant.now();
+//			if (nextRepaint)
 			repaintMode.pixelUpdated(CanvasComponent.this, x, y);
 		}
 
@@ -49,6 +54,7 @@ public final class CanvasComponent
 		public void completed()
 		{
 			repaint();
+			nextRepaint = Instant.now().plusSeconds(1);
 		}
 	};
 

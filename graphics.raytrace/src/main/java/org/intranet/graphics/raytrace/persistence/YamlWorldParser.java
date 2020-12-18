@@ -44,6 +44,7 @@ import org.intranet.graphics.raytrace.surface.Pattern;
 import org.intranet.graphics.raytrace.surface.RingPattern;
 import org.intranet.graphics.raytrace.surface.StripePattern;
 import org.intranet.graphics.raytrace.surface.TextureMapPattern;
+import org.intranet.graphics.raytrace.surface.map.BufferedReaderLinesReader;
 import org.intranet.graphics.raytrace.surface.map.Canvas;
 import org.intranet.graphics.raytrace.surface.map.CylindricalUvMap;
 import org.intranet.graphics.raytrace.surface.map.PlanarUvMap;
@@ -475,8 +476,7 @@ System.out.println("Definining " + defineName);
 				try (FileReader fr = new FileReader(f);
 					BufferedReader br = new BufferedReader(fr);)
 				{
-					List<String> lines = br.lines().collect(Collectors.toList());
-					Canvas canvas = Canvas.loadFromPpmString(lines);
+					Canvas canvas = Canvas.loadFromPpmString(new BufferedReaderLinesReader(br));
 					uvPattern = new ImageUvPattern(canvas);
 				}
 				catch (FileNotFoundException e)
