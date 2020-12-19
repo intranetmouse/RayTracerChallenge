@@ -66,7 +66,9 @@ public class Csg
 	@Override
 	public Shape deepCopy()
 	{
-		return new Csg(operation, left.deepCopy(), right.deepCopy());
+		Csg newCsg = new Csg(operation, left.deepCopy(), right.deepCopy());
+		newCsg.deepCopyFrom(this);
+		return newCsg;
 	}
 
 	@Override

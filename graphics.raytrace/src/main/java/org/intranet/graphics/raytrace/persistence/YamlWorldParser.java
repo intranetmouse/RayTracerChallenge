@@ -669,27 +669,26 @@ System.out.println("Adding object type=" + type);
 		{
 			String operation = (String)objMap.get("operation");
 			Csg csg = (Csg)shape;
+			CsgOperation initialOperation = csg.getCsgOperation();
 			CsgOperation op = "difference".equals(operation) ? CsgOperation.DIFFERENCE :
 				"intersection".equals(operation) ? CsgOperation.INTERSECTION :
 				"union".equals(operation) ? CsgOperation.UNION :
 				null;
-			if (op != null)
-			{
+			boolean creating = initialOperation == null;
+			if (creating || op != null)
 				csg.setCsgOperation(op);
 
-				@SuppressWarnings("unchecked")
-				Map<String, Object> right = (Map<String, Object>)objMap.get("right");
-				@SuppressWarnings("unchecked")
-				Map<String, Object> left = (Map<String, Object>)objMap.get("left");
-				if (right != null && left != null)
-				{
-					csg.setRight(readShapeFromProperties((String)right.get("type"), right));
-					csg.setLeft(readShapeFromProperties((String)left.get("type"), left));
-				}
-				else if (right == null || left == null)
-				{
-					System.err.println("only right or left is set");
-				}
+			@SuppressWarnings("unchecked")
+			Map<String, Object> right = (Map<String, Object>)objMap.get("right");
+			@SuppressWarnings("unchecked")
+			Map<String, Object> left = (Map<String, Object>)objMap.get("left");
+			if (right != null)
+				csg.setRight(readShapeFromProperties((String)right.get("type"), right));
+			if (left != null)
+				csg.setLeft(readShapeFromProperties((String)left.get("type"), left));
+			if (creating && (right == null || left == null))
+			{
+				System.err.println("only right or left is set, creating=" + creating);
 			}
 		}
 		if (shape instanceof TubeLike)
