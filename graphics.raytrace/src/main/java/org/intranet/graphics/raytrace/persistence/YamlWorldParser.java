@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -75,6 +77,7 @@ public class YamlWorldParser
 
 		try (InputStreamReader ymlReader = new InputStreamReader(ymlStream))
 		{
+			Instant startLoad = Instant.now();
 			YamlReader reader = new YamlReader(ymlReader);
 
 			while (true)
@@ -100,6 +103,9 @@ public class YamlWorldParser
 					}
 				}
 			}
+
+			Instant endLoad = Instant.now();
+			System.out.println("Load time: " + Duration.between(startLoad, endLoad));
 		}
 		catch (IOException e)
 		{

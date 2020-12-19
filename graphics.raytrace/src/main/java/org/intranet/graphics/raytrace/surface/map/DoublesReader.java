@@ -34,7 +34,18 @@ public final class DoublesReader
 		if (colorLine == null)
 			return false;
 
-		values = colorLine.replaceAll(" [ ]+", " ").split(" ");
+		StringBuilder sb = new StringBuilder(colorLine.length());
+		boolean lastSpace = false;
+		for (int i = 0; i < colorLine.length(); i++)
+		{
+			char newChar = colorLine.charAt(i);
+			boolean thisSpace = newChar == ' ';
+			if (!(lastSpace && thisSpace))
+				sb.append(newChar);
+			lastSpace = thisSpace;
+		}
+		values = sb.toString().split(" ");
+//		values = colorLine.replace(" [ ]+", " ").split(" ");
 		idx = 0;
 		return true;
 	}
