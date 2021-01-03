@@ -1,5 +1,7 @@
 package org.intranet.graphics.raytrace.primitive;
 
+import java.util.Arrays;
+
 public class Tuple
 {
 	static final Tuple zeroTuple = new Tuple(0, 0, 0, 0);
@@ -28,19 +30,6 @@ public class Tuple
 	public double getZ() { return values[2]; }
 	public double getW() { return values[3]; }
 
-	@Override
-	public boolean equals(Object other)
-	{
-		if (!(other instanceof Tuple))
-			return false;
-		Tuple otherTuple = (Tuple)other;
-		if (values.length != otherTuple.values.length)
-			return false;
-		for (int i = 0; i < values.length; i++)
-			if (!dblEqual(values[i], otherTuple.values[i]))
-				return false;
-		return true;
-	}
 
 	public static double[] addDoubles(double[] a, double[] b)
 	{
@@ -50,6 +39,30 @@ public class Tuple
 		for (int i = 0; i < a.length; i++)
 			result[i] = a[i] + b[i];
 		return result;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.hashCode(values);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Tuple other = (Tuple) obj;
+		if (!Arrays.equals(values, other.values))
+			return false;
+		return true;
 	}
 
 	public static double[] subtractDoubles(double[] a, double[] b)

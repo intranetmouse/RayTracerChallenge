@@ -1,44 +1,27 @@
 package org.intranet.graphics.raytrace.surface.map;
 
-import java.util.List;
-
 public interface LinesReader
 {
 	String nextLine();
 	boolean hasMoreLines();
 
-	public static final class StringLinesReader
-		implements LinesReader
+	long getDurationReading();
+	static boolean isCommentOrBlankLine(String line)
 	{
-		private final List<String> lines;
-		private int currentLine;
-
-		public StringLinesReader(List<String> lines)
+		int lineLength = line.length();
+	
+		char latestChar;
+		int idx = 0;
+		while (idx < lineLength)
 		{
-			this.lines = lines;
-			skipCommentLines();
+			latestChar = line.charAt(idx);
+			if (latestChar == '#')
+				return true;
+			if (latestChar != ' ')
+				return false;
+			idx++;
 		}
-
-		public String nextLine()
-		{
-			if (hasMoreLines())
-			{
-				String line = lines.get(currentLine++);
-				skipCommentLines();
-				return line;
-			}
-			return null;
-		}
-
-		private void skipCommentLines()
-		{
-			while (currentLine < lines.size() && lines.get(currentLine).startsWith("#"))
-				currentLine++;
-		}
-
-		public boolean hasMoreLines()
-		{
-			return currentLine < lines.size();
-		}
+		// the line is blank if we got to the end
+		return idx == lineLength;
 	}
 }

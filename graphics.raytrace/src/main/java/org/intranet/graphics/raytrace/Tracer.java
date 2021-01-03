@@ -51,6 +51,7 @@ public final class Tracer
 		viewPort.setVsize(vsize);
 
 		stats.start(hsize * vsize);
+		new Thread().setPriority(1);
 		StreamSupport.stream(traversal, parallel)
 			.forEach(pixel -> {
 				stats.startPixel();

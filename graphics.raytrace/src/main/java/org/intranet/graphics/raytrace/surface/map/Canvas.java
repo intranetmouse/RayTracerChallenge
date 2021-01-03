@@ -3,8 +3,12 @@ package org.intranet.graphics.raytrace.surface.map;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.intranet.graphics.raytrace.primitive.Color;
 
@@ -104,12 +108,13 @@ public class Canvas
 
 	public static Canvas loadFromPpmString(List<String> ppmLines)
 	{
-		LinesReader rdr = new LinesReader.StringLinesReader(ppmLines);
+		LinesReader rdr = new StringLinesReader(ppmLines);
 		return loadFromPpmString(rdr);
 	}
 
 	public static Canvas loadFromPpmString(LinesReader rdr)
 	{
+		Instant start = Instant.now();
 		String header = rdr.nextLine();
 		if (!"P3".equals(header))
 			throw new RuntimeException("Illegal header, does not match P3: " + header);
@@ -126,18 +131,21 @@ public class Canvas
 		int x = 0; int y = 0;
 		DoublesReader drdr = new DoublesReader(rdr);
 
+		Map<Double, Color> colorSet = new HashMap<>();
 		infiniteLoop:
 		while (true)
 		{
-			Double red = drdr.nextDouble();
-			if (red == null)
+			Double testRed = drdr.nextDouble();
+			if (testRed == null)
 				break infiniteLoop;
 
-			red = red / scale;
+			double red = testRed / scale;
 			double green = drdr.nextDouble() / scale;
 			double blue = drdr.nextDouble() / scale;
 
-			Color color = new Color(red, green, blue);
+			Color color = useColorSet ? colorSet.computeIfAbsent(
+				red + 256 * green + 65536 * blue, e -> new Color(red, green, blue)) :
+				new Color(red, green, blue);
 			canvas.writePixel(x++, y, color);
 
 			if (x >= width)
@@ -146,8 +154,14 @@ public class Canvas
 				y++;
 			}
 		}
+		Instant end = Instant.now();
+		Duration duration = Duration.between(start, end);
+		Duration reading = Duration.ofMillis(rdr.getDurationReading());
+		System.out.println("Loading took " + duration + ", diskreads=" + reading);
 		return canvas;
 	}
+
+	private static boolean useColorSet = true;
 
 	private void appendColor(List<String> lines, StringBuilder sb, double color)
 	{

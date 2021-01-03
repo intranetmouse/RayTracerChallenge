@@ -14,7 +14,7 @@ public final class DoublesReader
 	public Double nextDouble()
 	{
 		if (needMoreValues() && !tryReadMoreValues())
-				return null;
+			return null;
 
 		return retrieveNextValue();
 	}
@@ -34,20 +34,28 @@ public final class DoublesReader
 		if (colorLine == null)
 			return false;
 
-		StringBuilder sb = new StringBuilder(colorLine.length());
+		values = stripDuplicateSpaces(colorLine).split(" ");
+//		values = colorLine.replace(" [ ]+", " ").split(" ");
+		idx = 0;
+		return true;
+	}
+
+	/** Prevents re-allocation */
+	StringBuilder lineCache = new StringBuilder();
+	private String stripDuplicateSpaces(String colorLine)
+	{
+		lineCache.setLength(0);
 		boolean lastSpace = false;
 		for (int i = 0; i < colorLine.length(); i++)
 		{
 			char newChar = colorLine.charAt(i);
 			boolean thisSpace = newChar == ' ';
 			if (!(lastSpace && thisSpace))
-				sb.append(newChar);
+				lineCache.append(newChar);
 			lastSpace = thisSpace;
 		}
-		values = sb.toString().split(" ");
-//		values = colorLine.replace(" [ ]+", " ").split(" ");
-		idx = 0;
-		return true;
+
+		return lineCache.toString();
 	}
 
 	private boolean needMoreValues()

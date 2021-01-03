@@ -7,13 +7,27 @@ public final class BufferedReaderLinesReader
 	implements LinesReader
 {
 	private final BufferedReader br;
-	String nextLine;
+	private String nextLine;
+
+	private long durationReading = 0;
+	@Override
+	public long getDurationReading() { return durationReading; }
 
 	public BufferedReaderLinesReader(BufferedReader br)
 		throws IOException
 	{
 		this.br = br;
-		nextLine = br.readLine();
+		nextLine = readLine();
+	}
+
+	private String readLine()
+		throws IOException
+	{
+		long start = System.currentTimeMillis();
+		String value = br.readLine();
+		long end = System.currentTimeMillis();
+		durationReading += end - start;
+		return value;
 	}
 
 	@Override
@@ -23,9 +37,10 @@ public final class BufferedReaderLinesReader
 		if (nextLine != null)
 			try
 			{
-				for (nextLine = br.readLine();
-					nextLine != null && nextLine.trim().startsWith("#");
-					nextLine = br.readLine())
+				for (nextLine = readLine();
+					nextLine != null && LinesReader.isCommentOrBlankLine(nextLine);
+//					nextLine != null && nextLine.trim().startsWith("#");
+					nextLine = readLine())
 				{
 					// Just keep going
 				}
